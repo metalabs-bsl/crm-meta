@@ -1,5 +1,5 @@
 export const adminLabels = {
   main: 'Главная страница',
-  adminPage: 'Страница администратора',
-  notFound: 'Страница не найдена'
+  notFound: 'Страница не найдена',
+  login: 'Cтраница входа'
 };

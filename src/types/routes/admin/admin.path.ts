@@ -1,5 +1,5 @@
 export const adminPath = {
   main: '/',
-  adminPage: '/admin/adminPage',
-  notFound: '*'
+  notFound: '*',
+  login: '/auth'
 };

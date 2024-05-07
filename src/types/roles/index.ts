@@ -13,6 +13,7 @@ export module IROLE {
     MANAGER: RoleObject;
     SUPERVISOR: RoleObject;
     ADMIN: RoleObject;
+    UNAUTHORIZED: RoleObject;
   };
 }
 
@@ -20,5 +21,6 @@ export const ROLES: IROLE.IRoles = {
   INTERN: { role: 'Intern', permissions: {} },
   MANAGER: { role: 'Manager', permissions: {} },
   SUPERVISOR: { role: 'Supervisor', permissions: {} },
-  ADMIN: { role: 'Admin', permissions: {} }
+  ADMIN: { role: 'Admin', permissions: {} },
+  UNAUTHORIZED: { role: 'Unauthorized', permissions: {} }
 };
