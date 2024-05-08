@@ -5,7 +5,7 @@ import { Header, Sidebar } from 'common/components';
 import { useAppSelector } from 'common/hooks';
 import { loginSelectors } from 'api/admin/login/login.selectors';
 import { ROLES } from 'types/roles';
-import { adminPath } from 'types/routes/admin';
+import { adminPath } from 'types/routes';
 import styles from './styles.module.scss';
 
 export const App = () => {

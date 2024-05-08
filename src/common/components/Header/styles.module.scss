@@ -15,4 +15,14 @@
   .burger {
     height: 40px;
   }
+  .exchangeRates {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    ul {
+      li {
+        list-style: none;
+      }
+    }
+  }
 }
