@@ -1,3 +1,7 @@
-export const adminApiReducers = {};
+import { exchangeRates } from './exchangeRates/exchangeRates.api';
 
-export const adminApiMiddlewares = [];
+export const adminApiReducers = {
+  [exchangeRates.reducerPath]: exchangeRates.reducer
+};
+
+export const adminApiMiddlewares = [exchangeRates.middleware];

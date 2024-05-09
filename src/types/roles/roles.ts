@@ -1,1 +1,1 @@
-export type UserRoleUnionType = "Admin" | "Intern" | "Manager" | "Supervisor";
+export type UserRoleUnionType = 'Admin' | 'Intern' | 'Manager' | 'Supervisor' | 'Unauthorized';
