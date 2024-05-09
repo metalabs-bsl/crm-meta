@@ -5,11 +5,11 @@ import { useRedirect } from 'common/hooks';
 import { INavbar } from 'common/constants';
 import styles from './styles.module.scss';
 
-type Page = 'crm' | 'document';
+import { NAVBAR_PAGES } from 'types/enums';
 
 interface IProps {
   navbarItems: INavbar;
-  page: Page;
+  page: NAVBAR_PAGES;
 }
 
 export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
@@ -17,7 +17,7 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
   const { pathname } = useLocation();
 
   const onNavigate = (chapter: string) => {
-    if (page === 'crm' || page === 'document') redirectTo[page]({ chapter });
+    redirectTo[page]({ chapter });
   };
 
   return (
