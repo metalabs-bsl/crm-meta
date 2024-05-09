@@ -1,5 +1,5 @@
 export const adminLabels = {
-  main: 'Главная страница',
+  crm: ' Страница CRM',
   notFound: 'Страница не найдена',
   login: 'Cтраница входа',
   calendar: 'Cтраница Календарь',
