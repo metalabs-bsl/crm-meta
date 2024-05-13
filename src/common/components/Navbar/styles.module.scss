@@ -1,0 +1,17 @@
+.navBar {
+  width: 100%;
+  padding: 20px 40px;
+  border-radius: 10px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  li {
+    list-style: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+  }
+  .activeChapter {
+    background-color: lightgray;
+  }
+}

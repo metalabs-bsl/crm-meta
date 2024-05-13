@@ -18,8 +18,8 @@ export const mainRoutes: IRoute[] = [
     element: <NotFound />
   },
   {
-    path: paths.main,
-    label: labels.main,
+    path: paths.crm,
+    label: labels.crm,
     roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR, ROLES.UNAUTHORIZED],
     element: <CRM />
   },

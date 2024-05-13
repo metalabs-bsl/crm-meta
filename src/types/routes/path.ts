@@ -1,8 +1,8 @@
 export const adminPath = {
-  main: '/',
+  crm: '/crm/:chapter',
   notFound: '*',
   login: '/auth',
   calendar: '/calendar',
-  document: '/documents',
+  document: '/documents/:chapter',
   mail: '/mail'
 };
