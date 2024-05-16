@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { ISidebarAction, ISidebarState } from 'types/store/admin/header.slice.types';
 
 const initialState: ISidebarState = {
-  isShowSidebar: false
+  isShowSidebar: true
 };
 
 export const sidebarSlice = createSlice({

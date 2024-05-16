@@ -1,13 +1,18 @@
+@import '../../styles/variables.scss';
+
 .container {
   position: absolute;
+  padding: 20px;
+  background-color: $white;
+  border-radius: 10px;
   .arrow {
     position: absolute;
-    top: -10px;
+    top: -20px;
     left: calc(50% - 10px);
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 10px solid gray;
+    border-bottom: 20px solid $white;
   }
 }

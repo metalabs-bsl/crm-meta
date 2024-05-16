@@ -18,7 +18,7 @@ export const DropdownModal: FC<IProps> = ({ isOpen = false, children, targetRef,
     if (isOpen && targetRef.current && modalRef.current) {
       const { top, left, height, width } = targetRef.current.getBoundingClientRect();
       const { width: modalWidth } = modalRef.current.getBoundingClientRect();
-      setPosition({ top: top + height + 10, left: left - modalWidth / 2 + width / 2 });
+      setPosition({ top: top + height + 30, left: left - modalWidth / 2 + width / 2 });
     }
   }, [isOpen, targetRef]);
 

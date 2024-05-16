@@ -1,26 +1,28 @@
 import { useRef, useState } from 'react';
 import dayjs from 'dayjs';
+import { Button, Icon } from 'common/ui';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { useGetExchangeRatesQuery } from 'api/admin/exchangeRates/exchangeRates.api';
+// import { useGetExchangeRatesQuery } from 'api/admin/exchangeRates/exchangeRates.api';
 import { loginSelectors } from 'api/admin/login/login.selectors';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { DropdownModal } from '../DropdownModal';
-import burger from '../../assets/icons/header/burger.png';
-import userIcon from '../../assets/icons/header/user.png';
-import logo from '../../assets/img/logo.png';
+import logo from '../../assets/icons/header/logo.svg';
 import styles from './styles.module.scss';
+
+import { BUTTON_TYPES } from 'types/enums';
 
 export const Header = () => {
   const currentTime = dayjs(new Date()).format('HH:mm');
   const dispatch = useAppDispatch();
   const { isShowSidebar } = useAppSelector(sidebarSelectors.sidebar);
   const { role } = useAppSelector(loginSelectors.login);
-  const { data } = useGetExchangeRatesQuery();
+  // const { data } = useGetExchangeRatesQuery();
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
-
+  const [isExtangesOpen, setIsExtangesOpen] = useState<boolean>(false);
+  const [isBgOpen, setIsBgOpen] = useState<boolean>(false);
   const timeRef = useRef(null);
   const profileRef = useRef(null);
 
@@ -48,41 +50,69 @@ export const Header = () => {
     setIsProfileModalOpen(false);
   };
 
+  const openExtangesModal = () => {
+    setIsExtangesOpen(!isExtangesOpen);
+  };
+
+  // const closeExtangesModal = () => {
+  //   setIsExtangesOpen(false);
+  // };
+
+  const openBgModal = () => {
+    setIsBgOpen(!isBgOpen);
+  };
+
+  // const closeBgModal = () => {
+  //   setIsBgOpen(false);
+  // };
+
   return (
     <header className={styles.header}>
-      <img src={burger} alt='burger' className={styles.burger} onClick={onBurgerClick} />
-      <img src={logo} alt='logo' className={styles.logo} />
-      <div className={styles.exchangeRates}>
-        Курс валют:{' '}
-        <ul>
-          <li>$ = {data ? data.usd : 0} </li>
-          <li>euro = {data ? data.eur : 0} </li>
-        </ul>
+      <div className={styles.logoBlock}>
+        <Icon type={`burger-${isShowSidebar ? 'open' : 'close'}`} onClick={onBurgerClick} className={styles.burger} alt='burger' />
+        <img src={logo} alt='logo' className={styles.logo} />
       </div>
-      <span ref={timeRef} onClick={openTimeModal}>
-        {currentTime}
-      </span>
-      <DropdownModal isOpen={isTimeModalOpen} targetRef={timeRef} onClose={closeTimeModal}>
-        <div className={styles.timeContent}>
-          <button>Начать рабочий день</button>
-          <button>Перерыв</button>
-          <span>Время - 00:00</span>
+      <div className={styles.otherBlock}>
+        <div className={styles.exchangeRates} onClick={openExtangesModal}>
+          <span>Курсы валют</span>
+          <Icon type={`arrow-${isExtangesOpen ? 'up' : 'down'}`} alt='arrow' style={{ fill: 'red' }} />
         </div>
-      </DropdownModal>
+        <div className={styles.timeBlock} onClick={openTimeModal} ref={timeRef}>
+          <span className={styles.time}>{currentTime}</span>
+          <div className={styles.start}>
+            <button className={styles.playBtn}>
+              <Icon type='play' alt='play-icon' />
+            </button>
+            Начать
+          </div>
+          <DropdownModal isOpen={isTimeModalOpen} targetRef={timeRef} onClose={closeTimeModal}>
+            <div className={styles.timeContent}>
+              <button>Начать рабочий день</button>
+              <button>Перерыв</button>
+              <span>Время - 00:00</span>
+            </div>
+          </DropdownModal>
+        </div>
+        <div className={styles.exchangeRates} onClick={openBgModal}>
+          <span>Фон</span>
+          <Icon type={`arrow-${isBgOpen ? 'up' : 'down'}`} alt='arrow' />
+        </div>
 
-      <img onClick={openProfileModal} ref={profileRef} src={userIcon} alt='login' className={styles.userIcon} />
-      <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
-        <div className={styles.timeContent}>
-          <ul>
-            <li>Имя: Тариэл</li>
-            <li>Фамилия: Таиров</li>
-            <li>Номер телефона: +996704135830</li>
-            <li>Email: tarieltairov1@gmail.com</li>
-            <li>Статус: admin</li>
-          </ul>
-          <button>Выйти</button>
-        </div>
-      </DropdownModal>
+        <Button text='Профиль' type={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
+
+        <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
+          <div className={styles.timeContent}>
+            <ul>
+              <li>Имя: Тариэл</li>
+              <li>Фамилия: Таиров</li>
+              <li>Номер телефона: +996704135830</li>
+              <li>Email: tarieltairov1@gmail.com</li>
+              <li>Статус: admin</li>
+            </ul>
+            <button>Выйти</button>
+          </div>
+        </DropdownModal>
+      </div>
     </header>
   );
 };

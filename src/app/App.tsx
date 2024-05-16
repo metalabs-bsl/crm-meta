@@ -20,12 +20,12 @@ export const App = () => {
   }, [navigate, role]);
 
   return (
-    <>
+    <main className={styles.main}>
       <Header />
-      <div className={styles.main}>
+      <div className={styles.content}>
         <Sidebar />
         <Suspense fallback={<p style={{ color: 'red' }}>loading...</p>}>{routes}</Suspense>
       </div>
-    </>
+    </main>
   );
 };
