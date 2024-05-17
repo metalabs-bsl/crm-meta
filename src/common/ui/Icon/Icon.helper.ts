@@ -4,6 +4,7 @@ import arrowUp from '../../assets/icons/header/arrow-up.svg';
 import BurgerOpen from '../../assets/icons/header/burger.svg';
 import BurgerClose from '../../assets/icons/header/close.svg';
 import playIcon from '../../assets/icons/header/playIcon.svg';
+import timeoutPlayIcon from '../../assets/icons/header/timeout-playIcon.svg';
 import calendar from '../../assets/icons/sidebar/calendar.svg';
 import crm from '../../assets/icons/sidebar/crm.svg';
 import document from '../../assets/icons/sidebar/document.svg';
@@ -18,5 +19,6 @@ export const icons: IIcons = {
   ['crm']: crm,
   ['calendar']: calendar,
   ['document']: document,
-  ['mail']: mail
+  ['mail']: mail,
+  ['timeout-playIcon']: timeoutPlayIcon
 };

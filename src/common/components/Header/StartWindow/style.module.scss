@@ -1,0 +1,36 @@
+@import '../../../styles/variables.scss';
+
+.timeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .startBlock button {
+    width: 230px;
+  }
+  .workTime {
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    color: $gray-btn-bg-hover;
+  }
+  .timeOutBlock {
+    display: flex;
+    justify-content: center;
+    * {
+      width: 137px;
+    }
+    .timer {
+      color: $gray;
+      border: 1px solid $gray;
+      border-radius: 10px;
+      width: 137px;
+      padding: 5px 20px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}
