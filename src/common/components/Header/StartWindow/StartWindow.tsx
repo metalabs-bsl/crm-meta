@@ -34,7 +34,11 @@ export const StartWindow = () => {
         )}
       </div>
 
-      <span className={styles.workTime}>00:00</span>
+      <div className={styles.workTime}>
+        <Icon type='start-line' alt='line' />
+        00:00
+        <Icon type='start-line' alt='line' />
+      </div>
       {isStart && (
         <div className={styles.timeOutBlock}>
           {isTimeOut ? (

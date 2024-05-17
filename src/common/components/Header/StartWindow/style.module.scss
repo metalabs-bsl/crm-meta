@@ -13,6 +13,10 @@
     font-size: 20px;
     text-align: center;
     color: $gray-btn-bg-hover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
   }
   .timeOutBlock {
     display: flex;

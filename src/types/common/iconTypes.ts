@@ -12,4 +12,5 @@ export type IIconType =
   | 'calendar'
   | 'document'
   | 'mail'
-  | 'timeout-playIcon';
+  | 'timeout-playIcon'
+  | 'start-line';
