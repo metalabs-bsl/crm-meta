@@ -1,14 +1,12 @@
 import { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
+import { Icon } from 'common/ui';
 import { checkActivePath } from 'common/helpers';
 import { useRedirect } from 'common/hooks';
 import { crmChapters, documentChapters } from 'common/constants';
+import { IIconType } from 'types/common';
 import { adminPath } from 'types/routes';
-import calendarIcon from '../../../assets/icons/sidebar/001-calendar.png';
-import mailIcon from '../../../assets/icons/sidebar/002-empty-email.png';
-import docsIcon from '../../../assets/icons/sidebar/003-documents.png';
-import crmIcon from '../../../assets/icons/sidebar/004-crm.png';
 import styles from '../styles.module.scss';
 
 const Chapters: FC = () => {
@@ -16,28 +14,28 @@ const Chapters: FC = () => {
   const redirect = useRedirect();
   const chapters = [
     {
-      title: 'Почта',
-      icon: mailIcon,
-      path: adminPath.mail,
-      action: () => redirect.mail({})
-    },
-    {
-      title: 'Документы',
-      icon: docsIcon,
-      path: adminPath.document,
-      action: () => redirect.document({ chapter: documentChapters.word.chapter })
-    },
-    {
       title: 'CRM',
-      icon: crmIcon,
+      icon: 'crm',
       path: adminPath.crm,
       action: () => redirect.crm({ chapter: crmChapters.transactions.chapter })
     },
     {
       title: 'Календарь',
-      icon: calendarIcon,
+      icon: 'calendar',
       path: adminPath.calendar,
       action: () => redirect.calendar({})
+    },
+    {
+      title: 'Документы',
+      icon: 'document',
+      path: adminPath.document,
+      action: () => redirect.document({ chapter: documentChapters.word.chapter })
+    },
+    {
+      title: 'Почта',
+      icon: 'mail',
+      path: adminPath.mail,
+      action: () => redirect.mail({})
     }
   ];
 
@@ -45,7 +43,7 @@ const Chapters: FC = () => {
     <ul className={styles.chapter}>
       {chapters.map((i, index) => (
         <li key={index} onClick={i.action} className={cn({ [styles.active]: checkActivePath(pathname, i.path) })}>
-          <img src={i.icon} alt={i.title} />
+          <Icon type={i.icon as IIconType} alt={i.icon} />
           <p>{i.title}</p>
         </li>
       ))}

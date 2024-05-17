@@ -1,3 +1,9 @@
 .main {
-  display: flex;
+  height: 100vh;
+  background-image: url(../common/assets/images/main-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  .content {
+    display: flex;
+  }
 }

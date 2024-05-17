@@ -1,1 +1,2 @@
-export * from "./route";
+export * from './iconTypes';
+export * from './route';

@@ -1,6 +1,9 @@
+import { ROLES } from 'types/roles';
+
 export interface INavbarItem {
   title: string;
   chapter: string;
+  allowRoles: string[];
 }
 
 export interface INavbar {
@@ -8,15 +11,15 @@ export interface INavbar {
 }
 
 export const crmChapters: INavbar = {
-  transactions: { title: 'Сделки', chapter: 'transactions' },
-  accounts: { title: 'Счета', chapter: 'accounts' },
-  start: { title: 'Старт', chapter: 'start' },
-  employees: { title: 'Сотрудники', chapter: 'employees' }
+  transactions: { title: 'Сделки', chapter: 'transactions', allowRoles: [] },
+  accounts: { title: 'Счета', chapter: 'accounts', allowRoles: [] },
+  start: { title: 'Старт', chapter: 'start', allowRoles: [] },
+  employees: { title: 'Сотрудники', chapter: 'employees', allowRoles: [ROLES.ADMIN.role, ROLES.SUPERVISOR.role] }
 };
 
 export const documentChapters: INavbar = {
-  word: { title: 'word', chapter: 'word' },
-  excel: { title: 'excel', chapter: 'excel' },
-  powerpoint: { title: 'powerpoint', chapter: 'powerpoint' },
-  access: { title: 'access', chapter: 'access' }
+  word: { title: 'word', chapter: 'word', allowRoles: [] },
+  excel: { title: 'excel', chapter: 'excel', allowRoles: [] },
+  powerpoint: { title: 'powerpoint', chapter: 'powerpoint', allowRoles: [] },
+  access: { title: 'access', chapter: 'access', allowRoles: [] }
 };

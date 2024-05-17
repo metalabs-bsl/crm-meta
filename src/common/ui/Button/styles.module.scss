@@ -1,0 +1,23 @@
+@import '../../../common/styles/variables.scss';
+
+.btn {
+  border-radius: 10px;
+  padding: 5px 20px;
+  border: none;
+  font-weight: 500;
+  font-size: 20px;
+  text-align: center;
+  color: $white !important;
+  cursor: pointer;
+}
+
+.gray {
+  background-color: $gray-btn-bg-default;
+  &:hover {
+    background-color: $gray-btn-bg-hover;
+  }
+}
+
+.yellow {
+  background-color: $yellow-btn-bg;
+}
