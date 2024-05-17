@@ -1,11 +1,14 @@
 import type { PermissionsUnionType } from './permissions';
-import type { UserRoleUnionType } from './roles';
+import type { UserRoletTitle, UserRoleUnionType } from './roles';
 
 export module IROLE {
   export type UserRole = UserRoleUnionType;
+  export type UserTitle = UserRoletTitle;
   export type Permissions = PermissionsUnionType;
+
   export type RoleObject = {
     role: UserRole;
+    title: UserTitle;
     permissions: Partial<Record<Permissions, boolean>>;
   };
   export type IRoles = {
@@ -18,9 +21,9 @@ export module IROLE {
 }
 
 export const ROLES: IROLE.IRoles = {
-  INTERN: { role: 'Intern', permissions: {} },
-  MANAGER: { role: 'Manager', permissions: {} },
-  SUPERVISOR: { role: 'Supervisor', permissions: {} },
-  ADMIN: { role: 'Admin', permissions: {} },
-  UNAUTHORIZED: { role: 'Unauthorized', permissions: {} }
+  INTERN: { role: 'Intern', title: 'Стажёр', permissions: {} },
+  MANAGER: { role: 'Manager', title: 'Менеджер', permissions: {} },
+  SUPERVISOR: { role: 'Supervisor', title: 'Менеджер - Руководитель', permissions: {} },
+  ADMIN: { role: 'Admin', title: 'Администратор', permissions: {} },
+  UNAUTHORIZED: { role: 'Unauthorized', title: 'Неавторизованный', permissions: {} }
 };
