@@ -8,7 +8,7 @@
   justify-content: space-between;
   padding: 13px;
   background: $white;
-  padding-right: 100px;
+  padding-right: 200px;
   .logoBlock {
     height: 100%;
     display: flex;
@@ -68,11 +68,4 @@
       gap: 5px;
     }
   }
-}
-
-.timeContent {
-  background-color: gray;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }

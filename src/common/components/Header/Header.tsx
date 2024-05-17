@@ -8,6 +8,7 @@ import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { DropdownModal } from '../DropdownModal';
+import { ProfileWindow } from './ProfileWindow/ProfileWindow';
 import logo from '../../assets/icons/header/logo.svg';
 import styles from './styles.module.scss';
 
@@ -101,16 +102,7 @@ export const Header = () => {
         <Button text='Профиль' type={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
 
         <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
-          <div className={styles.timeContent}>
-            <ul>
-              <li>Имя: Тариэл</li>
-              <li>Фамилия: Таиров</li>
-              <li>Номер телефона: +996704135830</li>
-              <li>Email: tarieltairov1@gmail.com</li>
-              <li>Статус: admin</li>
-            </ul>
-            <button>Выйти</button>
-          </div>
+          <ProfileWindow />
         </DropdownModal>
       </div>
     </header>
