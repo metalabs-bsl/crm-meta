@@ -1,0 +1,54 @@
+@import '../../../styles/variables.scss';
+
+.bg {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .title {
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-btn-bg-hover;
+  }
+  .blocks {
+    display: flex;
+    gap: 7px;
+  }
+  .card {
+    width: 52px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .yellow {
+    background-color: $main-yellow-bg;
+  }
+  .blue {
+    background-color: $main-blue-bg;
+  }
+  .violet {
+    background-color: $main-violet-bg;
+  }
+  .red {
+    background-color: $main-red-bg;
+  }
+  .black {
+    background-color: $main-black-bg;
+  }
+
+  .texture {
+    background-size: cover;
+  }
+  .first-texture {
+    background-image: url(../../../assets/images/firstBg.png);
+  }
+  .second-texture {
+    background-image: url(../../../assets/images/secondBg.png);
+  }
+  .third-texture {
+    background-image: url(../../../assets/images/thirdBg.png);
+  }
+}
