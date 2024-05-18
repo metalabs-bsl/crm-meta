@@ -1,9 +1,35 @@
+@import '../common/styles/variables.scss';
+
 .main {
   height: 100vh;
-  background-image: url(../common/assets/images/main-bg.svg);
   background-repeat: no-repeat;
   background-size: cover;
   .content {
     display: flex;
   }
+}
+
+.yellow {
+  background-color: $main-yellow-bg;
+}
+.blue {
+  background-color: $main-blue-bg;
+}
+.violet {
+  background-color: $main-violet-bg;
+}
+.red {
+  background-color: $main-red-bg;
+}
+.black {
+  background-color: $main-black-bg;
+}
+.first-texture {
+  background-image: url(../common/assets/images/firstBg.png);
+}
+.second-texture {
+  background-image: url(../common/assets/images/secondBg.png);
+}
+.third-texture {
+  background-image: url(../common/assets/images/thirdBg.png);
 }

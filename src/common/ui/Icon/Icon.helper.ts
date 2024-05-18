@@ -2,6 +2,7 @@ import { IIcons } from 'types/common';
 import arrowDown from '../../assets/icons/header/arrow-down.svg';
 import arrowUp from '../../assets/icons/header/arrow-up.svg';
 import BurgerOpen from '../../assets/icons/header/burger.svg';
+import activeBg from '../../assets/icons/header/checkIcon.svg';
 import BurgerClose from '../../assets/icons/header/close.svg';
 import playIcon from '../../assets/icons/header/playIcon.svg';
 import startLine from '../../assets/icons/header/start-line.svg';
@@ -22,5 +23,6 @@ export const icons: IIcons = {
   ['document']: document,
   ['mail']: mail,
   ['timeout-playIcon']: timeoutPlayIcon,
-  ['start-line']: startLine
+  ['start-line']: startLine,
+  ['active-bg']: activeBg
 };

@@ -1,6 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { IROLE } from 'types/roles';
 
+import { BG_TYPES } from 'types/enums';
+
+export interface IBgState {
+  bgType: BG_TYPES;
+}
+
+export type IBgAction = PayloadAction<BG_TYPES>;
+
 export interface ISidebarState {
   isShowSidebar: boolean;
 }

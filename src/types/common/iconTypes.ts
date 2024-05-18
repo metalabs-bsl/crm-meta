@@ -13,4 +13,5 @@ export type IIconType =
   | 'document'
   | 'mail'
   | 'timeout-playIcon'
-  | 'start-line';
+  | 'start-line'
+  | 'active-bg';

@@ -7,6 +7,7 @@ import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { DropdownModal } from '../DropdownModal';
+import { BgWindow } from './BgWindow/BgWindow';
 import { CurrentTime } from './CurrentTime/CurrentTime';
 import { ProfileWindow } from './ProfileWindow/ProfileWindow';
 import { StartWindow } from './StartWindow/StartWindow';
@@ -26,6 +27,7 @@ export const Header = () => {
   const [isBgOpen, setIsBgOpen] = useState<boolean>(false);
   const timeRef = useRef(null);
   const profileRef = useRef(null);
+  const bgRef = useRef(null);
 
   const onBurgerClick = () => {
     dispatch(setChangeSidebarVisible(!isShowSidebar));
@@ -63,9 +65,9 @@ export const Header = () => {
     setIsBgOpen(!isBgOpen);
   };
 
-  // const closeBgModal = () => {
-  //   setIsBgOpen(false);
-  // };
+  const closeBgModal = () => {
+    setIsBgOpen(false);
+  };
 
   return (
     <header className={styles.header}>
@@ -92,10 +94,13 @@ export const Header = () => {
           <StartWindow />
         </DropdownModal>
 
-        <div className={styles.exchangeRates} onClick={openBgModal}>
+        <div className={styles.exchangeRates} onClick={openBgModal} ref={bgRef}>
           <span>Фон</span>
           <Icon type={`arrow-${isBgOpen ? 'up' : 'down'}`} alt='arrow' />
         </div>
+        <DropdownModal isOpen={isBgOpen} targetRef={bgRef} onClose={closeBgModal}>
+          <BgWindow />
+        </DropdownModal>
 
         <Button text='Профиль' type={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
         <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
