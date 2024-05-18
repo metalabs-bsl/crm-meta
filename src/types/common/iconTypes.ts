@@ -14,4 +14,6 @@ export type IIconType =
   | 'mail'
   | 'timeout-playIcon'
   | 'start-line'
-  | 'active-bg';
+  | 'active-bg'
+  | 'eur'
+  | 'usd';
