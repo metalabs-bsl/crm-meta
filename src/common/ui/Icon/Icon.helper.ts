@@ -4,9 +4,11 @@ import arrowUp from '../../assets/icons/header/arrow-up.svg';
 import BurgerOpen from '../../assets/icons/header/burger.svg';
 import activeBg from '../../assets/icons/header/checkIcon.svg';
 import BurgerClose from '../../assets/icons/header/close.svg';
+import eur from '../../assets/icons/header/euro.svg';
 import playIcon from '../../assets/icons/header/playIcon.svg';
 import startLine from '../../assets/icons/header/start-line.svg';
 import timeoutPlayIcon from '../../assets/icons/header/timeout-playIcon.svg';
+import usd from '../../assets/icons/header/usa.svg';
 import calendar from '../../assets/icons/sidebar/calendar.svg';
 import crm from '../../assets/icons/sidebar/crm.svg';
 import document from '../../assets/icons/sidebar/document.svg';
@@ -24,5 +26,7 @@ export const icons: IIcons = {
   ['mail']: mail,
   ['timeout-playIcon']: timeoutPlayIcon,
   ['start-line']: startLine,
-  ['active-bg']: activeBg
+  ['active-bg']: activeBg,
+  ['eur']: eur,
+  ['usd']: usd
 };

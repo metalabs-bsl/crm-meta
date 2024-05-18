@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { Button, Icon } from 'common/ui';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-// import { useGetExchangeRatesQuery } from 'api/admin/exchangeRates/exchangeRates.api';
 import { loginSelectors } from 'api/admin/login/login.selectors';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
@@ -9,6 +8,7 @@ import { ROLES } from 'types/roles';
 import { DropdownModal } from '../DropdownModal';
 import { BgWindow } from './BgWindow/BgWindow';
 import { CurrentTime } from './CurrentTime/CurrentTime';
+import { ExtangesWindow } from './ExtangesWindow/ExtangesWindow';
 import { ProfileWindow } from './ProfileWindow/ProfileWindow';
 import { StartWindow } from './StartWindow/StartWindow';
 import logo from '../../assets/icons/header/logo.svg';
@@ -20,7 +20,6 @@ export const Header = () => {
   const dispatch = useAppDispatch();
   const { isShowSidebar } = useAppSelector(sidebarSelectors.sidebar);
   const { role } = useAppSelector(loginSelectors.login);
-  // const { data } = useGetExchangeRatesQuery();
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isExtangesOpen, setIsExtangesOpen] = useState<boolean>(false);
@@ -28,6 +27,7 @@ export const Header = () => {
   const timeRef = useRef(null);
   const profileRef = useRef(null);
   const bgRef = useRef(null);
+  const extangesRef = useRef(null);
 
   const onBurgerClick = () => {
     dispatch(setChangeSidebarVisible(!isShowSidebar));
@@ -57,9 +57,9 @@ export const Header = () => {
     setIsExtangesOpen(!isExtangesOpen);
   };
 
-  // const closeExtangesModal = () => {
-  //   setIsExtangesOpen(false);
-  // };
+  const closeExtangesModal = () => {
+    setIsExtangesOpen(false);
+  };
 
   const openBgModal = () => {
     setIsBgOpen(!isBgOpen);
@@ -76,10 +76,13 @@ export const Header = () => {
         <img src={logo} alt='logo' className={styles.logo} />
       </div>
       <div className={styles.otherBlock}>
-        <div className={styles.exchangeRates} onClick={openExtangesModal}>
+        <div className={styles.exchangeRates} onClick={openExtangesModal} ref={extangesRef}>
           <span>Курсы валют</span>
           <Icon type={`arrow-${isExtangesOpen ? 'up' : 'down'}`} alt='arrow' style={{ fill: 'red' }} />
         </div>
+        <DropdownModal isOpen={isExtangesOpen} targetRef={extangesRef} onClose={closeExtangesModal}>
+          <ExtangesWindow />
+        </DropdownModal>
 
         <div className={styles.timeBlock} onClick={openTimeModal} ref={timeRef}>
           <CurrentTime />

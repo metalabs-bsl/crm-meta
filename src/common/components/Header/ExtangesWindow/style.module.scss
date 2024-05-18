@@ -1,0 +1,39 @@
+@import '../../../styles/variables.scss';
+
+.extangesTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr {
+    display: flex;
+    gap: 41px;
+    margin-bottom: 15px;
+    padding: 10px;
+  }
+
+  thead {
+    th {
+      width: 88px;
+      text-align: left;
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray-btn-bg-hover;
+    }
+  }
+
+  tbody {
+    .flag {
+      display: flex;
+      gap: 5px;
+    }
+    td {
+      width: 88px;
+      font-weight: 500;
+      font-size: 20px;
+      color: $gray-btn-bg-hover;
+    }
+    tr:last-child {
+      margin: 0;
+    }
+  }
+}
