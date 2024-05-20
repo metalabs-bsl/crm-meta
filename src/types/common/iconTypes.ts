@@ -16,4 +16,8 @@ export type IIconType =
   | 'start-line'
   | 'active-bg'
   | 'eur'
-  | 'usd';
+  | 'usd'
+  | 'crm-dark'
+  | 'calendar-dark'
+  | 'document-dark'
+  | 'mail-dark';

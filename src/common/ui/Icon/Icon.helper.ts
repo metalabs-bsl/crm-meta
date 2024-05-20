@@ -10,9 +10,13 @@ import startLine from '../../assets/icons/header/start-line.svg';
 import timeoutPlayIcon from '../../assets/icons/header/timeout-playIcon.svg';
 import usd from '../../assets/icons/header/usa.svg';
 import calendar from '../../assets/icons/sidebar/calendar.svg';
+import calendarDark from '../../assets/icons/sidebar/calendar-dark.svg';
 import crm from '../../assets/icons/sidebar/crm.svg';
+import crmDark from '../../assets/icons/sidebar/crm-dark.svg';
 import document from '../../assets/icons/sidebar/document.svg';
+import documentDark from '../../assets/icons/sidebar/document-dark.svg';
 import mail from '../../assets/icons/sidebar/mail.svg';
+import mailDark from '../../assets/icons/sidebar/mail-dark.svg';
 
 export const icons: IIcons = {
   ['arrow-down']: arrowDown,
@@ -24,6 +28,10 @@ export const icons: IIcons = {
   ['calendar']: calendar,
   ['document']: document,
   ['mail']: mail,
+  ['crm-dark']: crmDark,
+  ['calendar-dark']: calendarDark,
+  ['document-dark']: documentDark,
+  ['mail-dark']: mailDark,
   ['timeout-playIcon']: timeoutPlayIcon,
   ['start-line']: startLine,
   ['active-bg']: activeBg,

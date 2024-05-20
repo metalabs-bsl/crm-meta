@@ -41,12 +41,15 @@ const Chapters: FC = () => {
 
   return (
     <ul className={styles.chapter}>
-      {chapters.map((i, index) => (
-        <li key={index} onClick={i.action} className={cn({ [styles.active]: checkActivePath(pathname, i.path) })}>
-          <Icon type={i.icon as IIconType} alt={i.icon} />
-          <p>{i.title}</p>
-        </li>
-      ))}
+      {chapters.map((i, index) => {
+        const isActive = checkActivePath(pathname, i.path);
+        return (
+          <li key={index} onClick={i.action} className={cn({ [styles.active]: isActive })}>
+            <Icon type={(isActive ? i.icon + '-dark' : i.icon) as IIconType} alt={i.icon} />
+            <p>{i.title}</p>
+          </li>
+        );
+      })}
     </ul>
   );
 };
