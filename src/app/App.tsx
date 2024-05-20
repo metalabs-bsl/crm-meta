@@ -15,15 +15,16 @@ export const App = () => {
   const { role } = useAppSelector(loginSelectors.login);
   const routes = useRoutes(getRoutes(role));
   const { bgType } = useAppSelector(backgroundSelectors.background);
+  const unAuth = role === ROLES.UNAUTHORIZED;
 
   useEffect(() => {
-    if (role === ROLES.UNAUTHORIZED) {
+    if (unAuth) {
       navigate(adminPath.login);
     }
-  }, [navigate, role]);
+  }, [navigate, unAuth]);
 
   return (
-    <main className={cn(styles.main, styles[bgType])}>
+    <main className={cn(styles.main, styles[bgType], { [styles.unAuth]: unAuth })}>
       <Header />
       <div className={styles.content}>
         <Sidebar />

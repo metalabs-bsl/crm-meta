@@ -11,6 +11,14 @@
   }
 }
 
+.unAuth {
+  background-image: url(../common/assets/images/secondBg.png) !important;
+  .content {
+    padding: 0;
+    display: block;
+  }
+}
+
 .yellow {
   background-color: $main-yellow-bg;
 }
