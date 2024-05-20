@@ -1,17 +1,29 @@
+@import '../../styles/variables.scss';
+
 .navBar {
-  width: 100%;
-  padding: 20px 40px;
-  border-radius: 10px;
-  border: 1px solid black;
-  display: flex;
-  justify-content: space-between;
-  li {
-    list-style: none;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 3px;
-  }
-  .activeChapter {
-    background-color: lightgray;
+  max-width: 618px;
+  margin-bottom: 20px;
+  align-self: center;
+  ul {
+    padding: 9px 30px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    background: $baby-powder;
+    gap: 40px;
+    li {
+      list-style: none;
+      cursor: pointer;
+      padding: 5px 20px;
+      border-radius: 3px;
+      font-weight: 500;
+      font-size: 18px;
+      color: $white;
+    }
+    .activeChapter {
+      background: $white;
+      border-radius: 12px;
+      color: $gray-btn-bg-hover;
+    }
   }
 }

@@ -23,21 +23,23 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
   };
 
   return (
-    <ul className={styles.navBar}>
-      {Object.values(navbarItems).map((item, index) => {
-        if (!!item.allowRoles.length && !item.allowRoles.includes(role.role)) {
-          return null;
-        }
-        return (
-          <li
-            className={cn({ [styles.activeChapter]: pathname.includes(item.chapter) })}
-            key={index}
-            onClick={() => onNavigate(item.chapter)}
-          >
-            {item.title}
-          </li>
-        );
-      })}
-    </ul>
+    <nav className={styles.navBar}>
+      <ul>
+        {Object.values(navbarItems).map((item, index) => {
+          if (!!item.allowRoles.length && !item.allowRoles.includes(role.role)) {
+            return null;
+          }
+          return (
+            <li
+              className={cn({ [styles.activeChapter]: pathname.includes(item.chapter) })}
+              key={index}
+              onClick={() => onNavigate(item.chapter)}
+            >
+              {item.title}
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 };
