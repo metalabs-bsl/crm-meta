@@ -1,0 +1,81 @@
+@import '../../../../../common/styles/variables.scss';
+
+.card {
+  border-radius: 10px;
+  background-color: $white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .titleBlock {
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: $silver;
+    min-height: 101px;
+    cursor: pointer;
+    .main {
+      flex-direction: column;
+      font-size: 20px;
+    }
+  }
+
+  .mainBlock,
+  .main {
+    font-weight: 400;
+    color: $gray-btn-bg-hover;
+    gap: 5px;
+    display: flex;
+  }
+
+  .date,
+  .timeBlock {
+    display: flex;
+    align-items: flex-end;
+    font-weight: 400;
+    font-size: 14px;
+    color: $gray;
+  }
+
+  .commentContainer {
+    display: flex;
+    justify-content: space-between;
+    min-height: 44px;
+    cursor: pointer;
+    .mainBlock {
+      align-items: center;
+      font-size: 14px;
+    }
+  }
+
+  .cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .todoCreate,
+    .user {
+      cursor: pointer;
+    }
+    .todoBlock {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      .todo,
+      .count {
+        font-weight: 400;
+        font-size: 16px;
+      }
+      .count {
+        margin-left: 8px;
+        padding: 0 5px;
+        border-radius: 50%;
+        background: $count-active-bg;
+        color: $gray-btn-bg-hover;
+      }
+      .todo {
+        color: $gray;
+      }
+    }
+  }
+}

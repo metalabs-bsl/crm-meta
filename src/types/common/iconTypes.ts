@@ -21,4 +21,9 @@ export type IIconType =
   | 'calendar-dark'
   | 'document-dark'
   | 'mail-dark'
-  | 'search';
+  | 'search'
+  | 'plus-icon'
+  | 'comment'
+  | 'plus-gray'
+  | 'userIcon'
+  | 'delete';

@@ -1,4 +1,6 @@
 import { IIcons } from 'types/common';
+import comment from '../../assets/icons/comment.svg';
+import deleteIcon from '../../assets/icons/deleteIcon.svg';
 import arrowDown from '../../assets/icons/header/arrow-down.svg';
 import arrowUp from '../../assets/icons/header/arrow-up.svg';
 import BurgerOpen from '../../assets/icons/header/burger.svg';
@@ -9,6 +11,8 @@ import playIcon from '../../assets/icons/header/playIcon.svg';
 import startLine from '../../assets/icons/header/start-line.svg';
 import timeoutPlayIcon from '../../assets/icons/header/timeout-playIcon.svg';
 import usd from '../../assets/icons/header/usa.svg';
+import plusGray from '../../assets/icons/plus-gray.svg';
+import plusIcon from '../../assets/icons/plus-icon.svg';
 import search from '../../assets/icons/searchIcon.svg';
 import calendar from '../../assets/icons/sidebar/calendar.svg';
 import calendarDark from '../../assets/icons/sidebar/calendar-dark.svg';
@@ -18,6 +22,7 @@ import document from '../../assets/icons/sidebar/document.svg';
 import documentDark from '../../assets/icons/sidebar/document-dark.svg';
 import mail from '../../assets/icons/sidebar/mail.svg';
 import mailDark from '../../assets/icons/sidebar/mail-dark.svg';
+import userIcon from '../../assets/icons/userIcon.svg';
 
 export const icons: IIcons = {
   ['arrow-down']: arrowDown,
@@ -38,5 +43,10 @@ export const icons: IIcons = {
   ['active-bg']: activeBg,
   ['eur']: eur,
   ['usd']: usd,
-  ['search']: search
+  ['search']: search,
+  ['plus-icon']: plusIcon,
+  ['comment']: comment,
+  ['plus-gray']: plusGray,
+  ['userIcon']: userIcon,
+  ['delete']: deleteIcon
 };
