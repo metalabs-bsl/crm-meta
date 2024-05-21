@@ -20,4 +20,5 @@ export type IIconType =
   | 'crm-dark'
   | 'calendar-dark'
   | 'document-dark'
-  | 'mail-dark';
+  | 'mail-dark'
+  | 'search';

@@ -1,0 +1,23 @@
+@import '../../../common/styles/variables.scss';
+
+.deals {
+  display: flex;
+  flex-direction: column;
+  .headBlock {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 26px;
+    .titleBlock {
+      display: flex;
+      gap: 50px;
+      h1 {
+        color: $white;
+        font-weight: 500;
+        font-size: 30px;
+      }
+      .createBtn {
+        font-size: 18px;
+      }
+    }
+  }
+}

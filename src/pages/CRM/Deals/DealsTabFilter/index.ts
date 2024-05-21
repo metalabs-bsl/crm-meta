@@ -1,0 +1,1 @@
+export { DealsTabFilter } from './DealsTabFilter';

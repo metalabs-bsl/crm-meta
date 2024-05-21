@@ -20,6 +20,9 @@
 
 .yellow {
   background-color: $yellow-btn-bg;
+  &:hover {
+    background-color: $yellow-btn-hover;
+  }
 }
 
 .link-red {

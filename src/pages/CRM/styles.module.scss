@@ -1,5 +1,12 @@
+@import '../../common/styles/variables.scss';
+
 .crm {
   width: 100%;
   display: flex;
   flex-direction: column;
+  .pageContainer {
+    padding: 20px 50px 10px 50px;
+    background: $baby-powder;
+    border-radius: 10px;
+  }
 }
