@@ -9,11 +9,12 @@ interface IProps {
   type: BUTTON_TYPES;
   onClick: () => void;
   icon?: ReactNode;
+  className?: string;
 }
 
-export const Button = forwardRef<HTMLButtonElement, IProps>(({ text, type, onClick, icon }, ref) => {
+export const Button = forwardRef<HTMLButtonElement, IProps>(({ text, type, onClick, icon, className }, ref) => {
   return (
-    <button ref={ref} className={cn(styles.btn, styles[type])} onClick={onClick}>
+    <button ref={ref} className={cn(styles.btn, styles[type], className)} onClick={onClick}>
       {icon}
       {text}
     </button>

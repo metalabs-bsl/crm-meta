@@ -1,0 +1,44 @@
+@import '../../../../common/styles/variables.scss';
+
+.tabFilterBlock {
+  display: flex;
+  gap: 30px;
+  .tabsBlock {
+    background: $baby-powder;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 15px;
+    color: $white;
+
+    .tab {
+      padding: 5px 20px;
+      border-radius: 12px;
+      font-weight: 400;
+      font-size: 16px;
+      cursor: pointer;
+
+      .count {
+        border-radius: 15px;
+        background-color: $red-btn-default;
+        padding: 0 5px;
+        margin-left: 10px;
+      }
+    }
+
+    .activeTab {
+      background-color: $white;
+      color: $gray-btn-bg-hover;
+      .count {
+        background-color: $count-active-bg;
+      }
+    }
+  }
+
+  .countBlock {
+    span {
+      margin-left: 20px;
+    }
+  }
+}

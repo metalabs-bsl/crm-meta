@@ -9,6 +9,7 @@ import playIcon from '../../assets/icons/header/playIcon.svg';
 import startLine from '../../assets/icons/header/start-line.svg';
 import timeoutPlayIcon from '../../assets/icons/header/timeout-playIcon.svg';
 import usd from '../../assets/icons/header/usa.svg';
+import search from '../../assets/icons/searchIcon.svg';
 import calendar from '../../assets/icons/sidebar/calendar.svg';
 import calendarDark from '../../assets/icons/sidebar/calendar-dark.svg';
 import crm from '../../assets/icons/sidebar/crm.svg';
@@ -36,5 +37,6 @@ export const icons: IIcons = {
   ['start-line']: startLine,
   ['active-bg']: activeBg,
   ['eur']: eur,
-  ['usd']: usd
+  ['usd']: usd,
+  ['search']: search
 };
