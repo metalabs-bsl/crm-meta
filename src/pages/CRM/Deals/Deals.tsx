@@ -26,12 +26,7 @@ export const Deals = () => {
       <div className={styles.headBlock}>
         <div className={styles.titleBlock}>
           <h1>Сделки</h1>
-          <Button
-            text='создать сделку'
-            type={BUTTON_TYPES.YELLOW}
-            onClick={() => console.log('create deal')}
-            className={styles.createBtn}
-          />
+          <Button text='создать сделку' type={BUTTON_TYPES.YELLOW} onClick={() => console.log('create ')} className={styles.createBtn} />
         </div>
         <Input placeholder='Поиск' />
       </div>

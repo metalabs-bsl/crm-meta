@@ -8,6 +8,8 @@
     display: flex;
     gap: 13px;
     padding: 20px 78px 0 13px;
+    height: calc(100% - 78px);
+    width: 100%;
   }
 }
 
