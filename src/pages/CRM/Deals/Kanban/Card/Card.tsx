@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import cn from 'classnames';
 import { Icon } from 'common/ui';
 import styles from './style.module.scss';
 
@@ -19,7 +20,7 @@ export const Card: FC<CardProps> = ({ id, text }) => {
   });
 
   return (
-    <div className={styles.card} ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div className={cn(styles.card, { [styles.isDragging]: isDragging })} ref={drag}>
       <div className={styles.titleBlock}>
         <div className={styles.main}>
           <span className={styles.title}>{text}</span>
