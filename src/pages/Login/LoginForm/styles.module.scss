@@ -1,9 +1,56 @@
+@import '../../../common/styles/variables.scss';
+
 .loginForm {
-  width: 300px;
+  width: 434px;
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  background-color: lightgray;
-  border-radius: 20px;
+  gap: 15px;
+  padding: 32px;
+  background-color: $white;
+  border-radius: 0 10px 10px 0;
+
+  h1 {
+    color: $black;
+    margin-bottom: 15px;
+    font-weight: 500;
+    font-size: 30px;
+  }
+
+  .loginInp {
+    background-color: $seaSalt;
+    height: 40px;
+    border-radius: 5px;
+    width: 100%;
+    input,
+    input::placeholder {
+      color: $gray;
+    }
+
+    input {
+      padding-left: 15px;
+    }
+  }
+
+  .checkboxContainer {
+    display: flex;
+    gap: 10px;
+
+    .label {
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+
+  .btn {
+    margin-top: 45px;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .error {
+    color: $red;
+    font-size: 14px;
+  }
 }

@@ -1,20 +1,18 @@
-import { forwardRef, ReactNode } from 'react';
+import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-interface IProps {
+interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
-  type: BUTTON_TYPES;
-  onClick: () => void;
+  styleType: BUTTON_TYPES;
   icon?: ReactNode;
-  className?: string;
 }
 
-export const Button = forwardRef<HTMLButtonElement, IProps>(({ text, type, onClick, icon, className }, ref) => {
+export const Button = forwardRef<HTMLButtonElement, IProps>(({ text, styleType, icon, className, ...rest }, ref) => {
   return (
-    <button ref={ref} className={cn(styles.btn, styles[type], className)} onClick={onClick}>
+    <button ref={ref} className={cn(styles.btn, styles[styleType], className)} {...rest}>
       {icon}
       {text}
     </button>

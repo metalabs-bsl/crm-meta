@@ -26,9 +26,14 @@ export const Deals = () => {
       <div className={styles.headBlock}>
         <div className={styles.titleBlock}>
           <h1>Сделки</h1>
-          <Button text='создать сделку' type={BUTTON_TYPES.YELLOW} onClick={() => console.log('create ')} className={styles.createBtn} />
+          <Button
+            text='создать сделку'
+            styleType={BUTTON_TYPES.YELLOW}
+            onClick={() => console.log('create ')}
+            className={styles.createBtn}
+          />
         </div>
-        <Input placeholder='Поиск' />
+        <Input placeholder='Поиск' isSearch />
       </div>
       <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} />
       <div className={styles.deal_content}>{getDealsComponent()}</div>

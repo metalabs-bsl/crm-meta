@@ -26,7 +26,7 @@ export const ProfileWindow = () => {
         </li>
       </ul>
       <div className={styles.btnBlock}>
-        <Button type={BUTTON_TYPES.LINK_RED} text='выйти' onClick={() => console.log('logout')} />
+        <Button styleType={BUTTON_TYPES.LINK_RED} text='выйти' onClick={() => console.log('logout')} />
       </div>
     </div>
   );

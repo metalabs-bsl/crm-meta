@@ -28,9 +28,9 @@ export const StartWindow = () => {
     <div className={styles.timeContent}>
       <div className={styles.startBlock}>
         {isStart ? (
-          <Button text='завершить' type={BUTTON_TYPES.RED} onClick={onStop} />
+          <Button text='завершить' styleType={BUTTON_TYPES.RED} onClick={onStop} />
         ) : (
-          <Button text='старт рабочего дня' type={BUTTON_TYPES.GREEN} onClick={onStart} />
+          <Button text='старт рабочего дня' styleType={BUTTON_TYPES.GREEN} onClick={onStart} />
         )}
       </div>
 
@@ -49,7 +49,7 @@ export const StartWindow = () => {
             <Button
               icon={<Icon type='timeout-playIcon' alt='timeout' />}
               text='перерыв'
-              type={BUTTON_TYPES.OUTLINE_GRAY}
+              styleType={BUTTON_TYPES.OUTLINE_GRAY}
               onClick={onActivateTimeOut}
             />
           )}

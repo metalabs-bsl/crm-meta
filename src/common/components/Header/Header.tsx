@@ -105,7 +105,7 @@ export const Header = () => {
           <BgWindow />
         </DropdownModal>
 
-        <Button text='Профиль' type={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
+        <Button text='Профиль' styleType={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
         <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
           <ProfileWindow />
         </DropdownModal>
