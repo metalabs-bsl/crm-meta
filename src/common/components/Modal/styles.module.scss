@@ -1,0 +1,81 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    background: #363636;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .modalWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    max-height: 300px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .modalClose {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    top: 0;
+    right: -48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    & span {
+      position: relative;
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background-color: #010101;
+      transform: rotate(45deg);
+      border-radius: 2px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 2px;
+        background: #010101;
+        top: 0;
+        left: 0;
+        transform: rotate(-90deg);
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .modalInner {
+    width: 100%;
+    padding: 25px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+  }
+
+  .modalBtnWrapper {
+    gap: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}
