@@ -62,7 +62,7 @@ export const CardDetail: FC<IProps> = ({ cardTitle }) => {
         )}
         <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       </div>
-      <Progress currentStage='processed' />
+      <Progress currentStage='received' />
       <div>{getComponent(isActiveTab)}</div>
     </div>
   );

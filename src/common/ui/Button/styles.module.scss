@@ -58,3 +58,9 @@
   justify-content: center;
   gap: 5px;
 }
+
+.link-black {
+  background: transparent;
+  color: $gray-btn-bg-hover !important;
+  padding: 0;
+}
