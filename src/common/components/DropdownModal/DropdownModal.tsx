@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 interface IProps {
   targetRef: React.MutableRefObject<HTMLElement | null>;
   isOpen: boolean;
-  children: ReactNode;
+  children?: ReactNode;
   onClose: () => void;
 }
 

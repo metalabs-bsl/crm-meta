@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
+import { EdgeModal } from 'common/components';
+import { CardDetail } from '../../CardDetail';
 import styles from './style.module.scss';
 
 import { DragSourceMonitor, useDrag } from 'react-dnd';
@@ -11,6 +13,12 @@ interface CardProps {
 }
 
 export const Card: FC<CardProps> = ({ id, text }) => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const [{ isDragging }, drag] = useDrag({
     type: 'CARD',
     item: { type: 'CARD', id },
@@ -21,7 +29,7 @@ export const Card: FC<CardProps> = ({ id, text }) => {
 
   return (
     <div className={cn(styles.card, { [styles.isDragging]: isDragging })} ref={drag}>
-      <div className={styles.titleBlock}>
+      <div className={styles.titleBlock} onClick={() => setOpen(true)}>
         <div className={styles.main}>
           <span className={styles.title}>{text}</span>
           <span className={styles.client}>Азат</span>
@@ -45,6 +53,9 @@ export const Card: FC<CardProps> = ({ id, text }) => {
         </div>
         <Icon type='userIcon' alt='user' className={styles.user} />
       </div>
+      <EdgeModal isOpen={open} onClose={onClose}>
+        <CardDetail cardTitle={text} />
+      </EdgeModal>
     </div>
   );
 };

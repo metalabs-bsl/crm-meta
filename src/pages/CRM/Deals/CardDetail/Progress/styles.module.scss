@@ -1,0 +1,19 @@
+@import '../../../../../common/styles/variables.scss';
+
+.progress {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+
+  &_item {
+    padding: 7px 15px;
+    border-radius: 10px;
+    border-bottom: 1px solid;
+    min-width: 179px;
+    transition: background-color 0.3s;
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-btn-bg-hover;
+    background-color: $white;
+  }
+}

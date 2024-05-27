@@ -26,4 +26,6 @@ export type IIconType =
   | 'comment'
   | 'plus-gray'
   | 'userIcon'
-  | 'delete';
+  | 'delete'
+  | 'edit'
+  | 'link';
