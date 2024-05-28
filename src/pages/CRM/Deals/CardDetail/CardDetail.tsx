@@ -3,6 +3,8 @@ import { Icon, Input } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { AboutDeal } from './AboutDeal';
+import { history } from './CardDetail.helper';
+import { History } from './History';
 import { Progress } from './Progress';
 import styles from './style.module.scss';
 
@@ -33,7 +35,7 @@ export const CardDetail: FC<IProps> = ({ cardTitle }) => {
   const getComponent = (type: string) => {
     const components = {
       [tabItems[0].type]: <AboutDeal />,
-      [tabItems[1].type]: <p>История изменений</p>,
+      [tabItems[1].type]: <History history={history} />,
       [tabItems[2].type]: <p>WhatsApp</p>
     };
     return components[type];
@@ -63,7 +65,7 @@ export const CardDetail: FC<IProps> = ({ cardTitle }) => {
         <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       </div>
       <Progress currentStage='received' />
-      <div>{getComponent(isActiveTab)}</div>
+      <div className={styles.content}>{getComponent(isActiveTab)}</div>
     </div>
   );
 };
