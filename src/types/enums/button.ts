@@ -3,6 +3,7 @@ export enum BUTTON_TYPES {
   YELLOW = 'yellow',
   GREEN = 'green',
   RED = 'red',
+  CANCEL = 'cancel',
 
   // link - без границы
   LINK_RED = 'link-red',
