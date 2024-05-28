@@ -12,9 +12,21 @@ interface ModalProps {
   onClose: () => void;
   isOpen: boolean;
   children?: ReactNode;
+  leftBtnAction?: () => void;
+  rightBtnAction?: () => void;
 }
 
-export const Modal: FC<ModalProps> = ({ isOpen = false, children, leftBtnText, leftBtnStyle, rightBtnText, rightBtnStyle, onClose }) => {
+export const Modal: FC<ModalProps> = ({
+  leftBtnAction,
+  rightBtnAction,
+  isOpen = false,
+  leftBtnText,
+  leftBtnStyle,
+  rightBtnText,
+  rightBtnStyle,
+  children,
+  onClose
+}) => {
   return (
     <>
       {isOpen && (
@@ -26,8 +38,8 @@ export const Modal: FC<ModalProps> = ({ isOpen = false, children, leftBtnText, l
             <div className={styles.modalInner}>{children}</div>
             {(leftBtnText || rightBtnText) && (
               <div className={styles.modalBtnWrapper}>
-                {leftBtnText && <Button text={leftBtnText} styleType={leftBtnStyle} />}
-                {rightBtnText && <Button text={rightBtnText} styleType={rightBtnStyle} onClick={onClose} />}
+                {leftBtnText && <Button text={leftBtnText} styleType={leftBtnStyle} onClick={leftBtnAction} />}
+                {rightBtnText && <Button text={rightBtnText} styleType={rightBtnStyle} onClick={rightBtnAction} />}
               </div>
             )}
           </div>

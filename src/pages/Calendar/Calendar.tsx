@@ -20,7 +20,9 @@ export const Calendar: FC = () => {
         rightBtnText='Отменить'
         leftBtnStyle={BUTTON_TYPES.YELLOW}
         rightBtnStyle={BUTTON_TYPES.CANCEL}
-      />
+        leftBtnAction={onClose}
+        rightBtnAction={onClose}
+      ></Modal>
     </div>
   );
 };
