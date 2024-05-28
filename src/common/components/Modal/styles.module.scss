@@ -39,31 +39,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
     border-radius: 6px;
+    border: none;
     cursor: pointer;
-
-    & span {
-      position: relative;
-      display: inline-block;
-      width: 24px;
-      height: 2px;
-      background-color: $black;
-      transform: rotate(45deg);
-      border-radius: 2px;
-
-      &::after {
-        content: '';
-        position: absolute;
-        width: 24px;
-        height: 2px;
-        background: $black;
-        top: 0;
-        left: 0;
-        transform: rotate(-90deg);
-        border-radius: 2px;
-      }
-    }
   }
 
   .modalInner {

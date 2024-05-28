@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Button } from 'common/ui';
+import { Button, Icon } from 'common/ui';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
@@ -33,7 +33,7 @@ export const Modal: FC<ModalProps> = ({
         <div className={styles.modal} onClick={onClose}>
           <div className={styles.modalWrapper} onClick={(e) => e.stopPropagation()}>
             <button className={styles.modalClose} onClick={onClose}>
-              <span></span>
+              <Icon type='burger-close' />
             </button>
             <div className={styles.modalInner}>{children}</div>
             {(leftBtnText || rightBtnText) && (
