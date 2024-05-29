@@ -1,12 +1,15 @@
 import { FC } from 'react';
 import dayjs, { locale } from 'dayjs';
+import cn from 'classnames';
 import 'dayjs/locale/ru';
-import styles from '../styles.module.scss';
+import styles from './style.module.scss';
 
 interface IProps {
   date: string;
+  className?: string;
 }
-export const Date: FC<IProps> = ({ date }) => {
+
+export const Date: FC<IProps> = ({ date, className }) => {
   locale('ru');
   const inputDate = dayjs(date);
   const today = dayjs();
@@ -17,10 +20,10 @@ export const Date: FC<IProps> = ({ date }) => {
 
   const getDisplayDate = (): string => {
     if (inputDate.isSame(today, 'day')) {
-      return 'сегодня';
+      return 'Сегодня';
     } else {
       return formatDate(inputDate);
     }
   };
-  return <span className={styles.date}>{getDisplayDate()}</span>;
+  return <span className={cn(styles.date, className)}>{getDisplayDate()}</span>;
 };

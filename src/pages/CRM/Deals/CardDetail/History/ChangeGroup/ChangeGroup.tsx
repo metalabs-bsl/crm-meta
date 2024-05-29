@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { Date } from 'common/components';
 import { Change } from '../../CardDetail.helper';
 import { ChangeItem } from '../ChangeItem';
-import { Date } from '../Date';
 import styles from '../styles.module.scss';
 
 interface ChangeGroupProps {

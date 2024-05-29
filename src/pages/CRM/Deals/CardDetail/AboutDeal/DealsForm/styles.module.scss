@@ -2,6 +2,7 @@
 
 .dealsForm {
   border-radius: 10px;
+  width: 43.57%;
   min-width: 400px;
   min-height: 100%;
   background-color: $white;
@@ -55,9 +56,6 @@
         }
       }
 
-      .datetime {
-        max-width: 198px;
-      }
       .select {
         border-radius: 5px;
         padding: 9px 15px;

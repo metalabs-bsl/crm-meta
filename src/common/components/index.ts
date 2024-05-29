@@ -1,3 +1,4 @@
+export { Date } from './Date';
 export { DropdownModal } from './DropdownModal';
 export { EdgeModal } from './EdgeModal';
 export { Header } from './Header';

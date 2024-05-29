@@ -1,0 +1,41 @@
+@import '../../../../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: $white;
+  padding: 15px 18px;
+  select {
+    width: 150px;
+  }
+  .textareaBlock {
+    border: 1px solid $seaSalt;
+    border-radius: 5px;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    textarea {
+      outline: none;
+      min-height: 80px;
+      width: 100%;
+      border: none;
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray-btn-bg-hover;
+      resize: none;
+      &::placeholder {
+        color: $gray;
+      }
+    }
+
+    .datePicker {
+      align-self: flex-end;
+    }
+  }
+
+  .btnsBlock {
+    display: flex;
+    gap: 32px;
+  }
+}
