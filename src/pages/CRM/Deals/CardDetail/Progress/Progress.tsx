@@ -45,8 +45,8 @@ export const Progress: FC<IProps> = ({ currentStage = progress[0].type }) => {
           key={index}
           className={styles.progress_item}
           style={{
-            borderBottomColor: item.color,
-            backgroundColor: index <= currentIndex ? item.color : ''
+            borderBottomColor: index <= currentIndex ? progress[currentIndex].color : item.color,
+            backgroundColor: index <= currentIndex ? progress[currentIndex].color : ''
           }}
         >
           {item.title}

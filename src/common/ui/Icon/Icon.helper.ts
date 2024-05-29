@@ -12,6 +12,13 @@ import playIcon from '../../assets/icons/header/playIcon.svg';
 import startLine from '../../assets/icons/header/start-line.svg';
 import timeoutPlayIcon from '../../assets/icons/header/timeout-playIcon.svg';
 import usd from '../../assets/icons/header/usa.svg';
+import historyAcconts from '../../assets/icons/history/accoounts.svg';
+import ArrowLeft from '../../assets/icons/history/arrow-left.svg';
+import clip from '../../assets/icons/history/clip.svg';
+import historyComment from '../../assets/icons/history/comment.svg';
+import historyDeals from '../../assets/icons/history/created-deals.svg';
+import historyEdit from '../../assets/icons/history/edit.svg';
+import historyTodo from '../../assets/icons/history/todo.svg';
 import link from '../../assets/icons/link.svg';
 import plusGray from '../../assets/icons/plus-gray.svg';
 import plusIcon from '../../assets/icons/plus-icon.svg';
@@ -52,5 +59,12 @@ export const icons: IIcons = {
   ['userIcon']: userIcon,
   ['delete']: deleteIcon,
   ['edit']: edit,
-  ['link']: link
+  ['link']: link,
+  ['history-edit']: historyEdit,
+  ['history-todo']: historyTodo,
+  ['history-accounts']: historyAcconts,
+  ['history-comment']: historyComment,
+  ['history-deal-create']: historyDeals,
+  ['arrow-left']: ArrowLeft,
+  ['clip']: clip
 };

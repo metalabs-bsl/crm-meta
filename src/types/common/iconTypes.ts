@@ -28,4 +28,11 @@ export type IIconType =
   | 'userIcon'
   | 'delete'
   | 'edit'
-  | 'link';
+  | 'link'
+  | 'history-edit'
+  | 'history-todo'
+  | 'history-accounts'
+  | 'history-comment'
+  | 'history-deal-create'
+  | 'arrow-left'
+  | 'clip';

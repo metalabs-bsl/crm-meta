@@ -1,0 +1,73 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.dealsForm {
+  border-radius: 10px;
+  min-width: 400px;
+  min-height: 100%;
+  background-color: $white;
+  padding: 15px;
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 36px;
+    .title {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray;
+    }
+    .btnsBlock {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    .edit {
+      cursor: pointer;
+    }
+    margin-bottom: 10px;
+  }
+
+  .formItems {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .inpBlock {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        font-weight: 400;
+        font-size: 14px;
+        color: $gray;
+      }
+      .inp {
+        background-color: $seaSalt;
+        border-radius: 5px;
+        input {
+          font-weight: 400;
+          font-size: 16px;
+          color: $gray-btn-bg-hover;
+        }
+      }
+      .hasPrevIcon {
+        input {
+          padding: 0;
+        }
+      }
+
+      .datetime {
+        max-width: 198px;
+      }
+      .select {
+        border-radius: 5px;
+        padding: 9px 15px;
+        border: none;
+        background-color: $seaSalt;
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray-btn-bg-hover;
+        outline: none;
+      }
+    }
+  }
+}
