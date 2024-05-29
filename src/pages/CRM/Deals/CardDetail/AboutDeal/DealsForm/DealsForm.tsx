@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import cn from 'classnames';
-import { Button, Icon, Input } from 'common/ui';
+import { Button, DatePicker, Icon, Input } from 'common/ui';
 import { FormItems } from './DeasForm.helper';
 import styles from './styles.module.scss';
 
@@ -15,7 +14,7 @@ export const DealsForm = () => {
         <span className={styles.title}>О сделке</span>
         {isEdit ? (
           <div className={styles.btnsBlock}>
-            <Button styleType={BUTTON_TYPES.GREEN} text='сохранить' onClick={() => console.log('onEdit')} type='button' />
+            <Button styleType={BUTTON_TYPES.YELLOW} text='сохранить' onClick={() => console.log('onEdit')} type='button' />
             <Button styleType={BUTTON_TYPES.Link_BLACK} text='отменить' onClick={() => setIsEdit(false)} />
           </div>
         ) : (
@@ -34,14 +33,10 @@ export const DealsForm = () => {
                   </option>
                 ))}
               </select>
+            ) : item.type === 'datetime-local' ? (
+              <DatePicker defaultValue={item.value} disabled={!isEdit} />
             ) : (
-              <Input
-                defaultValue={item.value}
-                type={item.type}
-                className={cn(styles.inp, { [styles.hasPrevIcon]: item.icon, [styles.datetime]: item.type === 'datetime-local' })}
-                disabled={!isEdit}
-                prevIcon={item.icon ?? undefined}
-              />
+              <Input defaultValue={item.value} className={styles.inp} disabled={!isEdit} prevIcon={item.icon ?? undefined} />
             )}
           </div>
         ))}

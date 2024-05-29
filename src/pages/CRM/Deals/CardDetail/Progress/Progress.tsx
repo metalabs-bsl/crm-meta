@@ -5,7 +5,7 @@ const progress = [
   {
     title: 'Поступили',
     type: 'received',
-    color: '#FFE500'
+    color: '#BBED21'
   },
   {
     title: 'Взят в обработку',

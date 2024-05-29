@@ -1,0 +1,11 @@
+@import '../../styles/variables.scss';
+
+.date {
+  padding: 5px 20px;
+  border-radius: 10px;
+  background-color: $silver;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover;
+  margin-bottom: 20px;
+}
