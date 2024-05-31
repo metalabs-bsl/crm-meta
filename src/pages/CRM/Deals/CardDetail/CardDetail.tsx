@@ -2,6 +2,8 @@ import { FC, useState } from 'react';
 import { Icon, Input } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
 import { AboutDeal } from './AboutDeal';
 import { history } from './CardDetail.helper';
 import { History } from './History';
@@ -9,7 +11,7 @@ import { Progress } from './Progress';
 import styles from './style.module.scss';
 
 interface IProps {
-  cardTitle: string;
+  cardTitle?: string;
 }
 
 const tabItems: ITabsItem[] = [
@@ -27,10 +29,11 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-export const CardDetail: FC<IProps> = ({ cardTitle }) => {
+export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(cardTitle);
+  const notify = useNotify();
 
   const getComponent = (type: string) => {
     const components = {
@@ -43,6 +46,10 @@ export const CardDetail: FC<IProps> = ({ cardTitle }) => {
 
   const onSaveTitleEdit = () => {
     setIsTitleEdit(false);
+  };
+
+  const onLinkCopy = () => {
+    notify(MESSAGE.LINK_COPIED);
   };
 
   return (
@@ -59,7 +66,7 @@ export const CardDetail: FC<IProps> = ({ cardTitle }) => {
           <div className={styles.head_left}>
             <div className={styles.card_title}>{editedTitle}</div>
             <Icon type='edit' onClick={() => setIsTitleEdit(true)} />
-            <Icon type='link' />
+            <Icon type='link' onClick={onLinkCopy} />
           </div>
         )}
         <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />

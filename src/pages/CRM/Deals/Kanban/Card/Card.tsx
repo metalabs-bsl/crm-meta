@@ -1,11 +1,13 @@
 import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
-import { EdgeModal } from 'common/components';
+import { EdgeModal, Modal } from 'common/components';
 import { CardDetail } from '../../CardDetail';
+import { TodoCreateForm } from './TodoCreateForm';
 import styles from './style.module.scss';
 
 import { DragSourceMonitor, useDrag } from 'react-dnd';
+import { BUTTON_TYPES } from 'types/enums';
 
 interface CardProps {
   id: number;
@@ -14,9 +16,14 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({ id, text }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
 
   const onClose = () => {
     setOpen(false);
+  };
+
+  const onCloseTodoModal = () => {
+    setOpenTodoModal(false);
   };
 
   const [{ isDragging }, drag] = useDrag({
@@ -47,7 +54,7 @@ export const Card: FC<CardProps> = ({ id, text }) => {
       </div>
       <div className={styles.cardFooter}>
         <div className={styles.todoBlock}>
-          <Icon type='plus-gray' alt='plus' className={styles.todoCreate} />
+          <Icon type='plus-gray' alt='plus' className={styles.todoCreate} onClick={() => setOpenTodoModal(true)} />
           <span className={styles.todo}>Дело</span>
           <span className={styles.count}>0</span>
         </div>
@@ -56,6 +63,17 @@ export const Card: FC<CardProps> = ({ id, text }) => {
       <EdgeModal isOpen={open} onClose={onClose}>
         <CardDetail cardTitle={text} />
       </EdgeModal>
+      <Modal
+        isOpen={openTodoModal}
+        onClose={onCloseTodoModal}
+        leftBtnText='сохранить'
+        leftBtnStyle={BUTTON_TYPES.YELLOW}
+        rightBtnText='отменить'
+        rightBtnStyle={BUTTON_TYPES.Link_BLACK}
+        rightBtnAction={onCloseTodoModal}
+      >
+        <TodoCreateForm />
+      </Modal>
     </div>
   );
 };

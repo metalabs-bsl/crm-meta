@@ -1,0 +1,21 @@
+@import '../../../../../../common/styles/variables.scss';
+.textareaBlock {
+  border: 1px solid $seaSalt;
+  border-radius: 5px;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  textarea {
+    outline: none;
+    min-height: 80px;
+    width: 100%;
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-btn-bg-hover;
+    resize: none;
+    &::placeholder {
+      color: $gray;
+    }
+  }
+}

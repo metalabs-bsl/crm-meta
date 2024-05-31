@@ -1,4 +1,5 @@
 export { Date } from './Date';
+export { DeleteModal } from './DeleteModal';
 export { DropdownModal } from './DropdownModal';
 export { EdgeModal } from './EdgeModal';
 export { Header } from './Header';

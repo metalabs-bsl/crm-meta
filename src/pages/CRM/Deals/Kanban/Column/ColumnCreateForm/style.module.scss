@@ -1,0 +1,77 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    label {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray;
+    }
+    .inp {
+      background-color: $seaSalt;
+      border-radius: 5px;
+      input {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray !important;
+        &::placeholder {
+          color: $gray;
+        }
+      }
+    }
+  }
+  .colors {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .active {
+      height: 28px !important;
+      width: 28px !important;
+      border: 2px solid $gray;
+    }
+    .without {
+      background-image: url(../../../../../../common/assets/icons/without-color.svg);
+    }
+    .roundIcon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .received {
+      background-color: $yellow-round;
+    }
+
+    .processed {
+      background-color: $blue-round;
+    }
+
+    .consideration {
+      background-color: $green-round;
+    }
+
+    .booking {
+      background-color: $violet-round;
+    }
+
+    .pink {
+      background-color: $pink-round;
+    }
+    .black {
+      background-color: $gray-btn-bg-hover;
+    }
+    .bought {
+      background-color: $red-round;
+    }
+
+    .sale {
+      background-color: $salat-round;
+    }
+  }
+}
