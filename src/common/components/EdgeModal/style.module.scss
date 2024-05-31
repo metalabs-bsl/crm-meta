@@ -4,12 +4,20 @@
   position: absolute;
   left: 0;
   top: 0;
-  background-color: $modalMask;
   width: 100%;
   height: 100vh;
   display: flex;
   justify-content: flex-end;
   z-index: 1000;
+  &::before {
+    content: '';
+    position: absolute;
+    background: $modalMask;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
   .edgeModal {
     width: 68%;
     height: 100%;

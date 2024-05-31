@@ -4,7 +4,7 @@ import { IAuthorizedAaction, ILoginState } from 'types/store/admin/header.slice.
 
 const initialState: ILoginState = {
   isAuthorized: false,
-  role: ROLES.UNAUTHORIZED
+  role: ROLES.ADMIN
 };
 
 export const loginSlice = createSlice({
