@@ -76,7 +76,7 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
       <DeleteModal
         isOpen={openDeleteModal}
         onCancel={onCloseDeleteModal}
-        text='Вы уверены, что хотите удалить сделку?'
+        text={`Вы уверены, что хотите удалить колонку "${title}"?`}
         onDelete={onColumnDelete}
       />
     </div>
