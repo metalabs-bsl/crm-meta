@@ -10,9 +10,6 @@ import { ROLES } from 'types/roles';
 import { adminPath } from 'types/routes';
 import styles from './styles.module.scss';
 
-const test = 10;
-console.log(test);
-
 export const App = () => {
   const navigate = useNavigate();
   const { role } = useAppSelector(loginSelectors.login);
