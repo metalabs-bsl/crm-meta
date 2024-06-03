@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 import { IRoute } from '../types/common';
 import { ROLES } from '../types/roles';
 import { adminLabels as labels, adminPath as paths } from '../types/routes';
@@ -16,6 +17,12 @@ export const mainRoutes: IRoute[] = [
     label: labels.notFound,
     roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
     element: <NotFound />
+  },
+  {
+    path: paths.root,
+    label: '',
+    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    element: <Navigate to={'/crm/transactions'} />
   },
   {
     path: paths.crm,
