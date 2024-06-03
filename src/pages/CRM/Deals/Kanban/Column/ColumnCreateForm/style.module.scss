@@ -37,6 +37,8 @@
     }
     .without {
       background-image: url(../../../../../../common/assets/icons/without-color.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
     }
     .roundIcon {
       width: 24px;

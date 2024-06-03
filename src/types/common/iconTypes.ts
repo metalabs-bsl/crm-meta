@@ -35,4 +35,5 @@ export type IIconType =
   | 'history-comment'
   | 'history-deal-create'
   | 'arrow-left'
-  | 'clip';
+  | 'clip'
+  | 'calendar-outline';

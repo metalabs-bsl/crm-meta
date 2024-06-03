@@ -1,24 +1,19 @@
 import { FC } from 'react';
 import { Change } from 'pages/CRM/Deals/CardDetail/CardDetail.helper';
-import { Icon } from 'common/ui';
-import screen from '../../../../../../../../common/assets/images/testScreen.png';
 import styles from './styles.module.scss';
 
 interface IProps {
   data: Change;
 }
 
-export const Accounts: FC<IProps> = ({ data }) => {
+export const Accounts: FC<IProps> = ({}) => {
   return (
     <div className={styles.accounts}>
-      <span className={styles.title}>Счета</span>
+      <span className={styles.title}>Первая часть</span>
       <div className={styles.middle}>
-        <p className={styles.description}>{data.description}</p>
-        <span className={styles.timestamp}>{data.timestamp}</span>
-      </div>
-      <div className={styles.file}>
-        <img src={screen} alt='screen' className={styles.fileScreen} />
-        <Icon type='clip' className={styles.clip} />
+        <a target='_blank' href='#' className={styles.link}>
+          Счет об оплате первая часть.jpeg
+        </a>
       </div>
     </div>
   );

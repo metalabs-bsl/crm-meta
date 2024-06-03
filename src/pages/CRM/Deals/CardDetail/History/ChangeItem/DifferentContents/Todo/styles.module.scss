@@ -5,8 +5,7 @@
   flex-direction: column;
   gap: 15px;
 
-  .title,
-  .timestamp {
+  .title {
     font-weight: 400;
     font-size: 14px;
     color: $gray;
@@ -18,27 +17,23 @@
     border-radius: 5px;
     padding: 10px 15px;
     background-color: $seaSalt;
-    position: relative;
     .description {
       font-weight: 400;
       font-size: 16px;
       color: $gray-btn-bg-hover;
     }
-    .dedline {
-      display: flex;
-      gap: 5px;
-      font-size: 14px;
-      font-weight: 400;
-      .date {
-        padding: 5px 20px;
-        border-radius: 10px;
-        background-color: $white;
-      }
-    }
-    .timestamp {
-      position: absolute;
-      right: 10px;
-      bottom: 5px;
+  }
+  .dedline {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    .date {
+      padding: 5px 20px;
+      border-radius: 10px;
+      background-color: $seaSalt;
     }
   }
 }

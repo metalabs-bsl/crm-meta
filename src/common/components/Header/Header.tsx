@@ -11,7 +11,7 @@ import { CurrentTime } from './CurrentTime/CurrentTime';
 import { ExtangesWindow } from './ExtangesWindow/ExtangesWindow';
 import { ProfileWindow } from './ProfileWindow/ProfileWindow';
 import { StartWindow } from './StartWindow/StartWindow';
-import logo from '../../assets/icons/header/logo.svg';
+import logo from '../../assets/images/logo.png';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';

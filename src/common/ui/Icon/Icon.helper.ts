@@ -1,4 +1,5 @@
 import { IIcons } from 'types/common';
+import calendarOutline from '../../assets/icons/calendar-outline.svg';
 import comment from '../../assets/icons/comment.svg';
 import deleteIcon from '../../assets/icons/deleteIcon.svg';
 import edit from '../../assets/icons/edit.svg';
@@ -66,5 +67,6 @@ export const icons: IIcons = {
   ['history-comment']: historyComment,
   ['history-deal-create']: historyDeals,
   ['arrow-left']: ArrowLeft,
-  ['clip']: clip
+  ['clip']: clip,
+  ['calendar-outline']: calendarOutline
 };

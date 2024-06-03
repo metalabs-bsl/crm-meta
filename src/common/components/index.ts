@@ -2,6 +2,7 @@ export { Date } from './Date';
 export { DeleteModal } from './DeleteModal';
 export { DropdownModal } from './DropdownModal';
 export { EdgeModal } from './EdgeModal';
+export { FilterByDate } from './FilterByDate';
 export { Header } from './Header';
 export { Modal } from './Modal';
 export { Navbar } from './Navbar';

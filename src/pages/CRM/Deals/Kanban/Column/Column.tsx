@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
-import { DeleteModal, Modal } from 'common/components';
+import { DeleteModal, DropdownModal, FilterByDate, Modal } from 'common/components';
 import { Card } from '../Card';
 import { IColumn } from '../Kanban.helper';
 import { ColumnCreateForm } from './ColumnCreateForm';
@@ -20,7 +20,9 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
   const { status, title } = col;
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-
+  const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
+  const filterRef = useRef(null);
+  const isSaleColumn = status === 'sale';
   const [{ isOver }, drop] = useDrop({
     accept: 'CARD',
     drop: (item: { id: number }) => onDrop(item.id, status),
@@ -41,19 +43,33 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
     console.log('колонка удалена');
   };
 
+  const onClickFilterModal = () => {
+    setOpenFilterModal(!openFilterModal);
+  };
+
+  const onFilterChange = (start: string, end: string) => {
+    console.log({ start, end });
+  };
+
   return (
     <div className={cn(styles.column, { [styles.isOver]: isOver })} ref={drop}>
       <div className={styles.titleBlock}>
         <div className={cn(styles.roundIcon, styles[status])} />
         <span className={styles.title}>{title}</span>
         <span className={styles.count}>(1)</span>
-        <div className={styles.actionBlock}>
+        <div className={styles.actionBlock} style={{ display: isSaleColumn && openFilterModal ? 'flex' : '' }}>
+          {isSaleColumn && (
+            <div ref={filterRef} onClick={onClickFilterModal} className={styles.filter}>
+              <Icon type='calendar-outline' />
+            </div>
+          )}
           <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />
           <div className={styles.plus}>
             <Icon type='plus-icon' alt='plus' onClick={() => setOpenColumnModal(true)} />
           </div>
         </div>
       </div>
+      {isSaleColumn && <span className={styles.totalSum}>200.000$</span>}
       <div className={styles.createBtn} onClick={() => console.log('click plus')}>
         <Icon type='plus-icon' alt='plus' />
       </div>
@@ -79,6 +95,11 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
         text={`Вы уверены, что хотите удалить колонку "${title}"?`}
         onDelete={onColumnDelete}
       />
+      {isSaleColumn && (
+        <DropdownModal targetRef={filterRef} onClose={onClickFilterModal} isOpen={openFilterModal}>
+          <FilterByDate onFilterChange={onFilterChange} />
+        </DropdownModal>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { LoginForm } from './LoginForm/LoginForm';
-import logo from '../../common/assets/icons/header/logo.svg';
+import logo from '../../common/assets/images/logo.png';
 import styles from './styles.module.scss';
 
 export const Login: FC = () => {

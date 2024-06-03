@@ -21,18 +21,22 @@
   }
 }
 
-.yellow {
-  background-color: $main-yellow-bg;
+.pink {
+  background-color: $main-pink-bg;
 }
-.blue {
-  background-color: $main-blue-bg;
-}
+
 .violet {
   background-color: $main-violet-bg;
 }
-.red {
-  background-color: $main-red-bg;
+
+.green {
+  background-color: $main-green-bg;
 }
+
+.gray {
+  background-color: $gray;
+}
+
 .black {
   background-color: $main-black-bg;
 }
@@ -44,4 +48,13 @@
 }
 .third-texture {
   background-image: url(../common/assets/images/thirdBg.png);
+}
+.fourth-texture {
+  background-image: url(../common/assets/images/fourthBg.png);
+}
+.fifth-texture {
+  background-image: url(../common/assets/images/fifthBg.png);
+}
+.sixth-texture {
+  background-image: url(../common/assets/images/sixthBg.png);
 }

@@ -1,6 +1,7 @@
 import { Button } from 'common/ui';
 import { useAppSelector } from 'common/hooks';
 import { loginSelectors } from 'api/admin/login/login.selectors';
+import { AvatarUpload } from '../AvatarUpload';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
@@ -12,9 +13,12 @@ export const ProfileWindow = () => {
     <div className={styles.profile}>
       <span className={styles.role}> {role.title}</span>
       <ul>
-        <li>
-          <span className={styles.label}>ФИО</span>
-          <span className={styles.name}>Азатов Азат</span>
+        <li className={styles.avatarBlock}>
+          <div className={styles.textWrapper}>
+            <span className={styles.label}>ФИО</span>
+            <span className={styles.name}>Азатов Азат</span>
+          </div>
+          <AvatarUpload />
         </li>
         <li>
           <span className={styles.label}>Почта</span>

@@ -1,0 +1,17 @@
+@import '../../styles/variables.scss';
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .span {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray-btn-bg-hover;
+    }
+  }
+}

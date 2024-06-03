@@ -10,6 +10,12 @@
   flex-direction: column;
   gap: 12px;
 
+  .totalSum {
+    align-self: center;
+    font-weight: 500;
+    font-size: 24px;
+    color: $white;
+  }
   .cardsContainer {
     width: 100%;
     display: flex;
@@ -75,11 +81,15 @@
         cursor: pointer;
       }
       .plus {
-        background-color: $white;
+        background-color: $count-active-bg;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
+      }
+      .filter {
+        display: flex;
+        height: min-content;
       }
     }
 

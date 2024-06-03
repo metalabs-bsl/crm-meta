@@ -40,16 +40,16 @@ export const Card: FC<CardProps> = ({ id, text }) => {
         <div className={styles.main}>
           <span className={styles.title}>{text}</span>
           <span className={styles.client}>Азат</span>
+          <div className={styles.brutto}>
+            <span>Брутто:</span> 1200$
+          </div>
         </div>
-        <div className={styles.date}>8 мая</div>
+        <div className={styles.date}>8.05.2024</div>
       </div>
       <div className={styles.commentContainer}>
         <div className={styles.mainBlock}>
           <Icon type='comment' alt='comment' />
           <span className={styles.comment}>Прищельцы атакуют!</span>
-        </div>
-        <div className={styles.timeBlock}>
-          <span className={styles.time}>11:11</span>
         </div>
       </div>
       <div className={styles.cardFooter}>

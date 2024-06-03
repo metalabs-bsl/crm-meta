@@ -12,12 +12,23 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
-    background-color: $silver;
+    background-color: $count-active-bg;
     min-height: 101px;
     cursor: pointer;
     .main {
       flex-direction: column;
       font-size: 20px;
+      .client {
+        text-decoration: underline;
+      }
+      .brutto {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray-btn-bg-hover;
+        span {
+          color: $gray;
+        }
+      }
     }
   }
 
@@ -29,8 +40,7 @@
     display: flex;
   }
 
-  .date,
-  .timeBlock {
+  .date {
     display: flex;
     align-items: flex-end;
     font-weight: 400;
@@ -42,6 +52,8 @@
     display: flex;
     justify-content: space-between;
     min-height: 44px;
+    border-radius: 5px;
+    background-color: $seaSalt;
     cursor: pointer;
     .mainBlock {
       align-items: center;
