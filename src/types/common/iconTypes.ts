@@ -36,4 +36,7 @@ export type IIconType =
   | 'history-deal-create'
   | 'arrow-left'
   | 'clip'
-  | 'calendar-outline';
+  | 'calendar-outline'
+  | 'count-plus-active'
+  | 'count-minus-active'
+  | 'count-minus-unactive';

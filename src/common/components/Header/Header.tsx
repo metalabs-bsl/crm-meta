@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import cn from 'classnames';
 import { Button, Icon } from 'common/ui';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
 import { loginSelectors } from 'api/admin/login/login.selectors';
@@ -78,7 +79,7 @@ export const Header = () => {
       <div className={styles.otherBlock}>
         <div className={styles.exchangeRates} onClick={openExtangesModal} ref={extangesRef}>
           <span>Курсы валют</span>
-          <Icon type={`arrow-${isExtangesOpen ? 'up' : 'down'}`} alt='arrow' style={{ fill: 'red' }} />
+          <Icon type={'arrow-down'} alt='arrow' className={cn({ [styles.open]: isExtangesOpen })} />
         </div>
         <DropdownModal isOpen={isExtangesOpen} targetRef={extangesRef} onClose={closeExtangesModal}>
           <ExtangesWindow />
@@ -99,7 +100,7 @@ export const Header = () => {
 
         <div className={styles.exchangeRates} onClick={openBgModal} ref={bgRef}>
           <span>Фон</span>
-          <Icon type={`arrow-${isBgOpen ? 'up' : 'down'}`} alt='arrow' />
+          <Icon type={'arrow-down'} alt='arrow' className={cn({ [styles.open]: isBgOpen })} />
         </div>
         <DropdownModal isOpen={isBgOpen} targetRef={bgRef} onClose={closeBgModal}>
           <BgWindow />
