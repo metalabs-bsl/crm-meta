@@ -28,6 +28,9 @@
     &::placeholder {
       color: $white;
     }
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   .searchIcon {

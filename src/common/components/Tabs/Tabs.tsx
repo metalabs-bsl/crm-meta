@@ -8,9 +8,11 @@ interface IProps {
   isActiveTab: string;
   setIsActiveTab: (type: string) => void;
   className?: string;
+  tabClassName?: string;
+  activeTabClassName?: string;
 }
 
-export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, className }) => {
+export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, className, tabClassName, activeTabClassName }) => {
   const onChangeTab = (type: string) => {
     setIsActiveTab(type);
   };
@@ -18,7 +20,11 @@ export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, classN
   return (
     <div className={cn(styles.tabsBlock, className)}>
       {tabItems.map((tab, index) => (
-        <div key={index} className={cn(styles.tab, { [styles.activeTab]: isActiveTab === tab.type })} onClick={() => onChangeTab(tab.type)}>
+        <div
+          key={index}
+          className={cn(styles.tab, tabClassName, { [cn(styles.activeTab, activeTabClassName)]: isActiveTab === tab.type })}
+          onClick={() => onChangeTab(tab.type)}
+        >
           {tab.title}
         </div>
       ))}

@@ -49,7 +49,10 @@ export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
   };
 
   const onLinkCopy = () => {
-    notify(MESSAGE.LINK_COPIED);
+    navigator.clipboard
+      .writeText(editedTitle)
+      .then(() => notify(MESSAGE.LINK_COPIED))
+      .catch((err) => console.error('Failed to copy text: ', err));
   };
 
   return (

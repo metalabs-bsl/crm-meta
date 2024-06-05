@@ -9,6 +9,22 @@ export const CreateFileForm = () => {
     {
       title: 'Первая часть',
       value: 'first'
+    },
+    {
+      title: 'Вторая часть',
+      value: 'second'
+    },
+    {
+      title: 'Третья часть',
+      value: 'third'
+    },
+    {
+      title: 'Четвертая часть',
+      value: 'fourth'
+    },
+    {
+      title: 'Пятая часть',
+      value: 'fifth'
     }
   ]);
 

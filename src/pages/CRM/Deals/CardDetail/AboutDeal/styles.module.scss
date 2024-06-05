@@ -11,9 +11,16 @@
     .tab {
       align-self: center;
     }
+    .isEndTab {
+      align-self: flex-end;
+      margin-right: 13.5%;
+    }
     .box {
       width: 100%;
       height: calc(100% - 50px);
     }
+  }
+  .isCalculatorChild {
+    width: 100%;
   }
 }
