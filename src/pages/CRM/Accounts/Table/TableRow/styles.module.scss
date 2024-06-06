@@ -1,0 +1,36 @@
+@import '../../../../../common/styles/variables.scss';
+
+.mainRow {
+  cursor: pointer;
+}
+
+.paymentStatus {
+  background-color: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.accordionRow {
+  background-color: #f9f9f9;
+}
+
+.accordionContainer {
+  padding: 0;
+  border: none;
+}
+
+.expandedContent {
+  padding: 10px;
+}
+
+.paymentDetail {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.paymentDetail > div {
+  flex: 1;
+  text-align: center;
+}
