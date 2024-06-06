@@ -17,7 +17,7 @@ interface ColumnProps {
 }
 
 export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
-  const { status, title } = col;
+  const { status, title, color } = col;
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
   return (
     <div className={cn(styles.column, { [styles.isOver]: isOver })} ref={drop}>
       <div className={styles.titleBlock}>
-        <div className={cn(styles.roundIcon, styles[status])} />
+        <div className={cn(styles.roundIcon, styles[color])} />
         <span className={styles.title}>{title}</span>
         <span className={styles.count}>(1)</span>
         <div className={styles.actionBlock} style={{ display: isSaleColumn && openFilterModal ? 'flex' : '' }}>

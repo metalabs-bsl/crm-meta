@@ -44,32 +44,35 @@
       border-radius: 50%;
     }
 
-    .received {
+    .salat {
       background-color: $yellow-round;
     }
 
-    .processed {
+    .blue {
       background-color: $blue-round;
     }
 
-    .consideration {
+    .dark-green {
       background-color: $green-round;
     }
 
-    .booking {
+    .violet {
       background-color: $violet-round;
     }
 
-    .bought,
-    .expensive,
-    .wrongDates,
-    .changeMind,
-    .noAnswer {
+    .red {
       background-color: $red-round;
     }
 
-    .sale {
+    .light-green {
       background-color: $salat-round;
+    }
+    .pink {
+      background-color: $pink-round;
+    }
+
+    .black {
+      background-color: $gray-btn-bg-hover;
     }
 
     .actionBlock {

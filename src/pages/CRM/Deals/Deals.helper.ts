@@ -31,16 +31,16 @@ export const KanbanData = [
 ];
 
 export const kanbanKolumns = [
-  { status: 'received', title: 'Поступили' },
-  { status: 'processed', title: 'Взят в обработку' },
-  { status: 'consideration', title: 'Рассмотрение' },
-  { status: 'booking', title: 'Бронирование' },
-  { status: 'bought', title: 'Уже купил' },
-  { status: 'expensive', title: 'Дорого' },
-  { status: 'wrongDates', title: 'Не те даты' },
-  { status: 'changeMind', title: 'Передумал' },
-  { status: 'noAnswer', title: 'Нет ответа' },
-  { status: 'sale', title: 'Продажа' }
+  { status: 'received', title: 'Поступили', color: 'salat' },
+  { status: 'processed', title: 'Взят в обработку', color: 'blue' },
+  { status: 'consideration', title: 'Рассмотрение', color: 'dark-green' },
+  { status: 'booking', title: 'Бронирование', color: 'violet' },
+  { status: 'bought', title: 'Уже купил', color: 'red' },
+  { status: 'expensive', title: 'Дорого', color: 'red' },
+  { status: 'wrongDates', title: 'Не те даты', color: 'red' },
+  { status: 'changeMind', title: 'Передумал', color: 'red' },
+  { status: 'noAnswer', title: 'Нет ответа', color: 'red' },
+  { status: 'sale', title: 'Продажа', color: 'light-green' }
 ];
 
 export const TodoData = [
@@ -49,10 +49,10 @@ export const TodoData = [
 ];
 
 export const todoKolumns = [
-  { status: 'received', title: 'Информация' },
-  { status: 'processed', title: 'Без дел' },
-  { status: 'consideration', title: 'На сегодня' },
-  { status: 'booking', title: 'На этой неделе' },
-  { status: 'bought', title: 'На следующей неделе' },
-  { status: 'expensive', title: 'Просрочил' }
+  { status: 'received', title: 'Информация', color: 'salat' },
+  { status: 'processed', title: 'Без дел', color: 'dark-green' },
+  { status: 'consideration', title: 'На сегодня', color: 'light-green' },
+  { status: 'booking', title: 'На этой неделе', color: 'blue' },
+  { status: 'bought', title: 'На следующей неделе', color: 'violet' },
+  { status: 'expensive', title: 'Просрочил', color: 'red' }
 ];

@@ -7,4 +7,5 @@ export interface Task {
 export interface IColumn {
   status: string;
   title: string;
+  color: string;
 }
