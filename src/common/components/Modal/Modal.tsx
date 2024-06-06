@@ -7,8 +7,8 @@ import { BUTTON_TYPES } from 'types/enums';
 interface ModalProps {
   leftBtnText?: string;
   rightBtnText?: string;
-  leftBtnStyle: BUTTON_TYPES;
-  rightBtnStyle: BUTTON_TYPES;
+  leftBtnStyle?: BUTTON_TYPES;
+  rightBtnStyle?: BUTTON_TYPES;
   onClose: () => void;
   isOpen: boolean;
   children?: ReactNode;
