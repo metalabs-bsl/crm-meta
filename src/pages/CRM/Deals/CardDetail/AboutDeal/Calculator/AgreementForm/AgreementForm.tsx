@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import cn from 'classnames';
 import { DatePicker, Input } from 'common/ui';
-import { Accordion } from '../Accordion';
+import { Accordion } from 'common/components';
 import styles from './style.module.scss';
 
 export const AgreementForm = () => {

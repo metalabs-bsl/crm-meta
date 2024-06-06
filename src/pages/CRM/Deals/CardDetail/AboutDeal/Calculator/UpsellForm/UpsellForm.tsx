@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DatePicker, Input, Select } from 'common/ui';
-import { Accordion } from '../Accordion';
+import { Accordion } from 'common/components';
 import styles from './style.module.scss';
 
 const payOptions = [

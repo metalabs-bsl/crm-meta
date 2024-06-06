@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react';
 import cn from 'classnames';
 import { DatePicker, Input, Select } from 'common/ui';
-import { DropdownModal } from 'common/components';
-import { Accordion } from '../Accordion';
+import { Accordion, DropdownModal } from 'common/components';
 import { PassengersCount } from './PassengersCount';
 import { brandOptions, categoryTourTimeOptions, PassengerCounts, servicesOptions } from './TourInfoForm.helper';
 import styles from './styles.module.scss';

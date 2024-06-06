@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { DatePicker, Icon, Input, Select } from 'common/ui';
-import { Accordion } from '../Accordion';
+import { Accordion } from 'common/components';
 import styles from './styles.module.scss';
 
 interface IProps {
