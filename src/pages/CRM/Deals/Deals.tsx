@@ -38,7 +38,7 @@ export const Deals = () => {
       <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} />
       <div className={styles.deal_content}>{getDealsComponent()}</div>
       <EdgeModal isOpen={open} onClose={onClose}>
-        <CardDetail />
+        <CardDetail isNewDeal />
       </EdgeModal>
     </div>
   );

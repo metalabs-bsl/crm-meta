@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
-import { DeleteModal, DropdownModal, FilterByDate, Modal } from 'common/components';
+import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'common/components';
+import { CardDetail } from '../../CardDetail';
 import { Card } from '../Card';
 import { IColumn } from '../Kanban.helper';
 import { ColumnCreateForm } from './ColumnCreateForm';
@@ -21,6 +22,7 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
   const filterRef = useRef(null);
   const isSaleColumn = status === 'sale';
   const [{ isOver }, drop] = useDrop({
@@ -30,6 +32,10 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
       isOver: !!monitor.isOver()
     })
   });
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const onCloseColumnModal = () => {
     setOpenColumnModal(false);
@@ -71,7 +77,7 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
       </div>
       {isSaleColumn && <span className={styles.totalSum}>200.000$</span>}
       <div className={styles.createBtn} onClick={() => console.log('click plus')}>
-        <Icon type='plus-icon' alt='plus' />
+        <Icon type='plus-icon' alt='plus' onClick={() => setOpen(true)} />
       </div>
       <div className={styles.cardsContainer}>
         {tasks.map((task) => (
@@ -100,6 +106,9 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
           <FilterByDate onFilterChange={onFilterChange} />
         </DropdownModal>
       )}
+      <EdgeModal isOpen={open} onClose={onClose}>
+        <CardDetail isNewDeal />
+      </EdgeModal>
     </div>
   );
 };

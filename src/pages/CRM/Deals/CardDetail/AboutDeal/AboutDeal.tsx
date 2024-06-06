@@ -24,7 +24,7 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-export const AboutDeal = () => {
+export const AboutDeal = ({ ...rest }) => {
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
   const getActiveComponent = () => {
@@ -38,7 +38,7 @@ export const AboutDeal = () => {
 
   return (
     <div className={styles.aboutDeal}>
-      {!isCalculatorTab && <DealsForm />}
+      {!isCalculatorTab && <DealsForm {...rest} />}
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
         <Tabs
           tabItems={tabItems}
