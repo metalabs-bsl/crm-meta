@@ -1,7 +1,6 @@
 @import '../../../../../common/styles/variables.scss';
 
 .column {
-  min-width: 280px;
   height: 100%;
   background: $baby-powder;
   border-radius: 15px;
@@ -17,7 +16,7 @@
     color: $white;
   }
   .cardsContainer {
-    width: 100%;
+    width: 280px;
     display: flex;
     flex-direction: column;
     gap: 12px;
