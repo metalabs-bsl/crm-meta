@@ -16,8 +16,12 @@ export const Kanban: FC<IProps> = ({ data }) => {
   const onCardDrop = (id: number, newStatus: string) => {
     const updatedColumns = columns.map((column) => {
       if (column.status === newStatus) {
-        const updatedCards = [...column.cards, { id, text: `Task ${id}`, status: newStatus }];
-        return { ...column, cards: updatedCards };
+        const findCard = column.cards.find((card) => card.id === id);
+        if (!findCard) {
+          const updatedCards = [...column.cards, { id, text: `Task ${id}`, status: newStatus }];
+          return { ...column, cards: updatedCards };
+        }
+        return column;
       } else {
         const updatedCards = column.cards.filter((card) => card.id !== id);
         return { ...column, cards: updatedCards };
