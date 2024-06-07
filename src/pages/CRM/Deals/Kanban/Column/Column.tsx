@@ -12,12 +12,11 @@ import { useDrop } from 'react-dnd';
 
 interface ColumnProps {
   col: IColumn;
-  tasks: { id: number; text: string }[];
   onDrop: (id: number, newStatus: string) => void;
 }
 
-export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
-  const { status, title, color } = col;
+export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
+  const { status, title, color, cards } = col;
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -92,7 +91,7 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
         <Icon type='plus-icon' alt='plus' onClick={() => setOpen(true)} />
       </div>
       <div className={styles.cardsContainer}>
-        {tasks.map((task) => (
+        {cards.map((task) => (
           <Card key={task.id} id={task.id} text={task.text} />
         ))}
       </div>
