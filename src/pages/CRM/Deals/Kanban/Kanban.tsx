@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
+import { IColumn, Task } from '../Deals.helper';
 import { Column } from './Column';
-import { IColumn, Task } from './Kanban.helper';
 import styles from './styles.module.scss';
 
 import { DndProvider } from 'react-dnd';

@@ -24,6 +24,18 @@ export const mainTabs: IMainTabs[] = [
   }
 ];
 
+export interface Task {
+  id: number;
+  text: string;
+  status: string;
+}
+
+export interface IColumn {
+  status: string;
+  title: string;
+  color: string;
+}
+
 export const KanbanData = [
   { id: 1, text: 'Task 1', status: 'received' },
   { id: 2, text: 'Task 2', status: 'processed' },

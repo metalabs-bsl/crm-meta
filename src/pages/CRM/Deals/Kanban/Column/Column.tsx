@@ -3,8 +3,8 @@ import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'common/components';
 import { CardDetail } from '../../CardDetail';
+import { IColumn } from '../../Deals.helper';
 import { Card } from '../Card';
-import { IColumn } from '../Kanban.helper';
 import { ColumnForm } from './ColumnForm';
 import styles from './styles.module.scss';
 
