@@ -5,11 +5,10 @@ import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'comm
 import { CardDetail } from '../../CardDetail';
 import { Card } from '../Card';
 import { IColumn } from '../Kanban.helper';
-import { ColumnCreateForm } from './ColumnCreateForm';
+import { ColumnForm } from './ColumnForm';
 import styles from './styles.module.scss';
 
 import { useDrop } from 'react-dnd';
-import { BUTTON_TYPES } from 'types/enums';
 
 interface ColumnProps {
   col: IColumn;
@@ -20,6 +19,7 @@ interface ColumnProps {
 export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
   const { status, title, color } = col;
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -41,12 +41,23 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
     setOpenColumnModal(false);
   };
 
+  const onOpenCreateModal = () => {
+    setIsEditing(false);
+    setOpenColumnModal(true);
+  };
+
+  const onOpenEditModal = () => {
+    setIsEditing(true);
+    setOpenColumnModal(true);
+  };
+
   const onCloseDeleteModal = () => {
     setOpenDeleteModal(false);
   };
 
   const onColumnDelete = () => {
     console.log('колонка удалена');
+    onCloseDeleteModal();
   };
 
   const onClickFilterModal = () => {
@@ -69,9 +80,10 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
               <Icon type='calendar-outline' />
             </div>
           )}
+          <Icon type='edit' onClick={onOpenEditModal} />
           <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />
           <div className={styles.plus}>
-            <Icon type='plus-icon' alt='plus' onClick={() => setOpenColumnModal(true)} />
+            <Icon type='plus-icon' alt='plus' onClick={onOpenCreateModal} />
           </div>
         </div>
       </div>
@@ -84,16 +96,8 @@ export const Column: React.FC<ColumnProps> = ({ col, tasks, onDrop }) => {
           <Card key={task.id} id={task.id} text={task.text} />
         ))}
       </div>
-      <Modal
-        isOpen={openColumnModal}
-        onClose={onCloseColumnModal}
-        leftBtnText='сохранить'
-        leftBtnStyle={BUTTON_TYPES.YELLOW}
-        rightBtnText='отменить'
-        rightBtnStyle={BUTTON_TYPES.Link_BLACK}
-        rightBtnAction={onCloseColumnModal}
-      >
-        <ColumnCreateForm />
+      <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>
+        <ColumnForm formProps={isEditing ? { title, color } : undefined} onCancel={onCloseColumnModal} />
       </Modal>
       <DeleteModal
         isOpen={openDeleteModal}
