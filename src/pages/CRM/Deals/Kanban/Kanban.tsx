@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { IColumn } from '../Deals.helper';
-import { Column } from './Column';
+import { DraggableColumn } from './DraggableColumn';
 import styles from './styles.module.scss';
 
 import { DndProvider } from 'react-dnd';
@@ -30,11 +30,18 @@ export const Kanban: FC<IProps> = ({ data }) => {
     setColumns(updatedColumns);
   };
 
+  const moveColumn = (dragIndex: number, hoverIndex: number) => {
+    const updatedColumns = [...columns];
+    const [movedColumn] = updatedColumns.splice(dragIndex, 1);
+    updatedColumns.splice(hoverIndex, 0, movedColumn);
+    setColumns(updatedColumns);
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={styles.kanbanBoard}>
         {columns.map((col, index) => (
-          <Column key={index} col={col} onDrop={onCardDrop} />
+          <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} />
         ))}
       </div>
     </DndProvider>
