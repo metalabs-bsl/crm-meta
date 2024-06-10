@@ -1,0 +1,91 @@
+@import '../../../common/styles/variables.scss';
+
+.wrapper {
+  background: $white;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+
+  .table {
+    width: 100%;
+    border-radius: 10px;
+
+    thead {
+      &.table_wrapper {
+        th {
+          padding: 10px;
+          color: $table-title-color;
+          font-weight: 400;
+          text-align: left;
+          border-bottom: 1px solid $table-gray-bg;
+        }
+      }
+
+      .table_titles {
+        th {
+          padding: 10px;
+          color: $table-title-color;
+          font-weight: 400;
+          text-align: left;
+          border-bottom: 1px solid $table-gray-bg;
+        }
+      }
+    }
+
+    td {
+      padding: 8px;
+      text-align: left;
+      color: $table-column-color;
+      font-weight: 400;
+    }
+
+    .buttons {
+      display: flex;
+    }
+  }
+
+  .checkbox {
+    display: flex;
+    gap: 10px;
+  }
+
+  .editInput {
+    border: none;
+    // border: solid 1px $input-edit;
+    padding: 5px;
+    border-radius: 5px;
+    background: $input-edit-bg;
+    outline: none;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    gap: 30px;
+    padding-bottom: 15px;
+
+    .btnSave,
+    .btnEdit {
+      padding: 5px 20px;
+      background: $table-dtn-save;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .btnDelete,
+    .btnCancel {
+      padding: 5px 20px;
+      border-radius: 10px;
+      border: none;
+      color: $table-btn-delete;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+}

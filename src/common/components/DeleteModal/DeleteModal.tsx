@@ -8,11 +8,12 @@ import { BUTTON_TYPES } from 'types/enums';
 interface IProps {
   isOpen?: boolean;
   text: string;
+  itemName: string;
   onDelete: () => void;
   onCancel: () => void;
 }
 
-export const DeleteModal: FC<IProps> = ({ isOpen = false, onDelete, onCancel, text }) => {
+export const DeleteModal: FC<IProps> = ({ isOpen = false, onDelete, onCancel, text, itemName }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -26,7 +27,10 @@ export const DeleteModal: FC<IProps> = ({ isOpen = false, onDelete, onCancel, te
     >
       <div className={styles.modalContent}>
         <Icon type='delete' className={styles.icon} />
-        <p className={styles.text}>{text}</p>
+        <p className={styles.text}>
+          {text}
+          {itemName}
+        </p>
       </div>
     </Modal>
   );
