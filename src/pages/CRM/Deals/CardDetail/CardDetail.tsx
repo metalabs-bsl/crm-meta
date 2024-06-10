@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import cn from 'classnames';
 import { Icon, Input } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
@@ -9,9 +10,9 @@ import { history } from './CardDetail.helper';
 import { History } from './History';
 import { Progress } from './Progress';
 import styles from './style.module.scss';
-
 interface IProps {
   cardTitle?: string;
+  isNewDeal?: boolean;
 }
 
 const tabItems: ITabsItem[] = [
@@ -29,7 +30,7 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
+export const CardDetail: FC<IProps> = ({ cardTitle = '', isNewDeal = false }) => {
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(cardTitle);
@@ -37,7 +38,7 @@ export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
 
   const getComponent = (type: string) => {
     const components = {
-      [tabItems[0].type]: <AboutDeal />,
+      [tabItems[0].type]: <AboutDeal isNewDeal={isNewDeal} />,
       [tabItems[1].type]: <History history={history} />,
       [tabItems[2].type]: <p>WhatsApp</p>
     };
@@ -49,11 +50,14 @@ export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
   };
 
   const onLinkCopy = () => {
-    notify(MESSAGE.LINK_COPIED);
+    navigator.clipboard
+      .writeText(editedTitle)
+      .then(() => notify(MESSAGE.LINK_COPIED))
+      .catch((err) => console.error('Failed to copy text: ', err));
   };
 
   return (
-    <div className={styles.cardDetail}>
+    <div className={cn(styles.cardDetail, { [styles.isNewDeal]: isNewDeal })}>
       <div className={styles.head}>
         {isTitleEdit ? (
           <Input

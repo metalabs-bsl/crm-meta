@@ -1,15 +1,17 @@
 import { useState } from 'react';
+import cn from 'classnames';
 import { Button, DatePicker, Icon, Input } from 'common/ui';
 import { FormItems } from './DeasForm.helper';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-export const DealsForm = () => {
+export const DealsForm = ({ ...rest }) => {
+  const { isNewDeal } = rest;
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   return (
-    <form className={styles.dealsForm}>
+    <form className={cn(styles.dealsForm, { [styles.isNewDeal]: isNewDeal })}>
       <div className={styles.head}>
         <span className={styles.title}>О сделке</span>
         {isEdit ? (

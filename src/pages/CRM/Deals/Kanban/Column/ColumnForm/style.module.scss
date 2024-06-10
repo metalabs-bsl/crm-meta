@@ -8,6 +8,10 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+    .errorMessage {
+      color: $red;
+      font-size: 14px;
+    }
     label {
       font-weight: 400;
       font-size: 14px;
@@ -19,7 +23,7 @@
       input {
         font-weight: 400;
         font-size: 16px;
-        color: $gray !important;
+        color: $gray-btn-bg-hover;
         &::placeholder {
           color: $gray;
         }
@@ -46,34 +50,46 @@
       border-radius: 50%;
       cursor: pointer;
     }
-    .received {
+    .salat {
       background-color: $yellow-round;
     }
 
-    .processed {
+    .blue {
       background-color: $blue-round;
     }
 
-    .consideration {
+    .dark-green {
       background-color: $green-round;
     }
 
-    .booking {
+    .violet {
       background-color: $violet-round;
     }
 
-    .pink {
-      background-color: $pink-round;
-    }
-    .black {
-      background-color: $gray-btn-bg-hover;
-    }
-    .bought {
+    .red {
       background-color: $red-round;
     }
 
-    .sale {
+    .light-green {
       background-color: $salat-round;
+    }
+    .pink {
+      background-color: $pink-round;
+    }
+
+    .black {
+      background-color: $gray-btn-bg-hover;
+    }
+  }
+
+  .modalBtnWrapper {
+    gap: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      font-weight: 400;
+      font-size: 16px;
     }
   }
 }

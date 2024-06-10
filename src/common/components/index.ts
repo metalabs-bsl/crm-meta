@@ -1,3 +1,4 @@
+export { Accordion } from './Accordion';
 export { Date } from './Date';
 export { DeleteModal } from './DeleteModal';
 export { DropdownModal } from './DropdownModal';

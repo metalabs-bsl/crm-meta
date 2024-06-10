@@ -63,6 +63,12 @@
     .exchangeRates {
       display: flex;
       gap: 5px;
+      img {
+        transition: transform 0.2s;
+      }
+      .open {
+        transform: rotate(180deg);
+      }
     }
   }
 }

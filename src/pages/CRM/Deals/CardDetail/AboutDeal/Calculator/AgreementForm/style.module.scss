@@ -1,0 +1,62 @@
+@import '../../../../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 42%;
+    &:first-child {
+      width: 38%;
+    }
+
+    &:last-child {
+      width: 20%;
+      min-width: min-content;
+      justify-content: flex-end;
+    }
+
+    .item_block {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      label {
+        font-weight: 400;
+        font-size: 14px;
+        color: $gray;
+      }
+      .inp_wrapper {
+        min-width: 100%;
+        background-color: $seaSalt;
+        border: none;
+        border-radius: 5px;
+        input {
+          font-weight: 400;
+          font-size: 16px;
+          color: $gray;
+          &::placeholder {
+            color: $gray;
+          }
+        }
+      }
+      .withIcon {
+        input {
+          padding-left: 0;
+        }
+      }
+      .datepicker {
+        width: 100%;
+        height: 46px;
+      }
+    }
+
+    .more_items_block {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

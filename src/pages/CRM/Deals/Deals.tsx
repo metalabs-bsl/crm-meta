@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { Button, Input } from 'common/ui';
 import { EdgeModal } from 'common/components';
 import { CardDetail } from './CardDetail';
-import { DEALS_TABS, mainTabs } from './Deals.helper';
+import { DEALS_TABS, kanbanKolumns, mainTabs, todoKolumns } from './Deals.helper';
 import { DealsTabFilter } from './DealsTabFilter';
 import { Kanban } from './Kanban';
 import { List } from './List';
-import { Todos } from './Todos';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
@@ -20,9 +19,9 @@ export const Deals = () => {
   };
   const getDealsComponent = () => {
     const components: Record<DEALS_TABS, JSX.Element> = {
-      [DEALS_TABS.kanban]: <Kanban />,
+      [DEALS_TABS.kanban]: <Kanban data={kanbanKolumns} />,
       [DEALS_TABS.list]: <List />,
-      [DEALS_TABS.todos]: <Todos />
+      [DEALS_TABS.todos]: <Kanban data={todoKolumns} />
     };
     return components[isActiveTab];
   };
@@ -39,7 +38,7 @@ export const Deals = () => {
       <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} />
       <div className={styles.deal_content}>{getDealsComponent()}</div>
       <EdgeModal isOpen={open} onClose={onClose}>
-        <CardDetail />
+        <CardDetail isNewDeal />
       </EdgeModal>
     </div>
   );

@@ -1,0 +1,44 @@
+@import '../../../../../../../../common/styles/variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  .blocks {
+    border: 1px solid $silver;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    .title_block {
+      display: flex;
+      flex-direction: column;
+      .type {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray-btn-bg-hover;
+      }
+      .text {
+        font-weight: 400;
+        font-size: 14px;
+        color: $gray;
+      }
+    }
+    .count_block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      .count {
+        display: flex;
+        justify-content: center;
+        min-width: 35px;
+        font-weight: 500;
+        font-size: 20px;
+        color: $gray-btn-bg-hover;
+      }
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+}

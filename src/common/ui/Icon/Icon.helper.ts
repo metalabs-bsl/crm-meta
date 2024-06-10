@@ -1,6 +1,9 @@
 import { IIcons } from 'types/common';
 import calendarOutline from '../../assets/icons/calendar-outline.svg';
 import comment from '../../assets/icons/comment.svg';
+import countMinusActive from '../../assets/icons/count-minus-active.svg';
+import countMinusUnActive from '../../assets/icons/count-minus-unactive.svg';
+import countPlusActive from '../../assets/icons/count-plus-active.svg';
 import deleteIcon from '../../assets/icons/deleteIcon.svg';
 import edit from '../../assets/icons/edit.svg';
 import arrowDown from '../../assets/icons/header/arrow-down.svg';
@@ -68,5 +71,8 @@ export const icons: IIcons = {
   ['history-deal-create']: historyDeals,
   ['arrow-left']: ArrowLeft,
   ['clip']: clip,
-  ['calendar-outline']: calendarOutline
+  ['calendar-outline']: calendarOutline,
+  ['count-plus-active']: countPlusActive,
+  ['count-minus-active']: countMinusActive,
+  ['count-minus-unactive']: countMinusUnActive
 };

@@ -1,5 +1,4 @@
-import { FC, InputHTMLAttributes, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
+import { FC, InputHTMLAttributes } from 'react';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 
@@ -9,16 +8,17 @@ interface Iprops extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const DatePicker: FC<Iprops> = ({ className, defaultValue, ...res }) => {
-  const [currentDateTime, setCurrentDateTime] = useState('');
+  // под вопросом
+  // const [currentDateTime, setCurrentDateTime] = useState('');
 
-  useEffect(() => {
-    if (defaultValue) {
-      setCurrentDateTime(defaultValue);
-    } else {
-      const formattedDateTime = dayjs().format('YYYY-MM-DDTHH:mm');
-      setCurrentDateTime(formattedDateTime);
-    }
-  }, [defaultValue]);
+  // useEffect(() => {
+  //   if (defaultValue) {
+  //     setCurrentDateTime(defaultValue);
+  //   } else {
+  //     const formattedDateTime = dayjs().format('YYYY-MM-DDTHH:mm');
+  //     setCurrentDateTime(formattedDateTime);
+  //   }
+  // }, [defaultValue]);
 
-  return <input type='datetime-local' className={cn(styles.inp, className)} {...res} defaultValue={currentDateTime} />;
+  return <input type='datetime-local' className={cn(styles.inp, className)} {...res} defaultValue={defaultValue} />;
 };
