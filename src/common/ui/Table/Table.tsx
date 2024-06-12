@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { DeleteModal } from 'common/components';
 import { Checkbox } from '../Checkbox';
+import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
 
 export interface TableColumn {
@@ -9,7 +10,7 @@ export interface TableColumn {
   title: string;
   isEdit?: {
     value: boolean;
-    component: 'input' | 'select';
+    component: 'input' | 'select' | 'miniprogress';
   };
 }
 
@@ -22,38 +23,44 @@ interface TableProps {
   data: TableRow[];
 }
 
+const stages: Stage[] = [
+  { title: 'Поступили', type: 'received', color: '#b5e61d' },
+  { title: 'Взят в обработку', type: 'processed', color: '#ffa500' },
+  { title: 'Рассмотрение', type: 'consideration', color: '#ffff00' },
+  { title: 'Бронирование', type: 'booking', color: '#008000' },
+  { title: 'Завершить сделку', type: 'finish', color: '#0000ff' }
+];
+
 export const Table: React.FC<TableProps> = ({ columns, data }) => {
   const [tableData, setTableData] = useState<TableRow[]>(data);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
-  //Выбор строки
-  //Добавляет или удаляет индекс строки из массива selectedRows.
   const handleCheckboxChange = (index: number) => {
     setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
   };
 
-  //Изменение значения ячейки
-  //Обновляет значение ячейки в tableData.
   const handleInputChange = (rowIndex: number, columnKey: string, value: string) => {
-    setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
+    if (columnKey === 'dealStage') {
+      // Обновляем статус сделки в таблице
+      setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
+    } else {
+      setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
+    }
   };
 
-  //Обновляет значение ячейки в tableData.
   const handleSave = () => {
-    console.log('Saved data:', tableData);
+    console.log('Сохраненные данные:', tableData);
     setIsEditMode(false);
   };
 
-  //Удаляет выбранные строки из tableData.
   const handleDelete = () => {
     setTableData((prevData) => prevData.filter((_, index) => !selectedRows.includes(index)));
     setSelectedRows([]);
     setDeleteModalOpen(false);
   };
 
-  //Включают и отменяют режим редактирования.
   const handleEdit = () => {
     setIsEditMode(true);
   };
@@ -63,42 +70,50 @@ export const Table: React.FC<TableProps> = ({ columns, data }) => {
     setIsEditMode(false);
   };
 
-  //Возвращает компонент для редактирования ячейки, если соответствующая строка выбрана и включен режим редактирования.
   const renderEditComponent = (column: TableColumn, row: TableRow, rowIndex: number) => {
     const { key, isEdit } = column;
-    if (!isEdit || !selectedRows.includes(rowIndex) || !isEditMode) return row[key];
+    if (!isEdit) {
+      return row[key];
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       handleInputChange(rowIndex, key, e.target.value);
     };
 
-    if (isEdit.component === 'input') {
-      return <input type='text' value={row[key]} onChange={handleChange} className={styles.editInput} />;
-    } else if (isEdit.component === 'select') {
-      const options = getSelectOptions(key);
-      return (
-        <select value={row[key]} onChange={handleChange} className={styles.editInput}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      );
+    if (isEditMode && selectedRows.includes(rowIndex)) {
+      if (isEdit.component === 'input') {
+        return <input type='text' value={row[key]} onChange={handleChange} className={styles.editInput} />;
+      } else if (isEdit.component === 'select') {
+        const options = getSelectOptions(key);
+        return (
+          <select value={row[key]} onChange={handleChange} className={styles.editInput}>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        );
+      } else if (isEdit.component === 'miniprogress') {
+        return (
+          <select value={row[key]} onChange={handleChange} className={styles.editInput}>
+            {stages.map((stage) => (
+              <option key={stage.type} value={stage.type}>
+                {stage.title}
+              </option>
+            ))}
+          </select>
+        );
+      }
+    } else if (isEdit.component === 'miniprogress') {
+      return <MiniProgressBar stages={stages} currentStage={row[key]} selectedStage={row['dealStage']} />;
     }
     return row[key];
   };
 
-  //Возвращает опции для компонента select в зависимости от ключа колонки.
   const getSelectOptions = (key: string) => {
     if (key === 'dealStage') {
-      return [
-        { value: 'Поступили', label: 'Поступили' },
-        { value: 'Взят в обработку', label: 'Взят в обработку' },
-        { value: 'Рассмотрение', label: 'Рассмотрение' },
-        { value: 'Бронирование', label: 'Бронирование' },
-        { value: 'Завершить сделку', label: 'Завершить сделку' }
-      ];
+      return stages.map((stage) => ({ value: stage.type, label: stage.title }));
     } else if (key === 'responsible') {
       return [
         { value: 'Almaz', label: 'Almaz' },
@@ -108,7 +123,6 @@ export const Table: React.FC<TableProps> = ({ columns, data }) => {
     return [];
   };
 
-  //Возвращает строку с именами выбранных строк для отображения в модальном окне удаления.
   const getSelectedRowNames = () => {
     return selectedRows.map((index) => tableData[index]?.name || `Запись ${index + 1}`).join(', ');
   };
@@ -163,7 +177,7 @@ export const Table: React.FC<TableProps> = ({ columns, data }) => {
         onCancel={() => setDeleteModalOpen(false)}
         onDelete={handleDelete}
         text={`Вы уверены, что хотите удалить следующие записи: `}
-        itemName={getSelectedRowNames()} // Передача имен выбранных записей
+        itemName={getSelectedRowNames()}
       />
     </div>
   );

@@ -4,7 +4,6 @@ import { Modal } from '../Modal';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
-
 interface IProps {
   isOpen?: boolean;
   text: string;
@@ -28,8 +27,7 @@ export const DeleteModal: FC<IProps> = ({ isOpen = false, onDelete, onCancel, te
       <div className={styles.modalContent}>
         <Icon type='delete' className={styles.icon} />
         <p className={styles.text}>
-          {text}
-          {itemName}
+          {text} {itemName}
         </p>
       </div>
     </Modal>

@@ -11,14 +11,7 @@ const columns: TableColumn[] = [
     }
   },
   { key: 'client', title: 'Клиент' },
-  {
-    key: 'dealStage',
-    title: 'Стадия сделки',
-    isEdit: {
-      value: true,
-      component: 'select'
-    }
-  },
+  { key: 'dealStage', title: 'Стадия сделки', isEdit: { value: true, component: 'miniprogress' } },
   {
     key: 'tasks',
     title: 'Дела'
@@ -41,7 +34,7 @@ const data = [
   {
     name: 'MetaLabs',
     client: 'Евгений',
-    dealStage: 'Стадия 1',
+    dealStage: 'received',
     tasks: 'Ограничение доступа посторонним пользователям',
     amount: '1000 USD',
     responsible: 'Almaz'
@@ -49,7 +42,7 @@ const data = [
   {
     name: 'AnotherItem',
     client: 'AnotherClient',
-    dealStage: 'AnotherStage',
+    dealStage: 'processed',
     tasks: 'AnotherTasks',
     amount: '2000 USD',
     responsible: 'AnotherResponsible'
