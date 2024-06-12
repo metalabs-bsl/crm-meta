@@ -12,9 +12,11 @@ import { BUTTON_TYPES } from 'types/enums';
 interface CardProps {
   id: number;
   text: string;
+  index: number;
+  status: string;
 }
 
-export const Card: FC<CardProps> = ({ id, text }) => {
+export const Card: FC<CardProps> = ({ id, text, index, status }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
 
@@ -28,14 +30,14 @@ export const Card: FC<CardProps> = ({ id, text }) => {
 
   const [{ isDragging }, drag] = useDrag({
     type: 'CARD',
-    item: { type: 'CARD', id },
+    item: { type: 'CARD', id, index, status },
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: !!monitor.isDragging()
     })
   });
 
   return (
-    <div className={cn(styles.card, { [styles.isDragging]: isDragging })} ref={drag}>
+    <div className={cn(styles.card, { [styles.isDragging]: isDragging })} ref={drag} id={`card-${status}-${index}`}>
       <div className={styles.titleBlock} onClick={() => setOpen(true)}>
         <div className={styles.main}>
           <span className={styles.title}>{text}</span>
