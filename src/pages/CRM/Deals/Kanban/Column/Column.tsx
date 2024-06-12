@@ -8,11 +8,11 @@ import { Card } from '../Card';
 import { ColumnForm } from './ColumnForm';
 import styles from './styles.module.scss';
 
-import { useDrop } from 'react-dnd';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 
 interface ColumnProps {
   col: IColumn;
-  onDrop: (id: number, newStatus: string) => void;
+  onDrop: (id: number, newStatus: string, targetIndex: number) => void;
 }
 
 export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
@@ -26,12 +26,25 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
   const isSaleColumn = status === 'sale';
   const [{ isOver }, drop] = useDrop({
     accept: 'CARD',
-    drop: (item: { id: number }) => onDrop(item.id, status),
+    drop: (item: { id: number }, monitor: DropTargetMonitor) => {
+      const hoverIndex = cards.length;
+      const hoverBoundingRect = monitor.getClientOffset();
+      const targetIndex = cards.findIndex((_, index) => {
+        const cardElement = document.getElementById(`card-${status}-${index}`);
+        if (cardElement) {
+          const rect = cardElement.getBoundingClientRect();
+          if (hoverBoundingRect && rect.top < hoverBoundingRect.y && rect.bottom > hoverBoundingRect.y) {
+            return true;
+          }
+        }
+        return false;
+      });
+      onDrop(item.id, status, targetIndex === -1 ? hoverIndex : targetIndex);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver()
     })
   });
-
   const onClose = () => {
     setOpen(false);
   };
@@ -68,7 +81,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
   };
 
   return (
-    <div className={cn(styles.column, { [styles.isOver]: isOver })} ref={drop}>
+    <div className={cn(styles.column, { [styles.isOver]: isOver })}>
       <div className={styles.titleBlock}>
         <div className={cn(styles.roundIcon, styles[color])} />
         <span className={styles.title}>{title}</span>
@@ -90,9 +103,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
       <div className={styles.createBtn} onClick={() => console.log('click plus')}>
         <Icon type='plus-icon' alt='plus' onClick={() => setOpen(true)} />
       </div>
-      <div className={styles.cardsContainer}>
-        {cards.map((task) => (
-          <Card key={task.id} id={task.id} text={task.text} />
+      <div className={styles.cardsContainer} ref={drop}>
+        {cards.map((task, index) => (
+          <Card key={index} id={task?.id} text={task?.text} index={index} status={task.status} />
         ))}
       </div>
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>

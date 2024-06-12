@@ -38,8 +38,24 @@ export interface IColumn {
 }
 
 export const kanbanKolumns: IColumn[] = [
-  { status: 'received', title: 'Поступили', color: 'salat', cards: [{ id: 1, text: 'Task 1', status: 'received' }] },
-  { status: 'processed', title: 'Взят в обработку', color: 'blue', cards: [{ id: 2, text: 'Task 2', status: 'processed' }] },
+  {
+    status: 'received',
+    title: 'Поступили',
+    color: 'salat',
+    cards: [
+      { id: 1, text: 'Task 1', status: 'received' },
+      { id: 2, text: 'Task 2', status: 'received' }
+    ]
+  },
+  {
+    status: 'processed',
+    title: 'Взят в обработку',
+    color: 'blue',
+    cards: [
+      { id: 3, text: 'Task 3', status: 'processed' },
+      { id: 4, text: 'Task 4', status: 'processed' }
+    ]
+  },
   { status: 'consideration', title: 'Рассмотрение', color: 'dark-green', cards: [] },
   { status: 'booking', title: 'Бронирование', color: 'violet', cards: [] },
   { status: 'bought', title: 'Уже купил', color: 'red', cards: [] },
