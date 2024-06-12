@@ -24,11 +24,11 @@ interface TableProps {
 }
 
 const stages: Stage[] = [
-  { title: 'Поступили', type: 'received', color: '#b5e61d' },
-  { title: 'Взят в обработку', type: 'processed', color: '#ffa500' },
-  { title: 'Рассмотрение', type: 'consideration', color: '#ffff00' },
-  { title: 'Бронирование', type: 'booking', color: '#008000' },
-  { title: 'Завершить сделку', type: 'finish', color: '#0000ff' }
+  { title: 'Поступили', type: 'received', color: '#BBED21' },
+  { title: 'Взят в обработку', type: 'processed', color: '#13EDFB' },
+  { title: 'Рассмотрение', type: 'consideration', color: '#068D34' },
+  { title: 'Бронирование', type: 'booking', color: '#C214DE' },
+  { title: 'Завершить сделку', type: 'finish', color: '#F21212' }
 ];
 
 export const Table: React.FC<TableProps> = ({ columns, data }) => {
@@ -44,7 +44,18 @@ export const Table: React.FC<TableProps> = ({ columns, data }) => {
   const handleInputChange = (rowIndex: number, columnKey: string, value: string) => {
     if (columnKey === 'dealStage') {
       // Обновляем статус сделки в таблице
-      setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
+      setTableData((prevData) =>
+        prevData.map((row, index) =>
+          index === rowIndex
+            ? {
+                ...row,
+                [columnKey]: value, // Обновляем значение dealStage
+                // Если dealStage изменяется, также нужно обновить значение текущей стадии
+                currentStage: value
+              }
+            : row
+        )
+      );
     } else {
       setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
     }
@@ -80,6 +91,20 @@ export const Table: React.FC<TableProps> = ({ columns, data }) => {
       handleInputChange(rowIndex, key, e.target.value);
     };
 
+    const handleStageClick = (stageType: string) => {
+      setTableData((prevData) =>
+        prevData.map((row, index) =>
+          index === rowIndex
+            ? {
+                ...row,
+                dealStage: stageType, // Обновление dealStage в соответствии с выбранной стадией прогресса
+                currentStage: stageType // Обновление текущей стадии
+              }
+            : row
+        )
+      );
+    };
+
     if (isEditMode && selectedRows.includes(rowIndex)) {
       if (isEdit.component === 'input') {
         return <input type='text' value={row[key]} onChange={handleChange} className={styles.editInput} />;
@@ -96,13 +121,14 @@ export const Table: React.FC<TableProps> = ({ columns, data }) => {
         );
       } else if (isEdit.component === 'miniprogress') {
         return (
-          <select value={row[key]} onChange={handleChange} className={styles.editInput}>
-            {stages.map((stage) => (
-              <option key={stage.type} value={stage.type}>
-                {stage.title}
-              </option>
-            ))}
-          </select>
+          <MiniProgressBar stages={stages} currentStage={row[key]} selectedStage={row['dealStage']} onStageClick={handleStageClick} />
+          // <select value={row[key]} onChange={handleChange} className={styles.editInput}>
+          //   {stages.map((stage) => (
+          //     <option key={stage.type} value={stage.type}>
+          //       {stage.title}
+          //     </option>
+          //   ))}
+          // </select>
         );
       }
     } else if (isEdit.component === 'miniprogress') {
