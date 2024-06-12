@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Modal } from 'common/components';
+import { LossForm, Modal } from 'common/components';
 import { useNotify } from 'common/hooks';
-import { LossForm } from '../LossForm';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
