@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { Accordion } from 'common/components';
+import { FilePicker } from './FilePicker';
 import styles from './styles.module.scss';
 
 export interface PaymentRowProps {
   paymentDate: string;
-  invoice: string;
+  invoice: string[];
   amount: string;
   method: string;
   receipt: string;
@@ -30,7 +31,9 @@ export const PaymentRow: FC<PaymentRowProps> = ({ paymentDate, invoice, amount, 
         <tbody>
           <tr>
             <th className={styles.item}>{paymentDate}</th>
-            <th className={styles.item}>{invoice}</th>
+            <th className={styles.item}>
+              <FilePicker files={invoice}></FilePicker>
+            </th>
             <th className={styles.item}>{amount}</th>
             <th className={styles.item}>{method}</th>
             <th className={styles.item}>{receipt}</th>
