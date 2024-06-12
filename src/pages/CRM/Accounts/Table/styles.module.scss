@@ -14,7 +14,7 @@
   overflow: auto; /* Добавлено для горизонтальной и вертикальной прокрутки */
 }
 
-thead {
+.thead {
   border-bottom: 1px solid $silver;
 }
 
@@ -25,7 +25,6 @@ thead {
   font-size: 14px;
   color: $gray;
   &:not(:first-child) {
-    // width: 130px;
     min-width: 106px;
   }
   &:first-child {

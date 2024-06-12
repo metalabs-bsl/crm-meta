@@ -16,7 +16,7 @@ export const PaymentRow: FC<PaymentRowProps> = ({ paymentDate, invoice, amount, 
   return (
     <Accordion title='Полная оплата' className={styles.accordion}>
       <table className={styles.table}>
-        <thead>
+        <thead className={styles.thead}>
           <tr>
             <th className={styles.title}>срок оплаты</th>
             <th className={styles.title}>счёт от ТО</th>

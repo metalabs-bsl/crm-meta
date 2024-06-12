@@ -2,6 +2,7 @@
 
 .mainRow {
   background-color: $not-paid-row;
+  border-top: 1px solid $silver;
 }
 
 .item {
@@ -43,8 +44,12 @@
   padding: 0;
   width: 100%;
   flex-grow: 1;
+  padding: 4px 0;
   & > div {
     justify-content: start;
+    align-items: normal;
+    margin-bottom: 0;
+    height: 100%;
     & > img:last-child {
       display: none;
     }
@@ -60,4 +65,8 @@
   background-color: green;
   display: flex;
   flex-direction: column;
+}
+
+.expandedContent {
+  padding: 4px 0 0 15px;
 }

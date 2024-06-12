@@ -71,7 +71,6 @@ export const TableRow: FC<TableRowProps> = ({
       </tr>
       <tr className={styles.accordionRow}>
         <td colSpan={100} className={styles.accordionContainer}>
-          {/* <div className={styles.accordionWrapper}> */}
           <Accordion className={styles.accordion}>
             <div className={styles.expandedContent}>
               {paymentDetails.map((detail, index) => (
@@ -79,7 +78,6 @@ export const TableRow: FC<TableRowProps> = ({
               ))}
             </div>
           </Accordion>
-          {/* </div> */}
         </td>
       </tr>
     </>
