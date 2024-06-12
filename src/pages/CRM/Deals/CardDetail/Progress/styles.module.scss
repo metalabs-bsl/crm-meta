@@ -15,5 +15,21 @@
     font-size: 16px;
     color: $gray-btn-bg-hover;
     background-color: $white;
+    cursor: pointer;
+    transition: 0.5s all;
+  }
+  .clicked_items {
+    filter: brightness(0.75);
+  }
+  .modalWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 32px;
+    &Text {
+      font-weight: 400;
+      font-size: 24px;
+      text-align: center;
+    }
   }
 }
