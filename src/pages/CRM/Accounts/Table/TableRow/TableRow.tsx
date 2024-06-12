@@ -1,11 +1,16 @@
 import { FC } from 'react';
+import cn from 'classnames';
 import { Accordion } from 'common/components';
+import { PaymentRow, PaymentRowProps } from './PaymentRow';
 import styles from './styles.module.scss';
 
 interface TableRowProps {
+  index: number;
+  isSelected: boolean;
+  onSelectRow: (index: number) => void;
   contractNumber: string;
   bookingNumber: string;
-  paymentStatus: string;
+  paymentStatus: boolean;
   gross: string;
   net: string;
   rate: string;
@@ -16,18 +21,13 @@ interface TableRowProps {
   tourOperator: string;
   tourInvoice: string;
   whoCreated: string;
-  paymentDetails: {
-    paymentDate: string;
-    invoice: string;
-    amount: string;
-    method: string;
-    receipt: string;
-    tourAmount: string;
-    employeeInvoice: string;
-  }[];
+  paymentDetails: PaymentRowProps[];
 }
 
 export const TableRow: FC<TableRowProps> = ({
+  index,
+  isSelected,
+  onSelectRow,
   contractNumber,
   bookingNumber,
   paymentStatus,
@@ -46,55 +46,40 @@ export const TableRow: FC<TableRowProps> = ({
   return (
     <>
       <tr className={styles.mainRow}>
-        <td>{contractNumber}</td>
-        <td>{bookingNumber}</td>
-        <td className={styles.paymentStatus}>{paymentStatus}</td>
-        <td>{gross}</td>
-        <td>{net}</td>
-        <td>{rate}</td>
-        <td>{commission}</td>
-        <td>{paymentMethod}</td>
-        <td>{destination}</td>
-        <td>{tourDates}</td>
-        <td>{tourOperator}</td>
-        <td>{tourInvoice}</td>
-        <td>{whoCreated}</td>
+        <td className={styles.item}>
+          <input type='checkbox' checked={isSelected} onChange={() => onSelectRow(index)} />
+        </td>
+        <td className={styles.item}>{contractNumber}</td>
+        <td className={styles.item}>{bookingNumber}</td>
+        <td className={cn(styles.item, styles.paymentStatus)}>
+          {paymentStatus ? (
+            <span className={styles.paymentStatus_true}>Оплачено</span>
+          ) : (
+            <span className={styles.paymentStatus_false}>Не оплачено</span>
+          )}
+        </td>
+        <td className={styles.item}>{gross}</td>
+        <td className={styles.item}>{net}</td>
+        <td className={styles.item}>{rate}</td>
+        <td className={styles.item}>{commission}</td>
+        <td className={styles.item}>{paymentMethod}</td>
+        <td className={styles.item}>{destination}</td>
+        <td className={styles.item}>{tourDates}</td>
+        <td className={styles.item}>{tourOperator}</td>
+        <td className={styles.item}>{tourInvoice}</td>
+        <td className={styles.item}>{whoCreated}</td>
       </tr>
       <tr className={styles.accordionRow}>
-        <td colSpan={13} className={styles.accordionContainer}>
+        <td colSpan={100} className={styles.accordionContainer}>
+          {/* <div className={styles.accordionWrapper}> */}
           <Accordion className={styles.accordion}>
             <div className={styles.expandedContent}>
               {paymentDetails.map((detail, index) => (
-                <Accordion title='Первая оплата' key={index}>
-                  <table className={styles.table}>
-                    <thead>
-                      <tr>
-                        <th>срок оплаты</th>
-                        <th>счёт от ТО</th>
-                        <th>сумма оплаты</th>
-                        <th>способ оплаты</th>
-                        <th>квитанция от ТО</th>
-                        <th>оплата ТО</th>
-                        <th>счёт от сотрудника</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th>{detail.paymentDate}</th>
-                        <th>{detail.invoice}</th>
-                        <th>{detail.amount}</th>
-                        <th>{detail.method}</th>
-                        <th>{detail.receipt}</th>
-                        <th>{detail.tourAmount}</th>
-                        <th>{detail.employeeInvoice}</th>
-                        <th>галочка</th>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Accordion>
+                <PaymentRow {...detail} key={index} />
               ))}
             </div>
           </Accordion>
+          {/* </div> */}
         </td>
       </tr>
     </>

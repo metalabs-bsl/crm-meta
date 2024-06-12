@@ -5,6 +5,7 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
+  position: relative;
   .headBlock {
     display: flex;
     justify-content: space-between;
@@ -24,10 +25,11 @@
     }
   }
   .bodyBlock {
+    width: calc(100vw - 254px);
+    height: calc(100vh - 274px);
     background: $white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    // padding: 20px;
-    overflow-x: scroll;
+    overflow: hidden;
   }
 }

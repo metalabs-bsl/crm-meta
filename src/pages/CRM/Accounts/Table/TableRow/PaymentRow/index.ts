@@ -1,1 +1,1 @@
-export { PaymentRow } from './PaymentRow';
+export { PaymentRow, type PaymentRowProps } from './PaymentRow';

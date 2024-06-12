@@ -1,0 +1,27 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.accordion {
+  padding: 0;
+}
+
+thead {
+  border-bottom: 1px solid $silver;
+}
+
+.title, .item {
+  font-weight: 400;
+  font-size: 14px;
+  text-align: start;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  // width: 140px;
+  // min-width: 140px;
+}
+
+.title {
+  color: $gray;
+}
+
+.item {
+  color: $gray-btn-bg-hover;
+}

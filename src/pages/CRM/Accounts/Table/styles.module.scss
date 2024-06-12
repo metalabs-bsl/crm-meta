@@ -3,14 +3,36 @@
 .table {
   width: 100%;
   border-collapse: collapse;
+  overflow: hidden;
+  min-width: 100%; /* Добавлено для минимальной ширины */
+}
+
+.tableContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Добавлено для горизонтальной и вертикальной прокрутки */
 }
 
 thead {
   border-bottom: 1px solid $silver;
 }
 
-th,
-td {
-  padding: 10px;
-  text-align: center;
+.title {
+  padding: 10px 30px 10px 0;
+  text-align: start;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray;
+  &:not(:first-child) {
+    // width: 130px;
+    min-width: 106px;
+  }
+  &:first-child {
+    padding-left: 15px;
+  }
+}
+
+.title.paymentStatus {
+  min-width: 130px;
 }
