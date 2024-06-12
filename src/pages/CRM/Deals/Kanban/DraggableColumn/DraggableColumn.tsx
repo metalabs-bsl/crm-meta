@@ -6,7 +6,7 @@ import { useDrag, useDrop } from 'react-dnd';
 
 interface DraggableColumnProps {
   col: IColumn;
-  onDropTask: (id: number, newStatus: string) => void;
+  onDropTask: (id: number, newStatus: string, targetIndex: number) => void;
   index: number;
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
 }

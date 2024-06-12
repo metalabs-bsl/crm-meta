@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { IColumn } from '../Deals.helper';
+import { FC, useEffect, useState } from 'react';
+import { IColumn, Task } from '../Deals.helper';
 import { DraggableColumn } from './DraggableColumn';
 import styles from './styles.module.scss';
 
@@ -13,21 +13,42 @@ interface IProps {
 export const Kanban: FC<IProps> = ({ data }) => {
   const [columns, setColumns] = useState(data);
 
-  const onCardDrop = (id: number, newStatus: string) => {
+  useEffect(() => {
+    if (data) {
+      setColumns(data);
+    }
+  }, [data]);
+
+  const onCardDrop = (id: number, newStatus: string, targetIndex: number) => {
+    let movedCard: Task | undefined;
+
     const updatedColumns = columns.map((column) => {
+      if (column.cards.some((card) => card?.id === id)) {
+        movedCard = column.cards.find((card) => card?.id === id);
+      }
+      return {
+        ...column,
+        cards: column.cards.filter((card) => card?.id !== id)
+      };
+    });
+
+    const finalColumns = updatedColumns.map((column) => {
       if (column.status === newStatus) {
-        const findCard = column.cards.find((card) => card.id === id);
-        if (!findCard) {
-          const updatedCards = [...column.cards, { id, text: `Task ${id}`, status: newStatus }];
+        const findCard = column.cards.find((card) => card?.id === id);
+        if (!findCard && movedCard) {
+          const updatedCards = [...column.cards];
+          updatedCards.splice(targetIndex, 0, { ...movedCard, status: newStatus });
+          return { ...column, cards: updatedCards };
+        } else if (findCard) {
+          const updatedCards = column.cards.filter((card) => card?.id !== id);
+          updatedCards.splice(targetIndex, 0, findCard);
           return { ...column, cards: updatedCards };
         }
-        return column;
-      } else {
-        const updatedCards = column.cards.filter((card) => card.id !== id);
-        return { ...column, cards: updatedCards };
       }
+      return column;
     });
-    setColumns(updatedColumns);
+
+    setColumns(finalColumns);
   };
 
   const moveColumn = (dragIndex: number, hoverIndex: number) => {
