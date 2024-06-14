@@ -6,6 +6,7 @@ export const FilePicker: React.FC = () => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const uniqueId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -33,16 +34,16 @@ export const FilePicker: React.FC = () => {
             </a>
             <Icon type='delete' onClick={handleFileDelete} />
           </div>
-          <label htmlFor='file-upload' className={styles.custom_file_upload}>
+          <label htmlFor={uniqueId} className={styles.custom_file_upload}>
             Выберите файл
           </label>
         </div>
       ) : (
-        <label htmlFor='file-upload' className={styles.custom_file_upload}>
+        <label htmlFor={uniqueId} className={styles.custom_file_upload}>
           Загрузить
         </label>
       )}
-      <input id='file-upload' type='file' onChange={handleFileChange} style={{ display: 'none' }} ref={fileInputRef} />
+      <input id={uniqueId} type='file' onChange={handleFileChange} style={{ display: 'none' }} ref={fileInputRef} />
     </div>
   );
 };
