@@ -15,7 +15,8 @@ const options: IOption[] = [
   { label: 'Нет ответа', value: '5' }
 ];
 interface IProps {
-  onChangeValueType: (type: string) => void;
+  onChangeValueType: (type: string, rowIndex?: number) => void;
+  onCancel: () => void;
 }
 
 export const LossForm: FC<IProps> = ({ onChangeValueType }) => {

@@ -48,6 +48,7 @@
   .checkbox {
     display: flex;
     gap: 10px;
+    margin-top: 12px;
   }
 
   .editInput {
@@ -91,6 +92,19 @@
   }
 }
 
+// modal
+.modalBtnWrapper {
+  gap: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    font-weight: 400;
+    font-size: 16px;
+  }
+}
+
 // mini progress bar
 
 .miniProgressBar {
@@ -122,6 +136,20 @@
   }
 
   .active {
-    background-color: inherit; // This ensures the inline style's background color is applied
+    background-color: inherit;
   }
 }
+
+.detailCardMOdal {
+  position: absolute;
+  top: -450px;
+  left: -340px;
+  width: 1500px;
+  min-height: 100vh;
+}
+// .detailCardMOdal {
+//   position: relative;
+//   top: 330px;
+//   left: -340px;
+//   width: 1500px;
+// }

@@ -14,6 +14,7 @@ interface ModalProps {
   children?: ReactNode;
   leftBtnAction?: () => void;
   rightBtnAction?: () => void;
+  className?: string;
 }
 
 export const Modal: FC<ModalProps> = ({

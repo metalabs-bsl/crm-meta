@@ -1,5 +1,5 @@
 import { Table } from 'common/ui/Table';
-import { TableColumn } from 'common/ui/Table/Table';
+import { TableColumn, TableRow } from 'common/ui/Table/Table';
 
 const columns: TableColumn[] = [
   {
@@ -30,7 +30,7 @@ const columns: TableColumn[] = [
   }
 ];
 
-const data = [
+const data: TableRow[] = [
   {
     name: 'MetaLabs',
     client: 'Евгений',
