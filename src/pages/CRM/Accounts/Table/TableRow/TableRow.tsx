@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import cn from 'classnames';
+import { Checkbox } from 'common/ui';
 import { Accordion } from 'common/components';
 import { PaymentRow, PaymentRowProps } from './PaymentRow';
 import styles from './styles.module.scss';
@@ -47,7 +48,7 @@ export const TableRow: FC<TableRowProps> = ({
     <>
       <tr className={styles.mainRow}>
         <td className={styles.item}>
-          <input type='checkbox' checked={isSelected} onChange={() => onSelectRow(index)} />
+          <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
         </td>
         <td className={styles.item}>{contractNumber}</td>
         <td className={styles.item}>{bookingNumber}</td>
@@ -71,7 +72,7 @@ export const TableRow: FC<TableRowProps> = ({
       </tr>
       <tr className={styles.accordionRow}>
         <td colSpan={100} className={styles.accordionContainer}>
-          <Accordion className={styles.accordion}>
+          <Accordion className={styles.accordion} title='Информация об оплате'>
             <div className={styles.expandedContent}>
               {paymentDetails.map((detail, index) => (
                 <PaymentRow {...detail} key={index} />

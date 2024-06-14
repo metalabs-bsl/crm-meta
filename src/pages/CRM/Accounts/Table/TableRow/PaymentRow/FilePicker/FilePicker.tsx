@@ -4,9 +4,10 @@ import styles from './styles.module.scss';
 
 interface FilePickerProps {
   files: string[];
+  editable: boolean;
 }
 
-export const FilePicker: FC<FilePickerProps> = ({ files }) => {
+export const FilePicker: FC<FilePickerProps> = ({ files, editable }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,25 +35,29 @@ export const FilePicker: FC<FilePickerProps> = ({ files }) => {
           <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
             {file}
           </a>
-          <Icon type='delete' onClick={handleFileDelete} />
+          {!editable && <Icon type='delete' onClick={handleFileDelete} />}
         </div>
       ))}
-      {fileName ? (
-        <div className={styles.with_file}>
-          <div className={styles.fileBox}>
-            <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
-              {fileName}
-            </a>
-            <Icon type='delete' onClick={handleFileDelete} />
+      {!editable ? (
+        fileName ? (
+          <div className={styles.with_file}>
+            <div className={styles.fileBox}>
+              <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
+                {fileName}
+              </a>
+              <Icon type='delete' onClick={handleFileDelete} />
+            </div>
+            <label htmlFor='file-upload' className={styles.custom_file_upload}>
+              Выберите файл
+            </label>
           </div>
+        ) : (
           <label htmlFor='file-upload' className={styles.custom_file_upload}>
-            Выберите файл
+            <Icon type='plus-gray' />
           </label>
-        </div>
+        )
       ) : (
-        <label htmlFor='file-upload' className={styles.custom_file_upload}>
-          <Icon type='plus-gray' />
-        </label>
+        <></>
       )}
       <input id='file-upload' type='file' onChange={handleFileChange} style={{ display: 'none' }} ref={fileInputRef} />
     </div>

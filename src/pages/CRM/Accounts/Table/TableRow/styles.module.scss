@@ -12,11 +12,14 @@
   color: $gray-btn-bg-hover;
   text-align: start;
   &:not(:first-child) {
-    // width: 130px;
     min-width: 106px;
   }
   &:first-child {
-    padding-left: 15px;
+    padding-top: 18px;
+    padding-left: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -41,32 +44,20 @@
 }
 
 .accordion {
-  padding: 0;
   width: 100%;
   flex-grow: 1;
   padding: 4px 0;
+  background-color: $seaSalt;
+  display: inline-block;
   & > div {
     justify-content: start;
     align-items: normal;
     margin-bottom: 0;
     height: 100%;
+    // padding-left: 15px;
+    padding: 10px 0 0 15px;
     & > img:last-child {
       display: none;
     }
   }
-}
-
-.accordionWrapper {
-  width: 100%;
-}
-
-.wrapper{
-  position: relative;
-  background-color: green;
-  display: flex;
-  flex-direction: column;
-}
-
-.expandedContent {
-  padding: 4px 0 0 15px;
 }

@@ -12,6 +12,7 @@
   width: 100%;
   height: 100%;
   overflow: auto; /* Добавлено для горизонтальной и вертикальной прокрутки */
+  background-color: $seaSalt;
 }
 
 .thead {
@@ -28,7 +29,11 @@
     min-width: 106px;
   }
   &:first-child {
+    padding-top: 15px;
     padding-left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 

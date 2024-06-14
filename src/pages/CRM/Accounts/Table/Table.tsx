@@ -1,5 +1,7 @@
 import { FC, useState } from 'react';
 import cn from 'classnames';
+import { Checkbox } from 'common/ui';
+import { DeleteRow } from './DeleteRow';
 import { TableRow } from './TableRow';
 import styles from './styles.module.scss';
 
@@ -20,31 +22,34 @@ const data = [
     whoCreated: 'Азатов Азат',
     paymentDetails: [
       {
-        paymentDate: '26.09.2024',
+        paymentDateClient: '26.09.2024',
+        paymentDateSupervisor: '2024-09-26T00:00',
         invoice: ['Счет от TO Peg.png', 'test.png'],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: 'Счет от TO Peg...png',
+        receipt: ['Счет от TO Peg.png', 'test.png'],
         tourAmount: '100$',
-        employeeInvoice: 'Счет от TO Peg...png'
+        employeeInvoice: ['Счет от TO Peg.png', 'test.png']
       },
       {
-        paymentDate: '26.09.2024',
+        paymentDateClient: '26.09.2024',
+        paymentDateSupervisor: '2024-09-26T00:00',
         invoice: ['Счет от TO Peg.png', 'test.png'],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: 'Счет от TO Peg...png',
+        receipt: ['Счет от TO Peg.png', 'test.png'],
         tourAmount: '100$',
-        employeeInvoice: 'Счет от TO Peg...png'
+        employeeInvoice: ['Счет от TO Peg.png']
       },
       {
-        paymentDate: '26.09.2024',
+        paymentDateClient: '26.09.2024',
+        paymentDateSupervisor: '2024-09-26T00:00',
         invoice: ['Счет от TO Peg.png', 'test.png'],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: 'Счет от TO Peg...png',
+        receipt: ['Счет от TO Peg.png', 'test.png'],
         tourAmount: '100$',
-        employeeInvoice: 'Счет от TO Peg...png'
+        employeeInvoice: ['Счет от TO Peg.png', 'test.png']
       }
     ]
   },
@@ -64,13 +69,14 @@ const data = [
     whoCreated: 'Азатов Азат',
     paymentDetails: [
       {
-        paymentDate: '26.09.2024',
+        paymentDateClient: '26.09.2024',
+        paymentDateSupervisor: '2024-09-26T00:00',
         invoice: [],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: 'Счет от TO Peg...png',
+        receipt: ['Счет от TO Peg.png'],
         tourAmount: '100$',
-        employeeInvoice: 'Счет от TO Peg...png'
+        employeeInvoice: ['Счет от TO Peg.png', 'test.png']
       }
     ]
   }
@@ -105,7 +111,7 @@ export const Table: FC = () => {
         <thead className={styles.thead}>
           <tr>
             <th className={styles.title}>
-              <input type='checkbox' checked={selectAll} onChange={handleSelectAll} />
+              <Checkbox checked={selectAll} onChange={handleSelectAll} />
             </th>
             <th className={styles.title}>номер договора</th>
             <th className={styles.title}>номер брони в СТ</th>
@@ -128,6 +134,7 @@ export const Table: FC = () => {
           ))}
         </tbody>
       </table>
+      {selectedRows.length !== 0 && <DeleteRow />}
     </div>
   );
 };

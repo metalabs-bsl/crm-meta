@@ -5,14 +5,21 @@
 }
 
 .accordion {
-  padding: 0;
+  padding: 15px;
+  border-bottom: 1px solid $silver;
+  display: inline-block;
+  margin-bottom: 10px;
+  & > div {
+    margin-bottom: 0;
+  }
 }
 
 .thead {
   border-bottom: 1px solid $silver;
 }
 
-.title, .item {
+.title,
+.item {
   font-weight: 400;
   font-size: 14px;
   text-align: start;
@@ -25,5 +32,45 @@
 
 .item {
   color: $gray-btn-bg-hover;
-  vertical-align:top;
+  vertical-align: top;
+  & .datepicker {
+    height: 20px;
+    color: $gray-btn-bg-hover;
+    background-color: $seaSalt;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: start;
+    &:disabled {
+      background-color: inherit;
+    }
+  }
+  & .inp {
+    height: 20px;
+    input {
+      border-radius: 5px;
+      width: 75px;
+      height: 29px;
+      background-color: $seaSalt;
+      color: $gray-btn-bg-hover;
+      padding: 5px;
+      text-decoration: underline;
+      font-weight: 400;
+      font-size: 14px;
+    }
+    input:disabled {
+      color: $gray-btn-bg-hover;
+      background-color: inherit;
+      text-align: start;
+      padding-left: 0;
+      text-decoration: none;
+    }
+  }
+  & .select {
+    color: $gray-btn-bg-hover;
+    padding: 5px;
+    &:disabled {
+      background-color: inherit;
+      padding: 0;
+    }
+  }
 }
