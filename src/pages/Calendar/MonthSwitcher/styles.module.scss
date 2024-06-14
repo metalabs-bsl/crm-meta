@@ -1,0 +1,19 @@
+.swith_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .arrow {
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+  .month_title {
+    font-weight: 500;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .month {
+      text-transform: capitalize;
+    }
+  }
+}

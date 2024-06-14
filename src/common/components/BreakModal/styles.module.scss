@@ -1,0 +1,28 @@
+@import '../../../common/styles/variables.scss';
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 20px;
+  background-color: $seaSalt;
+  border-radius: 5px;
+  .icon {
+    width: 66px;
+  }
+  .data {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .name_wrapper {
+      font-weight: 400;
+      font-size: 24px;
+      text-align: center;
+      color: $gray-btn-bg-hover;
+      .name {
+        font-weight: 500;
+      }
+    }
+  }
+}

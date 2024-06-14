@@ -1,4 +1,6 @@
 export { Accordion } from './Accordion';
+export { BirthDayModal } from './BirthDayModal';
+export { BreakModal } from './BreakModal';
 export { Date } from './Date';
 export { DeleteModal } from './DeleteModal';
 export { DropdownModal } from './DropdownModal';
