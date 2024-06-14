@@ -11,9 +11,10 @@ interface AccordionProps {
   isEdit?: boolean;
   onEditAction?: () => void;
   className?: string;
+  onSaveAction?: () => void;
 }
 
-export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAction, isEdit, className }) => {
+export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAction, isEdit, className, onSaveAction }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -33,7 +34,7 @@ export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAct
         <div className={styles.accordion_title}>{title}</div>
         {isEdit ? (
           <div className={styles.btns_wrapper}>
-            <Button styleType={BUTTON_TYPES.YELLOW} text='сохранить' onClick={onEditAction} />
+            <Button styleType={BUTTON_TYPES.YELLOW} text='сохранить' onClick={onSaveAction} />
             <Button styleType={BUTTON_TYPES.Link_BLACK} text='отменить' onClick={onEditAction} />
           </div>
         ) : (

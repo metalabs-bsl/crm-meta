@@ -4,6 +4,9 @@
   background-color: $not-paid-row;
   border-top: 1px solid $silver;
 }
+.checkedRow {
+  background-color: $white;
+}
 
 .item {
   padding: 10px 18px 10px 0;
@@ -32,7 +35,7 @@
     border-radius: 10px;
   }
   &_true {
-    background-color: $not-paid;
+    background-color: $main-green-bg;
   }
   &_false {
     background-color: $not-paid;

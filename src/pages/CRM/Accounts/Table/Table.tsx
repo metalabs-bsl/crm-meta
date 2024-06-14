@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Checkbox } from 'common/ui';
+import { DeleteModal } from 'common/components';
 import { DeleteRow } from './DeleteRow';
 import { TableRow } from './TableRow';
 import styles from './styles.module.scss';
@@ -9,7 +10,6 @@ const data = [
   {
     contractNumber: '1234567890',
     bookingNumber: '1234567890',
-    paymentStatus: false,
     gross: '800.80$',
     net: '800.80$',
     rate: '83$',
@@ -24,39 +24,41 @@ const data = [
       {
         paymentDateClient: '26.09.2024',
         paymentDateSupervisor: '2024-09-26T00:00',
-        invoice: ['Счет от TO Peg.png', 'test.png'],
+        invoice: ['fgh'],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: ['Счет от TO Peg.png', 'test.png'],
+        receipt: ['2'],
         tourAmount: '100$',
-        employeeInvoice: ['Счет от TO Peg.png', 'test.png']
+        employeeInvoice: ['3'],
+        isPaid: true
       },
       {
         paymentDateClient: '26.09.2024',
         paymentDateSupervisor: '2024-09-26T00:00',
-        invoice: ['Счет от TO Peg.png', 'test.png'],
+        invoice: [],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: ['Счет от TO Peg.png', 'test.png'],
+        receipt: [],
         tourAmount: '100$',
-        employeeInvoice: ['Счет от TO Peg.png']
+        employeeInvoice: ['Счет от TO Peg.png'],
+        isPaid: true
       },
       {
         paymentDateClient: '26.09.2024',
         paymentDateSupervisor: '2024-09-26T00:00',
-        invoice: ['Счет от TO Peg.png', 'test.png'],
+        invoice: [],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: ['Счет от TO Peg.png', 'test.png'],
+        receipt: [],
         tourAmount: '100$',
-        employeeInvoice: ['Счет от TO Peg.png', 'test.png']
+        employeeInvoice: [],
+        isPaid: false
       }
     ]
   },
   {
     contractNumber: '1234567890',
     bookingNumber: '1234567890',
-    paymentStatus: false,
     gross: '800.80$',
     net: '800.80$',
     rate: '83$',
@@ -76,7 +78,8 @@ const data = [
         method: 'Наличными, сом',
         receipt: ['Счет от TO Peg.png'],
         tourAmount: '100$',
-        employeeInvoice: ['Счет от TO Peg.png', 'test.png']
+        employeeInvoice: [],
+        isPaid: true
       }
     ]
   }
@@ -85,6 +88,7 @@ const data = [
 export const Table: FC = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -103,6 +107,10 @@ export const Table: FC = () => {
         return [...prev, index];
       }
     });
+  };
+
+  const handleDelete = () => {
+    setOpenDeleteModal(true);
   };
 
   return (
@@ -134,7 +142,15 @@ export const Table: FC = () => {
           ))}
         </tbody>
       </table>
-      {selectedRows.length !== 0 && <DeleteRow />}
+      {selectedRows.length !== 0 && <DeleteRow onClickEvent={handleDelete} />}
+      <DeleteModal
+        isOpen={openDeleteModal}
+        onCancel={() => {
+          setOpenDeleteModal(false);
+        }}
+        text={`Вы уверены, что хотите удалить счёт "${selectedRows}"?`}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };

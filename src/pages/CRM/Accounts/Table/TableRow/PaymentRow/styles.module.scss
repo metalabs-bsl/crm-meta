@@ -1,17 +1,17 @@
 @import '../../../../../../common/styles/variables.scss';
 
-.table {
-  border-collapse: collapse;
-}
-
 .accordion {
   padding: 15px;
   border-bottom: 1px solid $silver;
-  display: inline-block;
   margin-bottom: 10px;
   & > div {
     margin-bottom: 0;
   }
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
 }
 
 .thead {
@@ -40,6 +40,7 @@
     font-weight: 400;
     font-size: 14px;
     text-align: start;
+    padding: 14px;
     &:disabled {
       background-color: inherit;
     }
@@ -71,6 +72,31 @@
     &:disabled {
       background-color: inherit;
       padding: 0;
+    }
+  }
+  & .checkbox {
+    & + span {
+      width: 29px;
+      height: 29px;
+      background-color: $seaSalt;
+      border: none;
+    }
+    &:checked + span {
+      background-color: $seaSalt;
+      &:after {
+        color: black;
+        border: 2px solid $gray-btn-bg-hover;
+        border-width: 0 3px 3px 0;
+        border-radius: 1px;
+        width: 6px;
+        height: 12px;
+        top: 44%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+    }
+    &:disabled + span {
+      cursor: not-allowed;
     }
   }
 }

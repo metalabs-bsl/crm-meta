@@ -11,7 +11,6 @@ interface TableRowProps {
   onSelectRow: (index: number) => void;
   contractNumber: string;
   bookingNumber: string;
-  paymentStatus: boolean;
   gross: string;
   net: string;
   rate: string;
@@ -31,7 +30,6 @@ export const TableRow: FC<TableRowProps> = ({
   onSelectRow,
   contractNumber,
   bookingNumber,
-  paymentStatus,
   gross,
   net,
   rate,
@@ -44,16 +42,18 @@ export const TableRow: FC<TableRowProps> = ({
   whoCreated,
   paymentDetails
 }) => {
+  const allChecked = paymentDetails.every((detail) => detail.isPaid);
+
   return (
     <>
-      <tr className={styles.mainRow}>
+      <tr className={cn(styles.mainRow, { [styles.checkedRow]: allChecked })}>
         <td className={styles.item}>
           <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
         </td>
         <td className={styles.item}>{contractNumber}</td>
         <td className={styles.item}>{bookingNumber}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
-          {paymentStatus ? (
+          {allChecked ? (
             <span className={styles.paymentStatus_true}>Оплачено</span>
           ) : (
             <span className={styles.paymentStatus_false}>Не оплачено</span>
