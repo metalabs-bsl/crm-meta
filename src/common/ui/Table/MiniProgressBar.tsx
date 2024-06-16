@@ -8,8 +8,6 @@ export interface Stage {
   color: string;
 }
 
-// type StageClickHandler = (stageType: string) => void;
-
 interface MiniProgressBarProps {
   stages: Stage[];
   currentStage: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';

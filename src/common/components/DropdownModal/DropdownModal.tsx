@@ -2,11 +2,13 @@ import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './style.module.scss';
 
-interface IProps {
+export interface IProps {
   targetRef: React.MutableRefObject<HTMLElement | null>;
   isOpen: boolean;
   children?: ReactNode;
   onClose: () => void;
+  id?: string;
+  clientName?: string | null;
 }
 
 export const DropdownModal: FC<IProps> = ({ isOpen = false, children, targetRef, onClose }) => {

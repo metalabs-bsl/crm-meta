@@ -35,7 +35,7 @@ const data: TableRow[] = [
     name: 'MetaLabs',
     client: 'Евгений',
     dealStage: 'received',
-    tasks: 'Ограничение доступа посторонним пользователям',
+    tasks: 'Ограничение доступа посторонним пользователям ',
     amount: '1000 USD',
     responsible: 'Almaz'
   },

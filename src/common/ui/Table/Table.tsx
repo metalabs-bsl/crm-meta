@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
-import { DeleteModal, LossForm, Modal } from 'common/components';
+import { DeleteModal, EdgeModal, LossForm, Modal } from 'common/components';
 import { Checkbox } from '../Checkbox';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
@@ -13,8 +13,9 @@ export interface TableColumn {
   title: string;
   isEdit?: {
     value: boolean;
-    component: 'input' | 'select' | 'miniprogress';
+    component: 'input' | 'select' | 'miniprogress' | 'date';
   };
+  isClientInfo?: boolean;
 }
 
 type DealStage = 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
@@ -22,6 +23,7 @@ type DealStage = 'received' | 'processed' | 'consideration' | 'booking' | 'finis
 export interface TableRow {
   [key: string]: any;
   dealStage: DealStage;
+  date?: string;
 }
 
 interface TableProps {
@@ -44,7 +46,6 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<TableRow | null>(null);
   const [lossReason, setLossReason] = useState<string>('');
-
   const [modalState, setModalState] = useState({
     delete: false,
     finish: false,
@@ -52,18 +53,15 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     cardDetail: false
   });
 
-  const handleCheckboxChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
-  };
-
-  const handleInputChange = (rowIndex: number, columnKey: string, value: string) => {
-    setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
+  const onCloseModal = (modalName: keyof typeof modalState) => {
+    setModalState({ ...modalState, [modalName]: false });
   };
 
   const handleSave = () => {
     console.log('Сохраненные данные:', tableData);
     setIsEditMode(false);
+    setSelectedRows([]);
+    onCloseModal('loss'); // Закрытие модального окна 'loss'
   };
 
   const handleDelete = () => {
@@ -76,8 +74,36 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     if (stageType === 'finish') {
       setModalState({ ...modalState, finish: true });
       setCurrentRowIndex(rowIndex);
+    } else if (stageType === 'sale') {
+      if (tableData[rowIndex].dealStage !== 'sale') {
+        setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, dealStage: 'sale' } : row)));
+      }
     } else {
       setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, dealStage: stageType } : row)));
+    }
+  };
+
+  const handleFinishAction = (finishType: 'sale' | 'loss') => {
+    if (currentRowIndex !== null) {
+      setTableData((prevData) =>
+        prevData.map((row, index) => {
+          if (index === currentRowIndex) {
+            const updatedRow = { ...row };
+            if (finishType === 'sale' && updatedRow.dealStage !== 'sale') {
+              updatedRow.dealStage = 'finish';
+            } else if (finishType === 'loss') {
+              updatedRow.dealStage = 'loss';
+              updatedRow.lossReason = lossReason;
+            }
+            return updatedRow;
+          }
+          return row;
+        })
+      );
+      onCloseModal('finish'); // Закрытие модального окна 'finish'
+      onCloseModal('loss'); // Закрытие модального окна 'loss'
+      setCurrentRowIndex(null);
+      setLossReason('');
     }
   };
 
@@ -91,28 +117,17 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
       setTableData((prevData) =>
         prevData.map((row, index) => (index === currentRowIndex ? { ...row, dealStage: 'loss', lossReason: reason } : row))
       );
-      setModalState({ ...modalState, loss: false });
+      onCloseModal('loss'); // Закрытие модального окна 'loss'
+      if (tableData[currentRowIndex].dealStage !== 'sale') {
+        setTableData((prevData) => prevData.map((row, index) => (index === currentRowIndex ? { ...row, dealStage: 'finish' } : row)));
+      }
       setCurrentRowIndex(null);
     }
   };
 
-  const getSelectOptions = (key: string) => {
-    if (key === 'dealStage') {
-      return stages.map((stage) => ({
-        value: stage.type,
-        label: stage.title
-      }));
-    } else if (key === 'responsible') {
-      return [
-        { value: 'Almaz', label: 'Almaz' },
-        { value: 'Иса', label: 'Иса' }
-      ];
-    }
-    return [];
-  };
-
   const renderEditComponent = (column: TableColumn, row: TableRow, rowIndex: number) => {
     const { key, isEdit } = column;
+
     if (!isEdit) return row[key];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => handleInputChange(rowIndex, key, e.target.value);
@@ -148,6 +163,36 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     return row[key];
   };
 
+  const getSelectOptions = (key: string) => {
+    if (key === 'dealStage') {
+      return stages.map((stage) => ({ value: stage.type, label: stage.title }));
+    } else if (key === 'responsible') {
+      return [
+        { value: 'Almaz', label: 'Almaz' },
+        { value: 'Иса', label: 'Иса' }
+      ];
+    }
+    return [];
+  };
+
+  const handleCheckboxChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
+  };
+
+  const handleInputChange = (rowIndex: number, columnKey: string, value: string) => {
+    setTableData((prevData) => prevData.map((row, index) => (index === rowIndex ? { ...row, [columnKey]: value } : row)));
+  };
+
+  const handleSelectAllRows = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      const allRowsIndexes = tableData.map((_, index) => index);
+      setSelectedRows(allRowsIndexes);
+    } else {
+      setSelectedRows([]);
+    }
+  };
+
   const getSelectedRowNames = () => {
     return selectedRows.map((index) => tableData[index]?.name || `Запись ${index + 1}`).join(', ');
   };
@@ -165,11 +210,14 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     finish: (
       <Modal
         isOpen={modalState.finish}
-        onClose={() => setModalState({ ...modalState, finish: false })}
-        leftBtnText='продажа'
+        onClose={() => onCloseModal('finish')}
+        leftBtnText='Продажа'
         leftBtnStyle={BUTTON_TYPES.GREEN}
-        leftBtnAction={() => handleStageClick('sale', currentRowIndex!)}
-        rightBtnText='проигрыш'
+        leftBtnAction={() => {
+          handleFinishAction('sale');
+          onCloseModal('finish'); // Закрытие модального окна после нажатия на "Продажа"
+        }}
+        rightBtnText='Проигрыш'
         rightBtnStyle={BUTTON_TYPES.RED}
         rightBtnAction={() => setModalState({ ...modalState, loss: true })}
       >
@@ -183,59 +231,69 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     loss: (
       <Modal
         isOpen={modalState.loss}
-        onClose={() => setModalState({ ...modalState, loss: false })}
+        onClose={() => onCloseModal('loss')}
         leftBtnText='Сохранить'
         leftBtnStyle={BUTTON_TYPES.GREEN}
         leftBtnAction={() => handleLossFormChange(lossReason)}
         rightBtnText='Отменить'
         rightBtnStyle={BUTTON_TYPES.RED}
-        // rightBtn
-        rightBtnAction={() => setModalState({ ...modalState, loss: false })}
+        rightBtnAction={() => onCloseModal('loss')}
       >
         <div className={styles.modalWrapper}>
-          <LossForm onChangeValueType={setLossReason} onCancel={() => setModalState({ ...modalState, loss: false })} />
+          <LossForm onChangeValueType={setLossReason} onCancel={() => onCloseModal('loss')} />
         </div>
       </Modal>
     ),
     cardDetail: (
-      <Modal
-        isOpen={modalState.cardDetail}
-        onClose={() => setModalState({ ...modalState, cardDetail: false })}
-        leftBtnText='Закрыть'
-        leftBtnStyle={BUTTON_TYPES.RED}
-        leftBtnAction={() => setModalState({ ...modalState, cardDetail: false })}
-        // className={styles.detailCardMOdal}
-      >
-        <div className={styles.detailCardMOdal}>{selectedRow && <CardDetail cardTitle={selectedRow.name} />}</div>
-      </Modal>
+      <EdgeModal isOpen={modalState.cardDetail} onClose={() => onCloseModal('cardDetail')}>
+        {selectedRow && <CardDetail cardTitle={selectedRow.name} />}
+      </EdgeModal>
     )
   };
 
+  const handleCancel = () => {
+    setSelectedRows([]); // Сброс выбранных строк
+    setIsEditMode(false); // Выход из режима редак
+  };
   return (
     <>
       <div className={styles.wrapper}>
         <table className={styles.table}>
           <thead className={styles.table_wrapper}>
             <tr className={styles.table_titles}>
-              <th>Выбрать</th>
+              <div className={styles.main_checkbox}>
+                <Checkbox checked={selectedRows.length === tableData.length} onChange={handleSelectAllRows} />
+              </div>
               {columns.map((column) => (
                 <th key={column.key}>{column.title}</th>
               ))}
             </tr>
           </thead>
           <tbody className={styles.table_body}>
-            {tableData.map((row, index) => (
-              <tr key={index}>
-                <td className={styles.checkbox}>
-                  <Checkbox checked={selectedRows.includes(index)} onChange={(e) => handleCheckboxChange(index, e)} />
+            {tableData.length === 0 ? (
+              <tr>
+                <td colSpan={columns.length + 1} className={styles.emptyTable}>
+                  <h3 className={styles.table_text}> Добавьте данные</h3>
                 </td>
-                {columns.map((column) => (
-                  <td key={column.key} onClick={() => column.key === 'name' && !isEditMode && handleNameClick(row)}>
-                    {renderEditComponent(column, row, index)}
-                  </td>
-                ))}
               </tr>
-            ))}
+            ) : (
+              tableData.map((row, index) => (
+                <tr key={index}>
+                  <td className={styles.checkbox}>
+                    <Checkbox checked={selectedRows.includes(index)} onChange={(e) => handleCheckboxChange(index, e)} />
+                  </td>
+                  {columns.map((column) => (
+                    <td
+                      key={column.key}
+                      className={styles.column}
+                      onClick={() => column.key === 'name' && !isEditMode && handleNameClick(row)}
+                    >
+                      {renderEditComponent(column, row, index)}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         {selectedRows.length > 0 && !isEditMode && (
@@ -253,7 +311,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
             <button onClick={handleSave} className={styles.btnSave}>
               Сохранить
             </button>
-            <button onClick={() => setIsEditMode(false)} className={styles.btnCancel}>
+            <button onClick={() => handleCancel()} className={styles.btnCancel}>
               Отменить
             </button>
           </div>
