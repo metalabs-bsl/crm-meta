@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
-import { DeleteModal, EdgeModal, LossForm, Modal } from 'common/components';
+import { DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
+import { ProfileWindow } from 'common/components/Header/ProfileWindow/ProfileWindow';
 import { Checkbox } from '../Checkbox';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
@@ -15,7 +16,8 @@ export interface TableColumn {
     value: boolean;
     component: 'input' | 'select' | 'miniprogress' | 'date';
   };
-  isClientInfo?: boolean;
+  isDropdown?: boolean;
+  date?: string;
 }
 
 type DealStage = 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
@@ -46,22 +48,43 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<TableRow | null>(null);
   const [lossReason, setLossReason] = useState<string>('');
+  const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
+  const [dropdownRowIndex, setDropdownRowIndex] = useState<number | null>(null);
+
+  const profileRef = useRef(null);
   const [modalState, setModalState] = useState({
     delete: false,
     finish: false,
     loss: false,
-    cardDetail: false
+    cardDetail: false,
+    dropdown: false
   });
+
+  const handleDropdownOpen = (rowIndex: number) => {
+    setIsOpenDropdown(true);
+    setDropdownRowIndex(rowIndex);
+    setModalState({ ...modalState, dropdown: true });
+  };
+
+  const handleDropdownClose = () => {
+    setIsOpenDropdown(false);
+    setDropdownRowIndex(null);
+    setModalState((prevState) => ({ ...prevState, dropdown: false }));
+  };
 
   const onCloseModal = (modalName: keyof typeof modalState) => {
     setModalState({ ...modalState, [modalName]: false });
+
+    if (modalName === 'loss') {
+      setLossReason('');
+    }
   };
 
   const handleSave = () => {
     console.log('Сохраненные данные:', tableData);
     setIsEditMode(false);
     setSelectedRows([]);
-    onCloseModal('loss'); // Закрытие модального окна 'loss'
+    onCloseModal('loss');
   };
 
   const handleDelete = () => {
@@ -112,6 +135,10 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     setModalState({ ...modalState, cardDetail: true });
   };
 
+  const handleClientInfoClick = (row: TableRow, rowIndex: number) => {
+    handleDropdownOpen(rowIndex);
+  };
+
   const handleLossFormChange = (reason: string) => {
     if (currentRowIndex !== null) {
       setTableData((prevData) =>
@@ -126,7 +153,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   };
 
   const renderEditComponent = (column: TableColumn, row: TableRow, rowIndex: number) => {
-    const { key, isEdit } = column;
+    const { key, isEdit, isDropdown } = column;
 
     if (!isEdit) return row[key];
 
@@ -154,6 +181,23 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
             selectedStage={row['dealStage']}
             onStageClick={(stageType) => handleStageClick(stageType, rowIndex)}
           />
+        );
+      }
+    } else if (isEdit.component === 'date') {
+      return (
+        <>
+          <div className={styles.taskDate}>{row.date}</div>
+        </>
+      );
+    } else if (isDropdown && column.key === 'isDropdown') {
+      // Отображение dropdown при клике на колонку client
+      if (modalState.dropdown && dropdownRowIndex === rowIndex) {
+        return modalComponents.dropdown;
+      } else {
+        return (
+          <div onClick={() => handleClientInfoClick(row, rowIndex)} className={styles.clientColumn}>
+            {row[key]}
+          </div>
         );
       }
     } else if (isEdit.component === 'miniprogress') {
@@ -219,7 +263,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         }}
         rightBtnText='Проигрыш'
         rightBtnStyle={BUTTON_TYPES.RED}
-        rightBtnAction={() => setModalState({ ...modalState, loss: true })}
+        rightBtnAction={() => setModalState({ ...modalState, loss: true, finish: false })}
       >
         <div className={styles.modalWrapper}>
           <p className={styles.modalWrapperText}>
@@ -248,16 +292,24 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
       <EdgeModal isOpen={modalState.cardDetail} onClose={() => onCloseModal('cardDetail')}>
         {selectedRow && <CardDetail cardTitle={selectedRow.name} />}
       </EdgeModal>
+    ),
+    dropdown: (
+      <div className={styles.dropdown}>
+        <DropdownModal targetRef={profileRef} isOpen={modalState.dropdown} onClose={() => handleDropdownClose()}>
+          <ProfileWindow />
+        </DropdownModal>
+      </div>
     )
   };
 
+  // Выход из режима редак
   const handleCancel = () => {
-    setSelectedRows([]); // Сброс выбранных строк
-    setIsEditMode(false); // Выход из режима редак
+    setSelectedRows([]);
+    setIsEditMode(false);
   };
   return (
     <>
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} ref={profileRef}>
         <table className={styles.table}>
           <thead className={styles.table_wrapper}>
             <tr className={styles.table_titles}>
@@ -282,13 +334,26 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
                   <td className={styles.checkbox}>
                     <Checkbox checked={selectedRows.includes(index)} onChange={(e) => handleCheckboxChange(index, e)} />
                   </td>
-                  {columns.map((column) => (
+                  {columns.map((column, columnIndex) => (
                     <td
-                      key={column.key}
+                      key={columnIndex}
                       className={styles.column}
-                      onClick={() => column.key === 'name' && !isEditMode && handleNameClick(row)}
+                      onClick={() => {
+                        if (column.key === 'name' && !isEditMode) {
+                          handleNameClick(row);
+                        } else if (column.key === 'client' && !isOpenDropdown) {
+                          handleClientInfoClick(row, index);
+                        }
+                      }}
                     >
-                      {renderEditComponent(column, row, index)}
+                      {column.key === 'tasks' ? (
+                        <>
+                          <div>{row[column.key]}</div>
+                          {row.date && <div className={styles.date}>{row.date}</div>}
+                        </>
+                      ) : (
+                        renderEditComponent(column, row, index)
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -321,6 +386,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
       {modalComponents.finish}
       {modalComponents.loss}
       {modalComponents.cardDetail}
+      {modalComponents.dropdown}
     </>
   );
 };

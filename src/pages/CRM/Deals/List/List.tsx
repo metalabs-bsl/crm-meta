@@ -37,7 +37,8 @@ const data: TableRow[] = [
     dealStage: 'received',
     tasks: 'Ограничение доступа посторонним пользователям ',
     amount: '1000 USD',
-    responsible: 'Almaz'
+    responsible: 'Almaz',
+    date: '2024-06-15'
   },
   {
     name: 'AnotherItem',
@@ -45,7 +46,8 @@ const data: TableRow[] = [
     dealStage: 'processed',
     tasks: 'AnotherTasks',
     amount: '2000 USD',
-    responsible: 'AnotherResponsible'
+    responsible: 'AnotherResponsible',
+    date: '2024-06-15'
   }
 ];
 
