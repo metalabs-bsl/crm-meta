@@ -1,0 +1,1 @@
+export { BirthDayModal } from './BirthDayModal';

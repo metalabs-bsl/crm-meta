@@ -39,4 +39,7 @@ export type IIconType =
   | 'calendar-outline'
   | 'count-plus-active'
   | 'count-minus-active'
-  | 'count-minus-unactive';
+  | 'count-minus-unactive'
+  | 'birthday'
+  | 'note'
+  | 'break';

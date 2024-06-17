@@ -9,7 +9,7 @@ interface ModalProps {
   rightBtnText?: string;
   leftBtnStyle?: BUTTON_TYPES;
   rightBtnStyle?: BUTTON_TYPES;
-  onClose: () => void;
+  onClose?: () => void;
   isOpen: boolean;
   children?: ReactNode;
   leftBtnAction?: () => void;
