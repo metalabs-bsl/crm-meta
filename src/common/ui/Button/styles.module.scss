@@ -70,3 +70,15 @@
   color: $gray-btn-bg-hover !important;
   padding: 0;
 }
+
+.link-gray {
+  padding: 5px 20px;
+  border-radius: 10px;
+  background-color: $count-active-bg;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover !important;
+  &:hover {
+    background-color: $silver;
+  }
+}

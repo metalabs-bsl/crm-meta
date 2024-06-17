@@ -1,0 +1,109 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.accordion {
+  padding: 15px;
+  border-bottom: 1px solid $silver;
+  margin-bottom: 10px;
+  & > div {
+    margin-bottom: 0;
+  }
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.thead {
+  border-bottom: 1px solid $silver;
+}
+
+.title,
+.item {
+  font-weight: 400;
+  font-size: 14px;
+  text-align: start;
+  padding: 10px 30px 10px 0;
+}
+
+.title {
+  color: $gray;
+}
+
+.item {
+  color: $gray-btn-bg-hover;
+  vertical-align: top;
+  & .datepicker {
+    height: 20px;
+    color: $gray-btn-bg-hover;
+    background-color: $seaSalt;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: start;
+    padding: 14px;
+    &:disabled {
+      background-color: inherit;
+      padding: 0;
+    }
+  }
+  & .inp {
+    height: 20px;
+    input {
+      border-radius: 5px;
+      width: 75px;
+      height: 29px;
+      background-color: $seaSalt;
+      color: $gray-btn-bg-hover;
+      padding: 5px;
+      text-decoration: underline;
+      font-weight: 400;
+      font-size: 14px;
+    }
+    input:disabled {
+      color: $gray-btn-bg-hover;
+      background-color: inherit;
+      text-align: start;
+      padding-left: 0;
+      text-decoration: none;
+    }
+  }
+  & .select {
+    color: $gray-btn-bg-hover;
+    padding: 5px;
+    &:disabled {
+      background-color: inherit;
+      padding: 0;
+    }
+  }
+  & .checkboxItem {
+    & + span {
+      width: 29px;
+      height: 29px;
+      background-color: $seaSalt;
+      border: none;
+    }
+    &:checked + span {
+      background-color: $seaSalt;
+      &:after {
+        color: black;
+        border: 2px solid $gray-btn-bg-hover;
+        border-width: 0 3px 3px 0;
+        border-radius: 1px;
+        width: 6px;
+        height: 12px;
+        top: 44%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+    }
+    &:disabled + span {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
