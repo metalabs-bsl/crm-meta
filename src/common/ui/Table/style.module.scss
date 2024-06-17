@@ -18,7 +18,7 @@
           color: $table-title-color;
           font-weight: 400;
           text-align: left;
-          border-bottom: 1px solid $table-gray-bg;
+          border-bottom: 1px solid $seaSalt;
         }
       }
 
@@ -28,7 +28,6 @@
           color: $table-title-color;
           font-weight: 400;
           text-align: left;
-          border-bottom: 1px solid $table-gray-bg;
         }
       }
     }
@@ -59,7 +58,7 @@
       left: -20px;
       height: 1px;
       width: 140%;
-      border-bottom: 1px solid #e9e6e6;
+      border-bottom: 1px solid $seaSalt;
     }
   }
 
@@ -78,7 +77,6 @@
 
   .editInput {
     border: none;
-    // border: solid 1px $input-edit;
     padding: 5px;
     border-radius: 5px;
     background: $input-edit-bg;
@@ -118,7 +116,7 @@
 
   .table_text {
     text-align: center;
-    color: red;
+    color: $not-paid;
     font-weight: 400;
     font-size: 26px;
   }
@@ -175,7 +173,7 @@
 
   .stageTitle {
     font-size: 14px;
-    color: #666666;
+    color: $gray;
   }
 
   .active {
@@ -185,7 +183,7 @@
 
 .date {
   font-size: 14px;
-  color: #888;
+  color: $gray;
   margin-top: 4px;
 }
 
@@ -196,7 +194,7 @@
   background: $white;
 
   .client {
-    background: #f8f8f8;
+    background: $seaSalt;
     width: 250px;
     border-radius: 10px;
     padding: 7px;
@@ -208,7 +206,7 @@
       .clientTitle,
       .clientTitleNumber {
         font-size: 14px;
-        color: #a8a4a4;
+        color: $gray;
         margin-bottom: 3px;
       }
 
@@ -221,7 +219,7 @@
     .client_date {
       margin-left: 150px;
       font-size: 14px;
-      color: #888;
+      color: $gray;
     }
   }
 }

@@ -7,8 +7,8 @@ import { BUTTON_TYPES } from 'types/enums';
 interface IProps {
   isOpen?: boolean;
   text: string;
-  onDelete: () => void;
-  onCancel: () => void;
+  onDelete?: () => void;
+  onCancel?: () => void;
 }
 
 export const DeleteModal: FC<IProps> = ({ isOpen = false, onDelete, onCancel, text }) => {

@@ -2,17 +2,19 @@
 import React from 'react';
 import styles from './style.module.scss';
 
+type IstageType = 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
+
 export interface Stage {
   title: string;
-  type: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
+  type: IstageType;
   color: string;
 }
 
 interface MiniProgressBarProps {
   stages: Stage[];
-  currentStage: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
-  selectedStage: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
-  onStageClick?: (stageType: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss') => void;
+  currentStage: IstageType;
+  selectedStage: IstageType;
+  onStageClick?: (stageType: IstageType) => void;
   isEditable: boolean;
 }
 

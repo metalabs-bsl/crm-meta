@@ -36,13 +36,6 @@ export const NoteForm: FC<IProps> = ({ createAction, deleteAction, editAction, f
     setIsEditing(true);
   };
 
-  const onDeleteClick = () => {
-    // Делаем что-то перед вызовом deleteAction
-    if (deleteAction) {
-      deleteAction();
-    }
-  };
-
   const onCancelEditProcess = () => {
     setDisabled(true);
     setIsEditing(false);
@@ -121,7 +114,7 @@ export const NoteForm: FC<IProps> = ({ createAction, deleteAction, editAction, f
         text={`Вы точно хотите удалить заметку "${formProps?.title}"`}
         isOpen={deleteModal}
         onCancel={onCancelDelete}
-        onDelete={onDeleteClick}
+        onDelete={deleteAction}
       />
     </form>
   );

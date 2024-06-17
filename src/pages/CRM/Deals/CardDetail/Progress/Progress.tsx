@@ -154,12 +154,7 @@ export const Progress: FC<IProps> = ({ currentStage = progress[0].type }) => {
         rightBtnStyle={BUTTON_TYPES.Link_BLACK}
         rightBtnAction={onLossCancel}
       >
-        <LossForm
-          onChangeValueType={setLossType}
-          onCancel={function (): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
+        <LossForm onChangeValueType={setLossType} />
       </Modal>
     </div>
   );

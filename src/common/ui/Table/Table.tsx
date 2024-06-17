@@ -320,7 +320,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         rightBtnAction={() => onCloseModal('loss')}
       >
         <div className={styles.modalWrapper}>
-          <LossForm onChangeValueType={setLossReason} onCancel={() => onCloseModal('loss')} />
+          <LossForm onChangeValueType={setLossReason} />
         </div>
       </Modal>
     ),

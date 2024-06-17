@@ -16,7 +16,6 @@ const options: IOption[] = [
 ];
 interface IProps {
   onChangeValueType: (type: string, rowIndex?: number) => void;
-  onCancel: () => void;
 }
 
 export const LossForm: FC<IProps> = ({ onChangeValueType }) => {
