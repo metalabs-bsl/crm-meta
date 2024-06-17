@@ -42,4 +42,5 @@ export type IIconType =
   | 'count-minus-unactive'
   | 'birthday'
   | 'note'
+  | 'download'
   | 'break';
