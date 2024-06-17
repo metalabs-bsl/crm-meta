@@ -116,7 +116,6 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
         onCancel={onCloseDeleteModal}
         text={`Вы уверены, что хотите удалить колонку "${title}"?`}
         onDelete={onColumnDelete}
-        itemName={title} // Передача имени колонки в itemName
       />
       {isSaleColumn && (
         <DropdownModal targetRef={filterRef} onClose={onClickFilterModal} isOpen={openFilterModal}>

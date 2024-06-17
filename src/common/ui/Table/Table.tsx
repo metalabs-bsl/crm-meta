@@ -284,8 +284,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         isOpen={modalState.delete}
         onCancel={() => setModalState({ ...modalState, delete: false })}
         onDelete={handleDelete}
-        text={`Вы уверены, что хотите удалить следующие записи: `}
-        itemName={getSelectedRowNames()}
+        text={`Вы уверены, что хотите удалить следующие записи: ${getSelectedRowNames()}`}
       />
     ),
     finish: (

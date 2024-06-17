@@ -122,7 +122,6 @@ export const NoteForm: FC<IProps> = ({ createAction, deleteAction, editAction, f
         isOpen={deleteModal}
         onCancel={onCancelDelete}
         onDelete={onDeleteClick}
-        itemName={''}
       />
     </form>
   );
