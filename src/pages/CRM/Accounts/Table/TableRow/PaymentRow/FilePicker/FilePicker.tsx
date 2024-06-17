@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, useCallback, useRef, useState } from 'react';
 import { Icon } from 'common/ui/Icon';
 import styles from './styles.module.scss';
 
@@ -9,34 +9,45 @@ interface FilePickerProps {
 }
 
 export const FilePicker: FC<FilePickerProps> = ({ files, editable, onFilesChange }) => {
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const newFile = event.target.files[0];
-      onFilesChange([...files, newFile.name]);
-    }
-  };
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const uniqueId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
 
-  const handleFileDelete = (fileName: string) => {
-    const updatedFiles = files.filter((file) => file !== fileName);
-    onFilesChange(updatedFiles);
-  };
+  const handleFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+        setFileUrl(URL.createObjectURL(file));
+        onFilesChange([...files, file.name]);
+      }
+    },
+    [files, onFilesChange]
+  );
+
+  const handleFileDelete = useCallback(
+    (fileName: string) => {
+      const updatedFiles = files.filter((file) => file !== fileName);
+      onFilesChange(updatedFiles);
+    },
+    [files, onFilesChange]
+  );
 
   return (
     <div className={styles.picker_container}>
       {files.map((file) => (
         <div className={styles.fileBox} key={file}>
-          <a href={file} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
+          <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
             {file}
           </a>
           {!editable && <Icon type='delete' onClick={() => handleFileDelete(file)} />}
         </div>
       ))}
       {!editable && (
-        <label htmlFor='file-upload' className={styles.custom_file_upload}>
+        <label htmlFor={uniqueId} className={styles.custom_file_upload}>
           <Icon type='plus-gray' />
         </label>
       )}
-      <input id='file-upload' type='file' onChange={handleFileChange} style={{ display: 'none' }} />
+      <input id={uniqueId} type='file' onChange={handleFileChange} style={{ display: 'none' }} ref={fileInputRef} />
     </div>
   );
 };

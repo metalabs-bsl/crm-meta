@@ -43,6 +43,7 @@
     padding: 14px;
     &:disabled {
       background-color: inherit;
+      padding: 0;
     }
   }
   & .inp {
@@ -74,7 +75,7 @@
       padding: 0;
     }
   }
-  & .checkbox {
+  & .checkboxItem {
     & + span {
       width: 29px;
       height: 29px;
@@ -99,4 +100,10 @@
       cursor: not-allowed;
     }
   }
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { Checkbox } from 'common/ui';
 import { DeleteModal } from 'common/components';
@@ -24,12 +24,12 @@ const data = [
       {
         paymentDateClient: '26.09.2024',
         paymentDateSupervisor: '2024-09-26T00:00',
-        invoice: ['fgh'],
+        invoice: [],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: ['2'],
+        receipt: [],
         tourAmount: '100$',
-        employeeInvoice: ['3'],
+        employeeInvoice: [],
         isPaid: true
       },
       {
@@ -40,7 +40,7 @@ const data = [
         method: 'Наличными, сом',
         receipt: [],
         tourAmount: '100$',
-        employeeInvoice: ['Счет от TO Peg.png'],
+        employeeInvoice: [],
         isPaid: true
       },
       {
@@ -76,7 +76,7 @@ const data = [
         invoice: [],
         amount: '100$',
         method: 'Наличными, сом',
-        receipt: ['Счет от TO Peg.png'],
+        receipt: [],
         tourAmount: '100$',
         employeeInvoice: [],
         isPaid: true
@@ -90,28 +90,18 @@ export const Table: FC = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    if (!selectAll) {
-      setSelectedRows(data.map((_, index) => index));
-    } else {
-      setSelectedRows([]);
-    }
-  };
+  const handleSelectAll = useCallback(() => {
+    setSelectAll((prev) => !prev);
+    setSelectedRows(() => (!selectAll ? data.map((_, index) => index) : []));
+  }, [selectAll]);
 
-  const handleSelectRow = (index: number) => {
-    setSelectedRows((prev) => {
-      if (prev.includes(index)) {
-        return prev.filter((i) => i !== index);
-      } else {
-        return [...prev, index];
-      }
-    });
-  };
+  const handleSelectRow = useCallback((index: number) => {
+    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
+  }, []);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setOpenDeleteModal(true);
-  };
+  }, []);
 
   return (
     <div className={styles.tableContainer}>
@@ -145,9 +135,7 @@ export const Table: FC = () => {
       {selectedRows.length !== 0 && <DeleteRow onClickEvent={handleDelete} />}
       <DeleteModal
         isOpen={openDeleteModal}
-        onCancel={() => {
-          setOpenDeleteModal(false);
-        }}
+        onCancel={() => setOpenDeleteModal(false)}
         text={`Вы уверены, что хотите удалить счёт "${selectedRows}"?`}
         onDelete={handleDelete}
       />

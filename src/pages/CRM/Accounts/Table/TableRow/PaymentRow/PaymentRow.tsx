@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
+import cn from 'classnames';
 import { Checkbox, DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { FilePicker } from './FilePicker';
@@ -14,29 +15,15 @@ export interface PaymentRowProps {
   tourAmount: string;
   employeeInvoice: string[];
   isPaid: boolean;
+  accordionTitle: string;
 }
 
 const payOptions = [
-  {
-    title: 'Наличными, сом',
-    value: 'som'
-  },
-  {
-    title: 'Наличными, $',
-    value: 'usd'
-  },
-  {
-    title: 'Наличными, €',
-    value: 'eur'
-  },
-  {
-    title: 'Переводом',
-    value: 'transaction'
-  },
-  {
-    title: 'Через банк',
-    value: 'bank'
-  }
+  { title: 'Наличными, сом', value: 'som' },
+  { title: 'Наличными, $', value: 'usd' },
+  { title: 'Наличными, €', value: 'eur' },
+  { title: 'Переводом', value: 'transaction' },
+  { title: 'Через банк', value: 'bank' }
 ];
 
 export const PaymentRow: FC<PaymentRowProps> = ({
@@ -48,7 +35,8 @@ export const PaymentRow: FC<PaymentRowProps> = ({
   receipt,
   tourAmount,
   employeeInvoice,
-  isPaid
+  isPaid,
+  accordionTitle
 }) => {
   const [isEditPaymentInfo, setIsEditPaymentInfo] = useState<boolean>(false);
   const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
@@ -62,15 +50,15 @@ export const PaymentRow: FC<PaymentRowProps> = ({
 
   const isEditable = !isEditPaymentInfo;
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     setIsEditPaymentInfo((prev) => !prev);
-  };
+  }, []);
 
-  const handleCheckboxChange = () => {
+  const handleCheckboxChange = useCallback(() => {
     setLocalIsPaid((prev) => !prev);
-  };
+  }, []);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const updatedData = {
       paymentDateSupervisor: localPaymentDateSupervisor,
       invoice: invoiceFiles,
@@ -83,11 +71,20 @@ export const PaymentRow: FC<PaymentRowProps> = ({
     };
 
     console.log(updatedData);
-  };
+  }, [
+    localPaymentDateSupervisor,
+    invoiceFiles,
+    localAmount,
+    localMethod,
+    receiptFiles,
+    localTourAmount,
+    employeeInvoiceFiles,
+    localIsPaid
+  ]);
 
   return (
     <Accordion
-      title='Полная оплата'
+      title={accordionTitle}
       className={styles.accordion}
       isEdit={isEditPaymentInfo}
       onEditAction={handleEdit}
@@ -109,60 +106,47 @@ export const PaymentRow: FC<PaymentRowProps> = ({
         </thead>
         <tbody>
           <tr>
-            <th className={styles.item}>{paymentDateClient}</th>
-            <th className={styles.item}>
+            <td className={styles.item}>{paymentDateClient}</td>
+            <td className={styles.item}>
               <DatePicker
                 className={styles.datepicker}
                 disabled={isEditable}
                 value={localPaymentDateSupervisor}
-                onChange={(e) => {
-                  setLocalPaymentDateSupervisor(e.target.value);
-                }}
+                onChange={(e) => setLocalPaymentDateSupervisor(e.target.value)}
               />
-            </th>
-            <th className={styles.item}>
+            </td>
+            <td className={styles.item}>
               <FilePicker files={invoiceFiles} editable={isEditable} onFilesChange={setInvoiceFiles} />
-            </th>
-            <th className={styles.item}>
-              <Input
-                className={styles.inp}
-                disabled={isEditable}
-                value={localAmount}
-                onChange={(e) => {
-                  setLocalAmount(e.target.value);
-                }}
-              />
-            </th>
-            <th className={styles.item}>
+            </td>
+            <td className={styles.item}>
+              <Input className={styles.inp} disabled={isEditable} value={localAmount} onChange={(e) => setLocalAmount(e.target.value)} />
+            </td>
+            <td className={styles.item}>
               <Select
                 value={localMethod}
                 options={payOptions}
                 className={styles.select}
                 disabled={isEditable}
-                onChange={(e) => {
-                  setLocalMethod(e.target.value);
-                }}
+                onChange={(e) => setLocalMethod(e.target.value)}
               />
-            </th>
-            <th className={styles.item}>
+            </td>
+            <td className={styles.item}>
               <FilePicker files={receiptFiles} editable={isEditable} onFilesChange={setReceiptFiles} />
-            </th>
-            <th className={styles.item}>
+            </td>
+            <td className={styles.item}>
               <Input
                 className={styles.inp}
                 disabled={isEditable}
                 value={localTourAmount}
-                onChange={(e) => {
-                  setLocalTourAmount(e.target.value);
-                }}
+                onChange={(e) => setLocalTourAmount(e.target.value)}
               />
-            </th>
-            <th className={styles.item}>
+            </td>
+            <td className={styles.item}>
               <FilePicker files={employeeInvoiceFiles} editable={isEditable} onFilesChange={setEmployeeInvoiceFiles} />
-            </th>
-            <th className={styles.item}>
-              <Checkbox className={styles.checkbox} checked={localIsPaid} disabled={isEditable} onChange={handleCheckboxChange} />
-            </th>
+            </td>
+            <td className={cn(styles.item, styles.checkboxWrapper)}>
+              <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={isEditable} onChange={handleCheckboxChange} />
+            </td>
           </tr>
         </tbody>
       </table>

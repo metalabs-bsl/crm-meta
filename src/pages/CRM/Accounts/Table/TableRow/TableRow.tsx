@@ -1,9 +1,11 @@
-import { FC } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import cn from 'classnames';
 import { Checkbox } from 'common/ui';
 import { Accordion } from 'common/components';
 import { PaymentRow, PaymentRowProps } from './PaymentRow';
 import styles from './styles.module.scss';
+
+type PaymentDetails = Omit<PaymentRowProps, 'accordionTitle'>;
 
 interface TableRowProps {
   index: number;
@@ -21,8 +23,10 @@ interface TableRowProps {
   tourOperator: string;
   tourInvoice: string;
   whoCreated: string;
-  paymentDetails: PaymentRowProps[];
+  paymentDetails: PaymentDetails[];
 }
+
+const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
 
 export const TableRow: FC<TableRowProps> = ({
   index,
@@ -42,7 +46,14 @@ export const TableRow: FC<TableRowProps> = ({
   whoCreated,
   paymentDetails
 }) => {
-  const allChecked = paymentDetails.every((detail) => detail.isPaid);
+  const allChecked = useMemo(() => paymentDetails.every((detail) => detail.isPaid), [paymentDetails]);
+
+  const renderPaymentRowTitle = useCallback(
+    (index: number, titles: string[]): string => {
+      return paymentDetails.length === 1 ? 'Полная оплата' : titles[index];
+    },
+    [paymentDetails.length]
+  );
 
   return (
     <>
@@ -71,11 +82,11 @@ export const TableRow: FC<TableRowProps> = ({
         <td className={styles.item}>{whoCreated}</td>
       </tr>
       <tr className={styles.accordionRow}>
-        <td colSpan={100} className={styles.accordionContainer}>
+        <td colSpan={14} className={styles.accordionContainer}>
           <Accordion className={styles.accordion} title='Информация об оплате'>
             <div className={styles.expandedContent}>
-              {paymentDetails.map((detail, index) => (
-                <PaymentRow {...detail} key={index} />
+              {paymentDetails.map((detail, idx) => (
+                <PaymentRow {...detail} key={idx} accordionTitle={renderPaymentRowTitle(idx, ordinalTitles)} />
               ))}
             </div>
           </Accordion>
