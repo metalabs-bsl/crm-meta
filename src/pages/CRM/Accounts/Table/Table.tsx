@@ -2,6 +2,7 @@ import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { Checkbox } from 'common/ui';
 import { DeleteModal } from 'common/components';
+import { mainRowHeaders } from '../Account.helper';
 import { DeleteRow } from './DeleteRow';
 import { TableRow } from './TableRow';
 import styles from './styles.module.scss';
@@ -111,19 +112,11 @@ export const Table: FC = () => {
             <th className={styles.title}>
               <Checkbox checked={selectAll} onChange={handleSelectAll} />
             </th>
-            <th className={styles.title}>номер договора</th>
-            <th className={styles.title}>номер брони в СТ</th>
-            <th className={cn(styles.title, styles.paymentStatus)}>статус оплаты</th>
-            <th className={styles.title}>Брутто</th>
-            <th className={styles.title}>Нетто</th>
-            <th className={styles.title}>курс</th>
-            <th className={styles.title}>комиссия</th>
-            <th className={styles.title}>способ оплаты</th>
-            <th className={styles.title}>направление</th>
-            <th className={styles.title}>даты тура</th>
-            <th className={styles.title}>туроператор</th>
-            <th className={styles.title}>оплата ТО</th>
-            <th className={styles.title}>кем создан</th>
+            {mainRowHeaders.map((header, idx) => (
+              <th key={idx} className={cn(header.classNames.map((el) => `${styles[el]}`).join(' '))}>
+                {header.title}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>

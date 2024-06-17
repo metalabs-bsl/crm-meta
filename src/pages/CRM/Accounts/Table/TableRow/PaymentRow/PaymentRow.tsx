@@ -1,8 +1,8 @@
 import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { Checkbox, DatePicker, Input, Select } from 'common/ui';
-import { Accordion } from 'common/components';
-import { FilePicker } from './FilePicker';
+import { Accordion, MultipleFilePicker } from 'common/components';
+import { paymentRowHeaders } from '../../../Account.helper';
 import styles from './styles.module.scss';
 
 export interface PaymentRowProps {
@@ -93,15 +93,11 @@ export const PaymentRow: FC<PaymentRowProps> = ({
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
-            <th className={styles.title}>СО клиента</th>
-            <th className={styles.title}>СО руководителя</th>
-            <th className={styles.title}>счёт от ТО</th>
-            <th className={styles.title}>сумма оплаты</th>
-            <th className={styles.title}>способ оплаты</th>
-            <th className={styles.title}>квитанция от ТО</th>
-            <th className={styles.title}>оплата ТО</th>
-            <th className={styles.title}>счёт от сотрудника</th>
-            <th className={styles.title}>оплачено</th>
+            {paymentRowHeaders.map((header, idx) => (
+              <th key={idx} className={cn(header.classNames.map((el) => `${styles[el]}`).join(' '))}>
+                {header.title}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -116,7 +112,7 @@ export const PaymentRow: FC<PaymentRowProps> = ({
               />
             </td>
             <td className={styles.item}>
-              <FilePicker files={invoiceFiles} editable={isEditable} onFilesChange={setInvoiceFiles} />
+              <MultipleFilePicker files={invoiceFiles} editable={isEditable} onFilesChange={setInvoiceFiles} />
             </td>
             <td className={styles.item}>
               <Input className={styles.inp} disabled={isEditable} value={localAmount} onChange={(e) => setLocalAmount(e.target.value)} />
@@ -131,7 +127,7 @@ export const PaymentRow: FC<PaymentRowProps> = ({
               />
             </td>
             <td className={styles.item}>
-              <FilePicker files={receiptFiles} editable={isEditable} onFilesChange={setReceiptFiles} />
+              <MultipleFilePicker files={receiptFiles} editable={isEditable} onFilesChange={setReceiptFiles} />
             </td>
             <td className={styles.item}>
               <Input
@@ -142,7 +138,7 @@ export const PaymentRow: FC<PaymentRowProps> = ({
               />
             </td>
             <td className={styles.item}>
-              <FilePicker files={employeeInvoiceFiles} editable={isEditable} onFilesChange={setEmployeeInvoiceFiles} />
+              <MultipleFilePicker files={employeeInvoiceFiles} editable={isEditable} onFilesChange={setEmployeeInvoiceFiles} />
             </td>
             <td className={cn(styles.item, styles.checkboxWrapper)}>
               <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={isEditable} onChange={handleCheckboxChange} />

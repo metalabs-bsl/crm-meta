@@ -2,13 +2,13 @@ import { ChangeEvent, FC, useCallback, useRef, useState } from 'react';
 import { Icon } from 'common/ui/Icon';
 import styles from './styles.module.scss';
 
-interface FilePickerProps {
+interface MultipleFilePickerProps {
   files: string[];
   editable: boolean;
   onFilesChange: (files: string[]) => void;
 }
 
-export const FilePicker: FC<FilePickerProps> = ({ files, editable, onFilesChange }) => {
+export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editable, onFilesChange }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uniqueId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
