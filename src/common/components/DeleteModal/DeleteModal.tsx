@@ -4,7 +4,6 @@ import { Modal } from '../Modal';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
-
 interface IProps {
   isOpen?: boolean;
   text: string;
