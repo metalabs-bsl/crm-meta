@@ -50,6 +50,17 @@
     gap: 10px;
     padding-top: 12px;
     margin-left: 20px;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -29px;
+      left: -20px;
+      height: 1px;
+      width: 140%;
+      border-bottom: 1px solid #e9e6e6;
+    }
   }
 
   .checkbox {
@@ -60,10 +71,9 @@
   }
 
   .column {
-    max-width: 300px; /* Задаем максимальную ширину */
-    overflow: hidden; /* Если необходимо скрыть содержимое, выходящее за пределы */
-    text-overflow: ellipsis; /* Добавляем многоточие для обрезанного текста */
-    // white-space: nowrap; /* Предотвращаем перенос текста на новую строку */
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .editInput {
@@ -166,4 +176,41 @@
   font-size: 14px;
   color: #888;
   margin-top: 4px;
+}
+
+// client window
+
+.client_wrapper {
+  height: auto;
+  background: $white;
+
+  .client {
+    background: #f8f8f8;
+    width: 250px;
+    border-radius: 10px;
+    padding: 7px;
+
+    ul {
+      list-style: none;
+      margin-bottom: 10px;
+
+      .clientTitle,
+      .clientTitleNumber {
+        font-size: 14px;
+        color: #a8a4a4;
+        margin-bottom: 3px;
+      }
+
+      .clientName,
+      .clientPhone {
+        font-size: 16px;
+      }
+    }
+
+    .client_date {
+      margin-left: 150px;
+      font-size: 14px;
+      color: #888;
+    }
+  }
 }

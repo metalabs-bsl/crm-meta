@@ -2,8 +2,8 @@
 import React, { FC, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
 import { DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
-import { ProfileWindow } from 'common/components/Header/ProfileWindow/ProfileWindow';
 import { Checkbox } from '../Checkbox';
+import ClientWindow from './clientWindow';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
 
@@ -25,12 +25,25 @@ type DealStage = 'received' | 'processed' | 'consideration' | 'booking' | 'finis
 export interface TableRow {
   [key: string]: any;
   dealStage: DealStage;
-  date?: string;
+  date: string;
+  client: string;
+  phoneNumber: string;
 }
 
 interface TableProps {
   columns: TableColumn[];
   data: TableRow[];
+}
+
+interface ModalState {
+  delete: boolean;
+  finish: boolean;
+  loss: boolean;
+  cardDetail: boolean;
+  dropdown: boolean;
+  clientName: string;
+  clientPhoneNumber: string;
+  date: string;
 }
 
 const stages: Stage[] = [
@@ -48,27 +61,34 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<TableRow | null>(null);
   const [lossReason, setLossReason] = useState<string>('');
-  const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
-  const [dropdownRowIndex, setDropdownRowIndex] = useState<number | null>(null);
-
+  // const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
+  // const [dropdownRowIndex, setDropdownRowIndex] = useState<number | null>(null);
+  const [cuurent, setCurrent] = useState<number | null>(null);
   const profileRef = useRef(null);
-  const [modalState, setModalState] = useState({
+
+  const [modalState, setModalState] = useState<ModalState>({
     delete: false,
     finish: false,
     loss: false,
     cardDetail: false,
-    dropdown: false
+    dropdown: false,
+    clientName: '',
+    clientPhoneNumber: '',
+    date: ''
   });
 
   const handleDropdownOpen = (rowIndex: number) => {
-    setIsOpenDropdown(true);
-    setDropdownRowIndex(rowIndex);
+    // setIsOpenDropdown(true);
+    // setDropdownRowIndex(rowIndex);
+    setCurrent(rowIndex);
+
     setModalState({ ...modalState, dropdown: true });
   };
 
   const handleDropdownClose = () => {
-    setIsOpenDropdown(false);
-    setDropdownRowIndex(null);
+    // setIsOpenDropdown(false);
+    // setDropdownRowIndex(null);
+    setCurrent(null);
     setModalState((prevState) => ({ ...prevState, dropdown: false }));
   };
 
@@ -123,8 +143,8 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
           return row;
         })
       );
-      onCloseModal('finish'); // Закрытие модального окна 'finish'
-      onCloseModal('loss'); // Закрытие модального окна 'loss'
+      onCloseModal('finish');
+      onCloseModal('loss');
       setCurrentRowIndex(null);
       setLossReason('');
     }
@@ -137,6 +157,18 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
 
   const handleClientInfoClick = (row: TableRow, rowIndex: number) => {
     handleDropdownOpen(rowIndex);
+    setCurrent(rowIndex);
+
+    const clientName = row.client;
+    const clientPhoneNumber = row.phoneNumber;
+    const clientDate = row.date;
+
+    setModalState((prevState) => ({
+      ...prevState,
+      clientName: clientName,
+      clientPhoneNumber: clientPhoneNumber,
+      date: clientDate
+    }));
   };
 
   const handleLossFormChange = (reason: string) => {
@@ -191,7 +223,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
       );
     } else if (isDropdown && column.key === 'isDropdown') {
       // Отображение dropdown при клике на колонку client
-      if (modalState.dropdown && dropdownRowIndex === rowIndex) {
+      if (modalState.dropdown && cuurent === rowIndex) {
         return modalComponents.dropdown;
       } else {
         return (
@@ -296,7 +328,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     dropdown: (
       <div className={styles.dropdown}>
         <DropdownModal targetRef={profileRef} isOpen={modalState.dropdown} onClose={() => handleDropdownClose()}>
-          <ProfileWindow />
+          <ClientWindow clientName={modalState.clientName} clientPhoneNumber={modalState.clientPhoneNumber} clientDate={modalState.date} />
         </DropdownModal>
       </div>
     )
@@ -309,7 +341,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   };
   return (
     <>
-      <div className={styles.wrapper} ref={profileRef}>
+      <div className={styles.wrapper}>
         <table className={styles.table}>
           <thead className={styles.table_wrapper}>
             <tr className={styles.table_titles}>
@@ -336,19 +368,20 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
                   </td>
                   {columns.map((column, columnIndex) => (
                     <td
+                      ref={cuurent === index && columnIndex === 1 ? profileRef : null}
                       key={columnIndex}
                       className={styles.column}
+                      onMouseEnter={() => columnIndex === 1 && handleClientInfoClick(row, index)}
+                      onMouseLeave={handleDropdownClose}
                       onClick={() => {
                         if (column.key === 'name' && !isEditMode) {
                           handleNameClick(row);
-                        } else if (column.key === 'client' && !isOpenDropdown) {
-                          handleClientInfoClick(row, index);
                         }
                       }}
                     >
                       {column.key === 'tasks' ? (
                         <>
-                          <div>{row[column.key]}</div>
+                          <div className={styles.col}>{row[column.key]}</div>
                           {row.date && <div className={styles.date}>{row.date}</div>}
                         </>
                       ) : (

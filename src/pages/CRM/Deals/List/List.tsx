@@ -38,7 +38,8 @@ const data: TableRow[] = [
     tasks: 'Ограничение доступа посторонним пользователям ',
     amount: '1000 USD',
     responsible: 'Almaz',
-    date: '2024-06-15'
+    date: '2024-06-31',
+    phoneNumber: '+996220790552'
   },
   {
     name: 'AnotherItem',
@@ -47,7 +48,8 @@ const data: TableRow[] = [
     tasks: 'AnotherTasks',
     amount: '2000 USD',
     responsible: 'AnotherResponsible',
-    date: '2024-06-15'
+    date: '2024-06-24',
+    phoneNumber: '+996552770140'
   }
 ];
 
