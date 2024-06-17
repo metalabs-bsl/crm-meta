@@ -1,0 +1,65 @@
+@import '../../../../../common/styles/variables.scss';
+
+.mainRow {
+  background-color: $not-paid-row;
+  border-top: 1px solid $silver;
+}
+.checkedRow {
+  background-color: $white;
+}
+
+.item {
+  padding: 10px 18px 10px 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover;
+  text-align: start;
+  &:not(:first-child) {
+    min-width: 106px;
+  }
+  &:first-child {
+    padding-top: 18px;
+    padding-left: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.paymentStatus {
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover;
+  & span {
+    padding: 5px 10px;
+    border-radius: 10px;
+  }
+  &_true {
+    background-color: $main-green-bg;
+  }
+  &_false {
+    background-color: $not-paid;
+  }
+}
+
+.item.paymentStatus {
+  min-width: 130px;
+}
+
+.accordion {
+  width: 100%;
+  flex-grow: 1;
+  padding: 4px 0;
+  background-color: $seaSalt;
+  display: inline-block;
+  & > div {
+    justify-content: start;
+    align-items: normal;
+    margin-bottom: 0;
+    height: 100%;
+    padding: 10px 0 0 15px;
+    & > img:last-child {
+      display: none;
+    }
+  }
+}

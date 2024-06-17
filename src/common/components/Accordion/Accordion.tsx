@@ -6,14 +6,16 @@ import styles from './style.module.scss';
 import { BUTTON_TYPES } from 'types/enums';
 
 interface AccordionProps {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   isEdit?: boolean;
   onEditAction?: () => void;
+  className?: string;
+  onSaveAction?: () => void;
 }
 
-export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAction, isEdit }) => {
-  const [isOpen, setIsOpen] = useState(true);
+export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAction, isEdit, className, onSaveAction }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
@@ -27,12 +29,12 @@ export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAct
   };
 
   return (
-    <div className={styles.accordion}>
+    <div className={cn(styles.accordion, className)}>
       <div className={styles.accordion_header}>
         <div className={styles.accordion_title}>{title}</div>
         {isEdit ? (
           <div className={styles.btns_wrapper}>
-            <Button styleType={BUTTON_TYPES.YELLOW} text='сохранить' onClick={onEditAction} />
+            <Button styleType={BUTTON_TYPES.YELLOW} text='сохранить' onClick={onSaveAction} />
             <Button styleType={BUTTON_TYPES.Link_BLACK} text='отменить' onClick={onEditAction} />
           </div>
         ) : (
