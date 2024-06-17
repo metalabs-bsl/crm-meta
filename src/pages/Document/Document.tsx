@@ -1,4 +1,4 @@
-import { Button, Input } from 'common/ui';
+import { Button, Input, Loading } from 'common/ui';
 import { DocumentTable } from './DocumentTable/DocumentTable';
 // import { Navbar } from 'common/components';
 // import { documentChapters } from 'common/constants';
@@ -64,19 +64,21 @@ const data = [
 
 export const Document = () => {
   return (
-    <div className={styles.document}>
-      {/* <Navbar navbarItems={documentChapters} page={NAVBAR_PAGES.DOCUMENT} /> */}
-      {/* <Loading /> */}
-      <div className={styles.headBlock}>
-        <div className={styles.titleBlock}>
-          <h1>Документы</h1>
-          <Button text='загрузить документ' styleType={BUTTON_TYPES.YELLOW} />
+    <Loading>
+      <div className={styles.document}>
+        {/* <Navbar navbarItems={documentChapters} page={NAVBAR_PAGES.DOCUMENT} /> */}
+        {/* <Loading /> */}
+        <div className={styles.headBlock}>
+          <div className={styles.titleBlock}>
+            <h1>Документы</h1>
+            <Button text='загрузить документ' styleType={BUTTON_TYPES.YELLOW} />
+          </div>
+          <Input placeholder='Поиск' isSearch />
         </div>
-        <Input placeholder='Поиск' isSearch />
+        <div className={styles.tableWrapper}>
+          <DocumentTable data={data} />
+        </div>
       </div>
-      <div className={styles.tableWrapper}>
-        <DocumentTable data={data} />
-      </div>
-    </div>
+    </Loading>
   );
 };
