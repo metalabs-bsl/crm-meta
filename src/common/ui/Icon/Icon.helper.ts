@@ -7,6 +7,7 @@ import countMinusActive from '../../assets/icons/count-minus-active.svg';
 import countMinusUnActive from '../../assets/icons/count-minus-unactive.svg';
 import countPlusActive from '../../assets/icons/count-plus-active.svg';
 import deleteIcon from '../../assets/icons/deleteIcon.svg';
+import download from '../../assets/icons/download-icon.svg';
 import edit from '../../assets/icons/edit.svg';
 import arrowDown from '../../assets/icons/header/arrow-down.svg';
 import arrowUp from '../../assets/icons/header/arrow-up.svg';
@@ -80,5 +81,6 @@ export const icons: IIcons = {
   ['count-minus-unactive']: countMinusUnActive,
   ['birthday']: birthday,
   ['note']: note,
+  ['download']: download,
   ['break']: Break
 };

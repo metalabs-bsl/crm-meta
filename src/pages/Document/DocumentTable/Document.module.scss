@@ -1,0 +1,91 @@
+@import '../../../common/styles/variables.scss';
+.table {
+  width: 100%;
+  color: $black;
+  background-color: $white;
+  border-collapse: collapse;
+}
+td {
+  padding: 15px 30px;
+}
+.thead {
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid $silver;
+}
+.headTd {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3em;
+  text-transform: lowercase;
+  color: $gray;
+  font-family: var(--font-family);
+}
+.tbody {
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.bodyTr {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  border-bottom: 1px solid $silver;
+  display: flex;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3em;
+  font-family: var(--font-family);
+  color: var(--background-eerie-black);
+  display: flex;
+  align-items: center;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.bodyTd {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3em;
+  font-family: var(--font-family);
+  color: var(--background-eerie-black);
+  text-decoration: none;
+}
+
+.iconsWrapper {
+  gap: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.deleteIcon {
+  cursor: pointer;
+}
+
+.downloadIcon {
+  cursor: pointer;
+}
+
+.naming {
+  width: 65%;
+}
+
+.format {
+  width: 20%;
+  overflow: hidden;
+}
+
+.action {
+  width: 15%;
+}
+
+@media (max-width: 991px) {
+  .table {
+    width: 736px;
+  }
+}
