@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
 import { Icon } from 'common/ui';
+import test from './assets/test.png';
 import styles from './Document.module.scss';
 
 interface DocumentData {
@@ -24,14 +24,14 @@ export const DocumentTable: FC<IProps> = ({ data }) => {
         {data.map((el, index) => (
           <div className={styles.bodyTr} key={index}>
             <div className={`${styles.bodyTd} ${styles.naming}`}>{el.title}</div>
-            <Link className={`${styles.bodyTd} ${styles.format}`} target='_blank' to='https://www.youtube.com/watch?v=u31qwQUeGuM'>
+            <a className={`${styles.bodyTd} ${styles.format}`} target='_blank' rel='noreferrer' href={test}>
               {el.file}
-            </Link>
+            </a>
             <div className={`${styles.bodyTd} ${styles.action}`}>
               <div className={styles.iconsWrapper}>
-                <span className={styles.downloadIcon}>
+                <a href='#' className={styles.downloadIcon} download={test}>
                   <Icon type='download' />
-                </span>
+                </a>
                 <span className={styles.deleteIcon}>
                   <Icon type='delete' />
                 </span>
