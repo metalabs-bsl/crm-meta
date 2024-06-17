@@ -4,4 +4,6 @@ export { DatePicker } from './DatePicker';
 export { FilePicker } from './FilePicker';
 export { Icon } from './Icon';
 export { Input } from './Input';
+export { MultipleSelect } from './MultipleSelect';
+export { Radio } from './Radio';
 export { Select } from './Select';

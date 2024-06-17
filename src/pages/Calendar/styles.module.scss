@@ -1,0 +1,20 @@
+@import '../../common/styles/variables.scss';
+
+.calendar {
+  background-color: $white;
+  width: 100%;
+  border-radius: 10px;
+  padding: 20px;
+  padding-bottom: 0;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  &_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 30px;
+    margin-bottom: 20px;
+  }
+}

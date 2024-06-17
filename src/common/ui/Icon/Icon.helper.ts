@@ -1,4 +1,6 @@
 import { IIcons } from 'types/common';
+import birthday from '../../assets/icons/birthday.svg';
+import Break from '../../assets/icons/break.svg';
 import calendarOutline from '../../assets/icons/calendar-outline.svg';
 import comment from '../../assets/icons/comment.svg';
 import countMinusActive from '../../assets/icons/count-minus-active.svg';
@@ -24,6 +26,7 @@ import historyDeals from '../../assets/icons/history/created-deals.svg';
 import historyEdit from '../../assets/icons/history/edit.svg';
 import historyTodo from '../../assets/icons/history/todo.svg';
 import link from '../../assets/icons/link.svg';
+import note from '../../assets/icons/note.svg';
 import plusGray from '../../assets/icons/plus-gray.svg';
 import plusIcon from '../../assets/icons/plus-icon.svg';
 import search from '../../assets/icons/searchIcon.svg';
@@ -74,5 +77,8 @@ export const icons: IIcons = {
   ['calendar-outline']: calendarOutline,
   ['count-plus-active']: countPlusActive,
   ['count-minus-active']: countMinusActive,
-  ['count-minus-unactive']: countMinusUnActive
+  ['count-minus-unactive']: countMinusUnActive,
+  ['birthday']: birthday,
+  ['note']: note,
+  ['break']: Break
 };

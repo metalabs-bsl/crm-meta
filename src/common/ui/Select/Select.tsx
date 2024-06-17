@@ -3,7 +3,7 @@ import cn from 'classnames';
 import styles from './style.module.scss';
 interface IOption {
   value: string;
-  title: string;
+  title: string | number;
 }
 
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
