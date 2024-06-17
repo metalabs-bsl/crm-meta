@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
 import { DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
 import { Checkbox } from '../Checkbox';
@@ -61,8 +61,6 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
   const [selectedRow, setSelectedRow] = useState<TableRow | null>(null);
   const [lossReason, setLossReason] = useState<string>('');
-  // const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
-  // const [dropdownRowIndex, setDropdownRowIndex] = useState<number | null>(null);
   const [cuurent, setCurrent] = useState<number | null>(null);
   const profileRef = useRef(null);
 
@@ -78,16 +76,12 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   });
 
   const handleDropdownOpen = (rowIndex: number) => {
-    // setIsOpenDropdown(true);
-    // setDropdownRowIndex(rowIndex);
     setCurrent(rowIndex);
 
     setModalState({ ...modalState, dropdown: true });
   };
 
   const handleDropdownClose = () => {
-    // setIsOpenDropdown(false);
-    // setDropdownRowIndex(null);
     setCurrent(null);
     setModalState((prevState) => ({ ...prevState, dropdown: false }));
   };
@@ -111,6 +105,10 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     setTableData((prevData) => prevData.filter((_, index) => !selectedRows.includes(index)));
     setSelectedRows([]);
     setModalState({ ...modalState, delete: false });
+
+    if (tableData.length - selectedRows.length === 0) {
+      setSelectedRows([]);
+    }
   };
 
   const handleStageClick = (stageType: DealStage, rowIndex: number) => {
@@ -212,6 +210,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
             currentStage={row[column.key]}
             selectedStage={row['dealStage']}
             onStageClick={(stageType) => handleStageClick(stageType, rowIndex)}
+            isEditable={true}
           />
         );
       }
@@ -233,7 +232,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         );
       }
     } else if (isEdit.component === 'miniprogress') {
-      return <MiniProgressBar stages={stages} currentStage={row[column.key]} selectedStage={row['dealStage']} />;
+      return <MiniProgressBar stages={stages} currentStage={row[column.key]} selectedStage={row['dealStage']} isEditable={false} />;
     }
 
     return row[key];
@@ -269,6 +268,12 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     }
   };
 
+  useEffect(() => {
+    if (tableData.length === 0) {
+      setSelectedRows([]);
+    }
+  }, [tableData]);
+
   const getSelectedRowNames = () => {
     return selectedRows.map((index) => tableData[index]?.name || `Запись ${index + 1}`).join(', ');
   };
@@ -291,7 +296,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         leftBtnStyle={BUTTON_TYPES.GREEN}
         leftBtnAction={() => {
           handleFinishAction('sale');
-          onCloseModal('finish'); // Закрытие модального окна после нажатия на "Продажа"
+          onCloseModal('finish');
         }}
         rightBtnText='Проигрыш'
         rightBtnStyle={BUTTON_TYPES.RED}
@@ -346,7 +351,11 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
           <thead className={styles.table_wrapper}>
             <tr className={styles.table_titles}>
               <div className={styles.main_checkbox}>
-                <Checkbox checked={selectedRows.length === tableData.length} onChange={handleSelectAllRows} />
+                <Checkbox
+                  checked={selectedRows.length === tableData.length && tableData.length > 0}
+                  onChange={handleSelectAllRows}
+                  disabled={tableData.length === 0}
+                />
               </div>
               {columns.map((column) => (
                 <th key={column.key}>{column.title}</th>

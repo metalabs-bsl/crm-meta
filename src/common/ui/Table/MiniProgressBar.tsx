@@ -13,9 +13,10 @@ interface MiniProgressBarProps {
   currentStage: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
   selectedStage: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
   onStageClick?: (stageType: 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss') => void;
+  isEditable: boolean;
 }
 
-const MiniProgressBar: React.FC<MiniProgressBarProps> = ({ stages, currentStage, selectedStage, onStageClick }) => {
+const MiniProgressBar: React.FC<MiniProgressBarProps> = ({ stages, currentStage, selectedStage, onStageClick, isEditable }) => {
   const currentIndex = stages.findIndex((item) => item.type === currentStage);
   const selectedStageIndex = stages.findIndex((item) => item.type === selectedStage);
 
@@ -34,7 +35,7 @@ const MiniProgressBar: React.FC<MiniProgressBarProps> = ({ stages, currentStage,
           <div
             key={index}
             className={`${styles.progressStage} ${index <= currentIndex ? styles.active : ''}`}
-            style={{ backgroundColor: progressColors[index] }}
+            style={{ backgroundColor: progressColors[index], cursor: isEditable ? 'pointer' : 'default' }}
             onClick={() => handleChange(stage.type)}
           />
         ))}
