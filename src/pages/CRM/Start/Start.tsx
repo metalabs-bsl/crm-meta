@@ -1,26 +1,26 @@
 import { ChangeEvent, useState } from 'react';
-import { Input, Select } from 'common/ui';
-import { IOption } from 'common/ui/Select/Select';
+import { Options } from 'types/pages';
+import { SearchInput, Select } from 'common/ui';
 import { General } from './General';
 import { Personal } from './Personal';
 import styles from './styles.module.scss';
 
-const selectOptions: IOption[] = [
+const selectOptions: Options[] = [
   {
-    title: 'Мои',
+    label: 'Мои',
     value: 'personal'
   },
   {
-    title: 'Общие',
+    label: 'Общие',
     value: 'general'
   }
 ];
 
 export const Start = () => {
-  const [content, setContent] = useState<IOption['value']>('personal');
+  const [content, setContent] = useState<Options['value']>('personal');
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    setContent(e.target.value as IOption['value']);
+    setContent(e.target.value as Options['value']);
   };
 
   return (
@@ -31,7 +31,7 @@ export const Start = () => {
         </div>
         <div className={styles.inputsWrapper}>
           <Select options={selectOptions} className={styles.select} value={content} onChange={handleSelect} />
-          <Input placeholder='Поиск' isSearch />
+          <SearchInput placeholder='Поиск' />
         </div>
       </div>
       <div className={styles.bodyBlock}>
