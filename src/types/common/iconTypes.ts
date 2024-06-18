@@ -43,4 +43,6 @@ export type IIconType =
   | 'birthday'
   | 'note'
   | 'download'
-  | 'break';
+  | 'break'
+  | 'report'
+  | 'report-dark';

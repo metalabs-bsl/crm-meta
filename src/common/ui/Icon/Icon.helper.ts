@@ -39,6 +39,8 @@ import document from '../../assets/icons/sidebar/document.svg';
 import documentDark from '../../assets/icons/sidebar/document-dark.svg';
 import mail from '../../assets/icons/sidebar/mail.svg';
 import mailDark from '../../assets/icons/sidebar/mail-dark.svg';
+import report from '../../assets/icons/sidebar/report.svg';
+import reportDark from '../../assets/icons/sidebar/report-dark.svg';
 import userIcon from '../../assets/icons/userIcon.svg';
 
 export const icons: IIcons = {
@@ -82,5 +84,7 @@ export const icons: IIcons = {
   ['birthday']: birthday,
   ['note']: note,
   ['download']: download,
-  ['break']: Break
+  ['break']: Break,
+  ['report']: report,
+  ['report-dark']: reportDark
 };

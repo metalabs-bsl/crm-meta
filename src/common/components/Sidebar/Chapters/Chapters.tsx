@@ -36,6 +36,12 @@ const Chapters: FC = () => {
       icon: 'mail',
       path: adminPath.mail,
       action: () => redirect.mail({})
+    },
+    {
+      title: 'Отчеты',
+      icon: 'report',
+      path: adminPath.report,
+      action: () => redirect.report({})
     }
   ];
 

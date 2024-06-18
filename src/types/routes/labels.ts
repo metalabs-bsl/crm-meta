@@ -4,5 +4,6 @@ export const adminLabels = {
   login: 'Cтраница входа',
   calendar: 'Cтраница Календарь',
   document: 'Cтраница Документы',
-  mail: 'Cтраница Почта'
+  mail: 'Cтраница Почта',
+  report: 'Cтраница Отчеты'
 };

@@ -8,6 +8,7 @@ export type RedirectFn<T> = ({}: T & { search?: Search }) => void;
 interface IRedirect {
   crm: RedirectFn<{ chapter: string }>;
   mail: RedirectFn<Empty>;
+  report: RedirectFn<Empty>;
   document: RedirectFn<{ chapter: string }>;
   calendar: RedirectFn<Empty>;
   move: RedirectFn<{ number: number }>;
@@ -28,6 +29,9 @@ export const useRedirect = (): IRedirect => {
     },
     calendar: (options) => {
       navigate({ pathname: adminPath.calendar, search: options?.search });
+    },
+    report: (options) => {
+      navigate({ pathname: adminPath.report, search: options?.search });
     },
     // Move
     move: ({ number }) => navigate(number)
