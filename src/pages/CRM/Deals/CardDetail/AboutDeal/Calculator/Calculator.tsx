@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import cn from 'classnames';
+import { Options } from 'types/pages';
 import { Select } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
@@ -20,24 +21,24 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-const payOptions = [
+const payOptions: Options[] = [
   {
-    title: 'Оплачено',
+    label: 'Оплачено',
     value: 'paid'
   },
   {
-    title: 'Частичная',
+    label: 'Частичная',
     value: 'partial'
   },
   {
-    title: 'Не оплачено',
+    label: 'Не оплачено',
     value: 'not-paid'
   }
 ];
 
 export const Calculator = () => {
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
-  const [selectValue, setSelectValue] = useState<string>(payOptions[2].value);
+  const [selectValue, setSelectValue] = useState<string | number>(payOptions[2].value);
 
   return (
     <div className={styles.calculator}>
@@ -58,7 +59,6 @@ export const Calculator = () => {
           onChange={(e) => setSelectValue(e.target.value)}
         />
       </div>
-
       <PaymentDetailsFrom isActiveTab={isActiveTab} />
       <TourInfoForm />
       <UpsellForm />

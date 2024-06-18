@@ -7,4 +7,5 @@ export { Input } from './Input';
 export { Loading } from './Loading';
 export { MultipleSelect } from './MultipleSelect';
 export { Radio } from './Radio';
+export { SearchInput } from './SearchInput';
 export { Select } from './Select';

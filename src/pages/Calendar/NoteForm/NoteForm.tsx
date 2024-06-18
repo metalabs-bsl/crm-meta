@@ -7,7 +7,7 @@ import styles from './style.module.scss';
 import { BUTTON_TYPES } from 'types/enums';
 
 const selectOptions: Options[] = [
-  { label: 'Нет', value: '0' },
+  { label: 'Не выбрано', value: '' },
   { label: 'Во время начала', value: '1' },
   { label: 'За 5 минут', value: '2' },
   { label: 'За 15 минут', value: '3' },

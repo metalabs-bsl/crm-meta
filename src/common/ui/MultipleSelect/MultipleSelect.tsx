@@ -1,40 +1,47 @@
 import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
+import { Options } from 'types/pages';
 import { Icon } from '../Icon';
 import { Radio } from '../Radio';
 import styles from './styles.module.scss';
 
-interface Option {
-  value: string;
-  label: string;
-}
-
 interface IProps {
   placeholder: string;
-  options: Option[];
-  defaultValue?: Option[];
+  options: Options[];
+  defaultValue?: Options[];
   disabled?: boolean;
 }
 
 export const MultipleSelect: FC<IProps> = ({ placeholder = '', options, defaultValue, disabled = false }) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
-  const [selectedValues, setSelectedValues] = useState<Option[]>([]);
+  const [selectedValues, setSelectedValues] = useState<Options[]>([]);
 
   useEffect(() => {
     if (defaultValue) {
       setSelectedValues(defaultValue);
+    } else {
+      setSelectedValues(options.filter((item) => !item.value && item));
     }
-  }, [defaultValue]);
+  }, [defaultValue, options]);
 
-  const handleChange = (value: Option) => {
-    setSelectedValues((prev) => {
-      const isSelected = prev.some((item) => item.value === value.value);
-      if (isSelected) {
-        return prev.filter((item) => item.value !== value.value);
-      } else {
-        return [...prev, value];
-      }
-    });
+  const handleChange = (value: Options) => {
+    if (!value.value) {
+      setSelectedValues([value]);
+    } else {
+      setSelectedValues((prev) => {
+        const updatedPrev = prev.filter((item) => !!item.value && item);
+        const isSelected = updatedPrev.some((item) => item.value === value.value);
+        if (isSelected) {
+          if (updatedPrev.length > 1) {
+            return updatedPrev.filter((item) => item.value !== value.value);
+          } else {
+            return options.filter((item) => !item.value && item);
+          }
+        } else {
+          return [...updatedPrev, value];
+        }
+      });
+    }
   };
 
   const onToggleVisible = () => {

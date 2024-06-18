@@ -1,3 +1,5 @@
+@import '../../../../../common/styles/variables.scss';
+
 .aboutDeal {
   display: flex;
   gap: 30px;
@@ -8,16 +10,38 @@
     flex-direction: column;
     width: 53.16%;
     gap: 10px;
-    .tab {
-      align-self: center;
-    }
-    .isEndTab {
-      align-self: flex-end;
-      margin-right: 13.5%;
-    }
+
     .box {
       width: 100%;
       height: calc(100% - 50px);
+    }
+    .isDisabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .wrapper {
+      padding-right: 13.5%;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .access {
+        height: 34px;
+        background-color: $white;
+        border-radius: 10px;
+        width: 184px;
+        font-weight: 400;
+        font-size: 16px;
+        padding: 6px 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+      }
+    }
+    .isOnlyTab {
+      justify-content: center;
+      padding-right: 0;
     }
   }
   .isCalculatorChild {

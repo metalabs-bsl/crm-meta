@@ -1,3 +1,5 @@
+import { Options } from 'types/pages';
+
 export interface PassengerCounts {
   adults: number;
   children: number;
@@ -14,31 +16,31 @@ export const passengerTypes: PassengerType[] = [
   { type: 'Ребенок', text: 'с рождения до 11 лет', stateKey: 'children' }
 ];
 
-export const brandOptions = [
+export const brandOptions: Options[] = [
   {
-    title: 'Pegasus Asia',
+    label: 'Pegasus Asia',
     value: 'pegasus'
   }
 ];
 
-export const categoryTourTimeOptions = [
+export const categoryTourTimeOptions: Options[] = [
   {
-    title: 'Горящие',
+    label: 'Горящие',
     value: 'last-minute'
   },
   {
-    title: 'На период позже',
+    label: 'На период позже',
     value: 'period-later'
   }
 ];
 
-export const servicesOptions = [
+export const servicesOptions: Options[] = [
   {
-    title: 'Виза',
+    label: 'Виза',
     value: 'visa'
   },
   {
-    title: 'Страховка',
+    label: 'Страховка',
     value: 'insurance'
   }
 ];

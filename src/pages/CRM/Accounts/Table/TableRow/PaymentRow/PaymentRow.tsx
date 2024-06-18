@@ -1,5 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
+import { Options } from 'types/pages';
 import { Checkbox, DatePicker, Input, Select } from 'common/ui';
 import { Accordion, MultipleFilePicker } from 'common/components';
 import { paymentRowHeaders } from '../../../Account.helper';
@@ -18,12 +19,12 @@ export interface PaymentRowProps {
   accordionTitle: string;
 }
 
-const payOptions = [
-  { title: 'Наличными, сом', value: 'som' },
-  { title: 'Наличными, $', value: 'usd' },
-  { title: 'Наличными, €', value: 'eur' },
-  { title: 'Переводом', value: 'transaction' },
-  { title: 'Через банк', value: 'bank' }
+const payOptions: Options[] = [
+  { label: 'Наличными, сом', value: 'som' },
+  { label: 'Наличными, $', value: 'usd' },
+  { label: 'Наличными, €', value: 'eur' },
+  { label: 'Переводом', value: 'transaction' },
+  { label: 'Через банк', value: 'bank' }
 ];
 
 export const PaymentRow: FC<PaymentRowProps> = ({

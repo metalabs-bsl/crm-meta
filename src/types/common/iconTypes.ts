@@ -21,7 +21,7 @@ export type IIconType =
   | 'calendar-dark'
   | 'document-dark'
   | 'mail-dark'
-  | 'search'
+  | 'search-white'
   | 'plus-icon'
   | 'comment'
   | 'plus-gray'
@@ -45,4 +45,8 @@ export type IIconType =
   | 'download'
   | 'break'
   | 'report'
-  | 'report-dark';
+  | 'report-dark'
+  | 'search-clear'
+  | 'search-black'
+  | 'calc-open'
+  | 'calc-close';
