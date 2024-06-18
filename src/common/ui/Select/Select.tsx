@@ -1,7 +1,7 @@
 import { FC, SelectHTMLAttributes } from 'react';
 import cn from 'classnames';
 import styles from './style.module.scss';
-interface IOption {
+export interface IOption {
   value: string;
   title: string | number;
 }
