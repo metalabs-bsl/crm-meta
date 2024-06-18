@@ -3,8 +3,8 @@ export const adminPath = {
   notFound: '*',
   login: '/auth',
   calendar: '/calendar',
-  document: '/documents/:chapter',
+  document: '/documents',
   mail: '/mail',
   root: '/',
-  report: '/report'
+  report: '/report/:chapter'
 };

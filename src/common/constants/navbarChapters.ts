@@ -17,9 +17,8 @@ export const crmChapters: INavbar = {
   employees: { title: 'Сотрудники', chapter: 'employees', allowRoles: [ROLES.ADMIN.role, ROLES.SUPERVISOR.role] }
 };
 
-export const documentChapters: INavbar = {
-  word: { title: 'word', chapter: 'word', allowRoles: [] },
-  excel: { title: 'excel', chapter: 'excel', allowRoles: [] },
-  powerpoint: { title: 'powerpoint', chapter: 'powerpoint', allowRoles: [] },
-  access: { title: 'access', chapter: 'access', allowRoles: [] }
+export const reportChapters: INavbar = {
+  profit: { title: 'Прибыль', chapter: 'profit', allowRoles: [] },
+  expenses: { title: 'Расходы', chapter: 'expenses', allowRoles: [] },
+  excel: { title: 'Excel', chapter: 'excel', allowRoles: [] }
 };

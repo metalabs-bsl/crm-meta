@@ -8,8 +8,8 @@ export type RedirectFn<T> = ({}: T & { search?: Search }) => void;
 interface IRedirect {
   crm: RedirectFn<{ chapter: string }>;
   mail: RedirectFn<Empty>;
-  report: RedirectFn<Empty>;
-  document: RedirectFn<{ chapter: string }>;
+  document: RedirectFn<Empty>;
+  report: RedirectFn<{ chapter: string }>;
   calendar: RedirectFn<Empty>;
   move: RedirectFn<{ number: number }>;
 }
@@ -21,17 +21,17 @@ export const useRedirect = (): IRedirect => {
     crm: ({ chapter, search }) => {
       navigate({ pathname: setPathIds(adminPath.crm, { chapter }), search });
     },
-    mail: (options) => {
-      navigate({ pathname: adminPath.mail, search: options?.search });
+    mail: ({ search }) => {
+      navigate({ pathname: adminPath.mail, search: search });
     },
-    document: ({ chapter, search }) => {
-      navigate({ pathname: setPathIds(adminPath.document, { chapter }), search });
+    document: ({ search }) => {
+      navigate({ pathname: adminPath.document, search });
     },
-    calendar: (options) => {
-      navigate({ pathname: adminPath.calendar, search: options?.search });
+    calendar: ({ search }) => {
+      navigate({ pathname: adminPath.calendar, search: search });
     },
-    report: (options) => {
-      navigate({ pathname: adminPath.report, search: options?.search });
+    report: ({ chapter, search }) => {
+      navigate({ pathname: setPathIds(adminPath.report, { chapter }), search });
     },
     // Move
     move: ({ number }) => navigate(number)

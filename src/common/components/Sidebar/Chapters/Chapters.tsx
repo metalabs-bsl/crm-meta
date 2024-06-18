@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { checkActivePath } from 'common/helpers';
 import { useRedirect } from 'common/hooks';
-import { crmChapters, documentChapters } from 'common/constants';
+import { crmChapters, reportChapters } from 'common/constants';
 import { IIconType } from 'types/common';
 import { adminPath } from 'types/routes';
 import styles from '../styles.module.scss';
@@ -29,7 +29,7 @@ const Chapters: FC = () => {
       title: 'Документы',
       icon: 'document',
       path: adminPath.document,
-      action: () => redirect.document({ chapter: documentChapters.word.chapter })
+      action: () => redirect.document({})
     },
     {
       title: 'Почта',
@@ -41,7 +41,7 @@ const Chapters: FC = () => {
       title: 'Отчеты',
       icon: 'report',
       path: adminPath.report,
-      action: () => redirect.report({})
+      action: () => redirect.report({ chapter: reportChapters.profit.chapter })
     }
   ];
 
