@@ -59,20 +59,22 @@ export const CardDetail: FC<IProps> = ({ cardTitle = '', isNewDeal = false }) =>
   return (
     <div className={cn(styles.cardDetail, { [styles.isNewDeal]: isNewDeal })}>
       <div className={styles.head}>
-        {isTitleEdit ? (
-          <Input
-            className={styles.editInp}
-            defaultValue={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
-          />
-        ) : (
-          <div className={styles.head_left}>
-            <div className={styles.card_title}>{editedTitle}</div>
-            <Icon type='edit' onClick={() => setIsTitleEdit(true)} />
-            <Icon type='link' onClick={onLinkCopy} />
-          </div>
-        )}
+        <div className={styles.head_left}>
+          {isTitleEdit ? (
+            <Input
+              className={styles.editInp}
+              defaultValue={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
+            />
+          ) : (
+            <>
+              <div className={styles.card_title}>{editedTitle}</div>
+              <Icon type='edit' onClick={() => setIsTitleEdit(true)} />
+              <Icon type='link' onClick={onLinkCopy} />
+            </>
+          )}
+        </div>
         <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       </div>
       <Progress currentStage='received' />

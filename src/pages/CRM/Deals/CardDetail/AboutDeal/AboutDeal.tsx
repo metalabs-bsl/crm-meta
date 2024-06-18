@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import cn from 'classnames';
+import { Icon } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { TAB_COMPONENTS } from './AboutDeal.helper';
@@ -27,6 +28,8 @@ const tabItems: ITabsItem[] = [
 export const AboutDeal = ({ ...rest }) => {
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
+  const [isAccess, setIsAccess] = useState<boolean>(true);
+
   const getActiveComponent = () => {
     const component = {
       [TAB_COMPONENTS.TODO]: <Todo />,
@@ -40,13 +43,16 @@ export const AboutDeal = ({ ...rest }) => {
     <div className={styles.aboutDeal}>
       {!isCalculatorTab && <DealsForm {...rest} />}
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
-        <Tabs
-          tabItems={tabItems}
-          isActiveTab={isActiveTab}
-          setIsActiveTab={setIsActiveTab}
-          className={cn(styles.tab, { [styles.isEndTab]: isCalculatorTab })}
-        />
-        <div className={styles.box}>{getActiveComponent()}</div>
+        <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
+          {isCalculatorTab && (
+            <div className={styles.access} onClick={() => setIsAccess(!isAccess)}>
+              <span>Доступ {isAccess ? 'открыт' : 'закрыт'}</span>
+              <Icon type={`calc-${isAccess ? 'open' : 'close'}`} />
+            </div>
+          )}
+          <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
+        </div>
+        <div className={cn(styles.box, { [styles.isDisabled]: isCalculatorTab && !isAccess })}>{getActiveComponent()}</div>
       </div>
     </div>
   );

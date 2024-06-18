@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { Options } from 'types/pages';
 import { DatePicker, Icon, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import styles from './styles.module.scss';
@@ -7,25 +8,25 @@ interface IProps {
   isActiveTab: string;
 }
 
-const payOptions = [
+const payOptions: Options[] = [
   {
-    title: 'Наличными, сом',
+    label: 'Наличными, сом',
     value: 'som'
   },
   {
-    title: 'Наличными, $',
+    label: 'Наличными, $',
     value: 'usd'
   },
   {
-    title: 'Наличными, €',
+    label: 'Наличными, €',
     value: 'eur'
   },
   {
-    title: 'Переводом',
+    label: 'Переводом',
     value: 'transaction'
   },
   {
-    title: 'Через банк',
+    label: 'Через банк',
     value: 'bank'
   }
 ];

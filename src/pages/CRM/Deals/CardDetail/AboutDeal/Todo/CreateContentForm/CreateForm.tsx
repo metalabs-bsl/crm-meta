@@ -1,17 +1,18 @@
 import { useState } from 'react';
+import { Options } from 'types/pages';
 import { Button, DatePicker, Select } from 'common/ui';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-const selectOptions = [
+const selectOptions: Options[] = [
   {
     value: 'todo',
-    title: 'Дело'
+    label: 'Дело'
   },
   {
     value: 'comment',
-    title: 'Комментарий'
+    label: 'Комментарий'
   }
 ];
 
