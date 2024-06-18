@@ -19,6 +19,7 @@ export type IIconType =
   | 'usd'
   | 'crm-dark'
   | 'calendar-dark'
+  | 'black-border-calendar'
   | 'document-dark'
   | 'mail-dark'
   | 'search'
