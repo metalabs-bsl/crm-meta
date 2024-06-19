@@ -1,0 +1,1 @@
+export { DocumentTableRow } from './DocumentTableRow';

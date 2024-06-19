@@ -6,11 +6,12 @@ interface IOption {
 }
 
 interface IItem {
-  label: string;
-  value: string;
-  type: string;
+  label?: string;
+  value?: string;
+  type?: string;
   icon?: IIconType;
   options?: IOption[];
+  items?: IItem[];
 }
 
 export const FormItems: IItem[] = [
@@ -62,14 +63,23 @@ export const FormItems: IItem[] = [
     ]
   },
   {
+    items: [
+      {
+        label: 'Дата рождения клиента',
+        value: '2024-05-08T11:11',
+        type: 'datetime-local'
+      },
+      {
+        label: 'Дата создания сделки',
+        value: '2024-05-08T11:11',
+        type: 'datetime-local'
+      }
+    ]
+  },
+  {
     label: 'Ответственный',
     value: 'Азатов Азат',
     type: 'text',
     icon: 'userIcon'
-  },
-  {
-    label: 'Дата создания',
-    value: '2024-05-08T11:11',
-    type: 'datetime-local'
   }
 ];

@@ -24,24 +24,50 @@ export const DealsForm = ({ ...rest }) => {
         )}
       </div>
       <div className={styles.formItems}>
-        {FormItems.map((item, index) => (
-          <div key={index} className={styles.inpBlock}>
-            <label htmlFor={item.label}>{item.label}</label>
-            {item.type === 'select' ? (
-              <select disabled={!isEdit} className={styles.select} defaultValue={item.options && item.options[1].value}>
-                {item.options?.map((option, index) => (
-                  <option key={index} value={option.value}>
-                    {option.title}
-                  </option>
+        {FormItems.map((item, index) => {
+          if (item.items) {
+            return (
+              <div key={index} className={styles.moreWrapper}>
+                {item.items.map((i, inx) => (
+                  <div key={inx} className={styles.inpBlock}>
+                    <label htmlFor={item.label}>{i.label}</label>
+                    {i.type === 'select' ? (
+                      <select disabled={!isEdit} className={styles.select} defaultValue={i.options && i.options[1].value}>
+                        {i.options?.map((option, index) => (
+                          <option key={index} value={option.value}>
+                            {option.title}
+                          </option>
+                        ))}
+                      </select>
+                    ) : i.type === 'datetime-local' ? (
+                      <DatePicker defaultValue={i.value} disabled={!isEdit} className={styles.date} />
+                    ) : (
+                      <Input defaultValue={i.value} className={styles.inp} disabled={!isEdit} prevIcon={i.icon ?? undefined} />
+                    )}
+                  </div>
                 ))}
-              </select>
-            ) : item.type === 'datetime-local' ? (
-              <DatePicker defaultValue={item.value} disabled={!isEdit} />
-            ) : (
-              <Input defaultValue={item.value} className={styles.inp} disabled={!isEdit} prevIcon={item.icon ?? undefined} />
-            )}
-          </div>
-        ))}
+              </div>
+            );
+          }
+          return (
+            <div key={index} className={styles.inpBlock}>
+              <label htmlFor={item.label}>{item.label}</label>
+              {item.type === 'select' ? (
+                <select disabled={!isEdit} className={styles.select} defaultValue={item.options && item.options[1].value}>
+                  {item.options?.map((option, index) => (
+                    <option key={index} value={option.value}>
+                      {option.title}
+                    </option>
+                  ))}
+                </select>
+              ) : item.type === 'datetime-local' ? (
+                <DatePicker defaultValue={item.value} disabled={!isEdit} />
+              ) : (
+                <Input defaultValue={item.value} className={styles.inp} disabled={!isEdit} prevIcon={item.icon ?? undefined} />
+              )}
+            </div>
+          );
+        })}
       </div>
     </form>
   );

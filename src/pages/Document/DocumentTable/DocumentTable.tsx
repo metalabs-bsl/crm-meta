@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { Icon } from 'common/ui';
-import test from './assets/test.png';
+import { DocumentTableRow } from './DocumentTableRow';
 import styles from './Document.module.scss';
 
 interface DocumentData {
@@ -22,22 +21,7 @@ export const DocumentTable: FC<IProps> = ({ data }) => {
       </div>
       <div className={styles.tbody}>
         {data.map((el, index) => (
-          <div className={styles.bodyTr} key={index}>
-            <div className={`${styles.bodyTd} ${styles.naming}`}>{el.title}</div>
-            <a className={`${styles.bodyTd} ${styles.format}`} target='_blank' rel='noreferrer' href={test}>
-              {el.file}
-            </a>
-            <div className={`${styles.bodyTd} ${styles.action}`}>
-              <div className={styles.iconsWrapper}>
-                <a href='#' className={styles.downloadIcon} download={test}>
-                  <Icon type='download' />
-                </a>
-                <span className={styles.deleteIcon}>
-                  <Icon type='delete' />
-                </span>
-              </div>
-            </div>
-          </div>
+          <DocumentTableRow key={index} data={el} />
         ))}
       </div>
     </div>

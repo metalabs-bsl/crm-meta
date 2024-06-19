@@ -3,6 +3,7 @@ import { useNavigate, useRoutes } from 'react-router-dom';
 import cn from 'classnames';
 import { getRoutes } from 'router';
 import { NotificationLayout } from 'common/containers';
+import { Loading } from 'common/ui';
 import { Header, Sidebar } from 'common/components';
 import { useAppSelector } from 'common/hooks';
 import { backgroundSelectors } from 'api/admin/background/background.selectors';
@@ -29,7 +30,7 @@ export const App = () => {
         <Header />
         <div className={styles.content}>
           <Sidebar />
-          <Suspense fallback={<p style={{ color: 'red' }}>loading...</p>}>{routes}</Suspense>
+          <Suspense fallback={<Loading isSpin />}>{routes}</Suspense>
         </div>
       </main>
     </NotificationLayout>

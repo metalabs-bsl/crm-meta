@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
-import { DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
+import { ClientWindow, DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
 import { Checkbox } from '../Checkbox';
-import ClientWindow from './clientWindow';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
 
@@ -332,7 +331,13 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     dropdown: (
       <div className={styles.dropdown}>
         <DropdownModal targetRef={profileRef} isOpen={modalState.dropdown} onClose={() => handleDropdownClose()}>
-          <ClientWindow clientName={modalState.clientName} clientPhoneNumber={modalState.clientPhoneNumber} clientDate={modalState.date} />
+          <ClientWindow
+            data={{
+              name: modalState.clientName,
+              phone: modalState.clientPhoneNumber,
+              birthday: modalState.date
+            }}
+          />
         </DropdownModal>
       </div>
     )
@@ -349,13 +354,13 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         <table className={styles.table}>
           <thead className={styles.table_wrapper}>
             <tr className={styles.table_titles}>
-              <div className={styles.main_checkbox}>
+              <th className={styles.main_checkbox}>
                 <Checkbox
                   checked={selectedRows.length === tableData.length && tableData.length > 0}
                   onChange={handleSelectAllRows}
                   disabled={tableData.length === 0}
                 />
-              </div>
+              </th>
               {columns.map((column) => (
                 <th key={column.key}>{column.title}</th>
               ))}
