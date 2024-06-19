@@ -1,4 +1,4 @@
-import { Input } from 'common/ui';
+import { SearchInput } from 'common/ui';
 import { Table } from './Table';
 import styles from './styles.module.scss';
 
@@ -9,7 +9,7 @@ export const Accounts = () => {
         <div className={styles.titleBlock}>
           <h1>Счета</h1>
         </div>
-        <Input placeholder='Поиск' isSearch />
+        <SearchInput placeholder='Поиск' />
       </div>
       <div className={styles.bodyBlock}>
         <Table />

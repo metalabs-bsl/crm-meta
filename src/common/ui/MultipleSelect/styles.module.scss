@@ -3,10 +3,11 @@
 .select {
   position: relative;
   .showArea {
-    height: 40px;
+    min-height: 40px;
     border-radius: 5px;
     background-color: $seaSalt;
     padding: 9px 15px;
+    padding-right: 35px;
     position: relative;
     cursor: pointer;
     font-weight: 400;
@@ -15,6 +16,7 @@
       position: absolute;
       right: 15px;
       transition: all 0.3s;
+      top: 25%;
     }
     .arrow_closed {
       transform: rotate(180deg);
@@ -25,7 +27,7 @@
   }
   .options_area {
     width: 215px;
-    top: 40px;
+    bottom: -120px;
     right: 0;
     position: absolute;
     background-color: $white;

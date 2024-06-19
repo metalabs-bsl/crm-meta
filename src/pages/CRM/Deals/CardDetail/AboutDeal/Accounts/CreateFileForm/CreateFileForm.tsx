@@ -1,29 +1,30 @@
 import { useState } from 'react';
+import { Options } from 'types/pages';
 import { Button, FilePicker, Select } from 'common/ui';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
 export const CreateFileForm = () => {
-  const [options] = useState([
+  const [options] = useState<Options[]>([
     {
-      title: 'Первая часть',
+      label: 'Первая часть',
       value: 'first'
     },
     {
-      title: 'Вторая часть',
+      label: 'Вторая часть',
       value: 'second'
     },
     {
-      title: 'Третья часть',
+      label: 'Третья часть',
       value: 'third'
     },
     {
-      title: 'Четвертая часть',
+      label: 'Четвертая часть',
       value: 'fourth'
     },
     {
-      title: 'Пятая часть',
+      label: 'Пятая часть',
       value: 'fifth'
     }
   ]);

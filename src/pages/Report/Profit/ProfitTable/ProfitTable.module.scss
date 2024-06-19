@@ -70,7 +70,9 @@
     text-align: right;
   }
 
-  .blockBtn {
+  .btnDownload {
+    display: inline-block;
+    text-decoration: none;
     font-size: 16px;
     font-weight: 400;
     padding: 5px 20px;
@@ -80,6 +82,7 @@
     cursor: pointer;
     text-transform: lowercase;
     font-family: var(--font-family);
+    background-color: $count-active-bg;
     color: var(--background-eerie-black);
   }
 }

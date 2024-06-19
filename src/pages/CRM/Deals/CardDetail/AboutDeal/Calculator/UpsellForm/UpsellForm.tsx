@@ -5,23 +5,23 @@ import styles from './style.module.scss';
 
 const payOptions = [
   {
-    title: 'Наличными, сом',
+    label: 'Наличными, сом',
     value: 'som'
   },
   {
-    title: 'Наличными, $',
+    label: 'Наличными, $',
     value: 'usd'
   },
   {
-    title: 'Наличными, €',
+    label: 'Наличными, €',
     value: 'eur'
   },
   {
-    title: 'Переводом',
+    label: 'Переводом',
     value: 'transaction'
   },
   {
-    title: 'Через банк',
+    label: 'Через банк',
     value: 'bank'
   }
 ];

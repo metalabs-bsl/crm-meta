@@ -26,7 +26,9 @@ export const ProfitTable: FC<IProps> = ({ data }) => {
               <p className={styles.blockText}>{el.status}</p>
             </div>
             <div className={`${styles.bodyBlock} ${styles.bodyExcel}`}>
-              <button className={styles.blockBtn}>Выгрузить в Excel</button>
+              <a href='#' className={styles.btnDownload} download>
+                Выгрузить в Excel
+              </a>
             </div>
           </div>
         ))}

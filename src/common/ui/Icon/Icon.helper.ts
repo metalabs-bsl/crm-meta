@@ -2,6 +2,8 @@ import { IIcons } from 'types/common';
 import birthday from '../../assets/icons/birthday.svg';
 import calendarBlackBorder from '../../assets/icons/black-border-calendar.svg';
 import Break from '../../assets/icons/break.svg';
+import calcClose from '../../assets/icons/calc-close.svg';
+import calcOpen from '../../assets/icons/calc-open.svg';
 import calendarOutline from '../../assets/icons/calendar-outline.svg';
 import comment from '../../assets/icons/comment.svg';
 import countMinusActive from '../../assets/icons/count-minus-active.svg';
@@ -31,6 +33,8 @@ import link from '../../assets/icons/link.svg';
 import note from '../../assets/icons/note.svg';
 import plusGray from '../../assets/icons/plus-gray.svg';
 import plusIcon from '../../assets/icons/plus-icon.svg';
+import clear from '../../assets/icons/search-clear.svg';
+import searchBlackIcon from '../../assets/icons/searchBlackIcon.svg';
 import search from '../../assets/icons/searchIcon.svg';
 import calendar from '../../assets/icons/sidebar/calendar.svg';
 import calendarDark from '../../assets/icons/sidebar/calendar-dark.svg';
@@ -64,7 +68,7 @@ export const icons: IIcons = {
   ['active-bg']: activeBg,
   ['eur']: eur,
   ['usd']: usd,
-  ['search']: search,
+  ['search-white']: search,
   ['plus-icon']: plusIcon,
   ['comment']: comment,
   ['plus-gray']: plusGray,
@@ -88,5 +92,9 @@ export const icons: IIcons = {
   ['download']: download,
   ['break']: Break,
   ['report']: report,
-  ['report-dark']: reportDark
+  ['report-dark']: reportDark,
+  ['search-clear']: clear,
+  ['search-black']: searchBlackIcon,
+  ['calc-open']: calcOpen,
+  ['calc-close']: calcClose
 };

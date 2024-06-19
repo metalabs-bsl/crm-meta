@@ -108,7 +108,7 @@ export const Table: FC = () => {
     <div className={styles.tableContainer}>
       <table className={styles.table}>
         <thead className={styles.thead}>
-          <tr>
+          <tr className={styles.tableRow}>
             <th className={styles.title}>
               <Checkbox checked={selectAll} onChange={handleSelectAll} />
             </th>

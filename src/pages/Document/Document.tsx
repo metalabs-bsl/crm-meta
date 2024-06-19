@@ -1,4 +1,4 @@
-import { Button, Input, Loading } from 'common/ui';
+import { Button, Loading, SearchInput } from 'common/ui';
 import { DocumentTable } from './DocumentTable/DocumentTable';
 // import { Navbar } from 'common/components';
 // import { documentChapters } from 'common/constants';
@@ -73,7 +73,7 @@ export const Document = () => {
             <h1>Документы</h1>
             <Button text='загрузить документ' styleType={BUTTON_TYPES.YELLOW} />
           </div>
-          <Input placeholder='Поиск' isSearch />
+          <SearchInput placeholder='Поиск' />
         </div>
         <div className={styles.tableWrapper}>
           <DocumentTable data={data} />

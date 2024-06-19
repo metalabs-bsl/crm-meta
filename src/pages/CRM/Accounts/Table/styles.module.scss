@@ -28,7 +28,7 @@
     min-width: 106px;
   }
   &:first-child {
-    padding-top: 15px;
+    padding-top: 18px;
     padding-left: 15px;
     display: flex;
     justify-content: center;
@@ -38,4 +38,8 @@
 
 .title.paymentStatus {
   min-width: 130px;
+}
+
+.tableRow {
+  height: 58px;
 }
