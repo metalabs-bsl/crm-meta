@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Options } from 'types/pages';
 import { DatePicker, Icon, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
@@ -33,13 +33,15 @@ const payOptions: Options[] = [
 
 const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
 
+const defaultPayment = [
+  {
+    title: 'Данные об оплате',
+    isEdit: false
+  }
+];
+
 export const PaymentDetailsFrom: FC<IProps> = ({ isActiveTab }) => {
-  const [paymentAccordions, setPaymentAccordions] = useState([
-    {
-      title: 'Данные об оплате',
-      isEdit: false
-    }
-  ]);
+  const [paymentAccordions, setPaymentAccordions] = useState(defaultPayment);
 
   const handleEditPaymentAccordion = (index: number) => {
     setPaymentAccordions(paymentAccordions.map((accordion, i) => (i === index ? { ...accordion, isEdit: !accordion.isEdit } : accordion)));
@@ -56,6 +58,13 @@ export const PaymentDetailsFrom: FC<IProps> = ({ isActiveTab }) => {
       }
     ]);
   };
+
+  useEffect(() => {
+    if (isActiveTab === 'full') {
+      console.log(isActiveTab);
+      setPaymentAccordions(defaultPayment);
+    }
+  }, [isActiveTab]);
 
   return (
     <>
@@ -102,7 +111,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({ isActiveTab }) => {
                     <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={!isEdit} />
                   </div>
                   <div className={styles.item_block}>
-                    <label>Срок оплаты</label>
+                    <label>СО клиента</label>
                     <DatePicker className={styles.datepicker} disabled={!isEdit} />
                   </div>
                 </div>

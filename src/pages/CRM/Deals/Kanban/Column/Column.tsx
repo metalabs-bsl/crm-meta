@@ -105,7 +105,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
       </div>
       <div className={styles.cardsContainer} ref={drop}>
         {cards.map((task, index) => (
-          <Card key={index} id={task?.id} text={task?.text} index={index} status={task.status} />
+          <Card key={task.id} index={index} data={task} />
         ))}
       </div>
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>

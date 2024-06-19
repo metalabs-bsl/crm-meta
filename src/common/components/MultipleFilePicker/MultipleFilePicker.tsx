@@ -34,14 +34,18 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
 
   return (
     <div className={styles.picker_container}>
-      {files.map((file) => (
-        <div className={styles.fileBox} key={file}>
-          <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
-            {file}
-          </a>
-          {!editable && <Icon type='delete' onClick={() => handleFileDelete(file)} />}
-        </div>
-      ))}
+      {files.length ? (
+        files.map((file) => (
+          <div className={styles.fileBox} key={file}>
+            <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
+              {file}
+            </a>
+            {!editable && <Icon type='delete' onClick={() => handleFileDelete(file)} />}
+          </div>
+        ))
+      ) : (
+        <span className={styles.fileName}>Файлы не загружены</span>
+      )}
       {!editable && (
         <label htmlFor={uniqueId} className={styles.custom_file_upload}>
           <Icon type='plus-gray' />

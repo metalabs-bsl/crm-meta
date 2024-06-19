@@ -95,7 +95,7 @@ export const PaymentRow: FC<PaymentRowProps> = ({
         <thead className={styles.thead}>
           <tr>
             {paymentRowHeaders.map((header, idx) => (
-              <th key={idx} className={cn(header.classNames.map((el) => `${styles[el]}`).join(' '))}>
+              <th key={idx} className={header.classNames.map((el) => `${styles[el]}`).join(' ')}>
                 {header.title}
               </th>
             ))}

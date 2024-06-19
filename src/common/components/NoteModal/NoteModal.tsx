@@ -1,19 +1,18 @@
 import { FC } from 'react';
-import dayjs from 'dayjs';
 import { Note } from 'types/pages';
 import { Icon } from 'common/ui';
+import { dateFormatWithHour } from 'common/helpers';
 import { Modal } from '../Modal';
 import styles from './styles.module.scss';
 
 interface IProps {
-  data?: Note;
+  data: Note;
   isOpen?: boolean;
   onCancel?: () => void;
 }
 
 export const NoteModal: FC<IProps> = ({ isOpen = false, onCancel, data }) => {
-  const date = dayjs(data?.date).format('DD.MM.YYYY, HH:mm');
-
+  const date = dateFormatWithHour(data?.date);
   return (
     <Modal isOpen={isOpen} onClose={onCancel}>
       <div className={styles.modalContent}>
