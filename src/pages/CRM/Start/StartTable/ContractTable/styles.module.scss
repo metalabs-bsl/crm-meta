@@ -1,0 +1,39 @@
+@import '../../../../../common/styles/variables.scss';
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.head {
+  background-color: $seaSalt;
+  height: 40px;
+  border-bottom: .5px solid $silver;
+}
+
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray;
+  text-align: start;
+  padding: 10px 15px;
+}
+
+.row {
+  height: 54px;
+  background-color: $not-paid-row;
+  &_paid {
+    background-color: $white;
+  }
+}
+
+.item {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: $table-column-color;
+  padding: 10px 15px;
+  &:first-child {
+    text-decoration: underline;
+  }
+}

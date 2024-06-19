@@ -1,1 +1,45 @@
 @import '../../../../common/styles/variables.scss';
+
+.content {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.head {
+  background-color: $gray-btn-bg-default;
+  height: 40px;
+}
+
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: lowercase;
+  color: $white;
+  padding: 10px 15px;
+  text-align: start;
+}
+
+.body {
+  background-color: $white;
+  border-bottom: 1px solid $silver;
+}
+
+.row {
+  height: 58px;
+}
+
+.item {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 120%;
+  color: $table-column-color;
+  padding: 10px;
+  &:first-child {
+    padding-left: 15px;
+  }
+}

@@ -1,0 +1,37 @@
+@import '../../../../../common/styles/variables.scss';
+
+.content {
+  padding: 5px 15px;
+  height: 35px;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  width: 550px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 400;
+  color: $gray;
+  margin-right: 10px;
+}
+
+.preposition {
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover;
+  margin-right: 4px;
+}
+
+.date {
+  height: 25px;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0 10px;
+  border-radius: 5px;
+  color: $black;
+  background-color: #f8f8f8;
+}
