@@ -65,7 +65,7 @@ export const UpsellForm = () => {
               <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
             </div>
             <div className={styles.item_block}>
-              <label>Срок оплаты</label>
+              <label>СО клиента</label>
               <DatePicker className={styles.datepicker} disabled={isEditable} />
             </div>
           </div>
