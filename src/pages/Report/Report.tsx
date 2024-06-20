@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { Navbar } from 'common/components';
 import { reportChapters } from 'common/constants';
-import { Excel } from './Excel';
 import { Expenses } from './Expenses';
+import { Others } from './Others';
 import { Profit } from './Profit';
 import styles from './styles.module.scss';
 
@@ -16,7 +16,7 @@ export const Report = () => {
     const components = {
       [reportChapters.profit.chapter]: <Profit />,
       [reportChapters.expenses.chapter]: <Expenses />,
-      [reportChapters.excel.chapter]: <Excel />
+      [reportChapters.excel.chapter]: <Others />
     };
     return components[chapter];
   };

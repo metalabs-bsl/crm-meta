@@ -60,7 +60,13 @@ export const Personal: FC = () => {
         soldDeals={employee.soldDeals}
         conversion={employee.conversion}
       />
-      <StartEndPeriodPicker startValue={startDate} endValue={endDate} onChangeStart={setStartDate} onChangeEnd={setEndDate} />
+      <StartEndPeriodPicker
+        startValue={startDate}
+        endValue={endDate}
+        onChangeStart={setStartDate}
+        onChangeEnd={setEndDate}
+        className={styles.datePicker}
+      />
       <StartTable employee={employee} />
     </div>
   );

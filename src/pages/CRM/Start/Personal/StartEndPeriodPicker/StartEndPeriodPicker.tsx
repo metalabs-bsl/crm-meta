@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
+import cn from 'classnames';
 import { DatePicker } from 'common/ui';
 import styles from './styles.module.scss';
 
@@ -7,9 +8,10 @@ interface StartEndPeriodPickerProps {
   onChangeStart: (date: string) => void;
   endValue: string;
   onChangeEnd: (date: string) => void;
+  className?: string;
 }
 
-export const StartEndPeriodPicker: FC<StartEndPeriodPickerProps> = ({ startValue, onChangeStart, endValue, onChangeEnd }) => {
+export const StartEndPeriodPicker: FC<StartEndPeriodPickerProps> = ({ startValue, onChangeStart, endValue, onChangeEnd, className }) => {
   const [startDate, setStartDate] = useState<string>(startValue);
   const [endDate, setEndDate] = useState<string>(endValue);
 
@@ -34,7 +36,7 @@ export const StartEndPeriodPicker: FC<StartEndPeriodPickerProps> = ({ startValue
   };
 
   return (
-    <div className={styles.content}>
+    <div className={cn(styles.content, className)}>
       <span className={styles.title}>Отчетный период:</span>
       <span className={styles.preposition}>с</span>
       <DatePicker className={styles.date} value={startDate} onChange={handleStartDateChange} />
