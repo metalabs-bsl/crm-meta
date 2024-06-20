@@ -1,12 +1,9 @@
 import { FC } from 'react';
-import styles from './ProfitTable.module.scss';
+import { ProfitData } from '../Profit';
+import styles from './styles.module.scss';
 
-interface ProfitData {
-  title: string;
-  status: string;
-}
 interface IProps {
-  data: ProfitData[];
+  data: ProfitData[] | [];
 }
 
 export const ProfitTable: FC<IProps> = ({ data }) => {

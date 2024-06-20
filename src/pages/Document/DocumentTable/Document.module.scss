@@ -1,19 +1,28 @@
 @import '../../../common/styles/variables.scss';
 .table {
+  position: relative;
   width: 100%;
-  color: $black;
-  background-color: $white;
-  border-collapse: collapse;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
 }
 td {
   padding: 15px 30px;
 }
 .thead {
-  padding: 15px 30px;
+  padding: 0 30px;
   display: flex;
   align-items: center;
-  background-color: #f8f8f8;
+  background: $seaSalt;
   border-bottom: 1px solid $silver;
+  box-shadow: 0 1px 5px rgba(184, 184, 184, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .headTd {
   font-size: 16px;
@@ -21,10 +30,11 @@ td {
   line-height: 1.3em;
   text-transform: lowercase;
   color: $gray;
+  padding: 15px 0;
   font-family: var(--font-family);
 }
 .tbody {
-  max-height: 560px;
+  flex: 1;
   overflow-y: auto;
 }
 

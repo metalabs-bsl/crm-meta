@@ -31,8 +31,13 @@
 }
 
 .tableWrapper {
-  border-radius: 10px;
+  width: calc(100vw - 254px);
+  height: calc(100vh - 200px);
+  border-radius: 8px;
+  display: flex;
+  margin: 0 auto;
   overflow: hidden;
+  flex-direction: column;
 }
 
 @media (max-width: 991px) {
