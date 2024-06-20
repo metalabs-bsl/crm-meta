@@ -9,25 +9,39 @@
     font-weight: 400;
     font-size: 14px;
     color: $gray;
-  }
-  .middle {
-    border-radius: 5px;
-    background-color: $seaSalt;
-    padding: 10px 15px;
-    .link {
-      font-weight: 400;
-      font-size: 16px;
+    .descTitle {
       color: $gray-btn-bg-hover;
-      text-decoration: none;
+    }
+    .isRemoving {
+      color: $not-paid;
     }
   }
-  .file {
-    width: min-content;
-    position: relative;
-    .clip {
-      position: absolute;
-      top: -5px;
-      right: -2px;
+  .middle {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: $gray-btn-bg-hover;
+    font-weight: 400;
+    .payment {
+      font-size: 14px;
+    }
+    .comment {
+      background-color: $seaSalt;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .linkWrapper {
+      border-radius: 5px;
+      background-color: $seaSalt;
+      padding: 5px 10px;
+      font-size: 14px;
+      width: min-content;
+      white-space: nowrap;
+      .link {
+        color: $gray;
+        text-decoration: none;
+      }
     }
   }
 }

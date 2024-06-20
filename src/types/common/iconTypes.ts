@@ -33,7 +33,7 @@ export type IIconType =
   | 'history-todo'
   | 'history-accounts'
   | 'history-comment'
-  | 'history-deal-create'
+  | 'history-deal'
   | 'arrow-left'
   | 'clip'
   | 'calendar-outline'

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Change } from 'pages/CRM/Deals/CardDetail/CardDetail.helper';
+import { Change } from 'types/entities';
 import styles from './styles.module.scss';
 
 interface IProps {

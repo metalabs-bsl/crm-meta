@@ -85,7 +85,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop }) => {
       <div className={styles.titleBlock}>
         <div className={cn(styles.roundIcon, styles[color])} />
         <span className={styles.title}>{title}</span>
-        <span className={styles.count}>(1)</span>
+        <span className={styles.count}>{cards.length}</span>
         <div className={styles.actionBlock} style={{ display: isSaleColumn && openFilterModal ? 'flex' : '' }}>
           {isSaleColumn && (
             <div ref={filterRef} onClick={onClickFilterModal} className={styles.filter}>

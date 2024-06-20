@@ -61,7 +61,6 @@ export const PaymentDetailsFrom: FC<IProps> = ({ isActiveTab }) => {
 
   useEffect(() => {
     if (isActiveTab === 'full') {
-      console.log(isActiveTab);
       setPaymentAccordions(defaultPayment);
     }
   }, [isActiveTab]);

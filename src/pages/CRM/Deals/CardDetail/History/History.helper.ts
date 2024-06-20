@@ -3,5 +3,5 @@ export enum HISTORY_ITEMS {
   TODO = 'history-todo',
   COMMENT = 'history-comment',
   ACCOUNTS = 'history-accounts',
-  DEAL_CREATE = 'history-deal-create'
+  DEAL = 'history-deal'
 }

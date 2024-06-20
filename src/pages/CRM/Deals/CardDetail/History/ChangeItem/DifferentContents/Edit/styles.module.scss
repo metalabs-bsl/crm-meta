@@ -11,14 +11,61 @@
     font-weight: 400;
     font-size: 14px;
     color: $gray;
+    .description {
+      color: $gray-btn-bg-hover;
+    }
   }
-  .bottom {
+  .bottom,
+  .bottom_other {
     display: flex;
     gap: 10px;
     .blocks {
       padding: 5px 20px;
       border-radius: 10px;
       background-color: $seaSalt;
+    }
+
+    .salat {
+      background-color: $yellow-round;
+    }
+
+    .blue {
+      background-color: $blue-round;
+    }
+
+    .dark-green {
+      background-color: $green-round;
+    }
+
+    .violet {
+      background-color: $violet-round;
+    }
+
+    .red {
+      background-color: $red-round;
+    }
+
+    .light-green {
+      background-color: $salat-round;
+    }
+    .pink {
+      background-color: $pink-round;
+    }
+
+    .black {
+      background-color: $gray-btn-bg-hover;
+    }
+  }
+  .bottom_other {
+    flex-direction: column;
+    .different {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .title {
+        font-weight: 400;
+        font-size: 14px;
+      }
     }
   }
 }

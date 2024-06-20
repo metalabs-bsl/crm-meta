@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Date } from 'common/components';
-import { Change } from '../../CardDetail.helper';
+import { Change } from 'types/entities';
 import { ChangeItem } from '../ChangeItem';
 import styles from '../styles.module.scss';
 

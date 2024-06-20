@@ -1,22 +1,62 @@
 import { FC } from 'react';
-import { Change } from 'pages/CRM/Deals/CardDetail/CardDetail.helper';
+import cn from 'classnames';
+import { Icon } from 'common/ui';
+import { dateFormatWithHour } from 'common/helpers';
+import { Change, IDetail, Todo_Create, Todo_Status } from 'types/entities';
 import styles from './styles.module.scss';
+
+enum TODO_TYPE_ENUM {
+  CREATE = 'todo-create',
+  STATUS = 'todo-status'
+}
+
+const isTodoCreate = (detail: IDetail): detail is Todo_Create => detail.detailType === TODO_TYPE_ENUM.CREATE;
+const isTodoStatus = (detail: IDetail): detail is Todo_Status => detail.detailType === TODO_TYPE_ENUM.STATUS;
 
 interface IProps {
   data: Change;
 }
 
 export const Todo: FC<IProps> = ({ data }) => {
-  return (
-    <div className={styles.todo}>
-      <span className={styles.title}>Дело</span>
-      <div className={styles.bottom}>
-        <p className={styles.description}>{data.description}</p>
+  const { detail, description } = data;
+
+  if (!detail) {
+    return null;
+  }
+
+  if (isTodoCreate(detail)) {
+    const date = dateFormatWithHour(detail.dedlineDate);
+
+    return (
+      <div className={styles.todo}>
+        <span className={styles.title}>
+          Дело: <span className={styles.titleDesc}>{description}</span>
+        </span>
+        <div className={styles.bottom}>
+          <p className={styles.description}>{detail.comment}</p>
+        </div>
+        <div className={styles.dedline}>
+          <span>Сделать до</span>
+          <span className={styles.date}>{date}</span>
+        </div>
       </div>
-      <div className={styles.dedline}>
-        <span>Сделать до</span>
-        <span className={styles.date}>9.05.2024, 11:11</span>
+    );
+  }
+
+  if (isTodoStatus(detail)) {
+    return (
+      <div className={styles.todo}>
+        <span className={styles.title}>
+          Дело: <span className={styles.titleDesc}>{description}</span>
+        </span>
+        <div className={styles.statusBottom}>
+          <span className={cn(styles.blocks, styles[detail.prev.color])}>{detail.prev.label}</span>
+          <Icon type='arrow-left' />
+          <span className={cn(styles.blocks, styles[detail.current.color])}>{detail.current.label}</span>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return null;
 };

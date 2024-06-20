@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Change } from '../CardDetail.helper';
+import { Change } from 'types/entities';
 import { ChangeGroup } from './ChangeGroup';
 import styles from './styles.module.scss';
 
@@ -14,8 +14,6 @@ export const History: React.FC<ChangeHistoryProps> = ({ history }) => {
 
   useEffect(() => {
     if (ref.current) {
-      console.log(ref.current?.scrollHeight);
-
       setVerticalLineHeight(ref.current?.scrollHeight);
     }
   }, []);

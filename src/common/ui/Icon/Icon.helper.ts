@@ -78,7 +78,7 @@ export const icons: IIcons = {
   ['history-todo']: historyTodo,
   ['history-accounts']: historyAcconts,
   ['history-comment']: historyComment,
-  ['history-deal-create']: historyDeals,
+  ['history-deal']: historyDeals,
   ['arrow-left']: ArrowLeft,
   ['clip']: clip,
   ['calendar-outline']: calendarOutline,

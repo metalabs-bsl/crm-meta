@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { DEALS_TABS, IMainTabs } from '../Deals.helper';
 import styles from './style.module.scss';
@@ -17,6 +17,17 @@ export const DealsTabFilter: FC<IProps> = ({ mainTabs, isActiveTab, setIsActiveT
     setIsActiveTab(type);
   };
 
+  const onActiveClick = () => {
+    setActive(!active);
+    onChangeTab(DEALS_TABS.todos);
+  };
+
+  useEffect(() => {
+    if (isActiveTab !== DEALS_TABS.todos) {
+      setActive(false);
+    }
+  }, [isActiveTab]);
+
   return (
     <div className={styles.tabFilterBlock}>
       <div className={styles.tabsBlock}>
@@ -32,7 +43,7 @@ export const DealsTabFilter: FC<IProps> = ({ mainTabs, isActiveTab, setIsActiveT
       </div>
       <div className={cn(styles.tabsBlock, styles.countBlock)}>
         <span>Мои:</span>
-        <div className={cn(styles.tab, { [styles.activeTab]: active })} onClick={() => setActive(!active)}>
+        <div className={cn(styles.tab, { [styles.activeTab]: active })} onClick={onActiveClick}>
           Запланированные
           <span className={cn(styles.count, { [styles.notZeroCount]: count > 0 })}>{count}</span>
         </div>
