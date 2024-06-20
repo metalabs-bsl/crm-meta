@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { StartTable } from '../StartTable';
 import { IEmployeeInfo } from '../types/IEmployee';
 import styles from './styles.module.scss';
@@ -13,6 +14,10 @@ const employees: IEmployeeInfo[] = [
     avgCheck: '1500$',
     avgCommissionCheck: '1500$',
     tourists: 100,
+    totalDeals: 20,
+    processedDeals: 20,
+    soldDeals: 15,
+    conversion: '5%',
     contracts: [
       {
         contractNumber: 1234567890,
@@ -38,6 +43,10 @@ const employees: IEmployeeInfo[] = [
     avgCheck: '600$',
     avgCommissionCheck: '200$',
     tourists: 50,
+    totalDeals: 20,
+    processedDeals: 20,
+    soldDeals: 15,
+    conversion: '5%',
     contracts: [
       {
         contractNumber: 1234567890,
@@ -63,6 +72,10 @@ const employees: IEmployeeInfo[] = [
     avgCheck: '600$',
     avgCommissionCheck: '200$',
     tourists: 50,
+    totalDeals: 20,
+    processedDeals: 20,
+    soldDeals: 15,
+    conversion: '5%',
     contracts: [
       {
         contractNumber: 1234567890,
@@ -88,6 +101,10 @@ const employees: IEmployeeInfo[] = [
     avgCheck: '600$',
     avgCommissionCheck: '200$',
     tourists: 50,
+    totalDeals: 20,
+    processedDeals: 20,
+    soldDeals: 15,
+    conversion: '5%',
     contracts: [
       {
         contractNumber: 1234567890,
@@ -113,6 +130,10 @@ const employees: IEmployeeInfo[] = [
     avgCheck: '600$',
     avgCommissionCheck: '200$',
     tourists: 50,
+    totalDeals: 20,
+    processedDeals: 20,
+    soldDeals: 15,
+    conversion: '5%',
     contracts: [
       {
         contractNumber: 1234567890,
@@ -131,7 +152,7 @@ const employees: IEmployeeInfo[] = [
   }
 ];
 
-export const General = () => {
+export const General: FC = () => {
   return (
     <div className={styles.content}>
       {employees.map((employee, index) => (

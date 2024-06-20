@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { Options } from 'types/pages';
 import { SearchInput, Select } from 'common/ui';
 import { General } from './General';
@@ -16,7 +16,7 @@ const selectOptions: Options[] = [
   }
 ];
 
-export const Start = () => {
+export const Start: FC = () => {
   const [content, setContent] = useState<Options['value']>('personal');
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {

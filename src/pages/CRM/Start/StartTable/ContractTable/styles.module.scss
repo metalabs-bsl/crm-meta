@@ -8,7 +8,6 @@
 .head {
   background-color: $seaSalt;
   height: 40px;
-  border-bottom: .5px solid $silver;
 }
 
 .title {
@@ -22,6 +21,7 @@
 .row {
   height: 54px;
   background-color: $not-paid-row;
+  border-top: .5px solid $silver;
   &_paid {
     background-color: $white;
   }

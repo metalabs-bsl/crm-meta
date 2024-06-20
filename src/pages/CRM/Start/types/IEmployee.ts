@@ -22,4 +22,8 @@ export interface IEmployeeInfo {
   avgCommissionCheck: string;
   tourists: number;
   contracts: IEmployeeContract[];
+  totalDeals: number;
+  processedDeals: number;
+  soldDeals: number;
+  conversion: string;
 }

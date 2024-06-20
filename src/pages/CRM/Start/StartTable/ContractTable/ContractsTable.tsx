@@ -22,7 +22,7 @@ export const ContractsTable: FC<ContractsTableProps> = ({ contracts }) => {
       </thead>
       <tbody className={styles.body}>
         {contracts.map((contract, idx) => (
-          <tr className={cn(styles.row, contract.isPaid && styles.row_paid)} key={idx}>
+          <tr className={cn(styles.row, { [styles.row_paid]: contract.isPaid })} key={idx}>
             <td className={styles.item}>{contract.contractNumber}</td>
             <td className={styles.item}>{contract.brutto}</td>
             <td className={styles.item}>{contract.netto}</td>
