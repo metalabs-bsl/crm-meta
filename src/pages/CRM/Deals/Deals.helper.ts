@@ -28,6 +28,15 @@ export interface Task {
   id: number;
   text: string;
   status: string;
+  brutto: string;
+  date: string;
+  comment: string;
+  todoCount: number;
+  user: {
+    name: string;
+    phone: string;
+    birthday: string;
+  };
 }
 
 export interface IColumn {
@@ -43,8 +52,34 @@ export const kanbanKolumns: IColumn[] = [
     title: 'Поступили',
     color: 'salat',
     cards: [
-      { id: 1, text: 'Task 1', status: 'received' },
-      { id: 2, text: 'Task 2', status: 'received' }
+      {
+        id: 1,
+        text: 'Task 1',
+        status: 'received',
+        brutto: '1200$',
+        date: '2024-05-08T00:00',
+        comment: 'Прищельцы атакуют!',
+        todoCount: 0,
+        user: {
+          name: 'Азат',
+          phone: '+996704135830',
+          birthday: '1997-05-16T00:00'
+        }
+      },
+      {
+        id: 2,
+        text: 'Task 2',
+        status: 'received',
+        brutto: '1500$',
+        date: '2024-05-09T00:00',
+        comment: 'Люди атакуют!',
+        todoCount: 1,
+        user: {
+          name: 'Айдин',
+          phone: '+996552220790',
+          birthday: '2004-02-12T00:00'
+        }
+      }
     ]
   },
   {
@@ -52,8 +87,34 @@ export const kanbanKolumns: IColumn[] = [
     title: 'Взят в обработку',
     color: 'blue',
     cards: [
-      { id: 3, text: 'Task 3', status: 'processed' },
-      { id: 4, text: 'Task 4', status: 'processed' }
+      {
+        id: 3,
+        text: 'Task 3',
+        status: 'processed',
+        brutto: '2500$',
+        date: '2024-02-09T00:00',
+        comment: 'Люди проиграли!',
+        todoCount: 2,
+        user: {
+          name: 'Милана',
+          phone: '+996507500858',
+          birthday: '2004-05-18T00:00'
+        }
+      },
+      {
+        id: 4,
+        text: 'Task 4',
+        status: 'processed',
+        brutto: '2500$',
+        date: '2022-02-09T00:00',
+        comment: 'Люди выиграли!',
+        todoCount: 3,
+        user: {
+          name: 'Тариэл',
+          phone: '+996704135830',
+          birthday: '2001-03-31T00:00'
+        }
+      }
     ]
   },
   { status: 'consideration', title: 'Рассмотрение', color: 'dark-green', cards: [] },
@@ -68,7 +129,41 @@ export const kanbanKolumns: IColumn[] = [
 
 export const todoKolumns: IColumn[] = [
   { status: 'received', title: 'Информация', color: 'salat', cards: [] },
-  { status: 'processed', title: 'Без дел', color: 'dark-green', cards: [] },
+  {
+    status: 'processed',
+    title: 'Без дел',
+    color: 'dark-green',
+    cards: [
+      {
+        id: 1,
+        text: 'Task 1',
+        status: 'received',
+        brutto: '1200$',
+        date: '2024-05-08T00:00',
+        comment: 'Прищельцы атакуют!',
+        todoCount: 0,
+        user: {
+          name: 'Азат',
+          phone: '+996704135830',
+          birthday: '1997-05-16T00:00'
+        }
+      },
+      {
+        id: 2,
+        text: 'Task 2',
+        status: 'received',
+        brutto: '1500$',
+        date: '2024-05-09T00:00',
+        comment: 'Люди атакуют!',
+        todoCount: 1,
+        user: {
+          name: 'Айдин',
+          phone: '+996552220790',
+          birthday: '2004-02-12T00:00'
+        }
+      }
+    ]
+  },
   { status: 'consideration', title: 'На сегодня', color: 'light-green', cards: [] },
   { status: 'booking', title: 'На этой неделе', color: 'blue', cards: [] },
   { status: 'bought', title: 'На следующей неделе', color: 'violet', cards: [] },
