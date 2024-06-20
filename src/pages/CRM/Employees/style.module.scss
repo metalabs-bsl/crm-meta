@@ -1,0 +1,97 @@
+@import '../../../common/styles/variables.scss';
+
+.employeesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .btn_title {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+  }
+
+  .title {
+    color: $white;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .addEmployeeButton {
+    background-color: $btn_employess;
+    border: none;
+    padding: 5px 20px;
+    color: $table-column-color;
+    font-weight: 400;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+}
+
+.employeesTable {
+  // width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: $white;
+}
+
+// .tableHeader {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// }
+
+.editInput,
+.editSelect {
+  background: $input-edit-bg;
+  border: none;
+  outline: none;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.employeesTable th,
+.employeesTable td {
+  padding: 15px 15px;
+  text-align: left;
+  border-bottom: 1px solid $table-bottom-solid;
+}
+
+.employeesTable th {
+  background-color: $input-edit-bg;
+  color: $table-title-color;
+  font-weight: 400;
+}
+
+.employeesTable td {
+  border-bottom: 1px solid $table-bottom-solid;
+  color: $table-column-color;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
+}
+
+.dtnEdit {
+  padding: 5px 20px;
+  background: $yellow-btn-bg;
+  font-size: 16px;
+  color: $gray-btn-bg-hover;
+  border: none;
+  border-radius: 10px;
+}
+
+.btnDelete {
+  padding: 5px 20px;
+  background: $gray-btn;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+}
