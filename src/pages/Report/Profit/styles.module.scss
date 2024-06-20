@@ -50,16 +50,6 @@
     list-style: none;
   }
 
-  .calendarPeriod {
-    padding: 0px 15px;
-    height: 35px;
-    background-color: $white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-  }
-
   .periodText {
     font-size: 14px;
     font-weight: 400;
@@ -174,9 +164,9 @@
 
   .common {
     width: 100%;
-    max-width: 380px;
+    max-width: 450px;
     border-radius: 10px;
-    padding: 20px 60px;
+    padding: 20px;
     background-color: $white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -186,12 +176,27 @@
   }
 
   .commonText {
+    max-width: 260px;
     font-size: 20px;
     font-weight: 400;
     line-height: 1.3em;
     text-align: center;
     font-family: var(--font-family);
     margin-bottom: 50px;
+  }
+
+  .commonBtnWrapper {
+    gap: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .greenBTn {
+    font-size: 16px;
+    font-weight: 400;
+    padding: 5px 20px;
+    line-height: 1.3em;
+    border-radius: 10px;
   }
 
   .commonDownload {

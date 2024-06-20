@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Icon } from 'common/ui';
+import { StartEndPeriodPicker } from 'pages/CRM/Start/Personal/StartEndPeriodPicker';
+import { Button } from 'common/ui';
 import { Empty } from 'common/ui/Empty';
-// import { Empty } from 'common/ui/Empty';
 import { Tabs } from 'common/components';
 import { ProfitTable } from './ProfitTable/ProfitTable';
 import styles from './styles.module.scss';
+
+import { BUTTON_TYPES } from 'types/enums';
 
 const tabItems = [
   { type: 'tab1', title: 'Сотрудники' },
@@ -56,12 +58,9 @@ const data: ProfitData[] = [
 ];
 
 export const Profit = () => {
-  const [calendar, setCalendar] = useState(false);
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
-
-  const handleClickCalendar = () => {
-    setCalendar((prev) => !prev);
-  };
+  const [startDate, setStartDate] = useState<string>('2024-06-01T00:00');
+  const [endDate, setEndDate] = useState<string>('2024-06-30T00:00');
 
   return (
     <div className={styles.profit}>
@@ -77,41 +76,11 @@ export const Profit = () => {
             activeTabClassName={styles.customActiveTab}
           />
         </div>
-
-        {/*-- сюда нужно поставить компонент 'Отчетный период: c - по', который сделает Михаил --*/}
-        {/* -----------------------------||----------------------------------- */}
-        {/* -----------------------------||------------------------------------ */}
-        {/* ----------------------------\\//---------------------------------- */}
         <div className={styles.calendarWrapper}>
           <div className={styles.calendarPeriod}>
-            <span className={styles.periodText}>
-              Отчетный период:
-              <span className={styles.periodLetters}>с</span>
-              <span className={styles.periodData}>10.10.10</span>
-              <span className={styles.periodLetters}>по</span>
-              <span className={styles.periodData}>10.10.10</span>
-            </span>
-          </div>
-          <div className={styles.calendar}>
-            <button onClick={handleClickCalendar} className={styles.calendarBtn}>
-              Выбрать отчетный период
-              <Icon type='black-border-calendar' />
-            </button>
-            <div className={`${styles.calendarContent} ${calendar ? styles.calendarContentActive : ''}`}>
-              <div className={styles.calendarInner}>
-                <span>Начало</span>
-                <span className={styles.calendarData}>12.05.2024</span>
-              </div>
-              <div className={styles.calendarInner}>
-                <span>Конец</span>
-                <span className={styles.calendarData}>12.05.2024</span>
-              </div>
-            </div>
+            <StartEndPeriodPicker startValue={startDate} endValue={endDate} onChangeStart={setStartDate} onChangeEnd={setEndDate} />
           </div>
         </div>
-        {/* ----------------------------//\\----------------------------------- */}
-        {/* -----------------------------||------------------------------------ */}
-        {/* -----------------------------||------------------------------------ */}
       </div>
       <div className={styles.tableWrapper}>
         {activeTab === 'tab1' && <>{data.length ? <ProfitTable data={data} /> : <Empty />}</>}
@@ -121,9 +90,14 @@ export const Profit = () => {
               <div className={styles.commonWrapper}>
                 <div className={styles.common}>
                   <p className={styles.commonText}>Отчет по общей прибыли сотрудников</p>
-                  <a href='#' className={styles.commonDownload} download>
-                    Выгрузить в Excel
-                  </a>
+                  <div className={styles.commonBtnWrapper}>
+                    <a href='#' download>
+                      <Button styleType={BUTTON_TYPES.GREEN} className={styles.greenBTn} text='Выгрузить в PDF' />
+                    </a>
+                    <a href='#' className={styles.commonDownload} download>
+                      Выгрузить в Excel
+                    </a>
+                  </div>
                 </div>
               </div>
             ) : (
