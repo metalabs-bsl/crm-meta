@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export const AccountItem: FC<IProps> = ({ item }) => {
-  const { part, fileName, dateTime } = item;
+  const { part, fileName, dateTime, comment } = item;
 
   return (
     <div className={styles.groupItem}>
@@ -16,6 +16,7 @@ export const AccountItem: FC<IProps> = ({ item }) => {
         <span className={styles.part}>{part}</span>
         <Icon type='delete' className={styles.delete} />
       </div>
+      <div className={styles.comment}>{comment}</div>
       <a className={styles.file}>{fileName}</a>
       <span className={styles.time}>{dateTime}</span>
     </div>

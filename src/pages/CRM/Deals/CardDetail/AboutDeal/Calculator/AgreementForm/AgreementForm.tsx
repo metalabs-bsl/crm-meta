@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import cn from 'classnames';
 import { DatePicker, Input } from 'common/ui';
-import { Accordion } from 'common/components';
+import { Accordion, MultipleFilePicker } from 'common/components';
 import styles from './style.module.scss';
 
 export const AgreementForm = () => {
   const [isEditAgreement, setIsEditAgreement] = useState<boolean>(false);
   const isEditable = !isEditAgreement;
+  const [passwordFiles, setPasswordFiles] = useState<string[]>([]);
   return (
     <Accordion title='Договор' onEditAction={() => setIsEditAgreement(!isEditAgreement)} isEdit={isEditAgreement}>
       <form className={styles.form}>
@@ -28,6 +29,12 @@ export const AgreementForm = () => {
           <div className={styles.item_block}>
             <label>Комментарий</label>
             <Input placeholder='Комментарий отсутствует' className={styles.inp_wrapper} disabled={isEditable} />
+          </div>
+          <div className={styles.item_block}>
+            <label>Паспорт</label>
+            <div className={styles.password_wrapper}>
+              <MultipleFilePicker files={passwordFiles} editable={isEditable} onFilesChange={setPasswordFiles} />
+            </div>
           </div>
         </div>
         <div className={styles.blocks}>
