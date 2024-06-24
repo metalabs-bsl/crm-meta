@@ -1,6 +1,5 @@
 import { IIcons } from 'types/common';
 import birthday from '../../assets/icons/birthday.svg';
-import calendarBlackBorder from '../../assets/icons/black-border-calendar.svg';
 import Break from '../../assets/icons/break.svg';
 import calcClose from '../../assets/icons/calc-close.svg';
 import calcOpen from '../../assets/icons/calc-open.svg';
@@ -60,7 +59,6 @@ export const icons: IIcons = {
   ['mail']: mail,
   ['crm-dark']: crmDark,
   ['calendar-dark']: calendarDark,
-  ['black-border-calendar']: calendarBlackBorder,
   ['document-dark']: documentDark,
   ['mail-dark']: mailDark,
   ['timeout-playIcon']: timeoutPlayIcon,

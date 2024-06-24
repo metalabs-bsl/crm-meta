@@ -14,58 +14,58 @@ export interface DocumentData {
 }
 
 const data: DocumentData[] = [
-  // {
-  //   title: 'Пример документа 1',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 3',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // },
-  // {
-  //   title: 'Пример документа 2',
-  //   file: 'file PDF'
-  // }
+  {
+    title: 'Пример документа 1',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 3',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  },
+  {
+    title: 'Пример документа 2',
+    file: 'file PDF'
+  }
 ];
 
 export const Document = () => {
