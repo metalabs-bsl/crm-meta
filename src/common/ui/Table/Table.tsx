@@ -2,6 +2,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
 import { ClientWindow, DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
+import { dateFormatWithHour } from 'common/helpers';
 import { Checkbox } from '../Checkbox';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
@@ -24,9 +25,11 @@ type DealStage = 'received' | 'processed' | 'consideration' | 'booking' | 'finis
 export interface TableRow {
   [key: string]: any;
   dealStage: DealStage;
-  date: string;
+  birthday: string;
   client: string;
   phoneNumber: string;
+  city: string;
+  source: string;
 }
 
 interface TableProps {
@@ -42,7 +45,9 @@ interface ModalState {
   dropdown: boolean;
   clientName: string;
   clientPhoneNumber: string;
-  date: string;
+  birthday: string;
+  city: string;
+  source: string;
 }
 
 const stages: Stage[] = [
@@ -71,7 +76,9 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     dropdown: false,
     clientName: '',
     clientPhoneNumber: '',
-    date: ''
+    birthday: '',
+    city: '',
+    source: ''
   });
 
   const handleDropdownOpen = (rowIndex: number) => {
@@ -158,13 +165,17 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
 
     const clientName = row.client;
     const clientPhoneNumber = row.phoneNumber;
-    const clientDate = row.date;
+    const clientBirthday = row.birthday;
+    const clientCity = row.city;
+    const clientSource = row.source;
 
     setModalState((prevState) => ({
       ...prevState,
       clientName: clientName,
       clientPhoneNumber: clientPhoneNumber,
-      date: clientDate
+      birthday: clientBirthday,
+      source: clientSource,
+      city: clientCity
     }));
   };
 
@@ -335,7 +346,9 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
             data={{
               name: modalState.clientName,
               phone: modalState.clientPhoneNumber,
-              birthday: modalState.date
+              birthday: modalState.birthday,
+              city: modalState.city,
+              source: modalState.source
             }}
           />
         </DropdownModal>
@@ -395,7 +408,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
                       {column.key === 'tasks' ? (
                         <>
                           <div className={styles.col}>{row[column.key]}</div>
-                          {row.date && <div className={styles.date}>{row.date}</div>}
+                          {row.date && <div className={styles.date}>{dateFormatWithHour(row.date)}</div>}
                         </>
                       ) : (
                         renderEditComponent(column, row, index)
