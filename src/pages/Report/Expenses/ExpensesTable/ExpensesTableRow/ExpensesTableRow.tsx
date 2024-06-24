@@ -1,49 +1,35 @@
 import { FC } from 'react';
+import { ITableData } from '../../types/ITableData';
 import styles from './styles.module.scss';
 
-interface ExpensesRowData {
-  creationData: string;
-  naming: string[];
-  quantity: string[];
-  price: number[];
-}
-
-interface IProps {
-  data: ExpensesRowData[] | [];
-}
-
-export const ExpensesTableRow: FC<IProps> = ({ data }) => {
+export const ExpensesTableRow: FC<ITableData> = ({ creationDate, list, total }) => {
   return (
-    <>
-      {data?.map((el, index) => (
-        <div className={styles.card} key={index}>
-          <div className={`${styles.cardColumn} ${styles.cardData}`}>
-            <p className={styles.cardText}>{el.creationData}</p>
-          </div>
-          <div className={`${styles.cardColumn} ${styles.cardNaming}`}>
-            {el.naming.map((name, index) => (
-              <p key={index} className={styles.cardText}>
-                {name}
-              </p>
-            ))}
-          </div>
-          <div className={`${styles.cardColumn} ${styles.cardQuantity}`}>
-            {el.quantity.map((qty, index) => (
-              <p key={index} className={styles.cardText}>
-                {qty}
-              </p>
-            ))}
-          </div>
-          <div className={`${styles.cardColumn} ${styles.cardPrice}`}>
-            {el.price.map((price, index) => (
-              <p key={index} className={styles.cardText}>
-                {`${price} сом`}
-              </p>
-            ))}
-            <p className={styles.cardTotal}>400 сом</p>
-          </div>
-        </div>
-      ))}
-    </>
+    <div className={styles.card}>
+      <div className={`${styles.cardColumn} ${styles.cardData}`}>
+        <p className={styles.cardText}>{creationDate}</p>
+      </div>
+      <div className={`${styles.cardColumn} ${styles.cardNaming}`}>
+        {list.map((el, idx) => (
+          <p key={idx} className={styles.cardText}>
+            {el.name}
+          </p>
+        ))}
+      </div>
+      <div className={`${styles.cardColumn} ${styles.cardQuantity}`}>
+        {list.map((el, idx) => (
+          <p key={idx} className={styles.cardText}>
+            {el.quantity}
+          </p>
+        ))}
+      </div>
+      <div className={`${styles.cardColumn} ${styles.cardPrice}`}>
+        {list.map((el, idx) => (
+          <p key={idx} className={styles.cardText}>
+            {`${el.price} сом`}
+          </p>
+        ))}
+        <p className={styles.cardTotal}>{total}</p>
+      </div>
+    </div>
   );
 };

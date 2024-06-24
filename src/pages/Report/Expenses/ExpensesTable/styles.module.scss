@@ -1,15 +1,18 @@
 @import '../../../../common/styles/variables.scss';
+
 .table {
   position: relative;
   width: 80%;
+  height: 100%;
   margin: 0 auto;
+  overflow: hidden;
 
   ul {
     list-style: none;
   }
 
   .head {
-    position: absolute;
+    // position: relative;
     top: 0;
     left: 0;
     right: 0;
@@ -47,13 +50,15 @@
   .body {
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    height: 100%;
   }
 
   // EDIT BLOCKS STYLES HERE
   //    ||
   //    \/
   .edit {
-    margin-top: 40px;
+    // margin-top: 40px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -67,40 +72,11 @@
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
-    }
-
-    .editColumn {
-      gap: 5px;
-      display: flex;
-      flex-direction: column;
+      height: 32px;
     }
 
     .editDate {
       width: 20%;
-    }
-
-    .editNaming {
-      width: 40%;
-    }
-
-    .editQuantity {
-      width: 20%;
-    }
-
-    .editPrice {
-      width: 20%;
-    }
-
-    .editInput {
-      border: none;
-      width: 100%;
-      display: inline-block;
-      font-weight: 400;
-      font-size: 16px;
-      padding: 5px 15px;
-      border-radius: 5px;
-      background-color: $white;
-      font-family: var(--font-family);
     }
 
     .editAdd {
@@ -132,20 +108,5 @@
       text-transform: lowercase;
       font-family: var(--font-family);
     }
-  }
-  //    /\
-  //    ||
-
-  .total {
-    display: inline-block;
-    font-weight: 400;
-    font-size: 16px;
-    padding: 5px 15px;
-    border-radius: 5px;
-    background-color: $lightRed;
-    font-family: var(--font-family);
-    margin-left: auto;
-    width: 18.9%;
-    margin-right: 10px;
   }
 }
