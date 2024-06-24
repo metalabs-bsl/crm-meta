@@ -9,55 +9,38 @@ import { BUTTON_TYPES } from 'types/enums';
 
 const data = [
   {
+    id: '1234567890',
     title: 'Пример документа 1',
     file: 'file PDF'
   },
   {
-    title: 'Пример документа 2',
+    id: '1234567890',
+    title: 'Пример документа 1',
     file: 'file PDF'
   },
   {
-    title: 'Пример документа 3',
+    id: '1234567890',
+    title: 'Пример документа 1',
     file: 'file PDF'
   },
   {
-    title: 'Пример документа 2',
+    id: '1234567890',
+    title: 'Пример документа 1',
     file: 'file PDF'
   },
   {
-    title: 'Пример документа 2',
+    id: '1234567890',
+    title: 'Пример документа 1',
     file: 'file PDF'
   },
   {
-    title: 'Пример документа 2',
+    id: '1234567890',
+    title: 'Пример документа 1',
     file: 'file PDF'
   },
   {
-    title: 'Пример документа 2',
-    file: 'file PDF'
-  },
-  {
-    title: 'Пример документа 2',
-    file: 'file PDF'
-  },
-  {
-    title: 'Пример документа 2',
-    file: 'file PDF'
-  },
-  {
-    title: 'Пример документа 2',
-    file: 'file PDF'
-  },
-  {
-    title: 'Пример документа 2',
-    file: 'file PDF'
-  },
-  {
-    title: 'Пример документа 2',
-    file: 'file PDF'
-  },
-  {
-    title: 'Пример документа 2',
+    id: '1234567890',
+    title: 'Пример документа 1',
     file: 'file PDF'
   }
 ];

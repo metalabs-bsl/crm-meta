@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Icon } from 'common/ui';
+import { Checkbox, Icon } from 'common/ui';
 import { DeleteModal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
@@ -7,18 +7,22 @@ import test from '../assets/test.png';
 import styles from '../Document.module.scss';
 
 interface IFile {
+  id: string;
   title: string;
   file: string;
 }
 
 interface IProps {
+  index: number;
   data: IFile;
+  isSelected: boolean;
+  onSelectRow: (index: number) => void;
 }
 
-export const DocumentTableRow: FC<IProps> = ({ data }) => {
+export const DocumentTableRow: FC<IProps> = ({ index, data, isSelected, onSelectRow }) => {
   const notification = useNotify();
   const [delOpen, setDelOpen] = useState<boolean>(false);
-  const { title, file } = data;
+  const { id, title, file } = data;
 
   const cancelDelete = () => {
     setDelOpen(false);
@@ -31,6 +35,8 @@ export const DocumentTableRow: FC<IProps> = ({ data }) => {
 
   return (
     <div className={styles.bodyTr}>
+      <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
+      <div className={`${styles.bodyTd} ${styles.id}`}>{id}</div>
       <div className={`${styles.bodyTd} ${styles.naming}`}>{title}</div>
       <a className={`${styles.bodyTd} ${styles.format}`} target='_blank' rel='noreferrer' href={test}>
         {file}
