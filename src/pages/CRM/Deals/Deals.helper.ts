@@ -36,6 +36,8 @@ export interface Task {
     name: string;
     phone: string;
     birthday: string;
+    city: string;
+    source: string;
   };
 }
 
@@ -63,7 +65,9 @@ export const kanbanKolumns: IColumn[] = [
         user: {
           name: 'Азат',
           phone: '+996704135830',
-          birthday: '1997-05-16T00:00'
+          birthday: '1997-05-16T00:00',
+          city: 'Бишкек',
+          source: 'Написал в WhatsApp'
         }
       },
       {
@@ -77,7 +81,9 @@ export const kanbanKolumns: IColumn[] = [
         user: {
           name: 'Айдин',
           phone: '+996552220790',
-          birthday: '2004-02-12T00:00'
+          birthday: '2004-02-12T00:00',
+          city: 'Бишкек',
+          source: 'Написал в WhatsApp'
         }
       }
     ]
@@ -98,7 +104,9 @@ export const kanbanKolumns: IColumn[] = [
         user: {
           name: 'Милана',
           phone: '+996507500858',
-          birthday: '2004-05-18T00:00'
+          birthday: '2004-05-18T00:00',
+          city: 'Бишкек',
+          source: 'Написал в WhatsApp'
         }
       },
       {
@@ -112,7 +120,9 @@ export const kanbanKolumns: IColumn[] = [
         user: {
           name: 'Тариэл',
           phone: '+996704135830',
-          birthday: '2001-03-31T00:00'
+          birthday: '2001-03-31T00:00',
+          city: 'Бишкек',
+          source: 'Написал в WhatsApp'
         }
       }
     ]
@@ -145,7 +155,9 @@ export const todoKolumns: IColumn[] = [
         user: {
           name: 'Азат',
           phone: '+996704135830',
-          birthday: '1997-05-16T00:00'
+          birthday: '1997-05-16T00:00',
+          city: 'Бишкек',
+          source: 'Написал в WhatsApp'
         }
       },
       {
@@ -159,7 +171,9 @@ export const todoKolumns: IColumn[] = [
         user: {
           name: 'Айдин',
           phone: '+996552220790',
-          birthday: '2004-02-12T00:00'
+          birthday: '2004-02-12T00:00',
+          city: 'Бишкек',
+          source: 'Написал в WhatsApp'
         }
       }
     ]
