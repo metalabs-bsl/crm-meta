@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { Icon } from 'common/ui';
-import { Change } from '../../CardDetail.helper';
+import { Change } from 'types/entities';
 import { HISTORY_ITEMS } from '../History.helper';
-import { Accounts, Comment, CreateDeal, Edit, Todo } from './DifferentContents';
+import { Accounts, Comment, Deal, Edit, Todo } from './DifferentContents';
 import styles from '../styles.module.scss';
 
 interface IProps {
@@ -27,7 +27,7 @@ export const ChangeItem: FC<IProps> = ({ changes, isFirstItem, isFirstGroup }) =
       [HISTORY_ITEMS.TODO]: <Todo data={changes} />,
       [HISTORY_ITEMS.COMMENT]: <Comment data={changes} />,
       [HISTORY_ITEMS.ACCOUNTS]: <Accounts data={changes} />,
-      [HISTORY_ITEMS.DEAL_CREATE]: <CreateDeal data={changes} />
+      [HISTORY_ITEMS.DEAL]: <Deal data={changes} />
     };
     return components[status];
   };

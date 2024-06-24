@@ -22,6 +22,7 @@ export const NoteModal: FC<IProps> = ({ isOpen = false, onCancel, data }) => {
             Запланированное <br /> <span className={styles.name}>{data?.title} </span>
             начнется <span className={styles.name}>{date}</span>
           </p>
+          <p className={styles.geolocation}>{data.geolocation}</p>
         </div>
       </div>
     </Modal>

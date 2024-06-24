@@ -24,6 +24,12 @@
       flex-direction: column;
       gap: 5px;
       width: 100%;
+      .password_wrapper {
+        padding: 10px 15px;
+        background-color: $seaSalt;
+        border-radius: 5px;
+        min-height: 40px;
+      }
       label {
         font-weight: 400;
         font-size: 14px;

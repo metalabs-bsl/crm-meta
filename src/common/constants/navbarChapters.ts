@@ -20,5 +20,5 @@ export const crmChapters: INavbar = {
 export const reportChapters: INavbar = {
   profit: { title: 'Прибыль', chapter: 'profit', allowRoles: [] },
   expenses: { title: 'Расходы', chapter: 'expenses', allowRoles: [] },
-  excel: { title: 'Excel', chapter: 'excel', allowRoles: [] }
+  excel: { title: 'Другие', chapter: 'others', allowRoles: [] }
 };

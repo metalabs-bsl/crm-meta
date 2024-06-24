@@ -6,7 +6,7 @@ export const birthdayData = {
 
 export const noteData = {
   title: 'Общее собрание',
-  geolocation: 'Бишкек',
+  geolocation: 'ул. Баялинова 48А',
   date: '2024-06-07T12:00',
   reminder: [
     { label: 'За 15 минут', value: '3' },

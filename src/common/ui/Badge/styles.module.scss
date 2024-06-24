@@ -1,0 +1,23 @@
+@import '../../styles/variables.scss';
+
+.badge {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  .count {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $count-active-bg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-btn-bg-hover;
+  }
+  .moreCount {
+    background-color: $not-paid;
+    color: $white;
+  }
+}

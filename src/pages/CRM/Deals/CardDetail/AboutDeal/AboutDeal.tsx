@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import cn from 'classnames';
-import { Icon } from 'common/ui';
+import { Button, Icon } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { TAB_COMPONENTS } from './AboutDeal.helper';
@@ -9,6 +9,8 @@ import { Calculator } from './Calculator';
 import { DealsForm } from './DealsForm';
 import { Todo } from './Todo';
 import styles from './styles.module.scss';
+
+import { BUTTON_TYPES } from 'types/enums';
 
 const tabItems: ITabsItem[] = [
   {
@@ -45,9 +47,12 @@ export const AboutDeal = ({ ...rest }) => {
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
         <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
           {isCalculatorTab && (
-            <div className={styles.access} onClick={() => setIsAccess(!isAccess)}>
-              <span>Доступ {isAccess ? 'открыт' : 'закрыт'}</span>
-              <Icon type={`calc-${isAccess ? 'open' : 'close'}`} />
+            <div className={styles.btns_wrapper}>
+              <div className={styles.access} onClick={() => setIsAccess(!isAccess)}>
+                <span>Доступ {isAccess ? 'открыт' : 'закрыт'}</span>
+                <Icon type={`calc-${isAccess ? 'open' : 'close'}`} />
+              </div>
+              <Button text='Создать договор' styleType={BUTTON_TYPES.LINK_GRAY} />
             </div>
           )}
           <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
