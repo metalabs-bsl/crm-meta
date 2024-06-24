@@ -6,6 +6,8 @@ interface IUser {
   name: string;
   phone: string;
   birthday: string;
+  city: string;
+  source: string;
 }
 
 interface ClientProps {
@@ -13,7 +15,7 @@ interface ClientProps {
 }
 
 export const ClientWindow: FC<ClientProps> = ({ data }) => {
-  const { name, phone, birthday } = data;
+  const { name, phone, birthday, city, source } = data;
   const date = dateFormat(birthday);
 
   return (
@@ -27,7 +29,18 @@ export const ClientWindow: FC<ClientProps> = ({ data }) => {
           <li className={styles.clientTitleNumber}>Номер телефона</li>
           <li className={styles.clientPhone}>{phone}</li>
         </ul>
-        <div className={styles.client_date}>{date}</div>
+        <ul>
+          <li className={styles.clientTitleNumber}>Город проживания</li>
+          <li className={styles.clientPhone}>{city}</li>
+        </ul>
+        <ul>
+          <li className={styles.clientTitleNumber}>Источник</li>
+          <li className={styles.clientPhone}>{source}</li>
+        </ul>
+        <ul>
+          <li className={styles.clientTitleNumber}>Дата рождения</li>
+          <li className={styles.clientPhone}>{date}</li>
+        </ul>
       </div>
     </div>
   );
