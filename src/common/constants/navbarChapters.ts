@@ -4,6 +4,7 @@ export interface INavbarItem {
   title: string;
   chapter: string;
   allowRoles: string[];
+  isBadge?: boolean;
 }
 
 export interface INavbar {
