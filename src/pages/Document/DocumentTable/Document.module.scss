@@ -1,6 +1,11 @@
 @import '../../../common/styles/variables.scss';
+.tableContainer {
+  height: 100%;
+  background-color: #f8f8f8;
+}
 .table {
   width: 100%;
+  height: 100%;
   color: $black;
   background-color: $white;
   border-collapse: collapse;
@@ -9,6 +14,7 @@ td {
   padding: 15px 30px;
 }
 .thead {
+  position: relative;
   padding: 15px 30px;
   display: flex;
   align-items: center;
@@ -16,29 +22,26 @@ td {
   border-bottom: 1px solid $silver;
 }
 .headTd {
+  width: 100%;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.3em;
-  text-transform: lowercase;
   color: $gray;
   font-family: var(--font-family);
 }
 .tbody {
-  max-height: 560px;
+  max-height: 100%;
   overflow-y: auto;
 }
 
 .bodyTr {
   height: 52px;
-  display: flex;
-  align-items: center;
   padding: 0 30px;
-  border-bottom: 1px solid $silver;
-  display: flex;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.3em;
   font-family: var(--font-family);
+  border-bottom: 1px solid $silver;
   color: var(--background-eerie-black);
   display: flex;
   align-items: center;
@@ -72,20 +75,30 @@ td {
 }
 
 .id {
-  width: 20%;
+  width: 23%;
+}
+
+.name {
+  width: 23%;
 }
 
 .naming {
-  width: 45%;
+  width: 43%;
 }
 
 .format {
-  width: 20%;
+  width: 6%;
   overflow: hidden;
 }
 
-.action {
-  width: 15%;
+// .action {
+//   width: 15%;
+// }
+
+.theadCheckbox {
+  position: relative;
+  top: -13px;
+  margin-right: 15px;
 }
 
 @media (max-width: 991px) {

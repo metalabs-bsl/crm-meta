@@ -1,0 +1,30 @@
+@import '../../../common/styles/variables.scss';
+.original {
+  height: 100%;
+
+  .originalHead {
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    background-color: $seaSalt;
+  }
+
+  .originalBody {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  .checkbox {
+    position: relative;
+    top: -13px;
+    margin-right: 15px;
+  }
+
+  .naming {
+    width: 93%;
+  }
+
+  .format {
+    width: 7%;
+  }
+}
