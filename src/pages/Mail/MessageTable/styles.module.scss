@@ -1,0 +1,117 @@
+@import '../../../common/styles/variables.scss';
+
+.table_wpapper {
+  border-radius: 10px;
+  overflow: hidden;
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    th,
+    td {
+      border-top: 1px solid $silver;
+      height: 54px;
+      padding-right: 45px;
+    }
+
+    td {
+      font-weight: 500;
+      font-size: 16px;
+      color: $gray-btn-bg-hover;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+      cursor: pointer;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray;
+    }
+
+    tbody {
+      background-color: $white;
+    }
+
+    th:first-child,
+    td:first-child {
+      width: 55px;
+      padding-left: 15px;
+      padding-bottom: 30px;
+      padding-right: 0;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 30%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 60%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray;
+      padding-right: 0px;
+    }
+
+    th:last-child,
+    td:last-child {
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray;
+      padding-right: 0px;
+    }
+
+    thead {
+      background-color: $seaSalt;
+      tr {
+        border-left: 5px solid $seaSalt;
+      }
+    }
+
+    tbody {
+      tr {
+        border-left: 5px solid $white;
+        .markerBox {
+          position: relative;
+          width: 20px;
+          height: 20px;
+          .marker {
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-color: $yellow-round;
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+      }
+
+      .unread {
+        border-left: 5px solid $not-paid;
+      }
+    }
+  }
+  .btns_wrapper {
+    background-color: $white;
+    border-top: 2px solid $silver;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    button {
+      font-weight: 400;
+      font-size: 16px;
+      text-transform: lowercase;
+    }
+  }
+}

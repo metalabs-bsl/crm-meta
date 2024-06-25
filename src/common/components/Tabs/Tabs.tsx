@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import cn from 'classnames';
+import { Badge } from 'common/ui';
 import { ITabsItem } from './Tabs.helper';
 import styles from './styles.module.scss';
 
@@ -25,7 +26,7 @@ export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, classN
           className={cn(styles.tab, tabClassName, { [cn(styles.activeTab, activeTabClassName)]: isActiveTab === tab.type })}
           onClick={() => onChangeTab(tab.type)}
         >
-          {tab.title}
+          {tab.hasBadge ? <Badge count={tab.badgeCount}>{tab.title}</Badge> : tab.title}
         </div>
       ))}
     </div>

@@ -11,6 +11,7 @@ interface IRedirect {
   document: RedirectFn<Empty>;
   report: RedirectFn<{ chapter: string }>;
   calendar: RedirectFn<Empty>;
+  login: RedirectFn<Empty>;
   move: RedirectFn<{ number: number }>;
 }
 
@@ -32,6 +33,9 @@ export const useRedirect = (): IRedirect => {
     },
     report: ({ chapter, search }) => {
       navigate({ pathname: setPathIds(adminPath.report, { chapter }), search });
+    },
+    login: ({ search }) => {
+      navigate({ pathname: adminPath.login, search });
     },
     // Move
     move: ({ number }) => navigate(number)
