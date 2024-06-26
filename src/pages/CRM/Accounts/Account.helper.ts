@@ -58,6 +58,10 @@ export const paymentRowHeaders = [
     classNames: ['title']
   },
   {
+    title: 'комментарий',
+    classNames: ['title']
+  },
+  {
     title: 'СО руководителя',
     classNames: ['title']
   },

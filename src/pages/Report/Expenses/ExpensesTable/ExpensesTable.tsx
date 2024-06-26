@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Button, DatePicker } from 'common/ui';
+import { Button, DatePicker, Icon } from 'common/ui';
 import { calculateTotalForNewItem, getCurrentDate } from '../Expenses.helper';
 import { IListItem, ITableData } from '../types/ITableData';
 import { ExpensesTableRow } from './ExpensesTableRow';
@@ -76,13 +76,17 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
                 }
               />
             </div>
-            {newExpenseData.list.map((el, idx) => (
-              <NewExpenseRow key={idx} item={el} onChange={(field, value) => handleInputChange(idx, field, value)} />
-            ))}
+            <div className={styles.inputsWrapper}>
+              {newExpenseData.list.map((el, idx) => (
+                <div className={styles.inputsInner} key={idx}>
+                  <NewExpenseRow item={el} onChange={(field, value) => handleInputChange(idx, field, value)} />
+                </div>
+              ))}
+            </div>
           </div>
-          <button className={styles.editAdd} onClick={addNewRow}>
-            +
-          </button>
+          <div className={styles.editAdd} onClick={addNewRow}>
+            <Icon type='plus-icon' />
+          </div>
           <div className={styles.btnWrapper}>
             <Button className={styles.editSave} styleType={BUTTON_TYPES.GREEN} text='Сохранить' onClick={addNewExpense} />
             <Button className={styles.editDelete} styleType={BUTTON_TYPES.LINK_GRAY} text='Отменить' onClick={() => setAddNew(false)} />

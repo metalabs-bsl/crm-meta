@@ -24,6 +24,7 @@ const data = [
     paymentDetails: [
       {
         paymentDateClient: '26.09.2024',
+        comment: 'Срок оплаты руководителя 26 июля',
         paymentDateSupervisor: '2024-09-26T00:00',
         invoice: [],
         amount: '100$',
@@ -35,6 +36,7 @@ const data = [
       },
       {
         paymentDateClient: '26.09.2024',
+        comment: 'Срок оплаты руководителя 26 июля',
         paymentDateSupervisor: '2024-09-26T00:00',
         invoice: [],
         amount: '100$',
@@ -46,6 +48,7 @@ const data = [
       },
       {
         paymentDateClient: '26.09.2024',
+        comment: 'Срок оплаты руководителя 26 июля',
         paymentDateSupervisor: '2024-09-26T00:00',
         invoice: [],
         amount: '100$',
@@ -73,6 +76,7 @@ const data = [
     paymentDetails: [
       {
         paymentDateClient: '26.09.2024',
+        comment: 'Срок оплаты руководителя 26 июля',
         paymentDateSupervisor: '2024-09-26T00:00',
         invoice: [],
         amount: '100$',

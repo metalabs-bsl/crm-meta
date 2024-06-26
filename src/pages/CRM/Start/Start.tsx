@@ -7,11 +7,11 @@ import styles from './styles.module.scss';
 
 const selectOptions: Options[] = [
   {
-    label: 'Мои',
+    label: 'Мои сделки',
     value: 'personal'
   },
   {
-    label: 'Общие',
+    label: 'Общие сделки',
     value: 'general'
   }
 ];

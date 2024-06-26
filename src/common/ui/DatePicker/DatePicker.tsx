@@ -5,9 +5,10 @@ import styles from './styles.module.scss';
 interface Iprops extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   defaultValue?: string;
+  minDate?: string;
 }
 
-export const DatePicker: FC<Iprops> = ({ className, defaultValue, ...res }) => {
+export const DatePicker: FC<Iprops> = ({ className, defaultValue, minDate, ...res }) => {
   // под вопросом
   // const [currentDateTime, setCurrentDateTime] = useState('');
 
@@ -20,5 +21,5 @@ export const DatePicker: FC<Iprops> = ({ className, defaultValue, ...res }) => {
   //   }
   // }, [defaultValue]);
 
-  return <input type='datetime-local' className={cn(styles.inp, className)} {...res} defaultValue={defaultValue} />;
+  return <input type='datetime-local' className={cn(styles.inp, className)} {...res} defaultValue={defaultValue} min={minDate} />;
 };

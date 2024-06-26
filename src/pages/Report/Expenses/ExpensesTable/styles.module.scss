@@ -11,8 +11,11 @@
     list-style: none;
   }
 
+  .test {
+    background-color: red;
+  }
+
   .head {
-    // position: relative;
     top: 0;
     left: 0;
     right: 0;
@@ -51,18 +54,13 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-    height: 100%;
+    height: 92%;
   }
 
-  // EDIT BLOCKS STYLES HERE
-  //    ||
-  //    \/
   .edit {
-    // margin-top: 40px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    gap: 5px 10px;
     padding: 10px;
     background: $seaSalt;
     box-shadow: 0 1px 5px 0 rgba(184, 184, 184, 0.1);
@@ -71,8 +69,22 @@
     .editWrapper {
       display: flex;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       height: 32px;
+      height: auto;
+    }
+
+    .inputsWrapper {
+      width: 100%;
+      gap: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inputsInner {
+      width: 100%;
+      display: flex;
+      gap: 5px;
     }
 
     .editDate {

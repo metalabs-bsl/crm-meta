@@ -142,7 +142,7 @@ export const Expenses = () => {
           <div className={styles.bodyHeading}>
             <div>
               <span className={styles.allExpenses}>Расходы за июнь 2024</span>
-              <span className={styles.monthTotal}>{totalPrice}</span>
+              <span className={styles.monthTotal}>{`${totalPrice} сом`}</span>
             </div>
             <div className={styles.btnWrapper}>
               <Button className={styles.greenBtn} styleType={BUTTON_TYPES.YELLOW} text='Добавить расход' onClick={() => setAddNew(true)} />
