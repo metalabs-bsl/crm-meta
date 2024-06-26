@@ -10,9 +10,6 @@
   background-color: $white;
   border-collapse: collapse;
 }
-td {
-  padding: 15px 30px;
-}
 .thead {
   position: relative;
   padding: 15px 30px;
@@ -30,7 +27,7 @@ td {
   font-family: var(--font-family);
 }
 .tbody {
-  max-height: 100%;
+  max-height: 90%;
   overflow-y: auto;
 }
 

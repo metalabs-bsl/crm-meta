@@ -1,5 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { Checkbox } from 'common/ui';
+import { DeleteModal } from 'common/components';
 import { DownloadDelete } from '../DownloadDelete';
 import { DocumentTableRow } from './DocumentTableRow';
 import styles from './Document.module.scss';
@@ -18,6 +19,7 @@ interface IProps {
 export const DocumentTable: FC<IProps> = ({ data }) => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   const handleSelectAll = useCallback(() => {
     setSelectAll((prev) => !prev);
@@ -28,13 +30,13 @@ export const DocumentTable: FC<IProps> = ({ data }) => {
     setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
   }, []);
 
-  const handleDelete = () => {
-    console.log('Удалить', selectedRows);
-  };
-
   const handleDownload = () => {
     console.log('Скачать', selectedRows);
   };
+
+  const handleDelete = useCallback(() => {
+    setOpenDeleteModal(true);
+  }, []);
 
   return (
     <div className={styles.tableContainer}>
@@ -56,6 +58,12 @@ export const DocumentTable: FC<IProps> = ({ data }) => {
         </div>
       </div>
       {selectedRows.length > 0 && <DownloadDelete onDelete={handleDelete} onDownload={handleDownload} />}
+      <DeleteModal
+        isOpen={openDeleteModal}
+        onCancel={() => setOpenDeleteModal(false)}
+        text={`Вы уверены, что хотите удалить счёт "${selectedRows}"?`}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };

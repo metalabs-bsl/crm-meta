@@ -56,6 +56,18 @@
   margin: 0 auto;
 }
 
+.modalInner {
+  gap: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.readyBtn {
+  width: 100%;
+  max-width: 200px;
+}
+
 @media (max-width: 991px) {
   .tableWrapper {
     overflow-x: auto;
