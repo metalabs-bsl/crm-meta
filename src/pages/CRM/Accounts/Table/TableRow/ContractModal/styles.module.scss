@@ -1,0 +1,30 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.contract_wrapper {
+  height: auto;
+  background: $white;
+
+  .contract {
+    background: $seaSalt;
+    width: 240px;
+    border-radius: 10px;
+    padding: 10px;
+
+    ul {
+      list-style: none;
+      margin-bottom: 10px;
+
+      .contractTitle,
+      .contractTitleNumber {
+        font-size: 14px;
+        color: $gray;
+        margin-bottom: 3px;
+      }
+
+      .contractName,
+      .contractPhone {
+        font-size: 16px;
+      }
+    }
+  }
+}

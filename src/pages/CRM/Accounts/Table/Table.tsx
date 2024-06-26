@@ -1,13 +1,14 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Checkbox } from 'common/ui';
 import { DeleteModal } from 'common/components';
-import { mainRowHeaders } from '../Account.helper';
+import { indexToBookingNumberForDeleteModal, mainRowHeaders } from '../Account.helper';
+import { TableRowData } from '../types/tableRowData';
 import { DeleteRow } from './DeleteRow';
 import { TableRow } from './TableRow';
 import styles from './styles.module.scss';
 
-const data = [
+const data: TableRowData[] = [
   {
     contractNumber: '1234567890',
     bookingNumber: '1234567890',
@@ -92,13 +93,14 @@ const data = [
 
 export const Table: FC = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [localData, setLocalData] = useState<TableRowData[]>([]);
 
   const handleSelectAll = useCallback(() => {
     setSelectAll((prev) => !prev);
-    setSelectedRows(() => (!selectAll ? data.map((_, index) => index) : []));
-  }, [selectAll]);
+    setSelectedRows(() => (!selectAll ? localData.map((_, index) => index) : []));
+  }, [selectAll, localData]);
 
   const handleSelectRow = useCallback((index: number) => {
     setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
@@ -106,6 +108,10 @@ export const Table: FC = () => {
 
   const handleDelete = useCallback(() => {
     setOpenDeleteModal(true);
+  }, []);
+
+  useEffect(() => {
+    setLocalData(data);
   }, []);
 
   return (
@@ -124,7 +130,7 @@ export const Table: FC = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {localData.map((row, index) => (
             <TableRow key={index} index={index} isSelected={selectedRows.includes(index)} onSelectRow={handleSelectRow} {...row} />
           ))}
         </tbody>
@@ -133,7 +139,7 @@ export const Table: FC = () => {
       <DeleteModal
         isOpen={openDeleteModal}
         onCancel={() => setOpenDeleteModal(false)}
-        text={`Вы уверены, что хотите удалить счёт "${selectedRows}"?`}
+        text={indexToBookingNumberForDeleteModal(selectedRows, localData) || ''}
         onDelete={handleDelete}
       />
     </div>

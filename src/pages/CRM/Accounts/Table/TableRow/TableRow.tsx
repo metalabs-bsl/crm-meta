@@ -1,7 +1,8 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Checkbox } from 'common/ui';
-import { Accordion } from 'common/components';
+import { Accordion, DropdownModal } from 'common/components';
+import { ContractModal } from './ContractModal';
 import { PaymentRow, PaymentRowProps } from './PaymentRow';
 import styles from './styles.module.scss';
 
@@ -46,6 +47,8 @@ export const TableRow: FC<TableRowProps> = ({
   whoCreated,
   paymentDetails
 }) => {
+  const contractNumberRef = useRef(null);
+  const [contractOpen, setContractOpen] = useState<boolean>(false);
   const allChecked = useMemo(() => paymentDetails.every((detail) => detail.isPaid), [paymentDetails]);
 
   const renderPaymentRowTitle = useCallback(
@@ -61,7 +64,16 @@ export const TableRow: FC<TableRowProps> = ({
         <td className={styles.item}>
           <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
         </td>
-        <td className={styles.item}>{contractNumber}</td>
+        <td className={styles.item}>
+          <span
+            className={styles.contractNumber}
+            onMouseEnter={() => setContractOpen(true)}
+            onMouseLeave={() => setContractOpen(false)}
+            ref={contractNumberRef}
+          >
+            {contractNumber}
+          </span>
+        </td>
         <td className={styles.item}>{bookingNumber}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
           {allChecked ? (
@@ -92,6 +104,9 @@ export const TableRow: FC<TableRowProps> = ({
           </Accordion>
         </td>
       </tr>
+      <DropdownModal targetRef={contractNumberRef} isOpen={contractOpen} onClose={() => setContractOpen(false)}>
+        <ContractModal name={'Азатов Азат'} phone={'+996500500500'} />
+      </DropdownModal>
     </>
   );
 };

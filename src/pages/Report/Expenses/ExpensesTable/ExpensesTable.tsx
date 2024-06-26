@@ -67,7 +67,6 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
           <div className={styles.editWrapper}>
             <div className={`${styles.editColumn} ${styles.editDate}`}>
               <DatePicker
-                // disabled={isEditable}
                 value={newExpenseData.creationDate}
                 onChange={(e) =>
                   setNewExpenseData((prev) => {

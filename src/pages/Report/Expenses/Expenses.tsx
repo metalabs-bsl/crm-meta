@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { StartEndPeriodPicker } from 'pages/CRM/Start/Personal/StartEndPeriodPicker';
 import { Button } from 'common/ui';
 import { ITableData } from './types/ITableData';
@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-const data = [
+const data: ITableData[] = [
   {
     creationDate: '2024-06-03T00:00',
     list: [
@@ -111,14 +111,12 @@ const data = [
   }
 ];
 
-export const Expenses = () => {
+export const Expenses: FC = () => {
   const [startDate, setStartDate] = useState<string>('2024-06-01T00:00');
   const [endDate, setEndDate] = useState<string>('2024-06-30T00:00');
   const [addNew, setAddNew] = useState<boolean>(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-
-  console.log(setTableData);
 
   useEffect(() => {
     const initializedData = addTotalToTableData(data);
