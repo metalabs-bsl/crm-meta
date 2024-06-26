@@ -12,85 +12,85 @@ import { BUTTON_TYPES } from 'types/enums';
 
 const data = [
   {
-    id: '1234567890',
+    id: '12345',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '123456780',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '12',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '1231123',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '75856',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '3456',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '89070',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '578567856',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '334523',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '4567456',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '45674547',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '567856875678',
     name: 'Азатов Азат Азатович',
     title: 'Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '3213412',
     name: 'Азатов Азат Азатович',
     title: 'Предпоследний Договор на случай если пришельцы решат напасть',
     file: 'PDF'
   },
   {
-    id: '1234567890',
+    id: '120934',
     name: 'Азатов Азат Азатович',
     title: 'Последний Договор на случай если пришельцы решат напасть',
     file: 'PDF'
@@ -208,8 +208,12 @@ export const Document = () => {
         </div>
         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
           <div className={styles.modalInner}>
-            <FilePicker />
-            <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' onClick={handleModalClose} />
+            <div className={styles.filePickerWrapper}>
+              <FilePicker />
+            </div>
+            <div className={styles.readyBtnWrapper}>
+              <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' onClick={handleModalClose} />
+            </div>
           </div>
         </Modal>
       </div>

@@ -56,11 +56,14 @@
   margin: 0 auto;
 }
 
-.modalInner {
-  gap: 40px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+.filePickerWrapper {
+  margin: 20px 0 30px;
+}
+
+.readyBtnWrapper {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
 }
 
 .readyBtn {
