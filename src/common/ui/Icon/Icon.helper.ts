@@ -11,6 +11,7 @@ import countPlusActive from '../../assets/icons/count-plus-active.svg';
 import deleteIcon from '../../assets/icons/deleteIcon.svg';
 import download from '../../assets/icons/download-icon.svg';
 import edit from '../../assets/icons/edit.svg';
+import goBackArrow from '../../assets/icons/goBackArrow.svg';
 import arrowDown from '../../assets/icons/header/arrow-down.svg';
 import arrowUp from '../../assets/icons/header/arrow-up.svg';
 import BurgerOpen from '../../assets/icons/header/burger.svg';
@@ -32,6 +33,7 @@ import link from '../../assets/icons/link.svg';
 import note from '../../assets/icons/note.svg';
 import plusGray from '../../assets/icons/plus-gray.svg';
 import plusIcon from '../../assets/icons/plus-icon.svg';
+import replyArrow from '../../assets/icons/replyArrow.svg';
 import clear from '../../assets/icons/search-clear.svg';
 import searchBlackIcon from '../../assets/icons/searchBlackIcon.svg';
 import search from '../../assets/icons/searchIcon.svg';
@@ -45,9 +47,15 @@ import mail from '../../assets/icons/sidebar/mail.svg';
 import mailDark from '../../assets/icons/sidebar/mail-dark.svg';
 import report from '../../assets/icons/sidebar/report.svg';
 import reportDark from '../../assets/icons/sidebar/report-dark.svg';
+import smsGrayIcon from '../../assets/icons/sms-gray.svg';
+import trashGrayIcon from '../../assets/icons/trash-gray.svg';
 import userIcon from '../../assets/icons/userIcon.svg';
 
 export const icons: IIcons = {
+  ['reply-arrow']: replyArrow,
+  ['go-back']: goBackArrow,
+  ['trash-gray']: trashGrayIcon,
+  ['sms-gray']: smsGrayIcon,
   ['arrow-down']: arrowDown,
   ['arrow-up']: arrowUp,
   ['burger-open']: BurgerOpen,

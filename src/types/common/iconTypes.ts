@@ -3,6 +3,10 @@ export type IIcons = {
 };
 
 export type IIconType =
+  | 'reply-arrow'
+  | 'go-back'
+  | 'sms-gray'
+  | 'trash-gray'
   | 'arrow-up'
   | 'arrow-down'
   | 'burger-open'
