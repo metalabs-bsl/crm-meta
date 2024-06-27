@@ -8,7 +8,7 @@
     align-items: center;
     background-color: $seaSalt;
     border-bottom: 1px solid $silver;
-    box-shadow: 0 1px 5px rgba(184, 184, 184, 0.1);
+    box-shadow: 0 1px 5px $dark-box-shadow;
   }
 
   .originalBody {

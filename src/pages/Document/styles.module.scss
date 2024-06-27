@@ -9,7 +9,7 @@
 
   .customTabsBlock {
     width: fit-content;
-    background: rgba(255, 255, 252, 0.3);
+    background: $gray-box-shadow;
     margin-bottom: 20px;
   }
   .customTab {
@@ -19,7 +19,7 @@
   .customActiveTab {
     color: $black;
     background: $white;
-    box-shadow: 0 1px 5px 0 rgba(184, 184, 184, 0.1);
+    box-shadow: 0 1px 5px 0 $dark-box-shadow;
   }
 }
 
@@ -51,7 +51,7 @@
   height: calc(100vh - 270px);
   background: $white;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px $black-box-shadow;
   overflow: hidden;
   margin: 0 auto;
 }

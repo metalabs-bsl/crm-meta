@@ -49,7 +49,6 @@ export const DocumentTable: FC<IProps> = ({ data }) => {
           <div className={`${styles.headTd} ${styles.name}`}>ФИО</div>
           <div className={`${styles.headTd} ${styles.naming}`}>название договора</div>
           <div className={`${styles.headTd} ${styles.format}`}>формат</div>
-          {/* <div className={`${styles.headTd} ${styles.action}`}>действие</div> */}
         </div>
         <div className={styles.tbody}>
           {data.map((el, index) => (

@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { Checkbox } from 'common/ui';
-import { DownloadDelete } from '../DownloadDelete'; // Импортируем компонент DownloadDelete
+import { DownloadDelete } from '../DownloadDelete';
 import { OriginalTableRow } from './OriginalTableRow';
 import styles from './styles.module.scss';
 

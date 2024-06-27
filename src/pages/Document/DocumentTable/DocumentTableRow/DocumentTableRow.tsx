@@ -58,16 +58,6 @@ export const DocumentTableRow: FC<IProps> = ({ index, data, isSelected, onSelect
           <p className={styles.fileType}>{file}</p>
         </div>
       </div>
-      {/* <div className={`${styles.bodyTd} ${styles.action}`}>
-        <div className={styles.iconsWrapper}>
-          <a href='#' className={styles.downloadIcon} download={test}>
-            <Icon type='download' />
-          </a>
-          <span className={styles.deleteIcon}>
-            <Icon type='delete' onClick={() => setDelOpen(true)} />
-          </span>
-        </div>
-      </div> */}
       <DeleteModal text={`Вы точно хотите удалить "${title}"`} isOpen={delOpen} onCancel={cancelDelete} onDelete={deleteDocument} />
     </div>
   );
