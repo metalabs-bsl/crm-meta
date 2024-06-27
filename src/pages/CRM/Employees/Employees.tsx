@@ -1,35 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
-import { Checkbox, DatePicker, Icon, SearchInput } from 'common/ui';
-import { DeleteModal, MultipleFilePicker } from 'common/components';
-import { columns, dataColumns } from './List/List';
-import { Column, DataColumn, EditOptions } from './types/types';
+import React, { useEffect, useState } from 'react';
+import { Checkbox, DatePicker, SearchInput } from 'common/ui';
+import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
+import AddEmployess from './AddEmployess/AddEmployess';
+import { DataColumn, EditOptions } from './types/types';
+import { columns, dataColumns } from './Employess.helper';
 import styles from './style.module.scss';
-
-interface EmployeesProps {
-  columns: Column[];
-  dataColumns: DataColumn[];
-}
 
 const isEditOptions = (isEdit: any): isEdit is EditOptions => {
   return isEdit && typeof isEdit === 'object' && 'value' in isEdit;
 };
 
-export const Employees: React.FC<EmployeesProps> = () => {
+export const Employees = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [isMainChecked, setIsMainChecked] = useState<boolean>(false);
+  const [tableData, setTableData] = useState<DataColumn[]>(dataColumns);
+  const [, setIsMainChecked] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedData, setEditedData] = useState<{ [key: number]: Partial<DataColumn> }>({});
-  const [files, setFiles] = useState<{ [key: number]: string[] }>({});
-  const [showFilePicker, setShowFilePicker] = useState<{ [key: number]: boolean }>({});
-  const [showPlusIcon, setShowPlusIcon] = useState<{ [key: number]: boolean }>({});
+  const [agreementFiles, setAgreementFiles] = useState<{ [key: number]: string[] }>({});
+  const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
+  const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
+  const [, setBirthdayData] = useState<{ [key: number]: Date | null }>({});
 
-  const handleMainCheckboxChange = (e: any) => {
+  const handleMainCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setIsMainChecked(checked);
     if (checked) {
-      setSelectedRows(dataColumns.map((_, index) => index));
+      setSelectedRows(tableData.map((_, index) => index));
     } else {
       setSelectedRows([]);
     }
@@ -46,6 +44,7 @@ export const Employees: React.FC<EmployeesProps> = () => {
   };
 
   const handleDelete = () => {
+    setTableData((prev) => prev.filter((_, index) => !selectedRows.includes(index)));
     setShowDeleteModal(false);
     setSelectedRows([]);
   };
@@ -56,20 +55,27 @@ export const Employees: React.FC<EmployeesProps> = () => {
 
   const handleEdit = () => {
     setIsEditing(true);
-    setShowPlusIcon(dataColumns.reduce((acc, _, index) => ({ ...acc, [index]: true }), {}));
   };
 
   const handleSave = () => {
+    setTableData((prev) => prev.map((item: any, index: number) => (editedData[index] ? { ...item, ...editedData[index] } : item)));
     setIsEditing(false);
     setSelectedRows([]);
     console.log('Saved Data:', editedData);
+
+    setEditedData({});
+    // setAgreementFiles({});
+    // setPassportFiles({});
+    setBirthdayData({});
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
     setSelectedRows([]);
     setEditedData({});
-    setShowPlusIcon({});
+    setAgreementFiles({});
+    setPassportFiles({});
+    setBirthdayData({});
   };
 
   const handleInputChange = (index: number, key: string, value: any) => {
@@ -82,137 +88,212 @@ export const Employees: React.FC<EmployeesProps> = () => {
     }));
   };
 
-  const handleFilesChange = (index: number, newFiles: string[]) => {
-    setFiles((prev) => ({
-      ...prev,
+  const handleAgreementFilesChange = (index: number, newFiles: string[]) => {
+    try {
+      console.log('Новые файлы договора:', newFiles);
+      setAgreementFiles((prevFiles) => ({
+        ...prevFiles,
+        [index]: newFiles
+      }));
+    } catch (error) {
+      console.error('Ошибка обработки файлов договора:', error);
+    }
+  };
+
+  const handlePassportFilesChange = (index: number, newFiles: string[]) => {
+    console.log('Новые файлы паспорта:', newFiles);
+    setPassportFiles((prevFiles) => ({
+      ...prevFiles,
       [index]: newFiles
     }));
-    setShowFilePicker((prev) => ({
+  };
+
+  const handleDateChange = (index: number, key: keyof Partial<DataColumn>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEditedData((prev) => ({
       ...prev,
-      [index]: true
+      [index]: {
+        ...prev[index],
+        [key]: value
+      }
     }));
   };
 
-  const handlePlusPicker = (index: number) => {
-    setShowFilePicker((prev) => ({
-      ...prev,
-      [index]: true
-    }));
-    setShowPlusIcon((prev) => ({
-      ...prev,
-      [index]: false
-    }));
-  };
+  useEffect(() => {
+    const initialAgreementFilesFromServer = dataColumns.reduce(
+      (acc, item, index) => {
+        if (item.agreement) {
+          acc[index] = item.agreement.split(',');
+        }
+        return acc;
+      },
+      {} as { [key: number]: string[] }
+    );
+
+    const initialPassportFilesFromServer = dataColumns.reduce(
+      (acc, item, index) => {
+        if (item.passport) {
+          acc[index] = item.passport.split(',');
+        }
+        return acc;
+      },
+      {} as { [key: number]: string[] }
+    );
+
+    setAgreementFiles(initialAgreementFilesFromServer);
+    setPassportFiles(initialPassportFilesFromServer);
+  }, []);
 
   return (
-    <div className={styles.wrapper}>
+    <>
       <div className={styles.employeesHeader}>
         <div className={styles.btn_title}>
           <h2 className={styles.title}>Сотрудники</h2>
-          <button className={styles.addEmployeeButton}>добавить сотрудника</button>
+          <button className={styles.addEmployeeButton} onClick={() => setShowAddEmployeeForm(true)}>
+            добавить сотрудника
+          </button>
         </div>
         <div>
           <SearchInput />
-          {!isEditing && <Icon type='plus-gray' onClick={() => setShowFilePicker({ 0: true })} />}
         </div>
       </div>
+      <div className={styles.wrapper}>
+        <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)}>
+          {showAddEmployeeForm && <AddEmployess />}
+        </Modal>
 
-      <div className={styles.employeesContainer}>
-        <table className={styles.employeesTable}>
-          <thead className={styles.tableHeader}>
-            <tr>
-              <th className={styles.check}>
-                <Checkbox checked={isMainChecked} onChange={handleMainCheckboxChange} />
-              </th>
-              {columns.map((column) => (
-                <th key={column.key}>{column.title}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {dataColumns.map((data, index) => (
-              <tr key={index}>
-                <td>
+        <div className={styles.employeesContainer}>
+          <table className={styles.employeesTable}>
+            <thead className={styles.tableHeader}>
+              <tr>
+                <th className={styles.main_checkbox}>
                   <Checkbox
-                    className={styles.checkbox}
-                    checked={selectedRows.includes(index)}
-                    onChange={() => handleCheckboxChange(index)}
+                    checked={selectedRows.length === tableData.length && tableData.length > 0}
+                    onChange={handleMainCheckboxChange}
+                    disabled={tableData.length === 0}
                   />
-                </td>
+                </th>
                 {columns.map((column) => (
-                  <td key={column.key}>
-                    {isEditing && selectedRows.includes(index) && column.isEdit ? (
-                      isEditOptions(column.isEdit) && column.isEdit.component === 'input' ? (
-                        <input
-                          type='text'
-                          value={editedData[index]?.[column.key] ?? data[column.key]}
-                          onChange={(e) => handleInputChange(index, column.key, e.target.value)}
-                          className={styles.editInput}
-                        />
-                      ) : isEditOptions(column.isEdit) && column.isEdit.component === 'select' ? (
-                        <select
-                          value={editedData[index]?.[column.key] ?? data[column.key]}
-                          onChange={(e) => handleInputChange(index, column.key, e.target.value)}
-                          className={styles.editSelect}
-                        >
-                          <option value='Менеджер'>Менеджер</option>
-                          <option value='Планктон'>Планктон</option>
-                          <option value='Спанчбоб'>Спанчбоб</option>
-                        </select>
-                      ) : column.key === 'agreement' ? (
-                        showPlusIcon[index] ? (
-                          <Icon type='plus-gray' onClick={() => handlePlusPicker(index)} />
-                        ) : (
-                          showFilePicker[index] && (
-                            <MultipleFilePicker
-                              files={files[index] ?? data[column.key].split(',')}
-                              editable={false}
-                              onFilesChange={(newFiles) => handleFilesChange(index, newFiles)}
-                            />
-                          )
-                        )
-                      ) : column.key === 'startDateInternship' || column.key === 'startDateWork' ? (
-                        <DatePicker onChange={(date) => handleInputChange(index, column.key, date)} />
-                      ) : (
-                        data[column.key]
-                      )
-                    ) : column.key === 'agreement' ? (
-                      data[column.key].split(',').map((file, fileIndex) => (
-                        <div key={fileIndex}>
-                          <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
-                            {file}
-                          </a>
-                        </div>
-                      ))
-                    ) : (
-                      data[column.key]
-                    )}
-                  </td>
+                  <th key={column.key}>{column.title}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {selectedRows.length > 0 && !isEditing && (
-          <div className={styles.actionButtons}>
-            <button onClick={handleEdit} className={styles.dtnEdit}>
-              Редактировать
-            </button>
-            <button onClick={() => setShowDeleteModal(true)} className={styles.btnDelete}>
-              Удалить
-            </button>
-          </div>
-        )}
-        {isEditing && (
-          <div className={styles.actionButtons}>
-            <button onClick={handleSave} className={styles.dtnEdit}>
-              Сохранить
-            </button>
-            <button onClick={handleCancelEdit} className={styles.btnDelete}>
-              Отменить
-            </button>
-          </div>
-        )}
+            </thead>
+            <tbody className={styles.table_body}>
+              {tableData.length === 0 ? (
+                <tr>
+                  <td colSpan={columns.length + 1} className={styles.emptyTable}>
+                    <h3 className={styles.table_text}> Добавьте данные</h3>
+                  </td>
+                </tr>
+              ) : (
+                tableData.map((data, index) => (
+                  <tr key={index}>
+                    <td className={styles.checkbox}>
+                      <Checkbox checked={selectedRows.includes(index)} onChange={() => handleCheckboxChange(index)} />
+                    </td>
+                    {columns.map((column) => (
+                      <td key={column.key}>
+                        {isEditing && selectedRows.includes(index) && column.isEdit ? (
+                          isEditOptions(column.isEdit) && column.isEdit.component === 'input' ? (
+                            <input
+                              type='text'
+                              value={editedData[index]?.[column.key] ?? data[column.key]}
+                              onChange={(e) => handleInputChange(index, column.key, e.target.value)}
+                              className={styles.editInput}
+                            />
+                          ) : isEditOptions(column.isEdit) && column.isEdit.component === 'select' ? (
+                            <select
+                              value={editedData[index]?.[column.key] ?? data[column.key]}
+                              onChange={(e) => handleInputChange(index, column.key, e.target.value)}
+                              className={styles.editSelect}
+                            >
+                              <option value='Менеджер'>Менеджер</option>
+                              <option value='Планктон'>Планктон</option>
+                              <option value='Спанчбоб'>Спанчбоб</option>
+                            </select>
+                          ) : column.key === 'agreement' ? (
+                            <MultipleFilePicker
+                              files={agreementFiles[index] ?? []}
+                              editable={false}
+                              onFilesChange={(newFiles) => handleAgreementFilesChange(index, newFiles)}
+                            />
+                          ) : column.key === 'passport' ? (
+                            <MultipleFilePicker
+                              files={passportFiles[index] ?? []}
+                              editable={false}
+                              onFilesChange={(newFiles) => handlePassportFilesChange(index, newFiles)}
+                            />
+                          ) : column.key === 'startDateWork' || column.key === 'startDateInternship' ? (
+                            <DatePicker
+                              defaultValue={
+                                editedData[index]?.[column.key]
+                                  ? new Date(editedData[index][column.key] as string).toISOString().slice(0, 16)
+                                  : undefined
+                              }
+                              onChange={handleDateChange(index, column.key)}
+                            />
+                          ) : column.key === 'birthday' ? (
+                            <DatePicker
+                              defaultValue={
+                                editedData[index]?.[column.key]
+                                  ? new Date(editedData[index][column.key] as string).toISOString().slice(0, 10)
+                                  : undefined
+                              }
+                              onChange={handleDateChange(index, column.key)}
+                            />
+                          ) : (
+                            data[column.key]
+                          )
+                        ) : column.key === 'agreement' ? (
+                          (agreementFiles[index] ?? data[column.key].split(',')).map((file, fileIndex) => (
+                            <div key={fileIndex}>
+                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
+                                {file || 'No file'}
+                              </a>
+                            </div>
+                          ))
+                        ) : column.key === 'passport' ? (
+                          (passportFiles[index] ?? data[column.key].split(',')).map((file, fileIndex) => (
+                            <div key={fileIndex}>
+                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
+                                {file || 'No file'}
+                              </a>
+                            </div>
+                          ))
+                        ) : (
+                          data[column.key]
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          {selectedRows.length > 0 && !isEditing && (
+            <div className={styles.actionButtons}>
+              <button className={styles.dtnEdit} onClick={handleEdit}>
+                Редактировать
+              </button>
+              <button className={styles.btnDelete} onClick={() => setShowDeleteModal(true)}>
+                Удалить
+              </button>
+            </div>
+          )}
+          {isEditing && (
+            <div className={styles.actionButtons}>
+              <button className={styles.dtnEdit} onClick={handleSave}>
+                Сохранить
+              </button>
+              <button className={styles.btnDelete} onClick={handleCancelEdit}>
+                Отменить
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       <DeleteModal
         isOpen={showDeleteModal}
@@ -220,17 +301,6 @@ export const Employees: React.FC<EmployeesProps> = () => {
         onDelete={handleDelete}
         onCancel={handleCancelDelete}
       />
-
-      {Object.keys(showFilePicker).map((index) =>
-        showFilePicker[Number(index)] ? (
-          <MultipleFilePicker
-            key={index}
-            files={files[Number(index)] ?? []}
-            editable={true}
-            onFilesChange={(newFiles) => handleFilesChange(Number(index), newFiles)}
-          />
-        ) : null
-      )}
-    </div>
+    </>
   );
 };

@@ -3,9 +3,9 @@ export { Employees } from '../Employees';
 // типы для таблиц
 
 export interface EditOptions {
-  value: boolean;
+  value: string;
   component?: 'input' | 'select';
-  options?: string[];
+  // options?: string[];
 }
 
 export interface Column {

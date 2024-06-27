@@ -1,5 +1,4 @@
-import { Employees } from '../Employees';
-import { Column, DataColumn } from '../types/types';
+import { Column, DataColumn } from './types/types';
 
 // список разделов таблице
 export const columns: Column[] = [
@@ -9,7 +8,11 @@ export const columns: Column[] = [
   },
   {
     title: 'дата рождения',
-    key: 'birthday'
+    key: 'birthday',
+    isEdit: {
+      value: true,
+      component: 'datepicker'
+    }
   },
 
   {
@@ -42,7 +45,7 @@ export const columns: Column[] = [
     key: 'startDateInternship',
     isEdit: {
       value: true,
-      component: 'input'
+      component: 'datepicker'
     }
   },
   {
@@ -50,7 +53,7 @@ export const columns: Column[] = [
     key: 'startDateWork',
     isEdit: {
       value: true,
-      component: 'input'
+      component: 'datepicker'
     }
   },
   {
@@ -65,7 +68,8 @@ export const columns: Column[] = [
     title: 'ID паспорт',
     key: 'passport',
     isEdit: {
-      value: true
+      value: true,
+      component: 'file'
     }
   }
 ];
@@ -91,13 +95,7 @@ export const dataColumns: DataColumn[] = [
     email: 'adyl@mail.ru',
     startDateInternship: '01.01.2024',
     startDateWork: '01.01.2024',
-    agreement: 'договор стажировки',
-    passport: '123456789'
+    agreement: 'договор  работы',
+    passport: '134501923'
   }
 ];
-
-const List = () => {
-  return <Employees columns={columns} dataColumns={dataColumns} />;
-};
-
-export default List;

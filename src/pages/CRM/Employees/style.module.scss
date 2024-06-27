@@ -9,7 +9,6 @@
   .btn_title {
     display: flex;
     gap: 50px;
-    align-items: center;
   }
 
   .title {
@@ -30,35 +29,26 @@
   }
 }
 
+.wrapper {
+  background: $white;
+  height: auto;
+  border-radius: 10px;
+}
+
 .employeesTable {
-  // width: 100%;
+  width: 100%;
   border-collapse: collapse;
   border-radius: 10px;
   overflow: hidden;
   background-color: $white;
 }
 
-// .tableHeader {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-// }
-
-.editInput,
-.editSelect {
-  background: $input-edit-bg;
-  border: none;
-  outline: none;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
 .employeesTable th,
 .employeesTable td {
-  padding: 15px 15px;
+  padding: 20px 16px;
   text-align: left;
   border-bottom: 1px solid $table-bottom-solid;
+  vertical-align: middle;
 }
 
 .employeesTable th {
@@ -68,8 +58,36 @@
 }
 
 .employeesTable td {
-  border-bottom: 1px solid $table-bottom-solid;
   color: $table-column-color;
+  word-wrap: break-word;
+}
+
+// .checkbox {
+//   padding: 0 auto;
+//   margin-left: 20px;
+//   position: relative;
+//   margin-top: 6px;
+
+//   &::after {
+//     content: '';
+//     position: absolute;
+//     top: 56px;
+//     // left: ;
+//     right: 0;
+//     height: 1px;
+//     width: 165%;
+//     background: $border-color;
+//   }
+// }
+
+.editInput,
+.editSelect {
+  background: $input-edit-bg;
+  border: none;
+  outline: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 15px;
 }
 
 .actionButtons {
@@ -77,6 +95,8 @@
   justify-content: center;
   gap: 30px;
   align-items: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
 }
 
 .dtnEdit {
@@ -86,6 +106,7 @@
   color: $gray-btn-bg-hover;
   border: none;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .btnDelete {
@@ -94,4 +115,5 @@
   font-size: 16px;
   border: none;
   border-radius: 10px;
+  cursor: pointer;
 }

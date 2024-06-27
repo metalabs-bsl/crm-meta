@@ -19,7 +19,7 @@ export const CRM: FC = () => {
       [crmChapters.transactions.chapter]: <Deals />,
       [crmChapters.accounts.chapter]: <Accounts />,
       [crmChapters.start.chapter]: <Start />,
-      [crmChapters.employees.chapter]: <Employees columns={[]} dataColumns={[]} />
+      [crmChapters.employees.chapter]: <Employees />
     };
     return components[chapter];
   };
