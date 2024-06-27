@@ -1,0 +1,32 @@
+@import '../../../common/styles/variables.scss';
+.empty {
+  width: 100%;
+  height: 100%;
+  background-color: $white;
+  gap: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  .imgWrapper {
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .emptyText {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3em;
+    text-align: center;
+    color: $gray;
+    font-family: var(--font-family);
+  }
+}

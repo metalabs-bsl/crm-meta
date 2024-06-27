@@ -1,0 +1,40 @@
+@import '../../../../../common/styles/variables.scss';
+
+.inputsWrapper {
+  width: 100%;
+}
+
+.editColumn {
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
+  .editInput {
+    border: none;
+    width: 100%;
+    display: inline-block;
+    border-radius: 5px;
+    background-color: $white;
+    padding: 0;
+    height: 32px;
+    & input {
+      font-weight: 400;
+      font-size: 16px;
+      color: $table-column-color;
+      padding: 5px 15px;
+    }
+  }
+}
+
+.editNaming {
+  width: 48%;
+}
+
+.editQuantity {
+  width: 25%;
+}
+
+.editPrice {
+  width: 25%;
+}

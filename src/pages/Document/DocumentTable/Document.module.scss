@@ -4,6 +4,7 @@
   background-color: #f8f8f8;
 }
 .table {
+  position: relative;
   width: 100%;
   height: 100%;
   color: $black;
@@ -12,11 +13,15 @@
 }
 .thead {
   position: relative;
-  padding: 15px 30px;
+  padding: 0px 30px;
   display: flex;
   align-items: center;
-  background-color: #f8f8f8;
+  background: $seaSalt;
   border-bottom: 1px solid $silver;
+  box-shadow: 0 1px 5px rgba(184, 184, 184, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .headTd {
   width: 100%;
@@ -24,6 +29,7 @@
   font-weight: 400;
   line-height: 1.3em;
   color: $gray;
+  padding: 15px 0;
   font-family: var(--font-family);
 }
 .tbody {

@@ -40,8 +40,8 @@ export const OriginalTable: FC<OriginalTableProps> = ({ originalData }) => {
         <div className={`${styles.originalTitle} ${styles.checkbox}`}>
           <Checkbox checked={selectAll} onChange={handleSelectAll} />
         </div>
-        <div className={`${styles.originalTitle} ${styles.naming}`}>Название договора</div>
-        <div className={`${styles.originalTitle} ${styles.format}`}>Формат</div>
+        <div className={`${styles.originalTitle} ${styles.naming}`}>название договора</div>
+        <div className={`${styles.originalTitle} ${styles.format}`}>формат</div>
       </div>
       <div className={styles.originalBody}>
         {originalData.map((el, index) => (

@@ -10,7 +10,14 @@ import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-const data = [
+export interface DocumentData {
+  id: string;
+  name: string;
+  title: string;
+  file: string;
+}
+
+const data: DocumentData[] = [
   {
     id: '12345',
     name: 'Азатов Азат Азатович',
