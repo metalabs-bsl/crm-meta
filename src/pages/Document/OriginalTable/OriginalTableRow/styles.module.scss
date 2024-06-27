@@ -1,0 +1,83 @@
+@import '../../../../common/styles/variables.scss';
+.originalRow {
+  width: 100%;
+  padding: 15px 30px;
+  display: flex;
+
+  .checkbox {
+    position: relative;
+    top: -13px;
+    margin-right: 15px;
+  }
+
+  .naming {
+    width: 93%;
+  }
+
+  .format {
+    width: 7%;
+  }
+
+  .dropDown {
+    position: relative;
+    width: 100%;
+    .btn {
+      padding: 2px 5px;
+      cursor: pointer;
+      display: inline-block;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.3em;
+      background-color: $seaSalt;
+      font-family: var(--font-family);
+      gap: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-transform: uppercase;
+      width: 100%;
+      max-width: 75px;
+      transition: all 0.3s;
+    }
+
+    .activeBtn {
+      border-radius: 5px 5px 0 0;
+    }
+
+    .arrow {
+      transition: all 0.3s;
+    }
+
+    .arrowActive {
+      transform: rotate(180deg);
+    }
+
+    .content {
+      position: absolute;
+      height: 0;
+      background-color: $seaSalt;
+      display: none;
+      padding: 2px 5px;
+      width: 100%;
+      max-width: 75px;
+      z-index: 10;
+    }
+
+    .contentActive {
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+    }
+
+    .fileType {
+      cursor: pointer;
+      margin-bottom: 5px;
+      transition: all 0.1s;
+
+      &:hover {
+        background-color: $white;
+      }
+    }
+  }
+}
