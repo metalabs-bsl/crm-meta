@@ -5,6 +5,7 @@ export const adminPath = {
   calendar: '/calendar',
   document: '/documents',
   mail: '/mail',
+  mailDetail: '/mail/:id',
   root: '/',
   report: '/report/:chapter'
 };
