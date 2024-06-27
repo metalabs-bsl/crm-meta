@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Navbar } from 'common/components';
 import { reportChapters } from 'common/constants';
@@ -8,7 +9,7 @@ import styles from './styles.module.scss';
 
 import { NAVBAR_PAGES } from 'types/enums';
 
-export const Report = () => {
+export const Report: FC = () => {
   const { chapter } = useParams<{ chapter: string }>();
   if (!chapter) return null;
 

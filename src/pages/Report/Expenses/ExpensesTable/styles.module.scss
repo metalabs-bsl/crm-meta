@@ -1,0 +1,124 @@
+@import '../../../../common/styles/variables.scss';
+
+.table {
+  position: relative;
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+
+  ul {
+    list-style: none;
+  }
+
+  .test {
+    background-color: red;
+  }
+
+  .head {
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .headText {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3em;
+    color: $gray;
+    font-family: var(--font-family);
+  }
+
+  .data {
+    width: 20%;
+  }
+
+  .naming {
+    width: 40%;
+  }
+
+  .quantity {
+    width: 20%;
+  }
+
+  .price {
+    width: 20%;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 92%;
+  }
+
+  .edit {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 10px;
+    background: $seaSalt;
+    box-shadow: 0 1px 5px 0 rgba(184, 184, 184, 0.1);
+    margin-bottom: 5px;
+
+    .editWrapper {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      height: 32px;
+      height: auto;
+    }
+
+    .inputsWrapper {
+      width: 100%;
+      gap: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inputsInner {
+      width: 100%;
+      display: flex;
+      gap: 5px;
+    }
+
+    .editDate {
+      width: 20%;
+    }
+
+    .editAdd {
+      cursor: pointer;
+      margin: 0 auto 10px;
+    }
+
+    .btnWrapper {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .editSave {
+      font-size: 16px;
+      font-weight: 400;
+      padding: 5px 20px;
+      line-height: 1.3em;
+    }
+
+    .editDelete {
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.3em;
+      text-transform: lowercase;
+      font-family: var(--font-family);
+    }
+  }
+}

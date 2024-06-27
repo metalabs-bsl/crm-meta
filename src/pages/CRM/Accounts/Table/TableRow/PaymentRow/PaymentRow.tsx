@@ -8,6 +8,7 @@ import styles from './styles.module.scss';
 
 export interface PaymentRowProps {
   paymentDateClient: string;
+  comment: string;
   paymentDateSupervisor: string;
   invoice: string[];
   amount: string;
@@ -29,6 +30,7 @@ const payOptions: Options[] = [
 
 export const PaymentRow: FC<PaymentRowProps> = ({
   paymentDateClient,
+  comment,
   paymentDateSupervisor,
   invoice,
   amount,
@@ -104,6 +106,7 @@ export const PaymentRow: FC<PaymentRowProps> = ({
         <tbody>
           <tr>
             <td className={styles.item}>{paymentDateClient}</td>
+            <td className={styles.item}>{comment}</td>
             <td className={styles.item}>
               <DatePicker
                 className={styles.datepicker}

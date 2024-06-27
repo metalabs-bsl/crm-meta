@@ -27,6 +27,10 @@
   }
 }
 
+.contractNumber {
+  text-decoration: underline;
+}
+
 .paymentStatus {
   font-weight: 400;
   font-size: 14px;
@@ -36,7 +40,7 @@
     border-radius: 10px;
   }
   &_true {
-    background-color: $main-green-bg;
+    background-color: $salat-round;
   }
   &_false {
     background-color: $not-paid;
