@@ -367,12 +367,14 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         <table className={styles.table}>
           <thead className={styles.table_wrapper}>
             <tr className={styles.table_titles}>
-              <th className={styles.main_checkbox}>
-                <Checkbox
-                  checked={selectedRows.length === tableData.length && tableData.length > 0}
-                  onChange={handleSelectAllRows}
-                  disabled={tableData.length === 0}
-                />
+              <th>
+                <div className={styles.main_checkbox}>
+                  <Checkbox
+                    checked={selectedRows.length === tableData.length && tableData.length > 0}
+                    onChange={handleSelectAllRows}
+                    disabled={tableData.length === 0}
+                  />
+                </div>
               </th>
               {columns.map((column) => (
                 <th key={column.key}>{column.title}</th>
@@ -388,7 +390,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
               </tr>
             ) : (
               tableData.map((row, index) => (
-                <tr key={index}>
+                <tr key={index} className={styles.table_wrap_column}>
                   <td className={styles.checkbox}>
                     <Checkbox checked={selectedRows.includes(index)} onChange={(e) => handleCheckboxChange(index, e)} />
                   </td>
