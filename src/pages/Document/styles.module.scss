@@ -6,6 +6,21 @@
   border-radius: 10px;
   padding: 20px 50px 10px 50px;
   background: $baby-powder;
+
+  .customTabsBlock {
+    width: fit-content;
+    background: $gray-box-shadow;
+    margin-bottom: 20px;
+  }
+  .customTab {
+    color: $white;
+  }
+
+  .customActiveTab {
+    color: $black;
+    background: $white;
+    box-shadow: 0 1px 5px 0 $dark-box-shadow;
+  }
 }
 
 .headBlock {
@@ -31,8 +46,29 @@
 }
 
 .tableWrapper {
-  border-radius: 10px;
+  position: relative;
+  width: calc(100vw - 254px);
+  height: calc(100vh - 270px);
+  background: $white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px $black-box-shadow;
   overflow: hidden;
+  margin: 0 auto;
+}
+
+.filePickerWrapper {
+  margin: 20px 0 30px;
+}
+
+.readyBtnWrapper {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.readyBtn {
+  width: 100%;
+  max-width: 200px;
 }
 
 @media (max-width: 991px) {

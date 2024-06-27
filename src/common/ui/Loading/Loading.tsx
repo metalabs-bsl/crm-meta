@@ -19,4 +19,3 @@ export const Loading: FC<IProps> = ({ isSpin = false, children }) => {
     </div>
   );
 };
-2;

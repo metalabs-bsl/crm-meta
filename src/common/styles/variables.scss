@@ -1,5 +1,10 @@
 @import './fonts.scss';
 
+// document-page box-shadow-color
+$dark-box-shadow: rgba(184, 184, 184, 0.1);
+$black-box-shadow: rgba(0, 0, 0, 0.1);
+$gray-box-shadow: rgba(255, 255, 252, 0.3);
+
 // фон кнопок
 $gray-btn-bg-default: #616161;
 $gray-btn-bg-hover: #242423;
@@ -22,6 +27,7 @@ $gray: #6f6f6f;
 $red: #e23333;
 $seaSalt: #f8f8f8;
 $silver: #c7c7c7;
+$lightRed: #ff5757;
 
 // палитра главного фона
 $main-pink-bg: #ea4c68;
@@ -47,8 +53,7 @@ $modalMask: rgba(#363636, 100%);
 
 $partial: #feda00;
 $not-paid: #ff2c2c;
-$not-paid-row: #FFDDDD;
-
+$not-paid-row: #ffdddd;
 
 $table-gray-bg: #ddd;
 $table-title-color: #6f6f6f;
