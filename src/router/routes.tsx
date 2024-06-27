@@ -16,19 +16,19 @@ export const mainRoutes: IRoute[] = [
   {
     path: paths.notFound,
     label: labels.notFound,
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <NotFound />
   },
   {
     path: paths.root,
     label: '',
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Navigate to={'/crm/transactions'} />
   },
   {
     path: paths.crm,
     label: labels.crm,
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR, ROLES.UNAUTHORIZED],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <CRM />
   },
   {
@@ -40,25 +40,25 @@ export const mainRoutes: IRoute[] = [
   {
     path: paths.calendar,
     label: labels.calendar,
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Calendar />
   },
   {
     path: paths.document,
     label: labels.document,
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Document />
   },
   {
     path: paths.mail,
     label: labels.mail,
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Mail />
   },
   {
     path: paths.report,
     label: labels.report,
-    roles: [ROLES.ADMIN, ROLES.INTERN, ROLES.MANAGER, ROLES.SUPERVISOR],
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Report />
   }
 ];

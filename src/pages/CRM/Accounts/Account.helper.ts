@@ -1,3 +1,5 @@
+import { TableRowData } from './types/tableRowData';
+
 export const mainRowHeaders = [
   {
     title: 'номер договора',
@@ -58,6 +60,10 @@ export const paymentRowHeaders = [
     classNames: ['title']
   },
   {
+    title: 'комментарий',
+    classNames: ['title']
+  },
+  {
     title: 'СО руководителя',
     classNames: ['title']
   },
@@ -90,3 +96,11 @@ export const paymentRowHeaders = [
     classNames: ['title']
   }
 ];
+
+export const indexToBookingNumberForDeleteModal = (selectedArr: number[], dataArr: TableRowData[]) => {
+  if (selectedArr.length === 1) {
+    return `Вы уверены, что хотите удалить счёт c номером договора: ${dataArr[selectedArr[0]].bookingNumber}?`;
+  } else {
+    return `Вы уверены, что хотите удалить счета c номерами договоров: ${selectedArr.map((idx) => dataArr[idx].bookingNumber).join(', ')}?`;
+  }
+};

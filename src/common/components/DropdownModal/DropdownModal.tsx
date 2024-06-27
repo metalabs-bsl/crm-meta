@@ -11,14 +11,27 @@ interface IProps {
 
 export const DropdownModal: FC<IProps> = ({ isOpen = false, children, targetRef, onClose }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [isAbove, setIsAbove] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    //за отностительную позицию от кликнутого элемента, который открывает DropdownModal
     if (isOpen && targetRef.current && modalRef.current) {
       const { top, left, height, width } = targetRef.current.getBoundingClientRect();
-      const { width: modalWidth } = modalRef.current.getBoundingClientRect();
-      setPosition({ top: top + height + 30, left: left - modalWidth / 2 + width / 2 });
+      const { height: modalHeight, width: modalWidth } = modalRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      const spaceBelow = viewportHeight - (top + height) - 30;
+      const spaceAbove = top - 30;
+
+      let topPosition = top + height + 30;
+      let above = false;
+      if (spaceBelow < modalHeight && spaceAbove > modalHeight) {
+        topPosition = top - modalHeight - 30;
+        above = true;
+      }
+
+      setPosition({ top: topPosition, left: left - modalWidth / 2 + width / 2 });
+      setIsAbove(above);
     }
   }, [isOpen, targetRef]);
 
@@ -30,12 +43,10 @@ export const DropdownModal: FC<IProps> = ({ isOpen = false, children, targetRef,
         targetRef.current &&
         !targetRef.current.contains(event.target as Node)
       ) {
-        // Если клик был за пределами модального окна, закрыть его
         onClose();
       }
     }
 
-    // Добавляем обработчик клика при открытии модального окна
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -54,7 +65,7 @@ export const DropdownModal: FC<IProps> = ({ isOpen = false, children, targetRef,
 
   return createPortal(
     <div className={styles.container} ref={modalRef} style={{ top: position.top, left: position.left, display: isOpen ? 'block' : 'none' }}>
-      <div className={styles.arrow} />
+      <div className={`${styles.arrow} ${isAbove ? styles.arrowDown : ''}`} />
       {children}
     </div>,
     modalRoot

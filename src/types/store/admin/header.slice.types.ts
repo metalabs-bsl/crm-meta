@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { IUserInfoRes } from 'types/entities/login';
 import { IROLE } from 'types/roles';
 
 import { BG_TYPES } from 'types/enums';
@@ -18,5 +19,7 @@ export type ISidebarAction = PayloadAction<boolean>;
 export interface ILoginState {
   isAuthorized: boolean;
   role: IROLE.RoleObject;
+  accessToken: null | string;
+  userInfo: null | IUserInfoRes;
 }
 export type IAuthorizedAaction = PayloadAction<boolean>;

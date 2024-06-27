@@ -8,23 +8,23 @@ import { BUTTON_TYPES } from 'types/enums';
 export const CreateFileForm = () => {
   const [options] = useState<Options[]>([
     {
-      label: 'Первая часть',
+      label: 'Первая оплата',
       value: 'first'
     },
     {
-      label: 'Вторая часть',
+      label: 'Вторая оплата',
       value: 'second'
     },
     {
-      label: 'Третья часть',
+      label: 'Третья оплата',
       value: 'third'
     },
     {
-      label: 'Четвертая часть',
+      label: 'Четвертая оплата',
       value: 'fourth'
     },
     {
-      label: 'Пятая часть',
+      label: 'Пятая оплата',
       value: 'fifth'
     }
   ]);
@@ -32,6 +32,7 @@ export const CreateFileForm = () => {
   return (
     <form className={styles.form}>
       <Select options={options} />
+      <textarea name='' id='' placeholder='Напишите что нужно сделать'></textarea>
       <FilePicker />
       <Button styleType={BUTTON_TYPES.YELLOW} text='отправить' />
     </form>

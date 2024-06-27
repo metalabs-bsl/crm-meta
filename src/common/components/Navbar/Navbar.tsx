@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
+import { Badge } from 'common/ui';
 import { useAppSelector, useRedirect } from 'common/hooks';
 import { INavbar } from 'common/constants';
 import { loginSelectors } from 'api/admin/login/login.selectors';
@@ -26,16 +27,17 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
     <nav className={styles.navBar}>
       <ul>
         {Object.values(navbarItems).map((item, index) => {
-          if (!!item.allowRoles.length && !item.allowRoles.includes(role.role)) {
+          if (!!item.allowRoles.length && !item.allowRoles.includes(role.role_name)) {
             return null;
           }
+
           return (
             <li
-              className={cn({ [styles.activeChapter]: pathname.includes(item.chapter) })}
               key={index}
+              className={cn({ [styles.activeChapter]: pathname.includes(item.chapter) })}
               onClick={() => onNavigate(item.chapter)}
             >
-              {item.title}
+              {item.chapter === 'accounts' ? <Badge count={1}>{item.title}</Badge> : item.title}
             </li>
           );
         })}

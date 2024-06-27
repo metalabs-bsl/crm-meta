@@ -1,19 +1,30 @@
 import { useState } from 'react';
 import { Button, Icon } from 'common/ui';
+import { useNotify } from 'common/hooks';
+import { useEndMutation, useGetWorkTimeInfoQuery, useStartMutation } from 'api/admin/workTime/workTime.api';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
 export const StartWindow = () => {
+  const notify = useNotify();
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
+  const [start] = useStartMutation();
+  const [end] = useEndMutation();
+  const { data } = useGetWorkTimeInfoQuery();
 
   const onStart = () => {
     setIsStart(true);
+    start()
+      .unwrap()
+      .then(() => setIsStart(true))
+      .catch((e) => notify(e.data.message, 'error'));
   };
 
   const onStop = () => {
     setIsStart(false);
+    data && end(data.id).unwrap();
   };
 
   const onActivateTimeOut = () => {
