@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { Button, Checkbox, Input, Loading } from 'common/ui';
-import { useLoginMutation } from 'api/admin/login/login.api';
+import { useNotify, useRedirect } from 'common/hooks';
+import { crmChapters, MESSAGE } from 'common/constants';
+import { useLazyGetUserInfoQuery, useLoginMutation } from 'api/admin/login/login.api';
 import styles from './styles.module.scss';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,21 +20,30 @@ export const LoginForm: FC = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<IFormInput>();
+  const notify = useNotify();
+  const redirect = useRedirect();
+  const [getUserInfo, { isFetching }] = useLazyGetUserInfoQuery();
   const [login, { isLoading }] = useLoginMutation();
-
   const isFormValid = Object.keys(errors).length === 0;
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log('userData', data);
     const loginData = {
       login: data.email,
       password: data.password
     };
-    login(loginData);
+    login(loginData)
+      .unwrap()
+      .then(() =>
+        getUserInfo()
+          .unwrap()
+          .then(() => redirect.crm({ chapter: crmChapters.transactions.chapter }))
+          .catch(() => notify(MESSAGE.ERROR, 'error'))
+      )
+      .catch(() => notify(MESSAGE.ERROR, 'error'));
   };
 
   return (
-    <Loading isSpin={isLoading}>
+    <Loading isSpin={isLoading || isFetching}>
       <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
         <h1>Авторизация</h1>
         <Input {...register('email', { required: 'Email is required' })} placeholder='Логин' className={styles.loginInp} />

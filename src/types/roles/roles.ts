@@ -1,2 +1,2 @@
-export type UserRoleUnionType = 'Admin' | 'Intern' | 'Manager' | 'Supervisor' | 'Unauthorized';
-export type UserRoletTitle = 'Администратор' | 'Стажёр' | 'Менеджер' | 'Менеджер - Руководитель' | 'Неавторизованный';
+export type UserRoleUnionType = 'Director' | 'Intern' | 'Manager' | 'Senior Manager' | 'Unauthorized';
+export type UserRoletTitle = 'Директор' | 'Стажёр' | 'Менеджер' | 'Менеджер - Руководитель' | 'Неавторизованный';

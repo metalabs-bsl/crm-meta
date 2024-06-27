@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { IColumn } from '../../Deals.helper';
+import { IColumn } from 'types/entities';
 import { Column } from '../Column';
 
 import { useDrag, useDrop } from 'react-dnd';
 
 interface DraggableColumnProps {
   col: IColumn;
-  onDropTask: (id: number, newStatus: string, targetIndex: number) => void;
+  onDropTask: (id: string, targetColIndex: number, targetIndex: number) => void;
   index: number;
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
 }
@@ -32,7 +32,7 @@ export const DraggableColumn: FC<DraggableColumnProps> = ({ col, onDropTask, ind
 
   return (
     <div ref={(node) => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Column col={col} onDrop={onDropTask} />
+      <Column col={col} onDrop={onDropTask} index={index} />
     </div>
   );
 };

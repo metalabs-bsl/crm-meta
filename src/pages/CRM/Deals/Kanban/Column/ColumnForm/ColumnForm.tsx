@@ -19,7 +19,7 @@ const colors = [
 ];
 
 interface IFormProps {
-  title: string;
+  column_name: string;
   color: string;
 }
 
@@ -36,7 +36,7 @@ export const ColumnForm: FC<IProps> = ({ formProps, onCancel }) => {
     formState: { errors }
   } = useForm<IFormProps>({
     defaultValues: {
-      title: formProps?.title ?? '',
+      column_name: formProps?.column_name ?? '',
       color: formProps?.color ?? colors[0].status
     }
   });
@@ -49,7 +49,7 @@ export const ColumnForm: FC<IProps> = ({ formProps, onCancel }) => {
 
   useEffect(() => {
     if (formProps) {
-      setValue('title', formProps.title);
+      setValue('column_name', formProps.column_name);
       setActiveColor(formProps.color);
     }
   }, [formProps, setValue]);
@@ -76,10 +76,10 @@ export const ColumnForm: FC<IProps> = ({ formProps, onCancel }) => {
         <label>Название доски</label>
         <Input
           placeholder='Введите название'
-          className={cn(styles.inp, { [styles.error]: errors.title })}
-          {...register('title', { required: 'Название доски обязательно' })}
+          className={cn(styles.inp, { [styles.error]: errors.column_name })}
+          {...register('column_name', { required: 'Название доски обязательно' })}
         />
-        {errors.title && <span className={styles.errorMessage}>{errors.title.message}</span>}
+        {errors.column_name && <span className={styles.errorMessage}>{errors.column_name.message}</span>}
       </div>
       <div className={styles.modalBtnWrapper}>
         <Button text='сохранить' styleType={BUTTON_TYPES.YELLOW} type='submit' />
