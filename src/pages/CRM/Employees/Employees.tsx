@@ -64,8 +64,6 @@ export const Employees = () => {
     console.log('Saved Data:', editedData);
 
     setEditedData({});
-    // setAgreementFiles({});
-    // setPassportFiles({});
     setBirthdayData({});
   };
 
@@ -166,12 +164,14 @@ export const Employees = () => {
           <table className={styles.employeesTable}>
             <thead className={styles.tableHeader}>
               <tr>
-                <th className={styles.main_checkbox}>
-                  <Checkbox
-                    checked={selectedRows.length === tableData.length && tableData.length > 0}
-                    onChange={handleMainCheckboxChange}
-                    disabled={tableData.length === 0}
-                  />
+                <th>
+                  <div className={styles.main_checkbox}>
+                    <Checkbox
+                      checked={selectedRows.length === tableData.length && tableData.length > 0}
+                      onChange={handleMainCheckboxChange}
+                      disabled={tableData.length === 0}
+                    />
+                  </div>
                 </th>
                 {columns.map((column) => (
                   <th key={column.key}>{column.title}</th>
@@ -188,8 +188,10 @@ export const Employees = () => {
               ) : (
                 tableData.map((data, index) => (
                   <tr key={index}>
-                    <td className={styles.checkbox}>
-                      <Checkbox checked={selectedRows.includes(index)} onChange={() => handleCheckboxChange(index)} />
+                    <td>
+                      <div className={styles.checkbox}>
+                        <Checkbox checked={selectedRows.includes(index)} onChange={() => handleCheckboxChange(index)} />
+                      </div>
                     </td>
                     {columns.map((column) => (
                       <td key={column.key}>

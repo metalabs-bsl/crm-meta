@@ -45,7 +45,7 @@
 
 .employeesTable th,
 .employeesTable td {
-  padding: 20px 16px;
+  padding: 20px 10px;
   text-align: left;
   border-bottom: 1px solid $table-bottom-solid;
   vertical-align: middle;
@@ -62,23 +62,19 @@
   word-wrap: break-word;
 }
 
-// .checkbox {
-//   padding: 0 auto;
-//   margin-left: 20px;
-//   position: relative;
-//   margin-top: 6px;
+.main_checkbox {
+  margin-bottom: 20px;
+  margin-left: 12px;
+}
 
-//   &::after {
-//     content: '';
-//     position: absolute;
-//     top: 56px;
-//     // left: ;
-//     right: 0;
-//     height: 1px;
-//     width: 165%;
-//     background: $border-color;
-//   }
-// }
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 20px;
+  margin-left: 8px;
+}
 
 .editInput,
 .editSelect {
