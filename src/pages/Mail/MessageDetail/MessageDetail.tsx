@@ -1,14 +1,36 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Icon, Loading } from 'common/ui';
+import { mockData } from '../Mail.helper';
+import { IMailChainData, IMailData } from '../types/mailsData';
 import styles from './styles.module.scss';
 
 export const MessageDetail = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [data, setData] = useState<{ mailChain: IMailChainData[]; theme: string }>({ mailChain: [], theme: '' });
+
+  const findMailChainAndThemeById = useCallback(
+    (data: IMailData[]): { mailChain: IMailChainData[]; theme: string } => {
+      const foundMail = data.find((el) => String(el.id) === id);
+      return { mailChain: foundMail ? foundMail.mailChain : [], theme: foundMail?.theme || '' };
+    },
+    [id]
+  );
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    setData(findMailChainAndThemeById(mockData));
+  }, [findMailChainAndThemeById]);
+
   return (
     <Loading>
       <div className={styles.message}>
         <div className={styles.messageHead}>
-          <a href='#'>
-            <Icon type='go-back' />
-          </a>
+          <Icon className={styles.back} type='go-back' onClick={handleGoBack} />
           <h1>Пришельцы решили действовать!</h1>
           <div className={styles.btnWrapper}>
             <div className={styles.btnInner}>

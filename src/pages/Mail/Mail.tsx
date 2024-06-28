@@ -15,6 +15,7 @@ export const Mail: FC = () => {
   const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
 
   useEffect(() => {
+    console.log(mockData);
     setData(mockData);
   }, []);
 
@@ -37,7 +38,7 @@ export const Mail: FC = () => {
           activeTabClassName={styles.activeTab}
         />
         <div className={styles.tableWrapper}>
-          <MessageTable messages={data} columns={columns} />
+          <MessageTable data={data} columns={columns} />
         </div>
       </div>
     </Loading>
