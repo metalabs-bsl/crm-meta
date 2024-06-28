@@ -18,6 +18,8 @@ export const MessageDetail = () => {
     [id]
   );
 
+  console.log(data);
+
   const handleGoBack = () => {
     navigate(-1);
   };
