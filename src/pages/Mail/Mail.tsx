@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
+import MessageModal from './MessageModal/MessageModal';
 import { IMailData } from './types/mailsData';
 import { mailTabs, mockData } from './Mail.helper';
 import { MessageTable } from './MessageTable';
@@ -13,6 +14,13 @@ const columns = ['отправитель', 'сообщение', 'дата'];
 export const Mail: FC = () => {
   const [data, setData] = useState<IMailData[]>([]);
   const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
+
+  const [isModalActive, setModalActive] = useState<boolean>(false);
+
+  const handleModalOpen = () => {
+    setModalActive(true);
+    console.log('show modal');
+  };
 
   useEffect(() => {
     console.log(mockData);
