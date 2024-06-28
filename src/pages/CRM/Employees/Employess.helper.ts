@@ -79,22 +79,22 @@ export const dataColumns: DataColumn[] = [
   {
     fullName: 'Almaz Almazov Almazovich',
     status: 'Менеджер руководитель',
-    birthday: '01.01.1990',
+    birthday: '04.07.2024T00:00',
     phoneNumber: '+996222123123',
     email: 'almaz@mail.ru',
-    startDateInternship: '01.01.2022',
-    startDateWork: '01.01.2022',
+    startDateInternship: '12.02.2024T00:00',
+    startDateWork: '01.01.2024T00:00',
     agreement: 'договор стажировки',
     passport: '123456789'
   },
   {
     fullName: 'Adil Adylov Adylovich',
     status: 'Менеджер',
-    birthday: '01.01.1990',
+    birthday: '04.07.2024T00:00',
     phoneNumber: '+996222123123',
     email: 'adyl@mail.ru',
-    startDateInternship: '01.01.2024',
-    startDateWork: '01.01.2024',
+    startDateInternship: '06.05.2024T00:00',
+    startDateWork: '04.07.2024T00:00',
     agreement: 'договор  работы',
     passport: '134501923'
   }

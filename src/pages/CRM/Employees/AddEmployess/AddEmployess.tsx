@@ -7,20 +7,9 @@ const AddEmployess = () => {
   const [status, setStatus] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  // const [internshipDate, setInternshipDate] = useState<string>('');
-  // const [workDate, setWorkDate] = useState<string>('');
-  // const [, setContract] = useState<File | null>(null);
-  // const [passportId, setPassportId] = useState<string>('');
-
-  // const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files) {
-  //     setContract(e.target.files[0]);
-  //   }
-  // };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Обработка отправки формы
   };
 
   return (
@@ -70,18 +59,15 @@ const AddEmployess = () => {
           <div className={styles.dates}>
             <div className={styles.field}>
               <label>Дата начала стажировки</label>
-              {/* <input type='date' value={internshipDate} onChange={(e) => setInternshipDate(e.target.value)} /> */}
               <DatePicker />
             </div>
             <div className={styles.field}>
               <label>Дата начала работы</label>
-              {/* <input type='date' value={workDate} onChange={(e) => setWorkDate(e.target.value)} /> */}
               <DatePicker />
             </div>
           </div>
           <div className={styles.agreement}>
             <label>Договор</label>
-            {/* <input type='file' onChange={handleFileChange} className={styles.agreement_field} /> */}
             <FilePicker />
           </div>
           <div className={styles.passport}>
