@@ -35,7 +35,7 @@ export const mockData: IMailData[] = [
         name: 'Азатов Азат Азатович',
         email: 'azatovaza@gmail.com',
         date: 'ср, 5 июня 2024, 18:30',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum nulla sit amet nisi fringilla porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla ipsum, ullamcorper eu egestas vel, sollicitudin sit amet augue. Nam molestie leo eu pretium rhoncus. Nulla at metus pellentesque, feugiat turpis id, placerat massa. Ut id porta neque, ut lobortis augue.\n С уважением Абдулла и команда Хакуна Матата'
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum nulla sit amet nisi fringilla porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla ipsum, ullamcorper eu egestas vel, sollicitudin sit amet augue. Nam molestie leo eu pretium rhoncus. Nulla at metus pellentesque, feugiat turpis id, placerat massa. Ut id porta neque, ut lobortis augue.\n \nС уважением Абдулла и команда Хакуна Матата'
       },
       {
         image: 'https://photocasa.ru/uploads/posts/2016-06/1465055358_img_3794-1.jpg',
@@ -77,3 +77,9 @@ export const mockData: IMailData[] = [
     checked: false
   }
 ];
+
+export const userMailData = {
+  image: 'https://photocasa.ru/uploads/posts/2016-06/1465055358_img_3794-1.jpg',
+  name: 'Апсаматова Аки',
+  email: 'apsamatovaaki@gmail.com'
+};
