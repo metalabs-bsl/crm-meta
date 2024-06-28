@@ -1,5 +1,12 @@
 @import '../../../../common/styles/variables.scss';
 
+.wrapper {
+  padding: 20px;
+  &:not(:first-child) {
+    border-top: 2px solid $seaSalt;
+  }
+}
+
 .card {
   width: 100%;
   padding: 24px;
@@ -8,12 +15,12 @@
   gap: 20px;
   display: flex;
   align-items: flex-start;
-  margin-bottom: 40px;
 
   .imgWrapper {
     width: 45px;
     height: 45px;
     border-radius: 50%;
+    border: 2px solid $silver;
     overflow: hidden;
     background-color: $white;
 
@@ -59,6 +66,7 @@
     font-weight: 400;
     line-height: 1.3em;
     margin-bottom: 20px;
+    white-space: pre-wrap;
   }
 }
 

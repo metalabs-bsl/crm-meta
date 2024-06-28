@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Icon, Loading } from 'common/ui';
+import { Button, Icon, Loading } from 'common/ui';
 import { mockData } from '../Mail.helper';
 import { IMailChainData, IMailData } from '../types/mailsData';
 import { MessageCard } from './MessageCard';
 import styles from './styles.module.scss';
+
+import { BUTTON_TYPES } from 'types/enums';
 
 export const MessageDetail = () => {
   const navigate = useNavigate();
@@ -50,6 +52,9 @@ export const MessageDetail = () => {
           {data.mailChain.map((el, idx) => (
             <MessageCard {...el} key={idx} />
           ))}
+          <div className={styles.answerBtn}>
+            <Button text={'ответить'} styleType={BUTTON_TYPES.YELLOW} />
+          </div>
         </div>
       </div>
     </Loading>

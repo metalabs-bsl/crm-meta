@@ -28,14 +28,14 @@ export const mockData: IMailData[] = [
     id: 1,
     sender: 'John Doe',
     theme: 'Я так понимаю это заголовок темы письма',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum nulla sit amet nisi fringilla porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla ipsum, ullamcorper eu egestas vel, sollicitudin sit amet augue. Nam molestie leo eu pretium rhoncus. Nulla at metus pellentesque, feugiat turpis id, placerat massa. Ut id porta neque, ut lobortis augue. Donec suscipit, nisl quis ultricies hendrerit, augue lectus vestibulum lacus, ac aliquam velit tortor sed orci. In hac habitasse platea dictumst. Aliquam luctus nisi vitae posuere venenatis. Integer tristique quam eget est maximus vulputate. Vestibulum egestas nisi lectus, nec rutrum ex congue id.',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum nulla sit amet nisi fringilla porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla ipsum, ullamcorper eu egestas vel, sollicitudin sit amet augue. Nam molestie leo eu pretium rhoncus. Nulla at metus pellentesque, feugiat turpis id, placerat massa. Ut id porta neque, ut lobortis augue.\nС уважением Абдулла и команда Хакуна Матата',
     mailChain: [
       {
         image: 'https://cdn.pixabay.com/photo/2021/11/19/20/20/man-6810238_960_720.jpg',
         name: 'Азатов Азат Азатович',
         email: 'azatovaza@gmail.com',
         date: 'ср, 5 июня 2024, 18:30',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum nulla sit amet nisi fringilla porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla ipsum, ullamcorper eu egestas vel, sollicitudin sit amet augue. Nam molestie leo eu pretium rhoncus. Nulla at metus pellentesque, feugiat turpis id, placerat massa. Ut id porta neque, ut lobortis augue. Donec suscipit, nisl quis ultricies hendrerit, augue lectus vestibulum lacus, ac aliquam velit tortor sed orci. In hac habitasse platea dictumst. Aliquam luctus nisi vitae posuere venenatis. Integer tristique quam eget est maximus vulputate. Vestibulum egestas nisi lectus, nec rutrum ex congue id.'
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fermentum nulla sit amet nisi fringilla porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla ipsum, ullamcorper eu egestas vel, sollicitudin sit amet augue. Nam molestie leo eu pretium rhoncus. Nulla at metus pellentesque, feugiat turpis id, placerat massa. Ut id porta neque, ut lobortis augue.\n С уважением Абдулла и команда Хакуна Матата'
       },
       {
         image: 'https://photocasa.ru/uploads/posts/2016-06/1465055358_img_3794-1.jpg',
