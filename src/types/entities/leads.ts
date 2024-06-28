@@ -8,7 +8,6 @@ export interface ICreateLeadParams {
   date_created: Date;
   column_id: string;
 }
-
 export interface ISourse {
   id: string;
   created_at: string;
