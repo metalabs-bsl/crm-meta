@@ -1,0 +1,115 @@
+@import '../../../common/styles/variables.scss';
+
+.employeesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .btn_title {
+    display: flex;
+    gap: 50px;
+  }
+
+  .title {
+    color: $white;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .addEmployeeButton {
+    background-color: $btn_employess;
+    border: none;
+    padding: 5px 20px;
+    color: $table-column-color;
+    font-weight: 400;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+}
+
+.wrapper {
+  background: $white;
+  height: auto;
+  border-radius: 10px;
+}
+
+.employeesTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: $white;
+}
+
+.employeesTable th,
+.employeesTable td {
+  padding: 20px 10px;
+  text-align: left;
+  border-bottom: 1px solid $table-bottom-solid;
+  vertical-align: middle;
+}
+
+.employeesTable th {
+  background-color: $input-edit-bg;
+  color: $table-title-color;
+  font-weight: 400;
+}
+
+.employeesTable td {
+  color: $table-column-color;
+  word-wrap: break-word;
+}
+
+.main_checkbox {
+  margin-bottom: 20px;
+  margin-left: 12px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 20px;
+  margin-left: 8px;
+}
+
+.editInput,
+.editSelect {
+  background: $input-edit-bg;
+  border: none;
+  outline: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.dtnEdit {
+  padding: 5px 20px;
+  background: $yellow-btn-bg;
+  font-size: 16px;
+  color: $gray-btn-bg-hover;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btnDelete {
+  padding: 5px 20px;
+  background: $gray-btn;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
