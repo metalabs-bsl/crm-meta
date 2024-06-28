@@ -4,7 +4,7 @@ export interface IMailChainData {
   email: string;
   date: string;
   text: string;
-  reply?: string;
+  reply?: IMailChainData;
 }
 
 export interface IMailData {
