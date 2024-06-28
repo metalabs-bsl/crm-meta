@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ROLES } from 'types/roles';
 import { IAuthorizedAaction, ILoginState } from 'types/store/admin/header.slice.types';
-// import { setBoard, setConnected } from '../kanban/kanban.slice';
 import { loginApi } from './login.api';
-
-// import { disconnectSocket } from 'socket';
 
 const initialState: ILoginState = {
   isAuthorized: false,
@@ -23,9 +20,6 @@ export const loginSlice = createSlice({
     logout: (state) => {
       (state.userInfo = null), (state.role = ROLES.UNAUTHORIZED), (state.accessToken = null);
       localStorage.clear();
-      // disconnectSocket();
-      // setBoard([]);
-      // setConnected(false);
     }
   },
   extraReducers(builder) {

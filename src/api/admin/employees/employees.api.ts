@@ -6,7 +6,7 @@ import { IGetResponsibleEmployees } from 'types/requests/admin/employees.api';
 export const employessApi = createApi({
   reducerPath: 'employessApi',
   baseQuery: getBaseQuery(),
-  endpoints: ({ query }) => ({
+  endpoints: ({ query, mutation }) => ({
     getResponsibleEmployees: query<Options[], IGetResponsibleEmployees.Params>({
       query: () => `/employees/all`,
       transformResponse: (data: IGetResponsibleEmployees.Response) => {
@@ -15,8 +15,15 @@ export const employessApi = createApi({
           value: employee.id
         }));
       }
+    }),
+    uploadAvatar: mutation<void, FormData>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/employees/avatar`,
+        body
+      })
     })
   })
 });
 
-export const { useGetResponsibleEmployeesQuery } = employessApi;
+export const { useGetResponsibleEmployeesQuery, useUploadAvatarMutation } = employessApi;

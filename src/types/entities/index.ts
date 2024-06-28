@@ -1,3 +1,4 @@
+export type { IResCurrenciesLast } from './currencies';
 export type { IResResponsible } from './employees';
 export type { IResExchangeRates } from './exchangeRates';
 export * from './history';

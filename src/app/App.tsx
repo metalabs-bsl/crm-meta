@@ -27,15 +27,18 @@ export const App = () => {
     if (!accessToken) {
       redirect.login({});
     }
-  }, [accessToken, redirect, role.role_name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken, role.role_name]);
 
   useEffect(() => {
     if (accessToken && !userInfo) getData();
   }, [accessToken, getData, userInfo]);
 
   useEffect(() => {
-    dispatch(initializeSocket());
-  }, [dispatch]);
+    if (accessToken) {
+      dispatch(initializeSocket());
+    }
+  }, [accessToken, dispatch]);
 
   return (
     <NotificationLayout>

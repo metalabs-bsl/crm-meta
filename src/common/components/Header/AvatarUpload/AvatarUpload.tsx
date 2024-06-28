@@ -1,22 +1,45 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { Icon } from 'common/ui';
+import { Icon, Loading } from 'common/ui';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useUploadAvatarMutation } from 'api/admin/employees/employees.api';
 import styles from './styles.module.scss';
 
-export const AvatarUpload = () => {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+interface IProps {
+  file: undefined | string;
+}
+
+export const AvatarUpload: FC<IProps> = ({ file }) => {
+  const notify = useNotify();
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadAvatar, { isLoading }] = useUploadAvatarMutation();
+
+  useEffect(() => {
+    if (file) {
+      setAvatarUrl(`${process.env.REACT_APP_BASE_URL}/${file}`);
+    }
+  }, [file]);
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setAvatarUrl(imageUrl);
+      const formData = new FormData();
+      formData.append('file', file);
+      uploadAvatar(formData)
+        .unwrap()
+        .then(() => {
+          setAvatarUrl(imageUrl);
+          notify(MESSAGE.SUCCESS, 'success');
+        })
+        .catch(() => notify(MESSAGE.ERROR, 'error'));
     }
   };
 
   const deleteAvatar = () => {
-    setAvatarUrl(null);
+    setAvatarUrl(undefined);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -24,25 +47,27 @@ export const AvatarUpload = () => {
 
   return (
     <div className={cn(styles.avatar, { [styles.hasPhoto]: avatarUrl })}>
-      {avatarUrl && <Icon type='delete' className={styles.delete} onClick={deleteAvatar} />}
-      {avatarUrl ? (
-        <label htmlFor='avatarInput'>
-          <img src={avatarUrl} alt='User Avatar' className={styles.userAvatar} />
-        </label>
-      ) : (
-        <label htmlFor='avatarInput'>
-          <Icon type='userIcon' className={styles.icon} />
-        </label>
-      )}
-      <input
-        ref={fileInputRef}
-        type='file'
-        id='avatarInput'
-        accept='image/*'
-        onChange={handleImageUpload}
-        className={styles.avatarInput}
-        hidden
-      />
+      <Loading isSpin={isLoading}>
+        {avatarUrl && <Icon type='delete' className={styles.delete} onClick={deleteAvatar} />}
+        {avatarUrl ? (
+          <label htmlFor='avatarInput'>
+            <img src={avatarUrl} alt='User Avatar' className={styles.userAvatar} />
+          </label>
+        ) : (
+          <label htmlFor='avatarInput'>
+            <Icon type='userIcon' className={styles.icon} />
+          </label>
+        )}
+        <input
+          ref={fileInputRef}
+          type='file'
+          id='avatarInput'
+          accept='image/*'
+          onChange={handleImageUpload}
+          className={styles.avatarInput}
+          hidden
+        />
+      </Loading>
     </div>
   );
 };

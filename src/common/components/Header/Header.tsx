@@ -8,8 +8,8 @@ import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { DropdownModal } from '../DropdownModal';
 import { BgWindow } from './BgWindow/BgWindow';
+import { CurrenciesWindow } from './CurrenciesWindow/CurrenciesWindow';
 import { CurrentTime } from './CurrentTime/CurrentTime';
-import { ExtangesWindow } from './ExtangesWindow/ExtangesWindow';
 import { ProfileWindow } from './ProfileWindow/ProfileWindow';
 import { StartWindow } from './StartWindow/StartWindow';
 import logo from '../../assets/images/logo.png';
@@ -81,9 +81,11 @@ export const Header = () => {
           <span>Курсы валют</span>
           <Icon type={'arrow-down'} alt='arrow' className={cn({ [styles.open]: isExtangesOpen })} />
         </div>
-        <DropdownModal isOpen={isExtangesOpen} targetRef={extangesRef} onClose={closeExtangesModal}>
-          <ExtangesWindow />
-        </DropdownModal>
+        {isExtangesOpen && (
+          <DropdownModal isOpen={isExtangesOpen} targetRef={extangesRef} onClose={closeExtangesModal}>
+            <CurrenciesWindow />
+          </DropdownModal>
+        )}
 
         <div className={styles.timeBlock} onClick={openTimeModal} ref={timeRef}>
           <CurrentTime />
@@ -94,22 +96,28 @@ export const Header = () => {
             Начать
           </div>
         </div>
-        <DropdownModal isOpen={isTimeModalOpen} targetRef={timeRef} onClose={closeTimeModal}>
-          <StartWindow />
-        </DropdownModal>
+        {isTimeModalOpen && (
+          <DropdownModal isOpen={isTimeModalOpen} targetRef={timeRef} onClose={closeTimeModal}>
+            <StartWindow />
+          </DropdownModal>
+        )}
 
         <div className={styles.exchangeRates} onClick={openBgModal} ref={bgRef}>
           <span>Фон</span>
           <Icon type={'arrow-down'} alt='arrow' className={cn({ [styles.open]: isBgOpen })} />
         </div>
-        <DropdownModal isOpen={isBgOpen} targetRef={bgRef} onClose={closeBgModal}>
-          <BgWindow />
-        </DropdownModal>
+        {isBgOpen && (
+          <DropdownModal isOpen={isBgOpen} targetRef={bgRef} onClose={closeBgModal}>
+            <BgWindow />
+          </DropdownModal>
+        )}
 
         <Button text='Профиль' styleType={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
-        <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
-          <ProfileWindow />
-        </DropdownModal>
+        {isProfileModalOpen && (
+          <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
+            <ProfileWindow />
+          </DropdownModal>
+        )}
       </div>
     </header>
   );
