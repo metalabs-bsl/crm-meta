@@ -5,10 +5,10 @@
   padding: 24px;
   border-radius: 10px;
   background-color: $seaSalt;
-  gap: 24px;
+  gap: 20px;
   display: flex;
   align-items: flex-start;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 
   .imgWrapper {
     width: 45px;
@@ -46,21 +46,27 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 1.3em;
-    font-family: var(--font-family);
   }
 
   .email {
     font-weight: 400;
     font-size: 16px;
     color: $silver;
-    font-family: var(--font-family);
   }
 
   .contentText {
     font-size: 16px;
     font-weight: 400;
     line-height: 1.3em;
-    font-family: var(--font-family);
     margin-bottom: 20px;
   }
+}
+
+.reply {
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid $gray;
+  gap: 20px;
+  display: flex;
+  align-items: flex-start;
 }

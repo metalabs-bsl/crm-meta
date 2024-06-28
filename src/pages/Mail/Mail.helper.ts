@@ -43,8 +43,13 @@ export const mockData: IMailData[] = [
         email: 'apsamatovaaki@gmail.com',
         date: 'ср, 5 июня 2024, 20:30',
         text: 'Aliquam eget nunc pretium',
-        reply:
-          'ultrices turpis non, iaculis nunc. Morbi fringilla ex eget metus venenatis scelerisque. Donec purus massa, gravida non dignissim eget, pharetra et lorem. Morbi in aliquet mi. Mauris semper tempus dui, sit amet rutrum leo posuere vitae. Proin ultrices nisl sit amet posuere elementum. Nullam gravida fermentum mollis. Ut bibendum neque euismod libero venenatis fermentum. Aliquam non bibendum nibh. Aliquam bibendum feugiat ex, vitae faucibus sem sodales ac. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec leo sapien, faucibus sed nulla ut, blandit tempor sem. Nulla congue nisl at dapibus tincidunt. Pellentesque.'
+        reply: {
+          image: 'https://cdn.pixabay.com/photo/2021/11/19/20/20/man-6810238_960_720.jpg',
+          name: 'Азатов Азат Азатович',
+          email: 'azatovaza@gmail.com',
+          date: 'ср, 5 июня 2024, 18:30',
+          text: 'ultrices turpis non, iaculis nunc. Morbi fringilla ex eget metus venenatis scelerisque. Donec purus massa, gravida non dignissim eget, pharetra et lorem. Morbi in aliquet mi. Mauris semper tempus dui, sit amet rutrum leo posuere vitae. Proin ultrices nisl sit amet posuere elementum. Nullam gravida fermentum mollis. Ut bibendum neque euismod libero venenatis fermentum. Aliquam non bibendum nibh. Aliquam bibendum feugiat ex, vitae faucibus sem sodales ac. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec leo sapien, faucibus sed nulla ut, blandit tempor sem. Nulla congue nisl at dapibus tincidunt. Pellentesque.'
+        }
       }
     ],
     date: '2024-06-05T00:00',
