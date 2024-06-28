@@ -3,23 +3,14 @@ import cn from 'classnames';
 import { Button, Checkbox } from 'common/ui';
 import { dateFormat } from 'common/helpers';
 import { useRedirect } from 'common/hooks';
+import { IMailData } from '../types/mailsData';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-interface Message {
-  id: number;
-  sender: string;
-  text: string;
-  date: string;
-  pick: boolean;
-  unread: boolean;
-  checked: boolean;
-}
-
 interface IProps {
   columns: string[];
-  messages: Message[];
+  data: IMailData[];
 }
 
 const actionBtns = [
@@ -30,35 +21,35 @@ const actionBtns = [
   { text: 'удалить', style: BUTTON_TYPES.LINK_GRAY, action: () => console.log('удалить') }
 ];
 
-export const MessageTable: FC<IProps> = ({ columns, messages }) => {
-  const [localMessages, setLocalMessages] = useState<Message[]>(messages);
+export const MessageTable: FC<IProps> = ({ columns, data }) => {
+  const [messages, setMessages] = useState<IMailData[]>(data);
   const [allChecked, setAllCheced] = useState<boolean>(false);
   const [isBtnsShow, setIsBtnsShow] = useState<boolean>(false);
-  const [currentMessage, setCurrentMessage] = useState<Message>();
+  const [currentMessage, setCurrentMessage] = useState<IMailData>();
   const redirectTo = useRedirect();
 
   useEffect(() => {
-    const isAnyChecked = localMessages.some((message) => message.checked);
+    const isAnyChecked = messages.some((message) => message.checked);
     setIsBtnsShow(isAnyChecked);
-  }, [localMessages]);
+  }, [messages]);
 
   const onToggleAllChecked = (e: boolean) => {
     setAllCheced(e);
-    const updated = localMessages.map((i) => ({ ...i, checked: e }));
-    setLocalMessages(updated);
+    const updated = messages.map((i) => ({ ...i, checked: e }));
+    setMessages(updated);
   };
 
   const onMessageChecked = (e: boolean, id: number) => {
-    const updated = localMessages.map((i) => {
+    const updated = messages.map((i) => {
       if (i.id === id) {
         return { ...i, checked: e };
       }
       return i;
     });
-    setLocalMessages(updated);
+    setMessages(updated);
     setAllCheced(false);
 
-    const finded = localMessages.find((i) => i.id === id);
+    const finded = messages.find((i) => i.id === id);
     setCurrentMessage(finded);
   };
 
@@ -68,6 +59,10 @@ export const MessageTable: FC<IProps> = ({ columns, messages }) => {
   };
 
   console.log(currentMessage);
+
+  useEffect(() => {
+    setMessages(data);
+  }, [data]);
 
   return (
     <div className={styles.table_wpapper}>
@@ -86,7 +81,7 @@ export const MessageTable: FC<IProps> = ({ columns, messages }) => {
           </tr>
         </thead>
         <tbody>
-          {localMessages.map((message) => {
+          {messages.map((message) => {
             const formatDate = dateFormat(message.date);
 
             return (
