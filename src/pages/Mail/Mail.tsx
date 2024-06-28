@@ -1,43 +1,22 @@
-import { FC, useState } from 'react';
-// import { Icon } from 'common/ui';
+import { FC, useEffect, useState } from 'react';
 import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
-import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
+import { IMailData } from './types/mailsData';
+import { mailTabs, mockData } from './Mail.helper';
 import { MessageTable } from './MessageTable';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-const mailTabs: ITabsItem[] = [
-  {
-    title: 'Входящие',
-    type: 'inbox',
-    badgeCount: 1,
-    hasBadge: true
-  },
-  {
-    title: 'Непрочитанные',
-    type: 'unread',
-    badgeCount: 2,
-    hasBadge: true
-  },
-  {
-    title: 'Отправленные',
-    type: 'sent',
-    badgeCount: 0,
-    hasBadge: true
-  }
-];
-
-const messages = [
-  { id: 1, sender: 'John Doe', text: 'Hello World', date: '2024-06-05T00:00', unread: true, pick: false, checked: false },
-  { id: 2, sender: 'Jane Smith', text: 'React is awesome!', date: '2024-06-04T00:00', unread: false, pick: true, checked: false }
-];
-
 const columns = ['отправитель', 'сообщение', 'дата'];
 
 export const Mail: FC = () => {
+  const [data, setData] = useState<IMailData[]>([]);
   const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
+
+  useEffect(() => {
+    setData(mockData);
+  }, []);
 
   return (
     <Loading>
@@ -58,7 +37,7 @@ export const Mail: FC = () => {
           activeTabClassName={styles.activeTab}
         />
         <div className={styles.tableWrapper}>
-          <MessageTable messages={messages} columns={columns} />
+          <MessageTable messages={data} columns={columns} />
         </div>
       </div>
     </Loading>

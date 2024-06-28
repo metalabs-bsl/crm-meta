@@ -3,23 +3,14 @@ import cn from 'classnames';
 import { Button, Checkbox } from 'common/ui';
 import { dateFormat } from 'common/helpers';
 import { useRedirect } from 'common/hooks';
+import { IMailData } from '../types/mailsData';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-interface Message {
-  id: number;
-  sender: string;
-  text: string;
-  date: string;
-  pick: boolean;
-  unread: boolean;
-  checked: boolean;
-}
-
 interface IProps {
   columns: string[];
-  messages: Message[];
+  messages: IMailData[];
 }
 
 const actionBtns = [
@@ -31,10 +22,10 @@ const actionBtns = [
 ];
 
 export const MessageTable: FC<IProps> = ({ columns, messages }) => {
-  const [localMessages, setLocalMessages] = useState<Message[]>(messages);
+  const [localMessages, setLocalMessages] = useState<IMailData[]>(messages);
   const [allChecked, setAllCheced] = useState<boolean>(false);
   const [isBtnsShow, setIsBtnsShow] = useState<boolean>(false);
-  const [currentMessage, setCurrentMessage] = useState<Message>();
+  const [currentMessage, setCurrentMessage] = useState<IMailData>();
   const redirectTo = useRedirect();
 
   useEffect(() => {
