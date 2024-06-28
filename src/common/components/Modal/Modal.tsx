@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import cn from 'classnames';
 import { Button, Icon } from 'common/ui';
 import styles from './styles.module.scss';
 
@@ -14,6 +15,7 @@ interface ModalProps {
   children?: ReactNode;
   leftBtnAction?: () => void;
   rightBtnAction?: () => void;
+  className?: string;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -25,13 +27,14 @@ export const Modal: FC<ModalProps> = ({
   rightBtnText,
   rightBtnStyle,
   children,
-  onClose
+  onClose,
+  className
 }) => {
   return (
     <>
       {isOpen && (
         <div className={styles.modal} onClick={onClose}>
-          <div className={styles.modalWrapper} onClick={(e) => e.stopPropagation()}>
+          <div className={cn(styles.modalWrapper, className)} onClick={(e) => e.stopPropagation()}>
             <button className={styles.modalClose} onClick={onClose}>
               <Icon type='burger-close' />
             </button>

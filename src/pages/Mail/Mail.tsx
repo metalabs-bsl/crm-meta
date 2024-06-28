@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
+import MessageModal from './MessageModal/MessageModal';
 import { MessageTable } from './MessageTable';
 import styles from './styles.module.scss';
 
@@ -38,6 +39,12 @@ const columns = ['отправитель', 'сообщение', 'дата'];
 
 export const Mail: FC = () => {
   const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
+  const [isModalActive, setModalActive] = useState<boolean>(false);
+
+  const handleModalOpen = () => {
+    setModalActive(true);
+    console.log('show modal');
+  };
 
   return (
     <Loading>
@@ -45,7 +52,7 @@ export const Mail: FC = () => {
         <div className={styles.headBlock}>
           <div className={styles.titleBlock}>
             <h1>Почта</h1>
-            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} />
+            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} onClick={handleModalOpen} />
           </div>
           <SearchInput placeholder='Поиск' />
         </div>
@@ -61,6 +68,8 @@ export const Mail: FC = () => {
           <MessageTable messages={messages} columns={columns} />
         </div>
       </div>
+
+      {isModalActive && <MessageModal setModalActive={setModalActive} />}
     </Loading>
   );
 };
