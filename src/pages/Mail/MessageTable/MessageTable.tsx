@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Button, Checkbox } from 'common/ui';
 import { dateFormat } from 'common/helpers';
+import { useRedirect } from 'common/hooks';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
@@ -34,6 +35,7 @@ export const MessageTable: FC<IProps> = ({ columns, messages }) => {
   const [allChecked, setAllCheced] = useState<boolean>(false);
   const [isBtnsShow, setIsBtnsShow] = useState<boolean>(false);
   const [currentMessage, setCurrentMessage] = useState<Message>();
+  const redirectTo = useRedirect();
 
   useEffect(() => {
     const isAnyChecked = localMessages.some((message) => message.checked);
@@ -60,6 +62,11 @@ export const MessageTable: FC<IProps> = ({ columns, messages }) => {
     setCurrentMessage(finded);
   };
 
+  const handleClickMessage = (messageId: number) => {
+    const id = messageId.toString();
+    redirectTo.mailDetail({ id });
+  };
+
   console.log(currentMessage);
 
   return (
@@ -83,7 +90,13 @@ export const MessageTable: FC<IProps> = ({ columns, messages }) => {
             const formatDate = dateFormat(message.date);
 
             return (
-              <tr key={message.id} className={cn({ [styles.unread]: message.unread })}>
+              <tr
+                key={message.id}
+                className={cn({ [styles.unread]: message.unread })}
+                onClick={() => {
+                  handleClickMessage(message.id);
+                }}
+              >
                 <td>
                   <Checkbox
                     className={styles.checkbox}

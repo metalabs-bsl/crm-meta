@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+// import { Icon } from 'common/ui';
 import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
