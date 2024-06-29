@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { formatDateToString } from 'pages/Mail/Mail.helper';
 import { IMailChainData } from 'pages/Mail/types/mailsData';
 import styles from './styes.module.scss';
 
@@ -16,7 +17,7 @@ export const MessageCard: FC<IMailChainData> = ({ image, name, email, date, text
               <span className={styles.email}>{email}</span>
             </div>
             <div className={styles.dateWrapper}>
-              <span>{date}</span>
+              <span>{formatDateToString(date)}</span>
             </div>
           </div>
           <p className={styles.contentText}>{text}</p>
@@ -32,7 +33,7 @@ export const MessageCard: FC<IMailChainData> = ({ image, name, email, date, text
                     <span className={styles.email}>{reply.email}</span>
                   </div>
                   <div className={styles.dateWrapper}>
-                    <span>{reply.date}</span>
+                    <span>{formatDateToString(reply.date)}</span>
                   </div>
                 </div>
                 <p className={styles.contentText}>{reply.text}</p>

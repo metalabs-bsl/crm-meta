@@ -3,7 +3,7 @@ import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
 import MessageModal from './MessageModal/MessageModal';
 import { IMailData } from './types/mailsData';
-import { mailTabs, mockData } from './Mail.helper';
+import { mailTabs as initialMailTabs, mockData } from './Mail.helper';
 import { MessageTable } from './MessageTable';
 import styles from './styles.module.scss';
 
@@ -14,7 +14,8 @@ const columns = ['отправитель', 'сообщение', 'дата'];
 export const Mail: FC = () => {
   const [data, setData] = useState<IMailData[]>([]);
   const [filteredData, setFilteredData] = useState<IMailData[]>([]);
-  const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
+  const [activeTab, setActiveTab] = useState<string>(initialMailTabs[0].type);
+  const [mailTabs, setMailTabs] = useState(initialMailTabs);
 
   const [isModalActive, setModalActive] = useState<boolean>(false);
 
@@ -32,19 +33,40 @@ export const Mail: FC = () => {
     let filtered;
     switch (activeTab) {
       case 'inbox':
-        filtered = data; // Assuming all data is inbox
+        filtered = data.filter((mail) => mail.sender !== 'You');
         break;
       case 'unread':
-        filtered = data.filter((mail) => mail.unread);
+        filtered = data.filter((mail) => mail.unread && mail.sender !== 'You');
         break;
       case 'sent':
-        filtered = data.filter((mail) => mail.sender === 'You'); // Assuming 'You' is the sender for sent emails
+        filtered = data.filter((mail) => mail.sender === 'You');
         break;
       default:
         filtered = data;
     }
     setFilteredData(filtered);
   }, [activeTab, data]);
+
+  useEffect(() => {
+    const inboxCount = data.filter((mail) => mail.sender !== 'You').length;
+    const unreadCount = data.filter((mail) => mail.unread && mail.sender !== 'You').length;
+    const sentCount = data.filter((mail) => mail.sender === 'You').length;
+
+    setMailTabs((prevTabs) =>
+      prevTabs.map((tab) => {
+        switch (tab.type) {
+          case 'inbox':
+            return { ...tab, badgeCount: inboxCount };
+          case 'unread':
+            return { ...tab, badgeCount: unreadCount };
+          case 'sent':
+            return { ...tab, badgeCount: sentCount };
+          default:
+            return tab;
+        }
+      })
+    );
+  }, [data]);
 
   return (
     <Loading>

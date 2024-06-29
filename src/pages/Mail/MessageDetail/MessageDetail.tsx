@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Icon, Loading } from 'common/ui';
 import { DeleteModal } from 'common/components';
@@ -14,8 +14,9 @@ export const MessageDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState<{ mailChain: IMailChainData[]; theme: string }>({ mailChain: [], theme: '' });
-  const [showAnswerForm, setShowAnswerForm] = useState<boolean>();
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>();
+  const [showAnswerForm, setShowAnswerForm] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const messageEndRef = useRef<HTMLDivElement>(null);
 
   const findMailChainAndThemeById = useCallback(
     (data: IMailData[]): { mailChain: IMailChainData[]; theme: string } => {
@@ -24,8 +25,6 @@ export const MessageDetail = () => {
     },
     [id]
   );
-
-  console.log(data);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -49,6 +48,12 @@ export const MessageDetail = () => {
   useEffect(() => {
     setData(findMailChainAndThemeById(mockData));
   }, [findMailChainAndThemeById]);
+
+  useEffect(() => {
+    if (showAnswerForm) {
+      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [showAnswerForm]);
 
   return (
     <Loading>
@@ -78,6 +83,7 @@ export const MessageDetail = () => {
               <Button text={'ответить'} styleType={BUTTON_TYPES.YELLOW} onClick={() => setShowAnswerForm(true)} />
             </div>
           )}
+          <div ref={messageEndRef} />
         </div>
       </div>
       <DeleteModal
