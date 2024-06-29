@@ -36,5 +36,9 @@
       text-align: center;
       cursor: pointer;
     }
+    .redTimer {
+      color: $not-paid;
+      border: 1px solid $not-paid;
+    }
   }
 }

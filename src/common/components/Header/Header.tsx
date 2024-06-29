@@ -2,14 +2,14 @@ import { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Button, Icon } from 'common/ui';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { loginSelectors } from 'api/admin/login/login.selectors';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { DropdownModal } from '../DropdownModal';
 import { BgWindow } from './BgWindow/BgWindow';
+import { CurrenciesWindow } from './CurrenciesWindow/CurrenciesWindow';
 import { CurrentTime } from './CurrentTime/CurrentTime';
-import { ExtangesWindow } from './ExtangesWindow/ExtangesWindow';
 import { ProfileWindow } from './ProfileWindow/ProfileWindow';
 import { StartWindow } from './StartWindow/StartWindow';
 import logo from '../../assets/images/logo.png';
@@ -20,7 +20,8 @@ import { BUTTON_TYPES } from 'types/enums';
 export const Header = () => {
   const dispatch = useAppDispatch();
   const { isShowSidebar } = useAppSelector(sidebarSelectors.sidebar);
-  const { role } = useAppSelector(loginSelectors.login);
+  const { role } = useAppSelector(employeesSelectors.employees);
+
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isExtangesOpen, setIsExtangesOpen] = useState<boolean>(false);
@@ -81,9 +82,11 @@ export const Header = () => {
           <span>Курсы валют</span>
           <Icon type={'arrow-down'} alt='arrow' className={cn({ [styles.open]: isExtangesOpen })} />
         </div>
-        <DropdownModal isOpen={isExtangesOpen} targetRef={extangesRef} onClose={closeExtangesModal}>
-          <ExtangesWindow />
-        </DropdownModal>
+        {isExtangesOpen && (
+          <DropdownModal isOpen={isExtangesOpen} targetRef={extangesRef} onClose={closeExtangesModal}>
+            <CurrenciesWindow />
+          </DropdownModal>
+        )}
 
         <div className={styles.timeBlock} onClick={openTimeModal} ref={timeRef}>
           <CurrentTime />
@@ -94,22 +97,28 @@ export const Header = () => {
             Начать
           </div>
         </div>
-        <DropdownModal isOpen={isTimeModalOpen} targetRef={timeRef} onClose={closeTimeModal}>
-          <StartWindow />
-        </DropdownModal>
+        {isTimeModalOpen && (
+          <DropdownModal isOpen={isTimeModalOpen} targetRef={timeRef} onClose={closeTimeModal}>
+            <StartWindow />
+          </DropdownModal>
+        )}
 
         <div className={styles.exchangeRates} onClick={openBgModal} ref={bgRef}>
           <span>Фон</span>
           <Icon type={'arrow-down'} alt='arrow' className={cn({ [styles.open]: isBgOpen })} />
         </div>
-        <DropdownModal isOpen={isBgOpen} targetRef={bgRef} onClose={closeBgModal}>
-          <BgWindow />
-        </DropdownModal>
+        {isBgOpen && (
+          <DropdownModal isOpen={isBgOpen} targetRef={bgRef} onClose={closeBgModal}>
+            <BgWindow />
+          </DropdownModal>
+        )}
 
         <Button text='Профиль' styleType={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
-        <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
-          <ProfileWindow />
-        </DropdownModal>
+        {isProfileModalOpen && (
+          <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
+            <ProfileWindow />
+          </DropdownModal>
+        )}
       </div>
     </header>
   );

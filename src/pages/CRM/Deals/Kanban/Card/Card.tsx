@@ -88,7 +88,15 @@ export const Card: FC<CardProps> = ({ data, index }) => {
         <TodoCreateForm />
       </Modal>
       <DropdownModal targetRef={profileRef} isOpen={clientOpen} onClose={() => setClientOpen(false)}>
-        <ClientWindow data={{ birthday: customer.date_of_birth, city: '', name: customer.fullname, phone: customer.phone, source: '' }} />
+        <ClientWindow
+          data={{
+            birthday: customer.date_of_birth,
+            city: customer.city,
+            name: customer.fullname,
+            phone: customer.phone,
+            source: customer.source
+          }}
+        />
       </DropdownModal>
     </div>
   );

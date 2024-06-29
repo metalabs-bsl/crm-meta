@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
-import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { backgroundSelectors } from 'api/admin/background/background.selectors';
-import { setBg } from 'api/admin/background/background.slice';
+import { useAppSelector } from 'common/hooks';
+import { useUpdateBgMutation } from 'api/admin/employees/employees.api';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import styles from '../styles.module.scss';
 
 import { BG_TYPES } from 'types/enums';
@@ -14,11 +14,12 @@ interface IProps {
 }
 
 export const BgCards: FC<IProps> = ({ title, backgrounds }) => {
-  const dispatch = useAppDispatch();
-  const { bgType } = useAppSelector(backgroundSelectors.background);
-
+  // const dispatch = useAppDispatch();
+  const { bgType } = useAppSelector(employeesSelectors.employees);
+  const [bgUpdate] = useUpdateBgMutation();
   const onChangeBg = (color: BG_TYPES) => {
-    dispatch(setBg(color));
+    // dispatch(setBg(color));
+    bgUpdate(color);
   };
 
   return (
