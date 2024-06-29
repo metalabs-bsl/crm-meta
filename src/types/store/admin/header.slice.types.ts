@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { IUserInfoRes } from 'types/entities/login';
+import { IUserInfoRes } from 'types/entities';
 import { IROLE } from 'types/roles';
 
 import { BG_TYPES } from 'types/enums';
