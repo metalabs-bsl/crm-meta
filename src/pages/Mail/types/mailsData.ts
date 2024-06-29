@@ -16,5 +16,4 @@ export interface IMailData {
   date: string;
   unread: boolean;
   pick: boolean;
-  checked: boolean;
 }

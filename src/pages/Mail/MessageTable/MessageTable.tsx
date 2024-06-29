@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Button, Checkbox } from 'common/ui';
 import { Modal } from 'common/components';
@@ -16,51 +16,33 @@ interface IProps {
 
 export const MessageTable: FC<IProps> = ({ columns, data }) => {
   const [messages, setMessages] = useState<IMailData[]>([]);
-  const [allChecked, setAllChecked] = useState<boolean>(false);
-  const [isBtnsShow, setIsBtnsShow] = useState<boolean>(false);
-  const [currentMessage, setCurrentMessage] = useState<IMailData>();
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const isAnyChecked = messages.some((message) => message.checked);
-    setIsBtnsShow(isAnyChecked);
-  }, [messages]);
+  const handleSelectAll = useCallback(() => {
+    setSelectAll((prev) => !prev);
+    setSelectedRows(() => (!selectAll ? messages.map((_, index) => index) : []));
+  }, [selectAll, messages]);
 
-  const onToggleAllChecked = (e: boolean) => {
-    setAllChecked(e);
-    const updated = messages.map((i) => ({ ...i, checked: e }));
-    setMessages(updated);
-  };
-
-  const onMessageChecked = (e: boolean, id: number) => {
-    const updated = messages.map((i) => {
-      if (i.id === id) {
-        return { ...i, checked: e };
-      }
-      return i;
-    });
-    setMessages(updated);
-    setAllChecked(false);
-
-    const found = messages.find((i) => i.id === id);
-    setCurrentMessage(found);
-  };
+  const handleSelectRow = useCallback((index: number) => {
+    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
+  }, []);
 
   const handlePinAll = () => {
-    console.log('закрепить все', currentMessage);
+    console.log('закрепить все', selectedRows);
   };
 
   const handleUnpinAll = () => {
-    console.log('открепить все', currentMessage);
+    console.log('открепить все', selectedRows);
   };
 
   const markAsRead = () => {
-    console.log('отправить на прочитанное', currentMessage);
+    console.log('отправить на прочитанное', selectedRows);
   };
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
-    console.log(isModalOpen);
   };
 
   const handleModalClose = () => {
@@ -78,7 +60,7 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
         <thead className={styles.thead}>
           <tr className={styles.headTr}>
             <th>
-              <Checkbox className={styles.checkbox} checked={allChecked} onChange={(e) => onToggleAllChecked(e.target.checked)} />
+              <Checkbox className={styles.checkbox} checked={selectAll} onChange={handleSelectAll} />
             </th>
             {columns.map((col, index) => (
               <th key={index}>{col}</th>
@@ -89,16 +71,12 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody className={styles.tbody}>
-          {messages.map((message) => {
+          {messages.map((message, index) => {
             const formatDate = dateFormat(message.date);
             return (
               <tr key={message.id} className={cn({ [styles.unread]: message.unread })}>
                 <td>
-                  <Checkbox
-                    className={styles.checkbox}
-                    checked={message.checked}
-                    onChange={(e) => onMessageChecked(e.target.checked, message.id)}
-                  />
+                  <Checkbox className={styles.checkbox} checked={selectedRows.includes(index)} onChange={() => handleSelectRow(index)} />
                 </td>
                 <td>{message.sender}</td>
                 <td>{message.text}</td>
@@ -109,7 +87,7 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
           })}
         </tbody>
       </table>
-      {isBtnsShow && (
+      {selectedRows.length !== 0 && (
         <div className={styles.btns_wrapper}>
           <Button styleType={BUTTON_TYPES.GREEN} text='открепить все' onClick={handleUnpinAll} />
           <Button styleType={BUTTON_TYPES.GREEN} text='закрепить все' onClick={handlePinAll} />
