@@ -12,12 +12,31 @@ const columns = ['отправитель', 'сообщение', 'дата'];
 
 export const Mail: FC = () => {
   const [data, setData] = useState<IMailData[]>([]);
+  const [filteredData, setFilteredData] = useState<IMailData[]>([]);
   const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
 
   useEffect(() => {
     console.log(mockData);
     setData(mockData);
   }, []);
+
+  useEffect(() => {
+    let filtered;
+    switch (activeTab) {
+      case 'inbox':
+        filtered = data; // Assuming all data is inbox
+        break;
+      case 'unread':
+        filtered = data.filter((mail) => mail.unread);
+        break;
+      case 'sent':
+        filtered = data.filter((mail) => mail.sender === 'You'); // Assuming 'You' is the sender for sent emails
+        break;
+      default:
+        filtered = data;
+    }
+    setFilteredData(filtered);
+  }, [activeTab, data]);
 
   return (
     <Loading>
@@ -38,7 +57,7 @@ export const Mail: FC = () => {
           activeTabClassName={styles.activeTab}
         />
         <div className={styles.tableWrapper}>
-          <MessageTable data={data} columns={columns} />
+          <MessageTable data={filteredData} columns={columns} />
         </div>
       </div>
     </Loading>

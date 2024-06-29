@@ -1,10 +1,11 @@
 @import '../../../common/styles/variables.scss';
 
-.table_wpapper {
+.table_wrapper {
   border-radius: 10px;
-  overflow: hidden;
+
   .table {
     width: 100%;
+    height: 100%;
     border-collapse: collapse;
     th,
     td {
@@ -29,10 +30,6 @@
       font-weight: 400;
       font-size: 16px;
       color: $gray;
-    }
-
-    tbody {
-      background-color: $white;
     }
 
     th:first-child,
@@ -101,10 +98,11 @@
       }
     }
   }
+
   .btns_wrapper {
     background-color: $white;
     border-top: 2px solid $silver;
-    padding: 10px 0;
+    padding: 10px 30px;
     display: flex;
     justify-content: center;
     gap: 30px;
@@ -113,5 +111,18 @@
       font-size: 16px;
       text-transform: lowercase;
     }
+  }
+
+  .modalInner {
+    gap: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modalBtnWrapper {
+    display: flex;
+    gap: 20px;
   }
 }
