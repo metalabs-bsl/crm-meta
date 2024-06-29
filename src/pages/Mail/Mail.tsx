@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
+import MessageModal from './MessageModal/MessageModal';
 import { IMailData } from './types/mailsData';
 import { mailTabs, mockData } from './Mail.helper';
 import { MessageTable } from './MessageTable';
@@ -14,6 +15,13 @@ export const Mail: FC = () => {
   const [data, setData] = useState<IMailData[]>([]);
   const [filteredData, setFilteredData] = useState<IMailData[]>([]);
   const [activeTab, setActiveTab] = useState<string>(mailTabs[0].type);
+
+  const [isModalActive, setModalActive] = useState<boolean>(false);
+
+  const handleModalOpen = () => {
+    setModalActive(true);
+    console.log('show modal');
+  };
 
   useEffect(() => {
     console.log(mockData);
@@ -44,7 +52,7 @@ export const Mail: FC = () => {
         <div className={styles.headBlock}>
           <div className={styles.titleBlock}>
             <h1>Почта</h1>
-            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} />
+            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} onClick={handleModalOpen} />
           </div>
           <SearchInput placeholder='Поиск' />
         </div>
@@ -60,6 +68,8 @@ export const Mail: FC = () => {
           <MessageTable data={filteredData} columns={columns} />
         </div>
       </div>
+
+      {isModalActive && <MessageModal setModalActive={setModalActive} />}
     </Loading>
   );
 };
