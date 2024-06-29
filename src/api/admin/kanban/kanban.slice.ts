@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IColumn } from 'types/entities';
+import { loginApi } from '../login/login.api';
+
+import { disconnectSocket } from 'socket';
 
 interface SocketState {
   connected: boolean;
@@ -26,6 +29,12 @@ export const kanbanSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     }
+  },
+  extraReducers(builder) {
+    builder.addMatcher(loginApi.endpoints.logout.matchFulfilled, (state) => {
+      state.board = [];
+      disconnectSocket();
+    });
   }
 });
 

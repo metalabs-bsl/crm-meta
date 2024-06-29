@@ -1,20 +1,30 @@
 import { Button } from 'common/ui';
 import { dateFormat } from 'common/helpers';
-import { useAppDispatch, useAppSelector } from 'common/hooks';
+import { useAppSelector, useNotify } from 'common/hooks';
+import { useLogoutMutation } from 'api/admin/login/login.api';
 import { loginSelectors } from 'api/admin/login/login.selectors';
-import { logout } from 'api/admin/login/login.slice';
 import { AvatarUpload } from '../AvatarUpload';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
 export const ProfileWindow = () => {
-  const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(loginSelectors.login);
+  const [handleLogout] = useLogoutMutation();
+  const notify = useNotify();
+
   if (!userInfo) {
     return null;
   }
   const updated = dateFormat(userInfo?.created_at);
+
+  const onLogout = () => {
+    handleLogout()
+      .unwrap()
+      .then((res) => {
+        notify(res.message, 'success');
+      });
+  };
 
   return (
     <div className={styles.profile}>
@@ -43,7 +53,7 @@ export const ProfileWindow = () => {
         </li>
       </ul>
       <div className={styles.btnBlock}>
-        <Button styleType={BUTTON_TYPES.LINK_RED} text='выйти' onClick={() => dispatch(logout())} />
+        <Button styleType={BUTTON_TYPES.LINK_RED} text='выйти' onClick={onLogout} />
       </div>
     </div>
   );

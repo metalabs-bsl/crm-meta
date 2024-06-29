@@ -9,7 +9,7 @@ export const loginApi = createApi({
   endpoints: ({ query, mutation }) => ({
     login: mutation<ILogin.Response, ILogin.Params>({
       query: (body) => ({
-        method: 'post',
+        method: 'POST',
         url: `/auth/login`,
         body
       })
@@ -17,8 +17,14 @@ export const loginApi = createApi({
     getUserInfo: query<IGetUserInfo.Response, IGetUserInfo.Params>({
       query: () => `/employees`,
       providesTags: ['UserInfo']
+    }),
+    logout: mutation<{ message: string }, void>({
+      query: () => ({
+        method: 'POST',
+        url: `/auth/logout`
+      })
     })
   })
 });
 
-export const { useLoginMutation, useLazyGetUserInfoQuery } = loginApi;
+export const { useLoginMutation, useLazyGetUserInfoQuery, useLogoutMutation } = loginApi;

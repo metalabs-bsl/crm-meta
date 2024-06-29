@@ -16,10 +16,6 @@ export const loginSlice = createSlice({
   reducers: {
     setAuthorized: (state, action: IAuthorizedAaction) => {
       state.isAuthorized = action.payload;
-    },
-    logout: (state) => {
-      (state.userInfo = null), (state.role = ROLES.UNAUTHORIZED), (state.accessToken = null);
-      localStorage.clear();
     }
   },
   extraReducers(builder) {
@@ -32,7 +28,11 @@ export const loginSlice = createSlice({
       state.role = payload.roles[0];
       state.userInfo = payload;
     });
+    builder.addMatcher(loginApi.endpoints.logout.matchFulfilled, (state) => {
+      (state.userInfo = null), (state.role = ROLES.UNAUTHORIZED), (state.accessToken = null);
+      localStorage.clear();
+    });
   }
 });
 
-export const { setAuthorized, logout } = loginSlice.actions;
+export const { setAuthorized } = loginSlice.actions;
