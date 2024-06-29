@@ -3,6 +3,8 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
 import { ClientWindow, DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
 import { dateFormatWithHour } from 'common/helpers';
+import { useAppDispatch } from 'common/hooks';
+import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
 import { Checkbox } from '../Checkbox';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
@@ -67,7 +69,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   const [lossReason, setLossReason] = useState<string>('');
   const [cuurent, setCurrent] = useState<number | null>(null);
   const profileRef = useRef(null);
-
+  const dispatch = useAppDispatch();
   const [modalState, setModalState] = useState<ModalState>({
     delete: false,
     finish: false,
@@ -156,7 +158,8 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
 
   const handleNameClick = (row: TableRow) => {
     setSelectedRow(row);
-    setModalState({ ...modalState, cardDetail: true });
+    // setModalState({ ...modalState, cardDetail: true });
+    dispatch(setChangeOpenEdgeModal(true));
   };
 
   const handleClientInfoClick = (row: TableRow, rowIndex: number) => {
@@ -334,11 +337,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         </div>
       </Modal>
     ),
-    cardDetail: (
-      <EdgeModal isOpen={modalState.cardDetail} onClose={() => onCloseModal('cardDetail')}>
-        {selectedRow && <CardDetail cardTitle={selectedRow.name} />}
-      </EdgeModal>
-    ),
+    cardDetail: <EdgeModal>{selectedRow && <CardDetail cardTitle={selectedRow.name} />}</EdgeModal>,
     dropdown: (
       <div className={styles.dropdown}>
         <DropdownModal targetRef={profileRef} isOpen={modalState.dropdown} onClose={() => handleDropdownClose()}>
@@ -401,6 +400,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
                       className={styles.column}
                       onMouseEnter={() => columnIndex === 1 && handleClientInfoClick(row, index)}
                       onMouseLeave={handleDropdownClose}
+                      style={{ cursor: column.key === 'name' ? 'pointer' : 'default' }}
                       onClick={() => {
                         if (column.key === 'name' && !isEditMode) {
                           handleNameClick(row);

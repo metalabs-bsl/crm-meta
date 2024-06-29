@@ -3,8 +3,9 @@ import cn from 'classnames';
 import { Icon, Input } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
-import { useNotify } from 'common/hooks';
+import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
+import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { AboutDeal } from './AboutDeal';
 import { history } from './CardDetail.helper';
 import { History } from './History';
@@ -12,7 +13,6 @@ import { Progress } from './Progress';
 import styles from './style.module.scss';
 interface IProps {
   cardTitle?: string;
-  isNewDeal?: boolean;
 }
 
 const tabItems: ITabsItem[] = [
@@ -30,15 +30,16 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-export const CardDetail: FC<IProps> = ({ cardTitle = '', isNewDeal = false }) => {
+export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
+  const notify = useNotify();
+  const { isNewDeal } = useAppSelector(sidebarSelectors.sidebar);
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(cardTitle);
-  const notify = useNotify();
 
   const getComponent = (type: string) => {
     const components = {
-      [tabItems[0].type]: <AboutDeal isNewDeal={isNewDeal} />,
+      [tabItems[0].type]: <AboutDeal />,
       [tabItems[1].type]: <History history={history} />,
       [tabItems[2].type]: <p>WhatsApp</p>
     };

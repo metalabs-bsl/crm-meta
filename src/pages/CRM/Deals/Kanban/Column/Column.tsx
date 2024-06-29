@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'common/components';
+import { useAppDispatch } from 'common/hooks';
+import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { IColumn } from 'types/entities';
 import { CardDetail } from '../../CardDetail';
 import { Card } from '../Card';
@@ -22,9 +24,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
-  const [open, setOpen] = useState<boolean>(false);
   const filterRef = useRef(null);
   const isSaleColumn = status === 1;
+  const dispatch = useAppDispatch();
 
   const [{ isOver }, drop] = useDrop({
     accept: 'CARD',
@@ -47,10 +49,6 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
       isOver: !!monitor.isOver()
     })
   });
-
-  const onClose = () => {
-    setOpen(false);
-  };
 
   const onCloseColumnModal = () => {
     setOpenColumnModal(false);
@@ -83,6 +81,11 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
     console.log({ start, end });
   };
 
+  const onOpen = () => {
+    dispatch(setChangeOpenEdgeModal(true));
+    dispatch(setIsNewDeal(true));
+  };
+
   return (
     <div className={cn(styles.column, { [styles.isOver]: isOver })}>
       <div className={styles.titleBlock}>
@@ -103,7 +106,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
         </div>
       </div>
       {isSaleColumn && <span className={styles.totalSum}>200.000$</span>}
-      <div className={styles.createBtn} onClick={() => setOpen(true)}>
+      <div className={styles.createBtn} onClick={onOpen}>
         <Icon type='plus-icon' alt='plus' />
       </div>
       <div className={styles.cardsContainer} ref={drop}>
@@ -125,8 +128,8 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
           <FilterByDate onFilterChange={onFilterChange} />
         </DropdownModal>
       )}
-      <EdgeModal isOpen={open} onClose={onClose}>
-        <CardDetail isNewDeal />
+      <EdgeModal>
+        <CardDetail />
       </EdgeModal>
     </div>
   );

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Options } from 'types/pages';
 import { Button, SearchInput, Select } from 'common/ui';
 import { EdgeModal } from 'common/components';
+import { useAppDispatch } from 'common/hooks';
+import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { CardDetail } from './CardDetail';
 import { DEALS_TABS, mainTabs } from './Deals.helper';
 import { DealsTabFilter } from './DealsTabFilter';
@@ -14,11 +16,13 @@ import { BUTTON_TYPES } from 'types/enums';
 
 export const Deals = () => {
   const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
-  const [open, setOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
-  const onClose = () => {
-    setOpen(false);
+  const onOpen = () => {
+    dispatch(setChangeOpenEdgeModal(true));
+    dispatch(setIsNewDeal(true));
   };
+
   const getDealsComponent = () => {
     const components: Record<DEALS_TABS, JSX.Element> = {
       [DEALS_TABS.kanban]: <KanbanChapter />,
@@ -38,7 +42,7 @@ export const Deals = () => {
       <div className={styles.headBlock}>
         <div className={styles.titleBlock}>
           <h1>Сделки</h1>
-          <Button text='создать сделку' styleType={BUTTON_TYPES.YELLOW} onClick={() => setOpen(true)} className={styles.createBtn} />
+          <Button text='создать сделку' styleType={BUTTON_TYPES.YELLOW} onClick={onOpen} className={styles.createBtn} />
         </div>
         <div className={styles.filterBlock}>
           <Select options={options} className={styles.filterSelect} />
@@ -47,8 +51,8 @@ export const Deals = () => {
       </div>
       <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} />
       <div className={styles.deal_content}>{getDealsComponent()}</div>
-      <EdgeModal isOpen={open} onClose={onClose}>
-        <CardDetail isNewDeal />
+      <EdgeModal>
+        <CardDetail />
       </EdgeModal>
     </div>
   );

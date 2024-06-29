@@ -3,6 +3,8 @@ import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { ClientWindow, DropdownModal, EdgeModal, Modal } from 'common/components';
 import { dateFormat } from 'common/helpers';
+import { useAppDispatch } from 'common/hooks';
+import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
 import { Task } from 'types/entities';
 import { CardDetail } from '../../CardDetail';
 import { TodoCreateForm } from './TodoCreateForm';
@@ -17,15 +19,15 @@ interface CardProps {
 }
 
 export const Card: FC<CardProps> = ({ data, index }) => {
+  const dispatch = useAppDispatch();
   const { brutto, comment_or_reminder, lead_name, count_of_reminders, id, customer } = data;
-  const [open, setOpen] = useState<boolean>(false);
   const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
   const [clientOpen, setClientOpen] = useState<boolean>(false);
   const updatedDate = dateFormat(customer.created_at);
   const profileRef = useRef(null);
 
-  const onClose = () => {
-    setOpen(false);
+  const onOpen = () => {
+    dispatch(setChangeOpenEdgeModal(true));
   };
 
   const onCloseTodoModal = () => {
@@ -42,7 +44,7 @@ export const Card: FC<CardProps> = ({ data, index }) => {
 
   return (
     <div className={cn(styles.card, { [styles.isDragging]: isDragging })} ref={drag} id={`card-${index}`}>
-      <div className={styles.titleBlock} onClick={() => setOpen(true)}>
+      <div className={styles.titleBlock} onClick={onOpen}>
         <div className={styles.main}>
           <span className={styles.title}>{lead_name}</span>
           <span
@@ -73,7 +75,7 @@ export const Card: FC<CardProps> = ({ data, index }) => {
         </div>
         <Icon type='userIcon' alt='user' className={styles.user} />
       </div>
-      <EdgeModal isOpen={open} onClose={onClose}>
+      <EdgeModal>
         <CardDetail cardTitle={lead_name} />
       </EdgeModal>
       <Modal
