@@ -6,8 +6,8 @@ import { NotificationLayout } from 'common/containers';
 import { Loading } from 'common/ui';
 import { Header, Sidebar } from 'common/components';
 import { useAppDispatch, useAppSelector, useRedirect } from 'common/hooks';
-import { backgroundSelectors } from 'api/admin/background/background.selectors';
-import { useLazyGetUserInfoQuery } from 'api/admin/login/login.api';
+import { useLazyGetUserInfoQuery } from 'api/admin/employees/employees.api';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { loginSelectors } from 'api/admin/login/login.selectors';
 import { adminPath } from 'types/routes';
 import styles from './styles.module.scss';
@@ -16,10 +16,12 @@ import { initializeSocket } from 'socket';
 
 export const App = () => {
   const redirect = useRedirect();
-  const { role, userInfo, accessToken } = useAppSelector(loginSelectors.login);
+  const { accessToken } = useAppSelector(loginSelectors.login);
+  const { userInfo, role } = useAppSelector(employeesSelectors.employees);
+
   const routes = useRoutes(getRoutes(role));
   const { pathname } = useLocation();
-  const { bgType } = useAppSelector(backgroundSelectors.background);
+  const { bgType } = useAppSelector(employeesSelectors.employees);
   const [getData] = useLazyGetUserInfoQuery();
   const dispatch = useAppDispatch();
 

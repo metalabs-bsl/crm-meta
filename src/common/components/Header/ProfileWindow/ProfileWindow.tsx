@@ -1,15 +1,16 @@
 import { Button } from 'common/ui';
 import { dateFormat } from 'common/helpers';
 import { useAppSelector, useNotify } from 'common/hooks';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useLogoutMutation } from 'api/admin/login/login.api';
-import { loginSelectors } from 'api/admin/login/login.selectors';
 import { AvatarUpload } from '../AvatarUpload';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
 export const ProfileWindow = () => {
-  const { userInfo } = useAppSelector(loginSelectors.login);
+  const { userInfo } = useAppSelector(employeesSelectors.employees);
+
   const [handleLogout] = useLogoutMutation();
   const notify = useNotify();
 

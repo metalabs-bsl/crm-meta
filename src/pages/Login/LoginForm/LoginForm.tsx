@@ -2,7 +2,8 @@ import { FC } from 'react';
 import { Button, Checkbox, Input, Loading } from 'common/ui';
 import { useNotify, useRedirect } from 'common/hooks';
 import { crmChapters, MESSAGE } from 'common/constants';
-import { useLazyGetUserInfoQuery, useLoginMutation } from 'api/admin/login/login.api';
+import { useLazyGetUserInfoQuery } from 'api/admin/employees/employees.api';
+import { useLoginMutation } from 'api/admin/login/login.api';
 import styles from './styles.module.scss';
 
 import { SubmitHandler, useForm } from 'react-hook-form';

@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Badge } from 'common/ui';
 import { useAppSelector, useRedirect } from 'common/hooks';
 import { INavbar } from 'common/constants';
-import { loginSelectors } from 'api/admin/login/login.selectors';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import styles from './styles.module.scss';
 
 import { NAVBAR_PAGES } from 'types/enums';
@@ -17,7 +17,7 @@ interface IProps {
 export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
   const redirectTo = useRedirect();
   const { pathname } = useLocation();
-  const { role } = useAppSelector(loginSelectors.login);
+  const { role } = useAppSelector(employeesSelectors.employees);
 
   const onNavigate = (chapter: string) => {
     redirectTo[page]({ chapter });

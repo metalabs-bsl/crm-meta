@@ -1,13 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ROLES } from 'types/roles';
 import { IAuthorizedAaction, ILoginState } from 'types/store/admin/header.slice.types';
 import { loginApi } from './login.api';
 
 const initialState: ILoginState = {
   isAuthorized: false,
-  role: ROLES.UNAUTHORIZED,
-  accessToken: localStorage.getItem('accessToken') || null,
-  userInfo: null
+  accessToken: localStorage.getItem('accessToken') || null
 };
 
 export const loginSlice = createSlice({
@@ -24,12 +21,8 @@ export const loginSlice = createSlice({
       localStorage.setItem('refreshToken', payload.refreshToken);
       state.accessToken = payload.accessToken;
     });
-    builder.addMatcher(loginApi.endpoints.getUserInfo.matchFulfilled, (state, { payload }) => {
-      state.role = payload.roles[0];
-      state.userInfo = payload;
-    });
     builder.addMatcher(loginApi.endpoints.logout.matchFulfilled, (state) => {
-      (state.userInfo = null), (state.role = ROLES.UNAUTHORIZED), (state.accessToken = null);
+      state.accessToken = null;
       localStorage.clear();
     });
   }

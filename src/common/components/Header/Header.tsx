@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Button, Icon } from 'common/ui';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { loginSelectors } from 'api/admin/login/login.selectors';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { setChangeSidebarVisible } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
@@ -20,7 +20,8 @@ import { BUTTON_TYPES } from 'types/enums';
 export const Header = () => {
   const dispatch = useAppDispatch();
   const { isShowSidebar } = useAppSelector(sidebarSelectors.sidebar);
-  const { role } = useAppSelector(loginSelectors.login);
+  const { role } = useAppSelector(employeesSelectors.employees);
+
   const [isTimeModalOpen, setIsTimeModalOpen] = useState<boolean>(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isExtangesOpen, setIsExtangesOpen] = useState<boolean>(false);

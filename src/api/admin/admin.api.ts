@@ -1,4 +1,3 @@
-import { backgroundApi } from './background/background.api';
 import { currenciesApi } from './currencies/currencies.api';
 import { employessApi } from './employees/employees.api';
 import { leadsApi } from './leads/leads.api';
@@ -10,8 +9,7 @@ export const adminApiReducers = {
   [loginApi.reducerPath]: loginApi.reducer,
   [leadsApi.reducerPath]: leadsApi.reducer,
   [employessApi.reducerPath]: employessApi.reducer,
-  [workTime.reducerPath]: workTime.reducer,
-  [backgroundApi.reducerPath]: backgroundApi.reducer
+  [workTime.reducerPath]: workTime.reducer
 };
 
 export const adminApiMiddlewares = [
@@ -19,6 +17,5 @@ export const adminApiMiddlewares = [
   loginApi.middleware,
   leadsApi.middleware,
   employessApi.middleware,
-  workTime.middleware,
-  backgroundApi.middleware
+  workTime.middleware
 ];
