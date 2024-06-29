@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useState } from 'react';
 import { Button } from 'common/ui';
 import styles from './styles.module.scss';
 
-import TextareaAutosize from 'react-textarea-autosize';
+import ReactTextareaAutosize from 'react-textarea-autosize';
 import { BUTTON_TYPES } from 'types/enums';
 
 interface IUserData {
@@ -41,7 +41,12 @@ export const AnswerForm: FC<IProps> = ({ user, setShowAnswerForm }) => {
               <span className={styles.email}>{user.email}</span>
             </div>
           </div>
-          <TextareaAutosize className={styles.contentText} value={content} onChange={handleChange} placeholder='Напишите ваше сообщение' />
+          <ReactTextareaAutosize
+            className={styles.contentText}
+            value={content}
+            onChange={handleChange}
+            placeholder='Напишите ваше сообщение'
+          />
           <Button text={'отправить'} styleType={BUTTON_TYPES.YELLOW} className={styles.btnSend} onClick={handleSend} />
           <Button
             text={'отменить'}
