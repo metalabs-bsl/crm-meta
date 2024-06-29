@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Button, Checkbox } from 'common/ui';
+import { Modal } from 'common/components';
 import { dateFormat } from 'common/helpers';
-import { useRedirect } from 'common/hooks';
+// import { useRedirect } from 'common/hooks';
 import { IMailData } from '../types/mailsData';
 import styles from './styles.module.scss';
 
@@ -13,20 +14,12 @@ interface IProps {
   data: IMailData[];
 }
 
-const actionBtns = [
-  { text: 'открепить', style: BUTTON_TYPES.YELLOW, action: () => console.log('Открепить'), isChangeble: true },
-  { text: 'закрепить', style: BUTTON_TYPES.YELLOW, action: () => console.log('Закрепить'), isChangeble: true },
-  { text: 'переслать', style: BUTTON_TYPES.LINK_GRAY, action: () => console.log('переслать') },
-  { text: 'отметить как прочитанное', style: BUTTON_TYPES.LINK_GRAY, action: () => console.log('отметить как прочитанное') },
-  { text: 'удалить', style: BUTTON_TYPES.LINK_GRAY, action: () => console.log('удалить') }
-];
-
 export const MessageTable: FC<IProps> = ({ columns, data }) => {
-  const [messages, setMessages] = useState<IMailData[]>(data);
-  const [allChecked, setAllCheced] = useState<boolean>(false);
+  const [messages, setMessages] = useState<IMailData[]>([]);
+  const [allChecked, setAllChecked] = useState<boolean>(false);
   const [isBtnsShow, setIsBtnsShow] = useState<boolean>(false);
   const [currentMessage, setCurrentMessage] = useState<IMailData>();
-  const redirectTo = useRedirect();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const isAnyChecked = messages.some((message) => message.checked);
@@ -34,7 +27,7 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
   }, [messages]);
 
   const onToggleAllChecked = (e: boolean) => {
-    setAllCheced(e);
+    setAllChecked(e);
     const updated = messages.map((i) => ({ ...i, checked: e }));
     setMessages(updated);
   };
@@ -47,28 +40,43 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
       return i;
     });
     setMessages(updated);
-    setAllCheced(false);
+    setAllChecked(false);
 
-    const finded = messages.find((i) => i.id === id);
-    setCurrentMessage(finded);
+    const found = messages.find((i) => i.id === id);
+    setCurrentMessage(found);
   };
 
-  const handleClickMessage = (messageId: number) => {
-    const id = messageId.toString();
-    redirectTo.mailDetail({ id });
+  const handlePinAll = () => {
+    console.log('закрепить все', currentMessage);
   };
 
-  console.log(currentMessage);
+  const handleUnpinAll = () => {
+    console.log('открепить все', currentMessage);
+  };
+
+  const markAsRead = () => {
+    console.log('отправить на прочитанное', currentMessage);
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    console.log(isModalOpen);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
-    setMessages(data);
+    const sortedData = [...data].sort((a, b) => (b.pick ? 1 : 0) - (a.pick ? 1 : 0));
+    setMessages(sortedData);
   }, [data]);
 
   return (
-    <div className={styles.table_wpapper}>
+    <div className={styles.table_wrapper}>
       <table className={styles.table}>
-        <thead>
-          <tr>
+        <thead className={styles.thead}>
+          <tr className={styles.headTr}>
             <th>
               <Checkbox className={styles.checkbox} checked={allChecked} onChange={(e) => onToggleAllChecked(e.target.checked)} />
             </th>
@@ -80,18 +88,11 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
             </td>
           </tr>
         </thead>
-        <tbody>
+        <tbody className={styles.tbody}>
           {messages.map((message) => {
             const formatDate = dateFormat(message.date);
-
             return (
-              <tr
-                key={message.id}
-                className={cn({ [styles.unread]: message.unread })}
-                onClick={() => {
-                  handleClickMessage(message.id);
-                }}
-              >
+              <tr key={message.id} className={cn({ [styles.unread]: message.unread })}>
                 <td>
                   <Checkbox
                     className={styles.checkbox}
@@ -110,23 +111,22 @@ export const MessageTable: FC<IProps> = ({ columns, data }) => {
       </table>
       {isBtnsShow && (
         <div className={styles.btns_wrapper}>
-          {actionBtns.map((btn, index) => {
-            if (btn.isChangeble) {
-              if (currentMessage?.pick) {
-                if (btn.text === 'открепить') {
-                  return <Button key={index} text={btn.text} styleType={btn.style} onClick={btn.action} />;
-                }
-              } else {
-                if (btn.text === 'закрепить') {
-                  return <Button key={index} text={btn.text} styleType={btn.style} onClick={btn.action} />;
-                }
-              }
-            } else {
-              return <Button key={index} text={btn.text} styleType={btn.style} onClick={btn.action} />;
-            }
-          })}
+          <Button styleType={BUTTON_TYPES.GREEN} text='открепить все' onClick={handleUnpinAll} />
+          <Button styleType={BUTTON_TYPES.GREEN} text='закрепить все' onClick={handlePinAll} />
+          <Button styleType={BUTTON_TYPES.LINK_GRAY} text='переслать' />
+          <Button styleType={BUTTON_TYPES.LINK_GRAY} text='отметить как прочитанное' onClick={markAsRead} />
+          <Button styleType={BUTTON_TYPES.LINK_GRAY} text='удалить' onClick={handleModalOpen} />
         </div>
       )}
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+        <div className={styles.modalInner}>
+          <span>here need to place the current sms</span>
+          <div className={styles.modalBtnWrapper}>
+            <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Да, удалить' onClick={handleModalClose} />
+            <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GRAY} text='Отменить' onClick={handleModalClose} />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
