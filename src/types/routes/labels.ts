@@ -5,5 +5,6 @@ export const adminLabels = {
   calendar: 'Cтраница Календарь',
   document: 'Cтраница Документы',
   mail: 'Cтраница Почта',
+  mailDetail: 'Страница Почта Письмо',
   report: 'Cтраница Отчеты'
 };
