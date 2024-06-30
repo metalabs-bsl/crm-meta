@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
+import { Checkbox } from '../../../../../common/ui/Checkbox';
 import { ClientWindow, DeleteModal, DropdownModal, EdgeModal, LossForm, Modal } from 'common/components';
 import { dateFormatWithHour } from 'common/helpers';
 import { useAppDispatch } from 'common/hooks';
 import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
-import { Checkbox } from '../Checkbox';
 import MiniProgressBar, { Stage } from './MiniProgressBar';
 import styles from './style.module.scss';
 
@@ -24,19 +24,38 @@ export interface TableColumn {
 
 type DealStage = 'received' | 'processed' | 'consideration' | 'booking' | 'finish' | 'sale' | 'loss';
 
-export interface TableRow {
-  [key: string]: any;
-  dealStage: DealStage;
+interface ICustomerData {
+  fullname: string;
   birthday: string;
-  client: string;
-  phoneNumber: string;
+  phone: string;
   city: string;
   source: string;
 }
 
+interface ILeadRow {
+  [key: string]: any;
+  lead_name: string;
+  customer: ICustomerData;
+  lead_column: { id: string };
+}
+
+interface IStageData {
+  color: string;
+  created_at: string;
+  id: string;
+  name: string;
+  status: number;
+  updated_at: string;
+}
+
+export interface TableRow {
+  leads: ILeadRow[];
+  stages: IStageData[];
+}
+
 interface TableProps {
   columns: TableColumn[];
-  data: TableRow[];
+  data: TableRow;
 }
 
 interface ModalState {
@@ -60,14 +79,15 @@ const stages: Stage[] = [
   { title: 'Завершить сделку', type: 'finish', color: '#F21212' }
 ];
 
-export const Table: FC<TableProps> = ({ columns, data }) => {
-  const [tableData, setTableData] = useState<TableRow[]>(data);
+export const ListTable: FC<TableProps> = ({ columns, data }) => {
+  const [tableData, setTableData] = useState<ILeadRow[]>([]);
+  // const [stageData, setStageData] = useState<IStageData[]>([]);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
-  const [selectedRow, setSelectedRow] = useState<TableRow | null>(null);
+  const [selectedRow, setSelectedRow] = useState<ILeadRow | null>(null);
   const [lossReason, setLossReason] = useState<string>('');
-  const [cuurent, setCurrent] = useState<number | null>(null);
+  const [current, setCurrent] = useState<number | null>(null);
   const profileRef = useRef(null);
   const dispatch = useAppDispatch();
   const [modalState, setModalState] = useState<ModalState>({
@@ -82,6 +102,11 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     city: '',
     source: ''
   });
+
+  useEffect(() => {
+    setTableData(data.leads);
+    // setStageData(data.stages);
+  }, [data]);
 
   const handleDropdownOpen = (rowIndex: number) => {
     setCurrent(rowIndex);
@@ -156,21 +181,21 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     }
   };
 
-  const handleNameClick = (row: TableRow) => {
+  const handleNameClick = (row: ILeadRow) => {
     setSelectedRow(row);
     // setModalState({ ...modalState, cardDetail: true });
     dispatch(setChangeOpenEdgeModal(true));
   };
 
-  const handleClientInfoClick = (row: TableRow, rowIndex: number) => {
+  const handleClientInfoClick = (row: ILeadRow, rowIndex: number) => {
     handleDropdownOpen(rowIndex);
     setCurrent(rowIndex);
 
-    const clientName = row.client;
-    const clientPhoneNumber = row.phoneNumber;
-    const clientBirthday = row.birthday;
-    const clientCity = row.city;
-    const clientSource = row.source;
+    const clientName = row.customer.fullname;
+    const clientPhoneNumber = row.customer.phone;
+    const clientBirthday = row.customer.birthday;
+    const clientCity = row.customer.city;
+    const clientSource = row.customer.source;
 
     setModalState((prevState) => ({
       ...prevState,
@@ -195,9 +220,12 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
     }
   };
 
-  const renderEditComponent = (column: TableColumn, row: TableRow, rowIndex: number) => {
+  const renderEditComponent = (column: TableColumn, row: ILeadRow, rowIndex: number) => {
     const { key, isEdit, isDropdown } = column;
 
+    if (column.key === 'customer') {
+      return row[key].fullname;
+    }
     if (!isEdit) return row[key];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => handleInputChange(rowIndex, key, e.target.value);
@@ -235,7 +263,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
       );
     } else if (isDropdown && column.key === 'isDropdown') {
       // Отображение dropdown при клике на колонку client
-      if (modalState.dropdown && cuurent === rowIndex) {
+      if (modalState.dropdown && current === rowIndex) {
         return modalComponents.dropdown;
       } else {
         return (
@@ -395,7 +423,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
                   </td>
                   {columns.map((column, columnIndex) => (
                     <td
-                      ref={cuurent === index && columnIndex === 1 ? profileRef : null}
+                      ref={current === index && columnIndex === 1 ? profileRef : null}
                       key={columnIndex}
                       className={styles.column}
                       onMouseEnter={() => columnIndex === 1 && handleClientInfoClick(row, index)}
@@ -452,4 +480,4 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
   );
 };
 
-export default Table;
+export default ListTable;
