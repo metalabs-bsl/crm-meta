@@ -1,5 +1,5 @@
 import { setConnected } from 'api/admin/kanban/kanban.slice';
-import { setKanbanBoard } from 'api/admin/kanban/kanban.ws';
+import { setKanbanAllBoard, setKanbanBoard } from 'api/admin/kanban/kanban.ws';
 import { IColumn } from 'types/entities';
 
 import { AppDispatch, RootState } from 'api';
@@ -25,11 +25,6 @@ export const connectSocket = (accessToken: string | null) => {
     socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket server');
       // Add logic for handling disconnection if needed
-    });
-
-    socket.on('boardKanban', (message: IColumn[]) => {
-      console.log('Received boardKanban event:', message);
-      // Add logic for handling received data if needed
     });
 
     socket.connect();
@@ -61,6 +56,10 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
     dispatch(setConnected(socket?.connected || false));
     socket?.on('boardKanban', (message: IColumn[]) => {
       dispatch(setKanbanBoard(message));
+    });
+
+    socket?.on('boardKanbanAll', (message: IColumn[]) => {
+      dispatch(setKanbanAllBoard(message));
     });
   } else {
     console.error('Access token is not available, cannot initialize socket.');

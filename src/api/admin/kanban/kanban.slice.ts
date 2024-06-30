@@ -7,12 +7,14 @@ import { disconnectSocket } from 'socket';
 interface SocketState {
   connected: boolean;
   board: IColumn[];
+  boardAll: IColumn[];
   loading: boolean;
 }
 
 const initialState: SocketState = {
   connected: false,
   board: [],
+  boardAll: [],
   loading: false
 };
 
@@ -26,6 +28,9 @@ export const kanbanSlice = createSlice({
     setBoard(state, action: PayloadAction<IColumn[]>) {
       state.board = action.payload;
     },
+    setBoardAll(state, action: PayloadAction<IColumn[]>) {
+      state.boardAll = action.payload;
+    },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     }
@@ -38,4 +43,4 @@ export const kanbanSlice = createSlice({
   }
 });
 
-export const { setConnected, setBoard, setLoading } = kanbanSlice.actions;
+export const { setConnected, setBoard, setBoardAll, setLoading } = kanbanSlice.actions;
