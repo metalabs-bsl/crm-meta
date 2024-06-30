@@ -16,27 +16,27 @@ export const DealsForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<ICreateLeadParams>();
 
-  const { isNewDeal } = useAppSelector(sidebarSelectors.sidebar);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const { isNewDeal, column_id } = useAppSelector(sidebarSelectors.sidebar);
+  const [isEdit, setIsEdit] = useState<boolean>(isNewDeal);
   const { data: responsibleOptions, isFetching: isResponsibleFetching } = useGetResponsibleEmployeesQuery();
   const { data: sourceOptions, isFetching: isSourceFetching } = useGetSourseLeadQuery();
   const [createDeal, { isLoading: isCreateLoading }] = useCreateLeadMutation();
   const notify = useNotify();
 
   useEffect(() => {
-    if (isNewDeal) {
-      setIsEdit(isNewDeal);
-    }
+    setIsEdit(isNewDeal);
   }, [isNewDeal]);
 
   const onsubmit: SubmitHandler<ICreateLeadParams> = (data) => {
-    createDeal({ ...data })
+    createDeal({ ...data, column_id: column_id })
       .unwrap()
       .then(() => {
         notify(MESSAGE.SUCCESS, 'success');
+        reset();
       });
   };
 

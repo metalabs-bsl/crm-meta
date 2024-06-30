@@ -27,3 +27,14 @@ export interface IColumn {
   leads_count: number;
   id: string;
 }
+
+export interface IColumnInfo {
+  name: string;
+  color: string;
+  status?: number;
+}
+
+export interface ICreateColumnParams {
+  id: string;
+  body: IColumnInfo;
+}

@@ -13,7 +13,6 @@ interface IProps {
 
 export const Kanban: FC<IProps> = ({ data, onChange }) => {
   const [columns, setColumns] = useState(data);
-
   useEffect(() => {
     if (data) {
       setColumns(data);
