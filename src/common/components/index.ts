@@ -1,3 +1,4 @@
+export { AccessChangeble } from './AccessChangeble';
 export { Accordion } from './Accordion';
 export { BirthDayModal } from './BirthDayModal';
 export { BreakModal } from './BreakModal';

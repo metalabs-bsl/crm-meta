@@ -9,10 +9,7 @@ export interface IResponsibleEmployees {
   email: string;
 }
 
-export interface IResResponsible {
-  count: number;
-  employees: IResponsibleEmployees[];
-}
+export type IResResponsible = IResponsibleEmployees[];
 
 interface IRole {
   id: string;

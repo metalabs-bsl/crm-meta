@@ -24,7 +24,7 @@ export const employeesSlice = createSlice({
     builder.addMatcher(employessApi.endpoints.getUserInfo.matchFulfilled, (state, { payload }) => {
       state.bgType = payload.background;
       state.userInfo = payload;
-      state.role = payload.roles[0];
+      state.role = payload.roles[0].role_name;
     });
     builder.addMatcher(loginApi.endpoints.logout.matchFulfilled, (state) => {
       state.userInfo = null;

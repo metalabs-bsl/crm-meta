@@ -41,4 +41,15 @@
       color: $gray-btn-bg-hover;
     }
   }
+
+  .tableWrapper {
+    position: relative;
+    width: calc(100vw - 254px);
+    height: calc(100vh - 270px);
+    background: $white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px $black-box-shadow;
+    overflow: hidden;
+    margin: 0 auto;
+  }
 }

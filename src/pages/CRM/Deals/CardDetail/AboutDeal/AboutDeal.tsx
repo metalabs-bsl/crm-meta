@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import cn from 'classnames';
-import { Button, Icon } from 'common/ui';
-import { Tabs } from 'common/components';
+import { Button } from 'common/ui';
+import { AccessChangeble, Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
+import { useAppSelector } from 'common/hooks';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { ROLES } from 'types/roles';
 import { TAB_COMPONENTS } from './AboutDeal.helper';
 import { Accounts } from './Accounts';
 import { Calculator } from './Calculator';
@@ -28,9 +31,11 @@ const tabItems: ITabsItem[] = [
 ];
 
 export const AboutDeal = ({ ...rest }) => {
+  const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
   const [isAccess, setIsAccess] = useState<boolean>(true);
+  const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
 
   const getActiveComponent = () => {
     const component = {
@@ -48,10 +53,7 @@ export const AboutDeal = ({ ...rest }) => {
         <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
           {isCalculatorTab && (
             <div className={styles.btns_wrapper}>
-              <div className={styles.access} onClick={() => setIsAccess(!isAccess)}>
-                <span>Доступ {isAccess ? 'открыт' : 'закрыт'}</span>
-                <Icon type={`calc-${isAccess ? 'open' : 'close'}`} />
-              </div>
+              {isManagement && <AccessChangeble isAccess={isAccess} setIsAccess={setIsAccess} />}
               <Button text='Создать договор' styleType={BUTTON_TYPES.LINK_GRAY} />
             </div>
           )}

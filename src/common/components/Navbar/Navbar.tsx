@@ -27,7 +27,7 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
     <nav className={styles.navBar}>
       <ul>
         {Object.values(navbarItems).map((item, index) => {
-          if (!!item.allowRoles.length && !item.allowRoles.includes(role.role_name)) {
+          if (!!item.allowRoles.length && !item.allowRoles.includes(role)) {
             return null;
           }
 

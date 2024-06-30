@@ -12,7 +12,7 @@ export const employessApi = createApi({
     getResponsibleEmployees: query<Options[], IGetResponsibleEmployees.Params>({
       query: () => `/employees/all`,
       transformResponse: (data: IGetResponsibleEmployees.Response) => {
-        return data.employees.map((employee) => ({
+        return data.map((employee) => ({
           label: `${employee.first_name} ${employee.second_name}`,
           value: employee.id
         }));

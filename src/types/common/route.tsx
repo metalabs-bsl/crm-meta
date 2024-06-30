@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
-import { IROLE } from '../roles';
+import { UserRoleUnionType } from 'types/roles/roles';
 
 export type IRoute = {
   path: string;
   label: string;
   element?: ReactElement;
   children?: IRoute[];
-  roles: IROLE.RoleObject[];
+  roles: UserRoleUnionType[];
 };

@@ -26,20 +26,18 @@ export const App = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!accessToken) {
-      redirect.login({});
+    if (accessToken && !userInfo) {
+      getData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken, role.role_name]);
-
-  useEffect(() => {
-    if (accessToken && !userInfo) getData();
   }, [accessToken, getData, userInfo]);
 
   useEffect(() => {
     if (accessToken) {
       dispatch(initializeSocket());
+    } else {
+      redirect.login({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, dispatch]);
 
   return (
