@@ -29,6 +29,10 @@
   }
 }
 
+.employeesContainer {
+  overflow-x: auto;
+}
+
 .wrapper {
   background: $white;
   height: auto;

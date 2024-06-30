@@ -33,8 +33,25 @@ export const employessApi = createApi({
     }),
     getUserInfo: query<IGetUserInfo.Response, IGetUserInfo.Params>({
       query: () => `/employees`
+    }),
+    addEmployee: mutation<void, FormData>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/employees`,
+        body
+      })
+    }),
+    getAllEmployees: query<IGetUserInfo.Response[], void>({
+      query: () => `/employees/all`
     })
   })
 });
 
-export const { useGetResponsibleEmployeesQuery, useUploadAvatarMutation, useUpdateBgMutation, useLazyGetUserInfoQuery } = employessApi;
+export const {
+  useGetResponsibleEmployeesQuery,
+  useUploadAvatarMutation,
+  useUpdateBgMutation,
+  useLazyGetUserInfoQuery,
+  useAddEmployeeMutation,
+  useGetAllEmployeesQuery
+} = employessApi;

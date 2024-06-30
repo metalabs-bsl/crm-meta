@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, DatePicker, SearchInput } from 'common/ui';
 import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
+import { useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
 import AddEmployess from './AddEmployess/AddEmployess';
 import { DataColumn, EditOptions } from './types/types';
 import { columns, dataColumns } from './Employess.helper';
@@ -12,6 +13,9 @@ const isEditOptions = (isEdit: any): isEdit is EditOptions => {
 };
 
 export const Employees = () => {
+  const { data } = useGetAllEmployeesQuery();
+  console.log(data);
+
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [tableData, setTableData] = useState<DataColumn[]>(dataColumns);
   const [, setIsMainChecked] = useState<boolean>(false);

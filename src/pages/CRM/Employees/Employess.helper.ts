@@ -1,5 +1,6 @@
 import { Column, DataColumn } from './types/types';
 
+// const [data, { isFetching }] = useGetResponsibleEmployeesQuery();
 // список разделов таблице
 export const columns: Column[] = [
   {
