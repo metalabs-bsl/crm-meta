@@ -16,6 +16,7 @@ export interface ISidebarState {
   isShowSidebar: boolean;
   isOpenEdgeModal: boolean;
   isNewDeal: boolean;
+  column_id: string;
 }
 
 export type ISidebarAction = PayloadAction<boolean>;

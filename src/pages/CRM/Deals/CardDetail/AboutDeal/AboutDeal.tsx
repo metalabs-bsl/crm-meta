@@ -30,7 +30,7 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-export const AboutDeal = ({ ...rest }) => {
+export const AboutDeal = () => {
   const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
@@ -48,7 +48,7 @@ export const AboutDeal = ({ ...rest }) => {
 
   return (
     <div className={styles.aboutDeal}>
-      {!isCalculatorTab && <DealsForm {...rest} />}
+      {!isCalculatorTab && <DealsForm />}
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
         <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
           {isCalculatorTab && (

@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'common/components';
 import { useAppDispatch } from 'common/hooks';
-import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
+import { setChangeOpenEdgeModal, setColumnId, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { IColumn } from 'types/entities';
 import { CardDetail } from '../../CardDetail';
 import { Card } from '../Card';
@@ -19,7 +19,7 @@ interface ColumnProps {
 }
 
 export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
-  const { status, column_name, color, leads, leads_count } = col;
+  const { status, column_name, color, leads, leads_count, id } = col;
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -82,6 +82,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
   };
 
   const onOpen = () => {
+    dispatch(setColumnId(id));
     dispatch(setChangeOpenEdgeModal(true));
     dispatch(setIsNewDeal(true));
   };
