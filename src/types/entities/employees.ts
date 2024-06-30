@@ -45,3 +45,28 @@ export interface IUserInfoRes {
   avatar: null | IAvatar;
   background: BG_TYPES;
 }
+
+export interface IEmployee {
+  id: string;
+  first_name: string;
+  second_name: string;
+  email: string;
+  date_of_birth: string;
+  status: string;
+  start_of_internship: string;
+  created_at: string;
+  phone: string;
+  contract_id: string;
+  passport_id: string;
+}
+
+export interface iAddEmployee {
+  id: string;
+  first_name: string;
+  second_name: string;
+  status: string;
+  phone: string;
+  email: string;
+  contract_id: string;
+  passport_id: string;
+}

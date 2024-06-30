@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
-import { IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
+import { IAddEmployeeForm, IGetEmployee, IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
 
 import { BG_TYPES } from 'types/enums';
 
@@ -34,14 +34,14 @@ export const employessApi = createApi({
     getUserInfo: query<IGetUserInfo.Response, IGetUserInfo.Params>({
       query: () => `/employees`
     }),
-    addEmployee: mutation<void, FormData>({
+    addEmployee: mutation<IAddEmployeeForm.Response, FormData>({
       query: (body) => ({
         method: 'POST',
         url: `/employees`,
         body
       })
     }),
-    getAllEmployees: query<IGetUserInfo.Response[], void>({
+    getAllEmployees: query<IGetEmployee.Response[], void>({
       query: () => `/employees/all`
     })
   })

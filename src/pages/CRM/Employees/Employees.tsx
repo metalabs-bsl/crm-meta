@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, DatePicker, SearchInput } from 'common/ui';
 import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
+import { dateFormat } from 'common/helpers';
 import { useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
+import { IEmployee } from 'types/entities/employees';
 import AddEmployess from './AddEmployess/AddEmployess';
 import { DataColumn, EditOptions } from './types/types';
-import { columns, dataColumns } from './Employess.helper';
+import { columns } from './Employess.helper';
 import styles from './style.module.scss';
 
 const isEditOptions = (isEdit: any): isEdit is EditOptions => {
@@ -17,7 +19,7 @@ export const Employees = () => {
   console.log(data);
 
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [tableData, setTableData] = useState<DataColumn[]>(dataColumns);
+  const [tableData, setTableData] = useState<DataColumn[]>([]);
   const [, setIsMainChecked] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -26,6 +28,28 @@ export const Employees = () => {
   const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [, setBirthdayData] = useState<{ [key: number]: Date | null }>({});
+
+  const transformData = (data: IEmployee[]): DataColumn[] => {
+    return data.map((item) => ({
+      id: item.id,
+      fullName: `${item.first_name} ${item.second_name}`,
+      birthday: dateFormat(item.date_of_birth),
+      phoneNumber: item.phone,
+      status: item.status,
+      email: item.email,
+      startDateInternship: item.start_of_internship,
+      startDateWork: dateFormat(item.created_at),
+      agreement: item.contract_id,
+      passport: item.passport_id
+    }));
+  };
+
+  useEffect(() => {
+    if (data) {
+      const transformedData = transformData(data);
+      setTableData(transformedData);
+    }
+  }, [data]);
 
   const handleMainCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -121,30 +145,30 @@ export const Employees = () => {
     }));
   };
 
-  useEffect(() => {
-    const initialAgreementFilesFromServer = dataColumns.reduce(
-      (acc, item, index) => {
-        if (item.agreement) {
-          acc[index] = item.agreement.split(',');
-        }
-        return acc;
-      },
-      {} as { [key: number]: string[] }
-    );
+  // useEffect(() => {
+  //   const initialAgreementFilesFromServer = dataColumns.reduce(
+  //     (acc, item, index) => {
+  //       if (item.agreement) {
+  //         acc[index] = item.agreement.split(',');
+  //       }
+  //       return acc;
+  //     },
+  //     {} as { [key: number]: string[] }
+  //   );
 
-    const initialPassportFilesFromServer = dataColumns.reduce(
-      (acc, item, index) => {
-        if (item.passport) {
-          acc[index] = item.passport.split(',');
-        }
-        return acc;
-      },
-      {} as { [key: number]: string[] }
-    );
+  //   const initialPassportFilesFromServer = dataColumns.reduce(
+  //     (acc, item, index) => {
+  //       if (item.passport) {
+  //         acc[index] = item.passport.split(',');
+  //       }
+  //       return acc;
+  //     },
+  //     {} as { [key: number]: string[] }
+  //   );
 
-    setAgreementFiles(initialAgreementFilesFromServer);
-    setPassportFiles(initialPassportFilesFromServer);
-  }, []);
+  //   setAgreementFiles(initialAgreementFilesFromServer);
+  //   setPassportFiles(initialPassportFilesFromServer);
+  // }, []);
 
   return (
     <>
@@ -251,7 +275,7 @@ export const Employees = () => {
                             data[column.key]
                           )
                         ) : column.key === 'agreement' ? (
-                          (agreementFiles[index] ?? data[column.key].split(',')).map((file, fileIndex) => (
+                          (agreementFiles[index] ?? []).map((file, fileIndex) => (
                             <div key={fileIndex}>
                               <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
                                 {file || 'No file'}
@@ -259,7 +283,7 @@ export const Employees = () => {
                             </div>
                           ))
                         ) : column.key === 'passport' ? (
-                          (passportFiles[index] ?? data[column.key].split(',')).map((file, fileIndex) => (
+                          (passportFiles[index] ?? []).map((file, fileIndex) => (
                             <div key={fileIndex}>
                               <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
                                 {file || 'No file'}

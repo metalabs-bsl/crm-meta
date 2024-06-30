@@ -1,6 +1,5 @@
 import { Column, DataColumn } from './types/types';
 
-// const [data, { isFetching }] = useGetResponsibleEmployeesQuery();
 // список разделов таблице
 export const columns: Column[] = [
   {
@@ -78,7 +77,7 @@ export const columns: Column[] = [
 // данные таблицы
 export const dataColumns: DataColumn[] = [
   {
-    fullName: 'Almaz Almazov Almazovich',
+    fullName: '',
     status: 'Менеджер руководитель',
     birthday: '04.07.2024T00:00',
     phoneNumber: '+996222123123',
@@ -86,7 +85,8 @@ export const dataColumns: DataColumn[] = [
     startDateInternship: '12.02.2024T00:00',
     startDateWork: '01.01.2024T00:00',
     agreement: 'договор стажировки',
-    passport: '123456789'
+    passport: '123456789',
+    id: ''
   },
   {
     fullName: 'Adil Adylov Adylovich',
@@ -97,6 +97,7 @@ export const dataColumns: DataColumn[] = [
     startDateInternship: '06.05.2024T00:00',
     startDateWork: '04.07.2024T00:00',
     agreement: 'договор  работы',
-    passport: '134501923'
+    passport: '134501923',
+    id: ''
   }
 ];

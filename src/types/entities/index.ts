@@ -1,5 +1,5 @@
 export type { IResCurrenciesLast } from './currencies';
-export type { IResResponsible, IUserInfoRes } from './employees';
+export type { iAddEmployee, IEmployee, IResResponsible, IUserInfoRes } from './employees';
 export type { IResExchangeRates } from './exchangeRates';
 export * from './history';
 export type { IColumn, Task } from './kanban';

@@ -13,10 +13,11 @@ export interface Column {
 
 export interface DataColumn {
   [key: string]: string;
+  id: string;
   fullName: string;
-  status: string;
   birthday: string;
   phoneNumber: string;
+  status: string;
   email: string;
   startDateInternship: string;
   startDateWork: string;
