@@ -2,9 +2,11 @@ import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'common/components';
-import { useAppDispatch } from 'common/hooks';
+import { useAppDispatch, useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
 import { setChangeOpenEdgeModal, setColumnId, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
-import { IColumn } from 'types/entities';
+import { IColumn, IColumnInfo } from 'types/entities';
 import { CardDetail } from '../../CardDetail';
 import { Card } from '../Card';
 import { ColumnForm } from './ColumnForm';
@@ -25,8 +27,16 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
   const filterRef = useRef(null);
-  const isSaleColumn = status === 1;
+  const isSaleColumn = status === 6;
+  const isEditableColumn = status === 1 || status === 7;
+  const isDelitableColumn = leads_count === 0 && isEditableColumn;
+  const isLeadCreatable = status === 1 || status === 2 || status === 3 || status === 4;
+  const [createColumn] = useCreateColumnMutation();
+  const [deleteColumn] = useDeleteColumnMutation();
+  const [updateColumn] = useUpdateColumnMutation();
+
   const dispatch = useAppDispatch();
+  const notify = useNotify();
 
   const [{ isOver }, drop] = useDrop({
     accept: 'CARD',
@@ -68,11 +78,6 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
     setOpenDeleteModal(false);
   };
 
-  const onColumnDelete = () => {
-    console.log('колонка удалена');
-    onCloseDeleteModal();
-  };
-
   const onClickFilterModal = () => {
     setOpenFilterModal(!openFilterModal);
   };
@@ -87,6 +92,33 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
     dispatch(setIsNewDeal(true));
   };
 
+  const onCreateColumn = (body: IColumnInfo) => {
+    createColumn({ body, id })
+      .unwrap()
+      .then(() => {
+        onCloseColumnModal();
+        notify(MESSAGE.CREATED, 'success');
+      });
+  };
+
+  const onColumnDelete = () => {
+    deleteColumn(id)
+      .unwrap()
+      .then(() => {
+        onCloseDeleteModal();
+        notify(MESSAGE.DELETED, 'success');
+      });
+  };
+
+  const onColumnUpdate = (body: IColumnInfo) => {
+    updateColumn({ body, id })
+      .unwrap()
+      .then(() => {
+        onCloseColumnModal();
+        notify(MESSAGE.UPDATED, 'success');
+      });
+  };
+
   return (
     <div className={cn(styles.column, { [styles.isOver]: isOver })}>
       <div className={styles.titleBlock}>
@@ -99,24 +131,30 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
               <Icon type='calendar-outline' />
             </div>
           )}
-          <Icon type='edit' onClick={onOpenEditModal} />
-          <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />
+          {isEditableColumn && <Icon type='edit' onClick={onOpenEditModal} />}
+          {isDelitableColumn && <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />}
           <div className={styles.plus}>
             <Icon type='plus-icon' alt='plus' onClick={onOpenCreateModal} />
           </div>
         </div>
       </div>
       {isSaleColumn && <span className={styles.totalSum}>200.000$</span>}
-      <div className={styles.createBtn} onClick={onOpen}>
-        <Icon type='plus-icon' alt='plus' />
-      </div>
+      {isLeadCreatable && (
+        <div className={styles.createBtn} onClick={onOpen}>
+          <Icon type='plus-icon' alt='plus' />
+        </div>
+      )}
       <div className={styles.cardsContainer} ref={drop}>
         {leads.map((task, index) => (
           <Card key={task.id} index={index} data={task} />
         ))}
       </div>
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>
-        <ColumnForm formProps={isEditing ? { column_name, color } : undefined} onCancel={onCloseColumnModal} />
+        <ColumnForm
+          onSendSubmit={isEditing ? onColumnUpdate : onCreateColumn}
+          formProps={isEditing ? { name: column_name, color, status: 100 } : undefined}
+          onCancel={onCloseColumnModal}
+        />
       </Modal>
       <DeleteModal
         isOpen={openDeleteModal}
