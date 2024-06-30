@@ -17,12 +17,18 @@ import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
+const options: Options[] = [
+  { label: 'Мои сделки', value: '1' },
+  { label: 'Общие сделки', value: '2' }
+];
+
 export const Deals = () => {
   const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
   const dispatch = useAppDispatch();
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
   const [access, setAccess] = useState<boolean>(true);
+  const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -31,17 +37,12 @@ export const Deals = () => {
 
   const getDealsComponent = () => {
     const components: Record<DEALS_TABS, JSX.Element> = {
-      [DEALS_TABS.kanban]: <KanbanChapter />,
+      [DEALS_TABS.kanban]: <KanbanChapter dataType={wsDataType} />,
       [DEALS_TABS.list]: <List />,
       [DEALS_TABS.todos]: <Todos data={[]} />
     };
     return components[isActiveTab];
   };
-
-  const options: Options[] = [
-    { label: 'Мои сделки', value: 1 },
-    { label: 'Общие сделки', value: 2 }
-  ];
 
   return (
     <div className={styles.deals}>
@@ -53,7 +54,14 @@ export const Deals = () => {
           )}
         </div>
         <div className={styles.filterBlock}>
-          {isManagement && <Select options={options} className={styles.filterSelect} />}
+          {isManagement && (
+            <Select
+              defaultValue={options[0].value}
+              options={options}
+              className={styles.filterSelect}
+              onChange={(e) => setWsDataType(e.target.value)}
+            />
+          )}
           <SearchInput placeholder='Поиск' />
         </div>
       </div>

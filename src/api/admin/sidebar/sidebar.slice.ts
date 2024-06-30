@@ -1,11 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ISidebarAction, ISidebarState } from 'types/store/admin/header.slice.types';
 import { leadsApi } from '../leads/leads.api';
 
 const initialState: ISidebarState = {
   isShowSidebar: true,
   isOpenEdgeModal: false,
-  isNewDeal: false
+  isNewDeal: false,
+  column_id: ''
 };
 
 export const sidebarSlice = createSlice({
@@ -20,13 +21,17 @@ export const sidebarSlice = createSlice({
     },
     setIsNewDeal: (state, action: ISidebarAction) => {
       state.isNewDeal = action.payload;
+    },
+    setColumnId: (state, action: PayloadAction<string>) => {
+      state.column_id = action.payload;
     }
   },
   extraReducers(builder) {
     builder.addMatcher(leadsApi.endpoints.createLead.matchFulfilled, (state) => {
       state.isOpenEdgeModal = false;
+      state.column_id = '';
     });
   }
 });
 
-export const { setChangeSidebarVisible, setChangeOpenEdgeModal, setIsNewDeal } = sidebarSlice.actions;
+export const { setChangeSidebarVisible, setChangeOpenEdgeModal, setIsNewDeal, setColumnId } = sidebarSlice.actions;
