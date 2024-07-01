@@ -15,8 +15,6 @@ export const KanbanChapter: FC<IProps> = ({ dataType }) => {
   const dispatch = useAppDispatch();
   const notify = useNotify();
 
-  console.log('board', board);
-
   const handleChangeBoard = (data: IColumn[]) => {
     if (JSON.stringify(data) !== JSON.stringify(board)) {
       if (dataType === '1') {
