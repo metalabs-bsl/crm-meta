@@ -37,7 +37,7 @@ export const employessApi = createApi({
     addEmployee: mutation<IAddEmployeeForm.Response, FormData>({
       query: (body) => ({
         method: 'POST',
-        url: `/employees`,
+        url: `/auth/register`,
         body
       })
     }),

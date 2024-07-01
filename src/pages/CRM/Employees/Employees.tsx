@@ -184,7 +184,7 @@ export const Employees = () => {
         </div>
       </div>
       <div className={styles.wrapper}>
-        <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)}>
+        <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)} className={styles.modal}>
           {showAddEmployeeForm && <AddEmployess />}
         </Modal>
 

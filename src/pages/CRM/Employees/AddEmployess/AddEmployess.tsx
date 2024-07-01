@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, DatePicker, FilePicker, Loading } from 'common/ui';
+import { Button, DatePicker, Loading } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { useAddEmployeeMutation } from 'api/admin/employees/employees.api';
 import styles from './style.module.scss';
@@ -68,10 +68,10 @@ const AddEmployees: FC = () => {
               <label>Статус</label>
               <select {...register('status', { required: 'Выберите статус' })} className={styles.input}>
                 <option value=''>Выберите статус</option>
-                <option value='Стажёр'>Стажёр</option>
-                <option value='Менеджер'>Менеджер</option>
-                <option value='Менеджер-руководитель'>Менеджер-руководитель</option>
-                <option value='Руководитель'>Руководитель</option>
+                <option value='Intern'>Стажёр</option>
+                <option value='Manager'>Менеджер</option>
+                <option value='Senior Manager'>Менеджер-руководитель</option>
+                <option value='Director'>Руководитель</option>
               </select>
               {errors.status && <span className={styles.error}>{errors.status.message}</span>}
             </div>
@@ -108,7 +108,7 @@ const AddEmployees: FC = () => {
                 {errors.employmentStartDate && <span className={styles.error}>{errors.employmentStartDate.message}</span>}
               </div>
             </div>
-            <div className={styles.agreement}>
+            {/* <div className={styles.agreement}>
               <label>Договор</label>
               <FilePicker />
               {errors.contract && <span className={styles.error}>{errors.contract.message}</span>}
@@ -117,7 +117,7 @@ const AddEmployees: FC = () => {
               <label>ID паспорта</label>
               <FilePicker />
               {errors.passport && <span className={styles.error}>{errors.passport.message}</span>}
-            </div>
+            </div> */}
           </div>
         </form>
       </div>
