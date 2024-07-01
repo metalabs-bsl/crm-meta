@@ -4,7 +4,6 @@ import duration from 'dayjs/plugin/duration';
 import cn from 'classnames';
 import { Button, Icon, Loading } from 'common/ui';
 import { useNotify } from 'common/hooks';
-import { MESSAGE } from 'common/constants';
 import {
   useEndMutation,
   useGetWorkTimeInfoQuery,
@@ -30,19 +29,14 @@ export const StartWindow = () => {
   const [pauseTime, setPauseTime] = useState('00:00');
   const [isOneHourPause, setIsOneHourPause] = useState<boolean>(false);
 
-  // этот useEffect отвечает за оповещение и за окрашивание таймера в красный если будет больше часа
+  // этот useEffect отвечает за окрашивание таймера в красный если будет больше часа
   useEffect(() => {
-    const time1 = pauseTime;
-    const time2 = '01:00';
-    const time3 = '00:23';
+    const redPauseTime = '00:59';
 
-    const time1Obj = dayjs(`2024-01-01T${time1}`);
-    const time2Obj = dayjs(`2024-01-01T${time2}`);
-    const time3Obj = dayjs(`2024-01-01T${time3}`);
+    const time1Obj = dayjs(`2024-01-01T${pauseTime}`);
+    const time2Obj = dayjs(`2024-01-01T${redPauseTime}`);
 
     setIsOneHourPause(time1Obj.isAfter(time2Obj));
-
-    if (time1Obj.isSame(time3Obj)) notify(MESSAGE.TIMER_MESSAGE, 'warning');
   }, [notify, pauseTime]);
 
   // этот useEffect отвечает за сопостаяление текущего этапа сценария
@@ -89,7 +83,7 @@ export const StartWindow = () => {
         setCurrentWorkTime(`${hours}:${minutes}`);
       };
       updateCurrentWorkTime();
-      intervalId = setInterval(updateCurrentWorkTime, 1000);
+      intervalId = setInterval(updateCurrentWorkTime, 60000);
     }
     return () => {
       if (intervalId) clearInterval(intervalId);
@@ -109,7 +103,7 @@ export const StartWindow = () => {
         setPauseTime(`${hours}:${minutes}`);
       };
       updateCurrentPauseTime();
-      intervalId = setInterval(updateCurrentPauseTime, 1000);
+      intervalId = setInterval(updateCurrentPauseTime, 60000);
     }
     return () => {
       if (intervalId) clearInterval(intervalId);

@@ -8,6 +8,7 @@ export { DeleteModal } from './DeleteModal';
 export { DropdownModal } from './DropdownModal';
 export { EdgeModal } from './EdgeModal';
 export { FilterByDate } from './FilterByDate';
+export { GreetingsModal } from './GreetingsModal';
 export { Header } from './Header';
 export { LossForm } from './LossForm';
 export { Modal } from './Modal';
