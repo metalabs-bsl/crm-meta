@@ -7,7 +7,6 @@ export { Date } from './Date';
 export { DeleteModal } from './DeleteModal';
 export { DropdownModal } from './DropdownModal';
 export { EdgeModal } from './EdgeModal';
-export { ErrorMessage } from './ErrorMessage';
 export { FilterByDate } from './FilterByDate';
 export { GreetingsModal } from './GreetingsModal';
 export { Header } from './Header';
