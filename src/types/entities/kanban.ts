@@ -1,9 +1,22 @@
+import { IResponsibleEmployees } from './employees';
+
+export interface IComment_or_Reminder {
+  date_to_finish: string;
+  text: string;
+  type: string;
+}
+
+export interface IResponsible_employee extends IResponsibleEmployees {
+  avatar_id: string;
+  phone: string;
+}
+
 export interface Task {
   id: string;
   lead_name: string;
   status: number;
   brutto: string | null;
-  comment_or_reminder: string | null;
+  comment_or_reminder: IComment_or_Reminder;
   count_of_reminders: number;
   customer: {
     date_of_birth: string;
@@ -17,6 +30,7 @@ export interface Task {
     city: string;
     source: string;
   };
+  responsible_employee: IResponsible_employee;
 }
 
 export interface IColumn {

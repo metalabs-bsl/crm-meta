@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { Icon, Loading } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useUploadAvatarMutation } from 'api/admin/employees/employees.api';
+import { useDeleteAvatarMutation, useUploadAvatarMutation } from 'api/admin/employees/employees.api';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -15,6 +15,7 @@ export const AvatarUpload: FC<IProps> = ({ file }) => {
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadAvatar, { isLoading }] = useUploadAvatarMutation();
+  const [removeAvatar, { isLoading: isDeleteLoading }] = useDeleteAvatarMutation();
 
   useEffect(() => {
     if (file) {
@@ -39,15 +40,20 @@ export const AvatarUpload: FC<IProps> = ({ file }) => {
   };
 
   const deleteAvatar = () => {
-    setAvatarUrl(undefined);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    removeAvatar()
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.DELETED, 'success');
+        setAvatarUrl(undefined);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      });
   };
 
   return (
     <div className={cn(styles.avatar, { [styles.hasPhoto]: avatarUrl })}>
-      <Loading isSpin={isLoading}>
+      <Loading isSpin={isLoading || isDeleteLoading}>
         {avatarUrl && <Icon type='delete' className={styles.delete} onClick={deleteAvatar} />}
         {avatarUrl ? (
           <label htmlFor='avatarInput'>

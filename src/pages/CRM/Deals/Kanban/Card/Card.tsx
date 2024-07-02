@@ -19,7 +19,7 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({ data, index }) => {
   const dispatch = useAppDispatch();
-  const { brutto, comment_or_reminder, lead_name, count_of_reminders, id, customer } = data;
+  const { comment_or_reminder, lead_name, count_of_reminders, id, customer, brutto, responsible_employee } = data;
   const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
   const [clientOpen, setClientOpen] = useState<boolean>(false);
   const [responsibleOpen, setResponsibleOpen] = useState<boolean>(false);
@@ -68,8 +68,8 @@ export const Card: FC<CardProps> = ({ data, index }) => {
       {comment_or_reminder && (
         <div className={styles.commentContainer}>
           <div className={styles.mainBlock}>
-            <Icon type='comment' alt='comment' />
-            <span className={styles.comment}>{comment_or_reminder}</span>
+            <Icon type={comment_or_reminder.type === 'reminder' ? 'history-todo' : 'comment'} alt='comment' />
+            <span className={styles.comment}>{comment_or_reminder.text}</span>
           </div>
         </div>
       )}
@@ -80,7 +80,15 @@ export const Card: FC<CardProps> = ({ data, index }) => {
           <span className={styles.count}>{count_of_reminders}</span>
         </div>
         <span onMouseEnter={() => setResponsibleOpen(true)} onMouseLeave={() => setResponsibleOpen(false)} ref={responsibleRef}>
-          <Icon type='userIcon' alt='user' className={styles.user} />
+          {responsible_employee.avatar_id ? (
+            <img
+              className={styles.user_img}
+              src={`${process.env.REACT_APP_BASE_URL}/files/download/${responsible_employee.avatar_id}`}
+              alt='user'
+            />
+          ) : (
+            <Icon type='userIcon' alt='user' className={styles.user_img} />
+          )}
         </span>
       </div>
       <EdgeModal>
@@ -93,7 +101,7 @@ export const Card: FC<CardProps> = ({ data, index }) => {
       )}
       {responsibleOpen && (
         <DropdownModal targetRef={responsibleRef} isOpen={responsibleOpen} onClose={() => setResponsibleOpen(false)}>
-          <ResponsibleWindow data={{ firstName: 'Aзатов', lastName: 'Азат' }} />
+          <ResponsibleWindow data={{ firstName: responsible_employee.first_name, lastName: responsible_employee.second_name }} />
         </DropdownModal>
       )}
       {clientOpen && (
