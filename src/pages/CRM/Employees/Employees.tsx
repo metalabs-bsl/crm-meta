@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, DatePicker, SearchInput } from 'common/ui';
 import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
-import AddEmployess from './AddEmployess/AddEmployess';
+import AddEmployees from './AddEmployees/AddEmployees';
 import { DataColumn, EditOptions } from './types/types';
 import { columns, dataColumns } from './Employess.helper';
 import styles from './style.module.scss';
@@ -156,8 +156,8 @@ export const Employees = () => {
         </div>
       </div>
       <div className={styles.wrapper}>
-        <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)}>
-          {showAddEmployeeForm && <AddEmployess />}
+        <Modal className={styles.modal} isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)}>
+          <AddEmployees />
         </Modal>
 
         <div className={styles.employeesContainer}>

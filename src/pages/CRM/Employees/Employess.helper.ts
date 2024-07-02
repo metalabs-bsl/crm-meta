@@ -41,6 +41,14 @@ export const columns: Column[] = [
     }
   },
   {
+    title: 'пароль',
+    key: 'password',
+    isEdit: {
+      value: true,
+      component: 'input'
+    }
+  },
+  {
     title: 'дата начала стажировки',
     key: 'startDateInternship',
     isEdit: {
@@ -54,6 +62,22 @@ export const columns: Column[] = [
     isEdit: {
       value: true,
       component: 'datepicker'
+    }
+  },
+  {
+    title: 'логин CRM',
+    key: 'loginCRM',
+    isEdit: {
+      value: true,
+      component: 'input'
+    }
+  },
+  {
+    title: 'пароль CRM',
+    key: 'passwordCRM',
+    isEdit: {
+      value: true,
+      component: 'input'
     }
   },
   {
@@ -82,8 +106,11 @@ export const dataColumns: DataColumn[] = [
     birthday: '04.07.2024T00:00',
     phoneNumber: '+996222123123',
     email: 'almaz@mail.ru',
+    password: 'ISC12345',
     startDateInternship: '12.02.2024T00:00',
     startDateWork: '01.01.2024T00:00',
+    loginCRM: 'test',
+    passwordCRM: 'test',
     agreement: 'договор стажировки',
     passport: '123456789'
   },
@@ -93,8 +120,11 @@ export const dataColumns: DataColumn[] = [
     birthday: '04.07.2024T00:00',
     phoneNumber: '+996222123123',
     email: 'adyl@mail.ru',
+    password: 'ISC12345',
     startDateInternship: '06.05.2024T00:00',
     startDateWork: '04.07.2024T00:00',
+    loginCRM: 'test',
+    passwordCRM: 'test',
     agreement: 'договор  работы',
     passport: '134501923'
   }

@@ -7,14 +7,32 @@
     display: flex;
     justify-content: space-between;
     font-weight: 400;
+    margin-bottom: 7px;
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 10px;
+    border-top: 1px solid $seaSalt;
+    column-gap: 15px;
+    row-gap: 10px;
+
+    :first-child {
+      grid-column: 1/3;
+      display: flex;
+      width: 100%;
+      column-gap: 15px;
+    }
   }
 
   .field {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
 
     .input {
+      height: 40px;
+      border: none;
       outline: none;
       background: $input-edit-bg;
     }
@@ -30,7 +48,10 @@
     input,
     select {
       padding: 10px;
-      border: 1px solid #ccc;
+      border: none;
+      // border: 1px solid #ccc;
+      background-color: $seaSalt;
+      color: $table-title-color;
       border-radius: 5px;
       outline: none;
       font-size: 14px;

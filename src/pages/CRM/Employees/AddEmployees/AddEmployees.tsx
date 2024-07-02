@@ -4,9 +4,13 @@ import styles from './style.module.scss';
 
 const AddEmployess = () => {
   const [fio, setFio] = useState<string>('');
+  const [dateOfBirth, setDateOfBirth] = useState<string>('');
   const [status, setStatus] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [emailPassword, setEmailPassword] = useState<string>('');
+  const [loginCRM, setLoginCRM] = useState<string>('');
+  const [passwordCRM, setPasswordCRM] = useState<string>('');
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -21,10 +25,22 @@ const AddEmployess = () => {
             Создать
           </button>
         </div>
-        <div className={styles.field}>
-          <div className={styles.field}>
-            <label>ФИО</label>
-            <input type='text' value={fio} onChange={(e) => setFio(e.target.value)} placeholder='Введите ФИО' className={styles.input} />
+        <div className={styles.fields}>
+          <div>
+            <div className={styles.field}>
+              <label>ФИО</label>
+              <input type='text' value={fio} onChange={(e) => setFio(e.target.value)} placeholder='Введите ФИО' className={styles.input} />
+            </div>
+            <div className={styles.field}>
+              <label>Дата рождения</label>
+              <input
+                type='date'
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                placeholder='Не выбрано'
+                className={styles.input}
+              />
+            </div>
           </div>
           <div className={styles.field}>
             <label>Статус</label>
@@ -56,6 +72,16 @@ const AddEmployess = () => {
               className={styles.input}
             />
           </div>
+          <div className={styles.field}>
+            <label>Пароль от почты</label>
+            <input
+              type='emailPassword'
+              value={emailPassword}
+              onChange={(e) => setEmailPassword(e.target.value)}
+              placeholder='Введите пароль от почты'
+              className={styles.input}
+            />
+          </div>
           <div className={styles.dates}>
             <div className={styles.field}>
               <label>Дата начала стажировки</label>
@@ -65,6 +91,27 @@ const AddEmployess = () => {
               <label>Дата начала работы</label>
               <DatePicker />
             </div>
+          </div>
+          <div></div>
+          <div className={styles.field}>
+            <label>Логин в CRM</label>
+            <input
+              type='loginCRM'
+              value={loginCRM}
+              onChange={(e) => setLoginCRM(e.target.value)}
+              placeholder='Введите пароль от почты'
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.field}>
+            <label>Пароль в CRM</label>
+            <input
+              type='passwordCRM'
+              value={passwordCRM}
+              onChange={(e) => setPasswordCRM(e.target.value)}
+              placeholder='Введите пароль от почты'
+              className={styles.input}
+            />
           </div>
           <div className={styles.agreement}>
             <label>Договор</label>

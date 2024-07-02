@@ -33,6 +33,13 @@
   background: $white;
   height: auto;
   border-radius: 10px;
+  .modal {
+    max-width: 788px;
+  }
+}
+
+.employeesContainer {
+  overflow: auto;
 }
 
 .employeesTable {
