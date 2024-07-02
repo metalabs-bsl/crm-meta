@@ -19,6 +19,10 @@ export const EdgeModal: FC<IProps> = ({ children }) => {
     dispatch(setIsNewDeal(false));
   };
 
+  if (!isOpenEdgeModal) {
+    return null;
+  }
+
   return (
     <div className={cn(styles.edgeMask, { [styles.closed]: !isOpenEdgeModal })} onClick={onClose}>
       <div className={styles.edgeModal} onClick={(e) => e.stopPropagation()}>

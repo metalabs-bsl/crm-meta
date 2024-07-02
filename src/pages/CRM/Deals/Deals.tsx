@@ -29,10 +29,17 @@ export const Deals = () => {
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
   const [access, setAccess] = useState<boolean>(true);
   const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
+  const [searchValue, setSearchValue] = useState<string>('');
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
     dispatch(setIsNewDeal(true));
+  };
+
+  console.log(searchValue);
+
+  const handleSearchValue = (id: string) => {
+    setSearchValue(id);
   };
 
   const getDealsComponent = () => {
@@ -62,7 +69,7 @@ export const Deals = () => {
               onChange={(e) => setWsDataType(e.target.value)}
             />
           )}
-          <SearchInput placeholder='Поиск' />
+          <SearchInput placeholder='Поиск' showCoincidences onCoincidencesChange={handleSearchValue} />
         </div>
       </div>
       <div className={styles.access_block}>

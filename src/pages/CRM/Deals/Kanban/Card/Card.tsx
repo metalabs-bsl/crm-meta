@@ -86,9 +86,11 @@ export const Card: FC<CardProps> = ({ data, index }) => {
       <EdgeModal>
         <CardDetail cardTitle={lead_name} />
       </EdgeModal>
-      <Modal isOpen={openTodoModal} onClose={onCloseTodoModal}>
-        <TodoCreateForm lead_id={id} onCancel={onCloseTodoModal} />
-      </Modal>
+      {openTodoModal && (
+        <Modal isOpen={openTodoModal} onClose={onCloseTodoModal}>
+          <TodoCreateForm lead_id={id} onCancel={onCloseTodoModal} />
+        </Modal>
+      )}
       {responsibleOpen && (
         <DropdownModal targetRef={responsibleRef} isOpen={responsibleOpen} onClose={() => setResponsibleOpen(false)}>
           <ResponsibleWindow data={{ firstName: 'Aзатов', lastName: 'Азат' }} />

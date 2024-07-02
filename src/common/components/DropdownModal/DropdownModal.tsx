@@ -59,7 +59,7 @@ export const DropdownModal: FC<IProps> = ({ isOpen = false, children, targetRef,
   }, [isOpen, onClose, targetRef]);
 
   const modalRoot = document.getElementById('root');
-  if (!modalRoot) {
+  if (!modalRoot || !isOpen) {
     return null;
   }
 
