@@ -249,7 +249,7 @@ export const Employees = () => {
                         ) : column.key === 'agreement' ? (
                           (agreementFiles[index] ?? data[column.key].split(',')).map((file, fileIndex) => (
                             <div key={fileIndex}>
-                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
+                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer' className={styles.fileLink}>
                                 {file || 'No file'}
                               </a>
                             </div>
@@ -257,7 +257,7 @@ export const Employees = () => {
                         ) : column.key === 'passport' ? (
                           (passportFiles[index] ?? data[column.key].split(',')).map((file, fileIndex) => (
                             <div key={fileIndex}>
-                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer'>
+                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer' className={styles.fileLink}>
                                 {file || 'No file'}
                               </a>
                             </div>

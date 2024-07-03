@@ -6,6 +6,7 @@ import styles from './styles.module.scss';
 import { BUTTON_TYPES } from 'types/enums';
 
 export const CreateFileForm = () => {
+  const [files, setFiles] = useState<File[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [options] = useState<Options[]>([
     {
       label: 'Первая оплата',
@@ -33,7 +34,7 @@ export const CreateFileForm = () => {
     <form className={styles.form}>
       <Select options={options} />
       <textarea name='' id='' placeholder='Напишите что нужно сделать'></textarea>
-      <FilePicker />
+      <FilePicker onFilesSelect={setFiles} />
       <Button styleType={BUTTON_TYPES.YELLOW} text='отправить' />
     </form>
   );

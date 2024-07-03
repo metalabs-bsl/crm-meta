@@ -111,8 +111,8 @@ export const dataColumns: DataColumn[] = [
     startDateWork: '01.01.2024T00:00',
     loginCRM: 'test',
     passwordCRM: 'test',
-    agreement: 'договор стажировки',
-    passport: '123456789'
+    agreement: 'договорстажирdfsdfsfdовки.jpg',
+    passport: '123456789.jpg'
   },
   {
     fullName: 'Adil Adylov Adylovich',
@@ -125,7 +125,7 @@ export const dataColumns: DataColumn[] = [
     startDateWork: '04.07.2024T00:00',
     loginCRM: 'test',
     passwordCRM: 'test',
-    agreement: 'договор  работы',
-    passport: '134501923'
+    agreement: 'договор работы.jpg',
+    passport: '134501923.jpg'
   }
 ];

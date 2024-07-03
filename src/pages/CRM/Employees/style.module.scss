@@ -83,6 +83,17 @@
   margin-left: 8px;
 }
 
+.fileLink {
+  font-weight: 400;
+  font-size: 14px;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: $table-column-color;
+  text-overflow: ellipsis;
+  max-width: 136px;
+  display: inline-block;
+}
+
 .editInput,
 .editSelect {
   background: $input-edit-bg;

@@ -1,41 +1,50 @@
-import React, { useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef, useState } from 'react';
 import { Icon } from '../Icon';
 import styles from './style.module.scss';
 
-export const FilePicker: React.FC = () => {
-  const [fileName, setFileName] = useState<string | null>(null);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
+interface FilePickerProps {
+  onFilesSelect: (files: File[]) => void;
+}
+
+export const FilePicker: FC<FilePickerProps> = ({ onFilesSelect }) => {
+  const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uniqueId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      setFileName(file.name);
-      setFileUrl(URL.createObjectURL(file));
+      const selectedFiles = Array.from(event.target.files);
+      setFiles(selectedFiles);
+      onFilesSelect(selectedFiles);
+    } else {
+      setFiles([]);
+      onFilesSelect([]);
     }
   };
 
-  const handleFileDelete = () => {
-    setFileName(null);
-    setFileUrl(null);
-    if (fileInputRef.current) {
+  const handleFileDelete = (index: number) => {
+    const newFiles = files.filter((_, i) => i !== index);
+    setFiles(newFiles);
+    onFilesSelect(newFiles);
+    if (newFiles.length === 0 && fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   return (
     <div className={styles.picker_container}>
-      {fileName ? (
-        <div className={styles.with_file}>
-          <div className={styles.fileBox}>
-            <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
-              {fileName}
-            </a>
-            <Icon type='delete' onClick={handleFileDelete} />
-          </div>
+      {files.length > 0 ? (
+        <div className={styles.with_files}>
+          {files.map((file, index) => (
+            <div className={styles.fileBox} key={index}>
+              <a href={URL.createObjectURL(file)} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
+                {file.name}
+              </a>
+              <Icon type='delete' onClick={() => handleFileDelete(index)} />
+            </div>
+          ))}
           <label htmlFor={uniqueId} className={styles.custom_file_upload}>
-            Выберите файл
+            Выберите файлы
           </label>
         </div>
       ) : (
@@ -43,7 +52,7 @@ export const FilePicker: React.FC = () => {
           Загрузить
         </label>
       )}
-      <input id={uniqueId} type='file' onChange={handleFileChange} style={{ display: 'none' }} ref={fileInputRef} />
+      <input id={uniqueId} type='file' multiple onChange={handleFileChange} style={{ display: 'none' }} ref={fileInputRef} />
     </div>
   );
 };

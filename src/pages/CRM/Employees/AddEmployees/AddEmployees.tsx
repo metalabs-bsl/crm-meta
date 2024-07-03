@@ -1,8 +1,9 @@
 import { FormEvent, useState } from 'react';
 import { DatePicker, FilePicker } from 'common/ui';
+import { addEmployee } from '../api/employees';
 import styles from './style.module.scss';
 
-const AddEmployess = () => {
+const AddEmployees = () => {
   const [fio, setFio] = useState<string>('');
   const [dateOfBirth, setDateOfBirth] = useState<string>('');
   const [status, setStatus] = useState<string>('');
@@ -11,9 +12,38 @@ const AddEmployess = () => {
   const [emailPassword, setEmailPassword] = useState<string>('');
   const [loginCRM, setLoginCRM] = useState<string>('');
   const [passwordCRM, setPasswordCRM] = useState<string>('');
+  const [contractFiles, setContractFiles] = useState<File[]>([]);
+  const [passportFiles, setPassportFiles] = useState<File[]>([]);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('fio', fio);
+    formData.append('dateOfBirth', dateOfBirth);
+    formData.append('status', status);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('emailPassword', emailPassword);
+    formData.append('loginCRM', loginCRM);
+    formData.append('passwordCRM', passwordCRM);
+    contractFiles.forEach((file, index) => {
+      formData.append(`contractFiles[${index}]`, file);
+    });
+    passportFiles.forEach((file, index) => {
+      formData.append(`passportFiles[${index}]`, file);
+    });
+
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    try {
+      const response = await addEmployee(formData);
+      console.log('Успешная отправка', response);
+    } catch (error) {
+      console.error('Ошибка при отправке данных на сервер:', error);
+    }
   };
 
   return (
@@ -75,7 +105,7 @@ const AddEmployess = () => {
           <div className={styles.field}>
             <label>Пароль от почты</label>
             <input
-              type='emailPassword'
+              type='text'
               value={emailPassword}
               onChange={(e) => setEmailPassword(e.target.value)}
               placeholder='Введите пароль от почты'
@@ -96,30 +126,30 @@ const AddEmployess = () => {
           <div className={styles.field}>
             <label>Логин в CRM</label>
             <input
-              type='loginCRM'
+              type='text'
               value={loginCRM}
               onChange={(e) => setLoginCRM(e.target.value)}
-              placeholder='Введите пароль от почты'
+              placeholder='Введите логин в CRM'
               className={styles.input}
             />
           </div>
           <div className={styles.field}>
             <label>Пароль в CRM</label>
             <input
-              type='passwordCRM'
+              type='text'
               value={passwordCRM}
               onChange={(e) => setPasswordCRM(e.target.value)}
-              placeholder='Введите пароль от почты'
+              placeholder='Введите пароль в CRM'
               className={styles.input}
             />
           </div>
           <div className={styles.agreement}>
             <label>Договор</label>
-            <FilePicker />
+            <FilePicker onFilesSelect={setContractFiles} />
           </div>
           <div className={styles.passport}>
             <label>ID паспорт</label>
-            <FilePicker />
+            <FilePicker onFilesSelect={setPassportFiles} />
           </div>
         </div>
       </form>
@@ -127,4 +157,4 @@ const AddEmployess = () => {
   );
 };
 
-export default AddEmployess;
+export default AddEmployees;
