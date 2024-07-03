@@ -17,3 +17,10 @@ export interface ISourse {
 }
 
 export type IResSource = ISourse[];
+
+export interface ICreateReminderParams {
+  reminder_text: string;
+  status: number;
+  date_to_finish: string;
+  lead_id: string;
+}

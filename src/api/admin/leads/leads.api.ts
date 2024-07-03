@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
-import { ICreateLead, ISourceLead } from 'types/requests/admin/leads.api';
+import { ICreateLead, ICreateReminder, ISourceLead } from 'types/requests/admin/leads.api';
 
 export const leadsApi = createApi({
   reducerPath: 'leadsApi',
@@ -9,7 +9,7 @@ export const leadsApi = createApi({
   endpoints: ({ query, mutation }) => ({
     createLead: mutation<ICreateLead.Response, ICreateLead.Params>({
       query: (body) => ({
-        method: 'post',
+        method: 'POST',
         url: `/leads`,
         body
       })
@@ -22,8 +22,15 @@ export const leadsApi = createApi({
           value: source.id
         }));
       }
+    }),
+    createReminder: mutation<ICreateReminder.Response, ICreateReminder.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leadsReminder`,
+        body
+      })
     })
   })
 });
 
-export const { useCreateLeadMutation, useGetSourseLeadQuery } = leadsApi;
+export const { useCreateLeadMutation, useGetSourseLeadQuery, useCreateReminderMutation } = leadsApi;

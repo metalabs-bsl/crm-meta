@@ -58,6 +58,11 @@
     .mainBlock {
       align-items: center;
       font-size: 14px;
+      padding: 0 5px;
+      img {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
 
@@ -66,7 +71,10 @@
     justify-content: space-between;
     align-items: center;
     .todoCreate,
-    .user {
+    .user_img {
+      width: 24px;
+      height: 24px;
+      border-radius: 40px;
       cursor: pointer;
     }
     .todoBlock {

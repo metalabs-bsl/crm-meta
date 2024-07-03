@@ -14,5 +14,6 @@ export { LossForm } from './LossForm';
 export { Modal } from './Modal';
 export { MultipleFilePicker } from './MultipleFilePicker';
 export { Navbar } from './Navbar';
+export { ResponsibleWindow } from './ResponsibleWindow';
 export { Sidebar } from './Sidebar';
 export { Tabs } from './Tabs';
