@@ -1,12 +1,12 @@
 import { FC, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
-import { ClientWindow, DropdownModal, EdgeModal, Modal, ResponsibleWindow } from 'common/components';
+import { ClientWindow, DropdownModal, Modal, ResponsibleWindow } from 'common/components';
 import { dateFormat } from 'common/helpers';
-import { useAppDispatch } from 'common/hooks';
+import { useAppDispatch, useRedirect } from 'common/hooks';
+import { crmChapters } from 'common/constants';
 import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
 import { Task } from 'types/entities';
-import { CardDetail } from '../../CardDetail';
 import { TodoCreateForm } from './TodoCreateForm';
 import styles from './style.module.scss';
 
@@ -23,12 +23,13 @@ export const Card: FC<CardProps> = ({ data, index }) => {
   const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
   const [clientOpen, setClientOpen] = useState<boolean>(false);
   const [responsibleOpen, setResponsibleOpen] = useState<boolean>(false);
-
+  const redirect = useRedirect();
   const updatedDate = dateFormat(customer.created_at);
   const profileRef = useRef(null);
   const responsibleRef = useRef(null);
 
   const onOpen = () => {
+    redirect.crm({ chapter: crmChapters.transactions.chapter, search: id });
     dispatch(setChangeOpenEdgeModal(true));
   };
 
@@ -91,9 +92,6 @@ export const Card: FC<CardProps> = ({ data, index }) => {
           )}
         </span>
       </div>
-      <EdgeModal>
-        <CardDetail cardTitle={lead_name} />
-      </EdgeModal>
       {openTodoModal && (
         <Modal isOpen={openTodoModal} onClose={onCloseTodoModal}>
           <TodoCreateForm lead_id={id} onCancel={onCloseTodoModal} />
