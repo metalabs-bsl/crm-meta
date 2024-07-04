@@ -11,15 +11,34 @@ export interface Column {
   isEdit?: EditOptions | boolean | { value: boolean; component?: string };
 }
 
-export interface DataColumn {
-  [key: string]: string;
-  fullName: string;
-  status: string;
-  birthday: string;
-  phoneNumber: string;
+interface IEmployeeRole {
+  created_at: string;
+  id: string;
+  role_name: string;
+  updated_at: string;
+}
+
+export interface IEmployeeData {
+  background: string;
+  created_at: string;
+  date_of_birth: string;
   email: string;
-  startDateInternship: string;
-  startDateWork: string;
-  agreement: string;
-  passport: string;
+  email_password: string;
+  end_of_internship: string;
+  first_name: string;
+  id: string;
+  job_title: string;
+  login: string;
+  middle_name: string;
+  password: string;
+  phone: string;
+  refreshToken: string;
+  roles: IEmployeeRole[];
+  second_name: string;
+  start_of_internship: string;
+  start_of_work: string;
+  status: number;
+  updated_at: string;
+  contracts: string[];
+  passports: string[];
 }
