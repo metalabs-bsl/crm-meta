@@ -19,12 +19,12 @@ interface CardProps {
 
 export const Card: FC<CardProps> = ({ data, index }) => {
   const dispatch = useAppDispatch();
-  const { comment_or_reminder, lead_name, count_of_reminders, id, customer, brutto, responsible_employee } = data;
+  const { comment_or_reminder, lead_name, count_of_reminders, id, customer, brutto, responsible_employee, created_at } = data;
   const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
   const [clientOpen, setClientOpen] = useState<boolean>(false);
   const [responsibleOpen, setResponsibleOpen] = useState<boolean>(false);
   const redirect = useRedirect();
-  const updatedDate = dateFormat(customer.created_at);
+  const updatedDate = dateFormat(created_at);
   const profileRef = useRef(null);
   const responsibleRef = useRef(null);
 

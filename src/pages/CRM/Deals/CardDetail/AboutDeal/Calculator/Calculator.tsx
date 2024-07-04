@@ -39,6 +39,7 @@ const payOptions: Options[] = [
 export const Calculator = () => {
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const [selectValue, setSelectValue] = useState<string | number>(payOptions[2].value);
+  const [servises, setServises] = useState<Options[]>([]);
 
   return (
     <div className={styles.calculator}>
@@ -60,8 +61,10 @@ export const Calculator = () => {
         />
       </div>
       <PaymentDetailsFrom isActiveTab={isActiveTab} />
-      <TourInfoForm />
-      <UpsellForm />
+      <TourInfoForm setServises={setServises} />
+      {servises.map((_, index) => (
+        <UpsellForm key={index} />
+      ))}
     </div>
   );
 };
