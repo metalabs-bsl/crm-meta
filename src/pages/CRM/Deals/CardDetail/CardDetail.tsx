@@ -51,10 +51,11 @@ export const CardDetail: FC<IProps> = ({ cardTitle = '' }) => {
   };
 
   const onLinkCopy = () => {
+    const url = window.location.href;
     navigator.clipboard
-      .writeText(editedTitle)
+      .writeText(url)
       .then(() => notify(MESSAGE.LINK_COPIED))
-      .catch((err) => console.error('Failed to copy text: ', err));
+      .catch(() => notify(MESSAGE.ERROR, 'error'));
   };
 
   return (

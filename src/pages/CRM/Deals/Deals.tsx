@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import { Options } from 'types/pages';
 import { Button, SearchInput, Select } from 'common/ui';
@@ -30,11 +31,19 @@ export const Deals = () => {
   const [access, setAccess] = useState<boolean>(true);
   const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
   const [searchValue, setSearchValue] = useState<string>('');
+  const location = useLocation();
 
-  const onOpen = () => {
+  const onOpen = (isNewDeal: boolean) => {
     dispatch(setChangeOpenEdgeModal(true));
-    dispatch(setIsNewDeal(true));
+    dispatch(setIsNewDeal(isNewDeal));
   };
+
+  useEffect(() => {
+    if (location.search) {
+      onOpen(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   console.log(searchValue);
 
@@ -57,7 +66,7 @@ export const Deals = () => {
         <div className={styles.titleBlock}>
           <h1>Сделки</h1>
           {isActiveTab !== DEALS_TABS.todos && (
-            <Button text='создать сделку' styleType={BUTTON_TYPES.YELLOW} onClick={onOpen} className={styles.createBtn} />
+            <Button text='создать сделку' styleType={BUTTON_TYPES.YELLOW} onClick={() => onOpen(true)} className={styles.createBtn} />
           )}
         </div>
         <div className={styles.filterBlock}>

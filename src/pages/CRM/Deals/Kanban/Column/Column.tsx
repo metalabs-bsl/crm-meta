@@ -1,13 +1,12 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
-import { DeleteModal, DropdownModal, EdgeModal, FilterByDate, Modal } from 'common/components';
+import { DeleteModal, DropdownModal, FilterByDate, Modal } from 'common/components';
 import { useAppDispatch, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
 import { setChangeOpenEdgeModal, setColumnId, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { IColumn, IColumnInfo } from 'types/entities';
-import { CardDetail } from '../../CardDetail';
 import { Card } from '../Card';
 import { ColumnForm } from './ColumnForm';
 import styles from './styles.module.scss';
@@ -167,9 +166,6 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
           <FilterByDate onFilterChange={onFilterChange} />
         </DropdownModal>
       )}
-      <EdgeModal>
-        <CardDetail />
-      </EdgeModal>
     </div>
   );
 };
