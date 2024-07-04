@@ -8,10 +8,11 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface IProps {
   data: IColumn[];
-  onChange: (data: IColumn[]) => void;
+  onChange?: (data: IColumn[]) => void;
+  canDrag?: boolean;
 }
 
-export const Kanban: FC<IProps> = ({ data, onChange }) => {
+export const Kanban: FC<IProps> = ({ data, onChange, canDrag = true }) => {
   const [columns, setColumns] = useState(data);
   useEffect(() => {
     if (data) {
@@ -49,7 +50,7 @@ export const Kanban: FC<IProps> = ({ data, onChange }) => {
     });
 
     setColumns(finalColumns);
-    onChange(finalColumns);
+    onChange && onChange(finalColumns);
   };
 
   const moveColumn = (dragIndex: number, hoverIndex: number) => {
@@ -57,14 +58,14 @@ export const Kanban: FC<IProps> = ({ data, onChange }) => {
     const [movedColumn] = updatedColumns.splice(dragIndex, 1);
     updatedColumns.splice(hoverIndex, 0, movedColumn);
     setColumns(updatedColumns);
-    onChange(updatedColumns);
+    onChange && onChange(updatedColumns);
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={styles.kanbanBoard}>
         {columns.map((col, index) => (
-          <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} />
+          <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} canDrag={canDrag} />
         ))}
       </div>
     </DndProvider>

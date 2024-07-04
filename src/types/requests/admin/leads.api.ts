@@ -1,4 +1,4 @@
-import { ICreateLeadParams, ICreateReminderParams, IResSource } from 'types/entities';
+import { IColumn, ICreateLeadParams, ICreateReminderParams, IResSource } from 'types/entities';
 
 export module ICreateLead {
   export type Response = void;
@@ -13,4 +13,9 @@ export module ISourceLead {
 export module ICreateReminder {
   export type Response = void;
   export type Params = ICreateReminderParams;
+}
+
+export module IGetLeadsDeal {
+  export type Response = IColumn[];
+  export type Params = void;
 }

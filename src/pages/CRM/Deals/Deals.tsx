@@ -6,6 +6,7 @@ import { Button, SearchInput, Select } from 'common/ui';
 import { AccessChangeble, EdgeModal } from 'common/components';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { useGetLeadsForTodoQuery } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { CardDetail } from './CardDetail';
@@ -24,14 +25,22 @@ const options: Options[] = [
 ];
 
 export const Deals = () => {
-  const { role } = useAppSelector(employeesSelectors.employees);
-  const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
   const dispatch = useAppDispatch();
-  const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
+  const location = useLocation();
+  const { data: TodoData, isFetching } = useGetLeadsForTodoQuery();
+  const { role } = useAppSelector(employeesSelectors.employees);
   const [access, setAccess] = useState<boolean>(true);
+  const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
   const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
   const [searchValue, setSearchValue] = useState<string>('');
-  const location = useLocation();
+  const [reminderCount, setReminderCount] = useState<number>(0);
+  const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
+
+  useEffect(() => {
+    if (TodoData) {
+      setReminderCount(TodoData.reduce((a, b) => a + b.leads_count, 0));
+    }
+  }, [TodoData]);
 
   const onOpen = (isNewDeal: boolean) => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -55,7 +64,7 @@ export const Deals = () => {
     const components: Record<DEALS_TABS, JSX.Element> = {
       [DEALS_TABS.kanban]: <KanbanChapter dataType={wsDataType} />,
       [DEALS_TABS.list]: <List />,
-      [DEALS_TABS.todos]: <Todos data={[]} />
+      [DEALS_TABS.todos]: <Todos data={TodoData} isFetching={isFetching} />
     };
     return components[isActiveTab];
   };
@@ -82,7 +91,7 @@ export const Deals = () => {
         </div>
       </div>
       <div className={styles.access_block}>
-        <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} />
+        <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} reminderCount={reminderCount} />
         {isManagement && <AccessChangeble isAccess={access} setIsAccess={setAccess} />}
       </div>
       <div className={cn(styles.deal_content, { [styles.isDisabled]: !access })}>{getDealsComponent()}</div>
