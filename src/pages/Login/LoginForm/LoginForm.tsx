@@ -34,17 +34,12 @@ export const LoginForm: FC = () => {
         try {
           const cred = (await navigator.credentials.get({ password: true })) as PasswordCredential;
           if (cred) {
-            console.log('Credentials found:', cred);
             setValue('email', cred.id);
             setValue('password', cred.password || '');
-          } else {
-            console.log('No credentials found');
           }
         } catch (error) {
           console.error('Error retrieving credentials:', error);
         }
-      } else {
-        console.log('Credential Management API not supported');
       }
     };
 
@@ -66,14 +61,7 @@ export const LoginForm: FC = () => {
             password: data.password
           });
 
-          navigator.credentials
-            .store(cred)
-            .then(() => {
-              console.log('Credentials stored successfully');
-            })
-            .catch((error) => {
-              console.error('Error storing credentials:', error);
-            });
+          navigator.credentials.store(cred);
         }
 
         getUserInfo()
