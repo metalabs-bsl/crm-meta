@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Button, Checkbox, Input, Loading } from 'common/ui';
 import { useNotify, useRedirect } from 'common/hooks';
 import { crmChapters, MESSAGE } from 'common/constants';
@@ -19,6 +19,7 @@ export const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm<IFormInput>();
   const notify = useNotify();
@@ -27,19 +28,59 @@ export const LoginForm: FC = () => {
   const [login, { isLoading }] = useLoginMutation();
   const isFormValid = Object.keys(errors).length === 0;
 
+  useEffect(() => {
+    const fetchCredentials = async () => {
+      if ('credentials' in navigator) {
+        try {
+          const cred = (await navigator.credentials.get({ password: true })) as PasswordCredential;
+          if (cred) {
+            console.log('Credentials found:', cred);
+            setValue('email', cred.id);
+            setValue('password', cred.password || '');
+          } else {
+            console.log('No credentials found');
+          }
+        } catch (error) {
+          console.error('Error retrieving credentials:', error);
+        }
+      } else {
+        console.log('Credential Management API not supported');
+      }
+    };
+
+    fetchCredentials();
+  }, [setValue]);
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     const loginData = {
       login: data.email,
       password: data.password
     };
+
     login(loginData)
       .unwrap()
-      .then(() =>
+      .then(() => {
+        if (data.rememberMe && 'credentials' in navigator) {
+          const cred = new PasswordCredential({
+            id: data.email,
+            password: data.password
+          });
+
+          navigator.credentials
+            .store(cred)
+            .then(() => {
+              console.log('Credentials stored successfully');
+            })
+            .catch((error) => {
+              console.error('Error storing credentials:', error);
+            });
+        }
+
         getUserInfo()
           .unwrap()
           .then(() => redirect.crm({ chapter: crmChapters.transactions.chapter }))
-          .catch(() => notify(MESSAGE.ERROR, 'error'))
-      )
+          .catch(() => notify(MESSAGE.ERROR, 'error'));
+      })
       .catch(() => notify(MESSAGE.ERROR, 'error'));
   };
 
