@@ -1,12 +1,17 @@
-import { useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import cn from 'classnames';
-import { DatePicker, Input, Select } from 'common/ui';
+import { Options } from 'types/pages';
+import { DatePicker, Input, MultipleSelect, Select } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { PassengersCount } from './PassengersCount';
 import { brandOptions, categoryTourTimeOptions, PassengerCounts, servicesOptions } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
 
-export const TourInfoForm = () => {
+interface IProps {
+  setServises: (data: Options[]) => void;
+}
+
+export const TourInfoForm: FC<IProps> = ({ setServises }) => {
   const passengersRef = useRef(null);
   const [isOpenPassengersModal, setIsOpenPassengersModal] = useState<boolean>(false);
   const [isEditTourInfo, setIsEditTourInfo] = useState<boolean>(false);
@@ -75,7 +80,7 @@ export const TourInfoForm = () => {
           </div>
           <div className={styles.item_block}>
             <label>Услуга</label>
-            <Select options={servicesOptions} className={styles.select} disabled={isEditable} />
+            <MultipleSelect onChange={setServises} options={servicesOptions} disabled={isEditable} placeholder='не выбрано' />
           </div>
         </div>
       </form>

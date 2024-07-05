@@ -17,9 +17,10 @@ interface ColumnProps {
   index: number;
   col: IColumn;
   onDrop: (id: string, targetColIndex: number, targetIndex: number) => void;
+  canDrag: boolean;
 }
 
-export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
+export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) => {
   const { status, column_name, color, leads, leads_count, id } = col;
   const [openColumnModal, setOpenColumnModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -130,22 +131,24 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index }) => {
               <Icon type='calendar-outline' />
             </div>
           )}
-          {isEditableColumn && <Icon type='edit' onClick={onOpenEditModal} />}
-          {isDelitableColumn && <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />}
-          <div className={styles.plus}>
-            <Icon type='plus-icon' alt='plus' onClick={onOpenCreateModal} />
-          </div>
+          {canDrag && isEditableColumn && <Icon type='edit' onClick={onOpenEditModal} />}
+          {canDrag && isDelitableColumn && <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />}
+          {canDrag && (
+            <div className={styles.plus}>
+              <Icon type='plus-icon' alt='plus' onClick={onOpenCreateModal} />
+            </div>
+          )}
         </div>
       </div>
       {isSaleColumn && <span className={styles.totalSum}>200.000$</span>}
-      {isLeadCreatable && (
+      {canDrag && isLeadCreatable && (
         <div className={styles.createBtn} onClick={onOpen}>
           <Icon type='plus-icon' alt='plus' />
         </div>
       )}
       <div className={styles.cardsContainer} ref={drop}>
         {leads.map((task, index) => (
-          <Card key={task.id} index={index} data={task} />
+          <Card key={task.id} index={index} data={task} canDrag={canDrag} />
         ))}
       </div>
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>

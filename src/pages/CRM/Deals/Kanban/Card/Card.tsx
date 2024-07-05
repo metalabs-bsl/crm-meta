@@ -15,16 +15,17 @@ import { DragSourceMonitor, useDrag } from 'react-dnd';
 interface CardProps {
   data: Task;
   index: number;
+  canDrag: boolean;
 }
 
-export const Card: FC<CardProps> = ({ data, index }) => {
+export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
   const dispatch = useAppDispatch();
-  const { comment_or_reminder, lead_name, count_of_reminders, id, customer, brutto, responsible_employee } = data;
+  const { comment_or_reminder, lead_name, count_of_reminders, id, customer, brutto, responsible_employee, created_at } = data;
   const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
   const [clientOpen, setClientOpen] = useState<boolean>(false);
   const [responsibleOpen, setResponsibleOpen] = useState<boolean>(false);
   const redirect = useRedirect();
-  const updatedDate = dateFormat(customer.created_at);
+  const updatedDate = dateFormat(created_at);
   const profileRef = useRef(null);
   const responsibleRef = useRef(null);
 
@@ -39,6 +40,7 @@ export const Card: FC<CardProps> = ({ data, index }) => {
 
   const [{ isDragging }, drag] = useDrag({
     type: 'CARD',
+    canDrag,
     item: { type: 'CARD', id, index },
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: !!monitor.isDragging()
@@ -76,7 +78,7 @@ export const Card: FC<CardProps> = ({ data, index }) => {
       )}
       <div className={styles.cardFooter}>
         <div className={styles.todoBlock}>
-          <Icon type='plus-gray' alt='plus' className={styles.todoCreate} onClick={() => setOpenTodoModal(true)} />
+          {canDrag && <Icon type='plus-gray' alt='plus' className={styles.todoCreate} onClick={() => setOpenTodoModal(true)} />}
           <span className={styles.todo}>Дело</span>
           <span className={styles.count}>{count_of_reminders}</span>
         </div>

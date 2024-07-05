@@ -9,11 +9,13 @@ interface DraggableColumnProps {
   onDropTask: (id: string, targetColIndex: number, targetIndex: number) => void;
   index: number;
   moveColumn: (dragIndex: number, hoverIndex: number) => void;
+  canDrag: boolean;
 }
 
-export const DraggableColumn: FC<DraggableColumnProps> = ({ col, onDropTask, index, moveColumn }) => {
+export const DraggableColumn: FC<DraggableColumnProps> = ({ col, onDropTask, index, moveColumn, canDrag }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'COLUMN',
+    canDrag,
     item: { index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging()
@@ -32,7 +34,7 @@ export const DraggableColumn: FC<DraggableColumnProps> = ({ col, onDropTask, ind
 
   return (
     <div ref={(node) => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Column col={col} onDrop={onDropTask} index={index} />
+      <Column col={col} onDrop={onDropTask} index={index} canDrag={canDrag} />
     </div>
   );
 };

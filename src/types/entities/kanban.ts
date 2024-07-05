@@ -18,6 +18,7 @@ export interface Task {
   brutto: string | null;
   comment_or_reminder: IComment_or_Reminder;
   count_of_reminders: number;
+  created_at: string;
   customer: {
     date_of_birth: string;
     email: string;
@@ -26,7 +27,6 @@ export interface Task {
     inn: string;
     passport: string;
     phone: string;
-    created_at: string;
     city: string;
     source: string;
   };

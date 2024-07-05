@@ -36,6 +36,10 @@ export const categoryTourTimeOptions: Options[] = [
 
 export const servicesOptions: Options[] = [
   {
+    label: 'Не выбрано',
+    value: ''
+  },
+  {
     label: 'Виза',
     value: 'visa'
   },
