@@ -337,7 +337,7 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         </div>
       </Modal>
     ),
-    cardDetail: <EdgeModal>{selectedRow && <CardDetail cardTitle={selectedRow.name} />}</EdgeModal>,
+    cardDetail: <EdgeModal>{selectedRow && <CardDetail />}</EdgeModal>,
     dropdown: (
       <div className={styles.dropdown}>
         <DropdownModal targetRef={profileRef} isOpen={modalState.dropdown} onClose={() => handleDropdownClose()}>

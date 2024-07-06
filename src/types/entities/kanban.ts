@@ -11,6 +11,18 @@ export interface IResponsible_employee extends IResponsibleEmployees {
   phone: string;
 }
 
+export interface ICustomer {
+  date_of_birth: string;
+  email: string;
+  fullname: string;
+  id: string;
+  inn: string;
+  passport: string;
+  phone: string;
+  city: string;
+  source: string;
+}
+
 export interface Task {
   id: string;
   lead_name: string;
@@ -19,17 +31,7 @@ export interface Task {
   comment_or_reminder: IComment_or_Reminder;
   count_of_reminders: number;
   created_at: string;
-  customer: {
-    date_of_birth: string;
-    email: string;
-    fullname: string;
-    id: string;
-    inn: string;
-    passport: string;
-    phone: string;
-    city: string;
-    source: string;
-  };
+  customer: ICustomer;
   responsible_employee: IResponsible_employee;
 }
 

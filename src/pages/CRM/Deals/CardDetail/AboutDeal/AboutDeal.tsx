@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Button } from 'common/ui';
 import { AccessChangeble, Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useAppSelector } from 'common/hooks';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { ICreateLeadParams } from 'types/entities';
 import { ROLES } from 'types/roles';
 import { TAB_COMPONENTS } from './AboutDeal.helper';
 import { Accounts } from './Accounts';
@@ -30,7 +31,12 @@ const tabItems: ITabsItem[] = [
   }
 ];
 
-export const AboutDeal = () => {
+interface IProps {
+  leadId?: string;
+  formData?: ICreateLeadParams;
+}
+
+export const AboutDeal: FC<IProps> = ({ formData, leadId }) => {
   const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
@@ -48,7 +54,7 @@ export const AboutDeal = () => {
 
   return (
     <div className={styles.aboutDeal}>
-      {!isCalculatorTab && <DealsForm />}
+      {!isCalculatorTab && <DealsForm formProps={formData} leadId={leadId} />}
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
         <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
           {isCalculatorTab && (
