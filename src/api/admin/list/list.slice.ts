@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TableRow } from 'pages/CRM/Deals/List/ListTable/ListTable';
+import { TableRow } from 'pages/CRM/Deals/List/types/types';
 import { loginApi } from '../login/login.api';
 
 import { disconnectSocket } from 'socket';
@@ -9,12 +9,14 @@ interface SocketState {
   list: TableRow;
   listAll: TableRow;
   loading: boolean;
+  update: TableRow;
 }
 
 const initialState: SocketState = {
   connected: false,
-  list: { leads: [], stages: [] },
-  listAll: { leads: [], stages: [] },
+  list: { leads: [], stages: [], name: '' },
+  listAll: { leads: [], stages: [], name: '' },
+  update: { leads: [], stages: [], name: '' },
   loading: false
 };
 
@@ -33,14 +35,17 @@ export const listSlice = createSlice({
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
+    },
+    setUpdateList(state, action: PayloadAction<TableRow>) {
+      state.update = action.payload;
     }
   },
   extraReducers(builder) {
     builder.addMatcher(loginApi.endpoints.logout.matchFulfilled, (state) => {
-      state.list = { leads: [], stages: [] };
+      state.list = { leads: [], stages: [], name: '' };
       disconnectSocket();
     });
   }
 });
 
-export const { setConnected, setListBoard, setListBoardAll, setLoading } = listSlice.actions;
+export const { setConnected, setListBoard, setListBoardAll, setLoading, setUpdateList } = listSlice.actions;

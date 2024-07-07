@@ -32,6 +32,13 @@ export const leadsApi = createApi({
     }),
     getLeadsForTodo: query<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
       query: () => `/leads/deal`
+    }),
+    updateLeads: mutation<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
+      query: (body) => ({
+        method: 'PUT',
+        url: `/leads/update`,
+        body
+      })
     })
   })
 });

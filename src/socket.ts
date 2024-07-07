@@ -1,4 +1,4 @@
-import { TableRow } from 'pages/CRM/Deals/List/ListTable/ListTable';
+import { TableRow } from 'pages/CRM/Deals/List/types/types';
 import { setConnected } from 'api/admin/kanban/kanban.slice';
 import { setKanbanAllBoard, setKanbanBoard } from 'api/admin/kanban/kanban.ws';
 import { setListBoard, setListBoardAll } from 'api/admin/list/list.slice';
