@@ -24,6 +24,8 @@
   }
   .disabled {
     cursor: not-allowed;
+    background-color: lighten($seaSalt, 20%) !important;
+    opacity: 0.3;
   }
   .options_area {
     width: 215px;

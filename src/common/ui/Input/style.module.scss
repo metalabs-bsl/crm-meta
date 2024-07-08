@@ -1,5 +1,10 @@
 @import '../../styles/variables.scss';
 
+.disabled {
+  background-color: lighten($seaSalt, 20%) !important;
+  opacity: 0.3;
+}
+
 .inputContainer {
   display: flex;
   align-items: center;
