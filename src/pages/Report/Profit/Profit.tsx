@@ -7,6 +7,7 @@ import { ProfitTable } from './ProfitTable/ProfitTable';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
+// import { send } from 'process';
 
 const tabItems = [
   { type: 'tab1', title: 'Сотрудники' },
