@@ -6,6 +6,9 @@
   gap: 15px;
   background-color: $white;
   padding: 15px 18px;
+  .errorMessage {
+    color: $not-paid;
+  }
   select {
     width: 150px;
   }

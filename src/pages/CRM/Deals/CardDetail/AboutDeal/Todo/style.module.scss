@@ -11,6 +11,10 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    .emptyText {
+      text-align: center;
+      font-size: 14px;
+    }
     &_title {
       display: flex;
       align-items: center;

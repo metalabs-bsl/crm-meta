@@ -1,5 +1,6 @@
 import {
   IColumn,
+  ICreateCommentParams,
   ICreateLeadParams,
   ICreateReminderParams,
   ILead,
@@ -23,6 +24,10 @@ export module ISourceLead {
   export type Params = void;
 }
 
+export module ICreateComment {
+  export type Response = void;
+  export type Params = ICreateCommentParams;
+}
 export module ICreateReminder {
   export type Response = void;
   export type Params = ICreateReminderParams;
