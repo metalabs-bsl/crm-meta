@@ -6,9 +6,10 @@ import IMask from 'imask';
 interface IProps {
   onChange?: (phoneNumber: string) => void;
   initialValue?: string;
+  disabled?: boolean;
 }
 
-export const PhoneInput: React.FC<IProps> = ({ onChange, initialValue }) => {
+export const PhoneInput: React.FC<IProps> = ({ onChange, initialValue, disabled = false }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -46,5 +47,5 @@ export const PhoneInput: React.FC<IProps> = ({ onChange, initialValue }) => {
     return formattedNumber;
   };
 
-  return <input ref={inputRef} className={styles.phoneInput} type='text' placeholder='+996(000)000-000' />;
+  return <input disabled={disabled} ref={inputRef} className={styles.phoneInput} type='text' placeholder='+996(000)000-000' />;
 };

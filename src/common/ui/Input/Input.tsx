@@ -13,7 +13,7 @@ export const Input: FC<IProps> = forwardRef<HTMLInputElement, IProps>(({ disable
   return (
     <div className={cn(styles.inputContainer, className, { [styles.disabled]: disabled })}>
       {!!prevIcon && <Icon type={prevIcon} className={styles.prevIcon} />}
-      <input type='text' className={styles.input} ref={ref} {...rest} />
+      <input type='text' className={styles.input} ref={ref} {...rest} disabled={disabled} />
     </div>
   );
 });
