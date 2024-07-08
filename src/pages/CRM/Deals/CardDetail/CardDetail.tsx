@@ -38,7 +38,7 @@ export const CardDetail = () => {
   const [updateLead, { isLoading }] = useUpdateLeadMutation();
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
-  const [editedTitle, setEditedTitle] = useState<string>('');
+  const [editedTitle, setEditedTitle] = useState<string>('Наименование');
   const [formData, setFormData] = useState<ICreateLeadParams>();
 
   useEffect(() => {
@@ -114,7 +114,7 @@ export const CardDetail = () => {
           </div>
           <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
         </div>
-        <Progress currentStage='received' />
+        <Progress currentStage={data?.lead_column.id} lead_id={data?.id} />
         <div className={styles.content}>{getComponent(isActiveTab)}</div>
       </div>
     </Loading>

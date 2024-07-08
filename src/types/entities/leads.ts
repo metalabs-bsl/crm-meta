@@ -83,3 +83,8 @@ export interface ILead {
   comments: IComment[];
   calculator: ICalculator[];
 }
+
+export interface IUpdateLeadColumnParams {
+  column_id: string;
+  lead_id: string;
+}

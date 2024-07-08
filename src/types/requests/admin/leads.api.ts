@@ -1,4 +1,12 @@
-import { IColumn, ICreateLeadParams, ICreateReminderParams, ILead, IResSource, IUpdateLeadParams } from 'types/entities';
+import {
+  IColumn,
+  ICreateLeadParams,
+  ICreateReminderParams,
+  ILead,
+  IResSource,
+  IUpdateLeadColumnParams,
+  IUpdateLeadParams
+} from 'types/entities';
 
 export module ICreateLead {
   export type Response = void;
@@ -27,4 +35,9 @@ export module IGetLeadsDeal {
 export module IGetLead {
   export type Response = ILead;
   export type Params = string;
+}
+
+export module IUpdateLeadColumn {
+  export type Response = void;
+  export type Params = IUpdateLeadColumnParams;
 }

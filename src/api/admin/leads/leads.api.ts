@@ -1,7 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
-import { ICreateLead, ICreateReminder, IGetLead, IGetLeadsDeal, ISourceLead, IUpdateLead } from 'types/requests/admin/leads.api';
+import {
+  ICreateLead,
+  ICreateReminder,
+  IGetLead,
+  IGetLeadsDeal,
+  ISourceLead,
+  IUpdateLead,
+  IUpdateLeadColumn
+} from 'types/requests/admin/leads.api';
 
 export const leadsApi = createApi({
   reducerPath: 'leadsApi',
@@ -46,12 +54,13 @@ export const leadsApi = createApi({
       query: (id) => `/leads/find/${id}`,
       providesTags: ['Detail-Lead']
     }),
-    updateLeads: mutation<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
+    updateLeadColumn: mutation<IUpdateLeadColumn.Response, IUpdateLeadColumn.Params>({
       query: (body) => ({
-        method: 'PUT',
-        url: `/leads/update`,
+        method: 'PATCH',
+        url: `/leads/column`,
         body
-      })
+      }),
+      invalidatesTags: ['Detail-Lead']
     })
   })
 });
@@ -62,5 +71,6 @@ export const {
   useCreateReminderMutation,
   useGetLeadsForTodoQuery,
   useLazyGetLeadQuery,
-  useUpdateLeadMutation
+  useUpdateLeadMutation,
+  useUpdateLeadColumnMutation
 } = leadsApi;

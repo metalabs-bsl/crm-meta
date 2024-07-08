@@ -3,6 +3,7 @@
 .progress {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   gap: 5px;
 
   &_item {
@@ -17,9 +18,6 @@
     background-color: $white;
     cursor: pointer;
     transition: 0.5s all;
-  }
-  .clicked_items {
-    filter: brightness(0.75);
   }
   .modalWrapper {
     display: flex;
