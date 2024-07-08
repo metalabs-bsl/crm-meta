@@ -92,9 +92,9 @@ export const Deals = () => {
       </div>
       <div className={styles.access_block}>
         <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} reminderCount={reminderCount} />
-        {isManagement && <AccessChangeble isAccess={access} setIsAccess={setAccess} />}
+        {isManagement && <AccessChangeble isAccess={access} setIsAccess={setAccess} isDeal={true} />}
       </div>
-      <div className={cn(styles.deal_content, { [styles.isDisabled]: !access })}>{getDealsComponent()}</div>
+      <div className={cn(styles.deal_content)}>{getDealsComponent()}</div>
       <EdgeModal>
         <CardDetail />
       </EdgeModal>
