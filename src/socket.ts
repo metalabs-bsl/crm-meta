@@ -1,5 +1,7 @@
+import { TableRow } from 'pages/CRM/Deals/List/types/types';
 import { setConnected } from 'api/admin/kanban/kanban.slice';
 import { setKanbanAllBoard, setKanbanBoard } from 'api/admin/kanban/kanban.ws';
+import { setListBoard, setListBoardAll } from 'api/admin/list/list.slice';
 import { IColumn } from 'types/entities';
 
 import { AppDispatch, RootState } from 'api';
@@ -54,12 +56,21 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
 
     // Example of dispatching actions to update Redux state
     dispatch(setConnected(socket?.connected || false));
+
     socket?.on('boardKanban', (message: IColumn[]) => {
       dispatch(setKanbanBoard(message));
     });
 
     socket?.on('boardKanbanAll', (message: IColumn[]) => {
       dispatch(setKanbanAllBoard(message));
+    });
+
+    socket?.on('boardList', (message: TableRow) => {
+      dispatch(setListBoard(message));
+    });
+
+    socket?.on('boardListAll', (message: TableRow) => {
+      dispatch(setListBoardAll(message));
     });
   } else {
     console.error('Access token is not available, cannot initialize socket.');

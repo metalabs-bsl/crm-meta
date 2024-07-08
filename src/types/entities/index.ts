@@ -1,3 +1,4 @@
+export type { IResAppSettings, IUpdateAppSettings } from './appSettings';
 export type { IResCurrenciesLast } from './currencies';
 export type { IResResponsible, IUserInfoRes } from './employees';
 export type { IResExchangeRates } from './exchangeRates';

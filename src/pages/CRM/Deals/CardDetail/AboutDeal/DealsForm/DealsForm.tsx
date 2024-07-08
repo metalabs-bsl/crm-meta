@@ -38,6 +38,7 @@ export const DealsForm: FC<IProps> = ({ formProps, leadId }) => {
   const notify = useNotify();
 
   useEffect(() => {
+    console.log('HELLO');
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
         if (key === 'customer_DOB' || key === 'date_created') {

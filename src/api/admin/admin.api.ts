@@ -1,3 +1,4 @@
+import { appSettingsApi } from './appSettings/appSettings.api';
 import { currenciesApi } from './currencies/currencies.api';
 import { employessApi } from './employees/employees.api';
 import { kanbanApi } from './kanban/kanban.api';
@@ -11,7 +12,8 @@ export const adminApiReducers = {
   [leadsApi.reducerPath]: leadsApi.reducer,
   [employessApi.reducerPath]: employessApi.reducer,
   [workTime.reducerPath]: workTime.reducer,
-  [kanbanApi.reducerPath]: kanbanApi.reducer
+  [kanbanApi.reducerPath]: kanbanApi.reducer,
+  [appSettingsApi.reducerPath]: appSettingsApi.reducer
 };
 
 export const adminApiMiddlewares = [
@@ -20,5 +22,6 @@ export const adminApiMiddlewares = [
   leadsApi.middleware,
   employessApi.middleware,
   workTime.middleware,
-  kanbanApi.middleware
+  kanbanApi.middleware,
+  appSettingsApi.middleware
 ];

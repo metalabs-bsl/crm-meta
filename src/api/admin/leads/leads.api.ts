@@ -45,6 +45,13 @@ export const leadsApi = createApi({
     getLead: query<IGetLead.Response, IGetLead.Params>({
       query: (id) => `/leads/find/${id}`,
       providesTags: ['Detail-Lead']
+    }),
+    updateLeads: mutation<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
+      query: (body) => ({
+        method: 'PUT',
+        url: `/leads/update`,
+        body
+      })
     })
   })
 });
