@@ -107,6 +107,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
       .then(() => {
         onCloseDeleteModal();
         notify(MESSAGE.DELETED, 'success');
+      })
+      .catch((e) => {
+        notify(e.data.message, 'error');
       });
   };
 
