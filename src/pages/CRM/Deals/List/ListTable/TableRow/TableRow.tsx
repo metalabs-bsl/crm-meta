@@ -115,7 +115,7 @@ export const TableRowData: FC<IProps> = ({
             {customer?.fullname}
           </span>
         </td>
-        <td>
+        <td className={styles.miniprogress_wrapper}>
           {lead_column && lead_column.id ? (
             <MiniProgressBar
               currentStage={currentStage}
