@@ -63,7 +63,7 @@ export const Deals = () => {
   const getDealsComponent = () => {
     const components: Record<DEALS_TABS, JSX.Element> = {
       [DEALS_TABS.kanban]: <KanbanChapter dataType={wsDataType} />,
-      [DEALS_TABS.list]: <List />,
+      [DEALS_TABS.list]: <List dataType={wsDataType} />,
       [DEALS_TABS.todos]: <Todos data={TodoData} isFetching={isFetching} />
     };
     return components[isActiveTab];
@@ -92,9 +92,9 @@ export const Deals = () => {
       </div>
       <div className={styles.access_block}>
         <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} reminderCount={reminderCount} />
-        {isManagement && <AccessChangeble isAccess={access} setIsAccess={setAccess} />}
+        {isManagement && <AccessChangeble isAccess={access} setIsAccess={setAccess} isDeal={true} />}
       </div>
-      <div className={cn(styles.deal_content, { [styles.isDisabled]: !access })}>{getDealsComponent()}</div>
+      <div className={cn(styles.deal_content)}>{getDealsComponent()}</div>
       <EdgeModal>
         <CardDetail />
       </EdgeModal>

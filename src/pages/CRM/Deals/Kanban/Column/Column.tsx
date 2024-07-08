@@ -30,7 +30,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
   const isSaleColumn = status === 6;
   const isEditableColumn = status === 1 || status === 7;
   const isDelitableColumn = leads_count === 0 && isEditableColumn;
-  const isLeadCreatable = status === 1 || status === 2 || status === 3 || status === 4;
+  const isLeadCreatable = status === 1 || status === 2 || status === 3 || status === 4 || status === 5;
   const [createColumn] = useCreateColumnMutation();
   const [deleteColumn] = useDeleteColumnMutation();
   const [updateColumn] = useUpdateColumnMutation();
