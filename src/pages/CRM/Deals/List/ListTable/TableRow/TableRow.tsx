@@ -6,8 +6,8 @@ import { useAppDispatch, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
-import MiniProgressBar from '../../OldTable/MiniProgressBar';
 import { ILeadRow, IStageData, TableColumn } from '../../types/types';
+import MiniProgressBar from '../MiniProgressBar';
 import styles from '../style.module.scss';
 
 interface IProps extends ILeadRow {
@@ -36,6 +36,8 @@ export const TableRowData: FC<IProps> = ({
   const [editedLeadName, setEditedLeadName] = useState<string>(lead_name);
   const [editedResponsibleEmployee, setEditedResponsibleEmployee] = useState<string>(responsible_employee.id);
   const [currentStage, setCurrentStage] = useState<string>(lead_column?.id || '');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [changes, setChanges] = useState<Array<any>>([]);
 
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const redirect = useRedirect();
@@ -69,8 +71,20 @@ export const TableRowData: FC<IProps> = ({
       responsible_employee: editedResponsibleEmployee,
       currentStage
     };
-    console.log('Updated Data:', updatedData);
+    setChanges((prevChanges) => {
+      const index = prevChanges.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        const newChanges = [...prevChanges];
+        newChanges[index] = updatedData;
+        return newChanges;
+      }
+      return [...prevChanges, updatedData];
+    });
   }, [editedLeadName, editedResponsibleEmployee, currentStage, id]);
+
+  useEffect(() => {
+    console.log('Changes Array:', changes);
+  }, [changes]);
 
   const getEmployeeName = (id: string) => {
     const employee = responsibleOptions?.find((option) => option.value === id);
@@ -81,7 +95,7 @@ export const TableRowData: FC<IProps> = ({
     <>
       <tr className={styles.table_text}>
         <td>
-          <div className={styles.main_checkbox}>
+          <div className={styles.checkbox}>
             <Checkbox checked={selectedRows.includes(id)} onChange={() => handleSelectRow(id)} />
           </div>
         </td>

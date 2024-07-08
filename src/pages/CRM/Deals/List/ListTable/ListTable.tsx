@@ -69,7 +69,6 @@ const ListTable: FC<TableProps> = ({ data }) => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.actions}></div>
       <table className={styles.table}>
         <thead className={styles.table_header}>
           <tr className={styles.table_header_titles}>
