@@ -70,7 +70,7 @@ export const CardDetail = () => {
 
   const getComponent = (type: string) => {
     const components = {
-      [tabItems[0].type]: <AboutDeal formData={formData} leadId={data?.id} />,
+      [tabItems[0].type]: <AboutDeal formData={formData} reminders={data?.reminders} comments={data?.comments} />,
       [tabItems[1].type]: <History history={history} />,
       [tabItems[2].type]: <p>WhatsApp</p>
     };

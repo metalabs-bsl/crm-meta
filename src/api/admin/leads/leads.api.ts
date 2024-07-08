@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
 import {
+  ICreateComment,
   ICreateLead,
   ICreateReminder,
   IGetLead,
@@ -45,7 +46,30 @@ export const leadsApi = createApi({
         method: 'POST',
         url: `/leadsReminder`,
         body
-      })
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    deleteReminder: mutation<void, string>({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/leadsReminder/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    createComment: mutation<ICreateComment.Response, ICreateComment.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leadsComments`,
+        body
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    deleteComment: mutation<void, string>({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/leadsComments/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead']
     }),
     getLeadsForTodo: query<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
       query: () => `/leads/deal`
@@ -72,5 +96,8 @@ export const {
   useGetLeadsForTodoQuery,
   useLazyGetLeadQuery,
   useUpdateLeadMutation,
-  useUpdateLeadColumnMutation
+  useUpdateLeadColumnMutation,
+  useDeleteReminderMutation,
+  useCreateCommentMutation,
+  useDeleteCommentMutation
 } = leadsApi;

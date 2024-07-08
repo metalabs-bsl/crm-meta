@@ -5,7 +5,7 @@ import { AccessChangeble, Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useAppSelector } from 'common/hooks';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
-import { ICreateLeadParams } from 'types/entities';
+import { IComment, ICreateLeadParams, ICreateReminderParams } from 'types/entities';
 import { ROLES } from 'types/roles';
 import { TAB_COMPONENTS } from './AboutDeal.helper';
 import { Accounts } from './Accounts';
@@ -32,11 +32,12 @@ const tabItems: ITabsItem[] = [
 ];
 
 interface IProps {
-  leadId?: string;
   formData?: ICreateLeadParams;
+  reminders?: ICreateReminderParams[];
+  comments?: IComment[];
 }
 
-export const AboutDeal: FC<IProps> = ({ formData, leadId }) => {
+export const AboutDeal: FC<IProps> = ({ formData, reminders, comments }) => {
   const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
@@ -45,7 +46,7 @@ export const AboutDeal: FC<IProps> = ({ formData, leadId }) => {
 
   const getActiveComponent = () => {
     const component = {
-      [TAB_COMPONENTS.TODO]: <Todo />,
+      [TAB_COMPONENTS.TODO]: <Todo reminders={reminders} comments={comments} />,
       [TAB_COMPONENTS.ACCOUNT]: <Accounts />,
       [TAB_COMPONENTS.CALCULATOR]: <Calculator />
     };
@@ -54,7 +55,7 @@ export const AboutDeal: FC<IProps> = ({ formData, leadId }) => {
 
   return (
     <div className={styles.aboutDeal}>
-      {!isCalculatorTab && <DealsForm formProps={formData} leadId={leadId} />}
+      {!isCalculatorTab && <DealsForm formProps={formData} />}
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
         <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
           {isCalculatorTab && (
