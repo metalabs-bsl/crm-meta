@@ -80,7 +80,7 @@ export const Deals = () => {
           )}
         </div>
         <div className={styles.filterBlock}>
-          {isManagement && isActiveTab !== DEALS_TABS.todos && (
+          {isManagement && (
             <Select
               defaultValue={options[0].value}
               options={options}

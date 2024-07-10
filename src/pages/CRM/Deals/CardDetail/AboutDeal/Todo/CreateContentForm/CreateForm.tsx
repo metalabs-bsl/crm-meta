@@ -39,12 +39,12 @@ export const CreateForm: FC<IProps> = () => {
     formState: { errors }
   } = useForm<IFormFields>();
 
-  const [isTodo, setIsTodo] = useState<boolean>(true);
+  const [contentType, setContentType] = useState<string>(selectOptions[0].value as string);
   const [cretateReminder, { isLoading }] = useCreateReminderMutation();
   const [createComment, { isLoading: isCommentLoading }] = useCreateCommentMutation();
 
   const onSubmit = (data: IFormFields) => {
-    if (isTodo) {
+    if (contentType === 'todo') {
       const updatedData = { ...data, lead_id: search.substring(1), status: 1 };
       cretateReminder(updatedData)
         .unwrap()
@@ -70,15 +70,15 @@ export const CreateForm: FC<IProps> = () => {
   };
 
   const changeContentType = (text: string) => {
-    setIsTodo(text === selectOptions[0].value);
+    setContentType(text);
     reset({ reminder_text: '', comment_text: '' });
   };
 
   return (
     <Loading isSpin={isLoading || isCommentLoading}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <Select options={selectOptions} defaultValue={selectOptions[0].value} onChange={(e) => changeContentType(e.target.value)} />
-        {isTodo ? (
+        <Select options={selectOptions} value={contentType} onChange={(e) => changeContentType(e.target.value)} />
+        {contentType === 'todo' ? (
           <div className={styles.textareaBlock}>
             <textarea
               {...register('reminder_text', { required: 'Название дела обязательно' })}
