@@ -7,7 +7,7 @@
   border-radius: 10px;
 
   .table {
-    width: 103%;
+    width: 100%;
     border-radius: 10px;
     border-collapse: collapse;
 
@@ -20,6 +20,40 @@
         font-size: 14px;
         font-weight: 400;
       }
+    }
+
+    .clientName {
+      display: flex;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    .clientName {
+      position: relative;
+    }
+
+    .clientName .plus {
+      display: none;
+    }
+
+    .clientName:hover .plus {
+      display: inline-block;
+    }
+
+    .check {
+      width: 10%;
+      color: $gray !important;
+      cursor: pointer;
+    }
+
+    // .focused {
+    //   border: 1px solid blue; // например, выделение рамкой при фокусе
+    // }
+
+    .plus {
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 10px;
     }
 
     .table_header_titles th {

@@ -1,14 +1,22 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
-import { Checkbox, Select } from 'common/ui';
+import { Icon, Select } from 'common/ui';
 import { ClientWindow, DropdownModal, EdgeModal } from 'common/components';
 import { useAppDispatch, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
+import { useUpdateLeadMutation } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ILeadRow, IStageData, TableColumn } from '../../types/types';
 import MiniProgressBar from '../MiniProgressBar';
 import styles from '../style.module.scss';
+
+interface IChange {
+  id: string;
+  lead_name: string;
+  responsible_employee: string;
+  currentStage: string;
+}
 
 interface IProps extends ILeadRow {
   selectedRows: string[];
@@ -16,6 +24,8 @@ interface IProps extends ILeadRow {
   stages: IStageData[];
   columns: TableColumn[];
   isEditing: boolean;
+  onRowChange: (data: IChange) => void;
+  handleDelete: () => void;
 }
 
 export const TableRowData: FC<IProps> = ({
@@ -24,24 +34,25 @@ export const TableRowData: FC<IProps> = ({
   customer,
   lead_column,
   stages,
-  selectedRows,
+  // selectedRows,
   order,
   responsible_employee,
-  handleSelectRow,
-  isEditing
+  handleDelete,
+  isEditing,
+  onRowChange
 }) => {
   const profileRef = useRef(null);
-
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [editedLeadName, setEditedLeadName] = useState<string>(lead_name);
   const [editedResponsibleEmployee, setEditedResponsibleEmployee] = useState<string>(responsible_employee.id);
   const [currentStage, setCurrentStage] = useState<string>(lead_column?.id || '');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [changes, setChanges] = useState<Array<any>>([]);
+  const [showEditField, setShowEditField] = useState<boolean>(false);
 
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const redirect = useRedirect();
   const dispatch = useAppDispatch();
+
+  const {} = useUpdateLeadMutation();
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -65,51 +76,56 @@ export const TableRowData: FC<IProps> = ({
   };
 
   useEffect(() => {
-    const updatedData = {
-      id,
-      lead_name: editedLeadName,
-      responsible_employee: editedResponsibleEmployee,
-      currentStage
-    };
-    setChanges((prevChanges) => {
-      const index = prevChanges.findIndex((item) => item.id === id);
-      if (index !== -1) {
-        const newChanges = [...prevChanges];
-        newChanges[index] = updatedData;
-        return newChanges;
-      }
-      return [...prevChanges, updatedData];
-    });
-  }, [editedLeadName, editedResponsibleEmployee, currentStage, id]);
+    if (isEditing) {
+      const updatedData = {
+        id,
+        lead_name: editedLeadName,
+        responsible_employee: editedResponsibleEmployee,
+        currentStage
+      };
 
-  useEffect(() => {
-    console.log('Changes Array:', changes);
-  }, [changes]);
+      onRowChange(updatedData);
+    }
+  }, [currentStage, editedLeadName, editedResponsibleEmployee, id, isEditing, onRowChange]);
 
-  const getEmployeeName = (id: string) => {
-    const employee = responsibleOptions?.find((option) => option.value === id);
-    return employee ? employee.label : '';
+  const handleIconClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowEditField(true);
+  };
+
+  const handleCheckClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowEditField(false);
   };
 
   return (
     <>
       <tr className={styles.table_text}>
-        <td>
-          <div className={styles.checkbox}>
-            <Checkbox checked={selectedRows.includes(id)} onChange={() => handleSelectRow(id)} />
-          </div>
+        <td onClick={onOpen} className={styles.clientName}>
+          {showEditField ? (
+            <input
+              type='text'
+              name='lead_name'
+              value={editedLeadName}
+              onChange={handleInputChange}
+              className={`${styles.input_edit}`}
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <span>{editedLeadName}</span>
+          )}
+          {!showEditField && (
+            <div className={styles.plus} onClick={handleIconClick}>
+              <Icon type='edit' alt='edit' />
+            </div>
+          )}
+          {showEditField && (
+            <div className={styles.check} onClick={handleCheckClick}>
+              <Icon type='check' alt='check' />
+            </div>
+          )}
         </td>
-        <td onClick={onOpen}>
-          <input
-            type='text'
-            name='lead_name'
-            value={editedLeadName}
-            onChange={handleInputChange}
-            disabled={!isEditing || !selectedRows.includes(id)}
-            className={styles.input_edit}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </td>
+
         <td>
           <span ref={profileRef} onMouseEnter={() => setIsShowModal(true)} onMouseLeave={() => setIsShowModal(false)}>
             {customer?.fullname}
@@ -117,39 +133,31 @@ export const TableRowData: FC<IProps> = ({
         </td>
         <td className={styles.miniprogress_wrapper}>
           {lead_column && lead_column.id ? (
-            <MiniProgressBar
-              currentStage={currentStage}
-              stages={stages}
-              isEditable={isEditing && selectedRows.includes(id)}
-              onStageChange={handleStageChange}
-            />
+            <MiniProgressBar currentStage={currentStage} stages={stages} isEditable={true} onStageChange={handleStageChange} />
           ) : (
             <div>No stage data</div>
           )}
         </td>
-        <td>Render tasks data</td>
+        <td
+          style={{
+            maxWidth: '280px'
+          }}
+        >
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus voluptatem sunt dolor.
+        </td>
         <td>{order}</td>
         <td>
-          {responsibleOptions && (
-            <div className={styles.inpBlock}>
-              {isEditing && selectedRows.includes(id) ? (
-                <Select
-                  value={editedResponsibleEmployee}
-                  options={responsibleOptions}
-                  onChange={handleSelectChange}
-                  className={styles.select}
-                />
-              ) : (
-                <input
-                  type='text'
-                  name='responsible_employee'
-                  value={getEmployeeName(editedResponsibleEmployee)}
-                  disabled
-                  className={styles.input_edit}
-                />
-              )}
-            </div>
-          )}
+          <div className={styles.inpBlock}>
+            <Select
+              value={editedResponsibleEmployee}
+              options={responsibleOptions || []}
+              onChange={handleSelectChange}
+              className={styles.select}
+            />
+          </div>
+        </td>
+        <td className={styles.deleteIcon}>
+          <Icon type='delete' onClick={handleDelete} />
         </td>
       </tr>
       <DropdownModal targetRef={profileRef} isOpen={isShowModal} onClose={() => setIsShowModal(false)}>

@@ -1,11 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { Checkbox } from 'common/ui';
 import { DeleteModal } from 'common/components';
 import { useAppSelector } from 'common/hooks';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { ROLES } from 'types/roles';
 import { ILeadRow, TableColumn, TableRow } from '../types/types';
-import { TableRowData } from './TableRow/TableRow';
+import { TableRowData } from './TableRow';
 import styles from './style.module.scss';
 
 interface TableProps {
@@ -13,14 +12,23 @@ interface TableProps {
   data: TableRow;
 }
 
+interface IChange {
+  id: string;
+  lead_name: string;
+  responsible_employee: string;
+  currentStage: string;
+}
+
 const ListTable: FC<TableProps> = ({ data }) => {
   const [tableData, setTableData] = useState<ILeadRow[]>([]);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const { role } = useAppSelector(employeesSelectors.employees);
-  const isManagement = role === ROLES.SENIOR_MANAGER;
-  console.log(isManagement);
+  const isManagement = role === ROLES.SENIOR_MANAGER || role === ROLES.DIRECTOR;
+  const [changedRows, setChangedRows] = useState<IChange[]>([]);
+
+  console.log('changedRows', changedRows);
 
   useEffect(() => {
     if (data) {
@@ -32,17 +40,9 @@ const ListTable: FC<TableProps> = ({ data }) => {
     setSelectedRows((prevSelected) => (prevSelected.includes(id) ? prevSelected.filter((rowId) => rowId !== id) : [...prevSelected, id]));
   };
 
-  const handleSelectAllRows = () => {
-    if (selectedRows.length === tableData.length) {
-      setSelectedRows([]);
-    } else {
-      setSelectedRows(tableData.map((row) => row.id));
-    }
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
+  // const handleEdit = () => {
+  //   setIsEditing(true);
+  // };
 
   const handleDelete = () => {
     setShowDeleteModal(true);
@@ -57,14 +57,32 @@ const ListTable: FC<TableProps> = ({ data }) => {
     setShowDeleteModal(false);
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    setSelectedRows([]);
-  };
+  // const handleSave = () => {
+  //   setIsEditing(false);
+  //   setSelectedRows([]);
+  // };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    setSelectedRows([]);
+  // const handleCancel = () => {
+  //   setIsEditing(false);
+  //   setSelectedRows([]);
+  // };
+
+  const handleChange = (data: IChange) => {
+    console.log(data);
+
+    setChangedRows((prev) => {
+      if (prev.length) {
+        const updatedDatas = prev.map((item) => {
+          if (item.id === data.id) {
+            return data;
+          } else {
+            return item;
+          }
+        });
+        return updatedDatas;
+      }
+      return [...prev, ...[data]];
+    });
   };
 
   return (
@@ -73,21 +91,13 @@ const ListTable: FC<TableProps> = ({ data }) => {
       <table className={styles.table}>
         <thead className={styles.table_header}>
           <tr className={styles.table_header_titles}>
-            <th>
-              <div className={styles.main_checkbox}>
-                <Checkbox
-                  checked={selectedRows.length === tableData.length && tableData.length > 0}
-                  onChange={handleSelectAllRows}
-                  disabled={tableData.length === 0}
-                />
-              </div>
-            </th>
             <th className={styles.table_titles}>наименование</th>
             <th className={styles.table_titles}>клиент</th>
             <th className={styles.table_titles}>стадия сделки</th>
             <th className={styles.table_titles}>дела</th>
             <th className={styles.table_titles}>сумма/валюта</th>
-            {role !== ROLES.MANAGER && <th className={styles.table_titles}>ответственный</th>}
+            {isManagement && <th className={styles.table_titles}>ответственный</th>}
+            <th className={styles.table_titles}>Действия</th>
           </tr>
         </thead>
         <tbody className={styles.table_body}>
@@ -100,11 +110,13 @@ const ListTable: FC<TableProps> = ({ data }) => {
               handleSelectRow={handleSelectRow}
               stages={data.stages}
               isEditing={isEditing}
+              onRowChange={handleChange}
+              handleDelete={handleDelete}
             />
           ))}
         </tbody>
       </table>
-      {selectedRows.length > 0 && (
+      {/* {selectedRows.length > 0 && (
         <div className={styles.buttons}>
           {isEditing ? (
             <>
@@ -120,13 +132,15 @@ const ListTable: FC<TableProps> = ({ data }) => {
               <button onClick={handleEdit} className={styles.btnEdit}>
                 Редактировать
               </button>
-              <button onClick={handleDelete} className={styles.btnDelete}>
-                Удалить
-              </button>
+              {isManagement && (
+                <button onClick={handleDelete} className={styles.btnDelete}>
+                  Удалить
+                </button>
+              )}
             </>
           )}
         </div>
-      )}
+      )} */}
       <DeleteModal
         text='Вы уверены, что хотите удалить выбранные элементы?'
         isOpen={showDeleteModal}
