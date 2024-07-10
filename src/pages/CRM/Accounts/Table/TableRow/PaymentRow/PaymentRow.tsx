@@ -15,7 +15,6 @@ export interface PaymentRowProps {
   method: string;
   receipt: string[];
   tourAmount: string;
-  employeeInvoice: string[];
   isPaid: boolean;
   accordionTitle: string;
 }
@@ -37,7 +36,6 @@ export const PaymentRow: FC<PaymentRowProps> = ({
   method,
   receipt,
   tourAmount,
-  employeeInvoice,
   isPaid,
   accordionTitle
 }) => {
@@ -49,7 +47,6 @@ export const PaymentRow: FC<PaymentRowProps> = ({
   const [localTourAmount, setLocalTourAmount] = useState<string>(tourAmount);
   const [invoiceFiles, setInvoiceFiles] = useState<string[]>(invoice);
   const [receiptFiles, setReceiptFiles] = useState<string[]>(receipt);
-  const [employeeInvoiceFiles, setEmployeeInvoiceFiles] = useState<string[]>(employeeInvoice);
 
   const isEditable = !isEditPaymentInfo;
 
@@ -69,21 +66,11 @@ export const PaymentRow: FC<PaymentRowProps> = ({
       method: localMethod,
       receipt: receiptFiles,
       tourAmount: localTourAmount,
-      employeeInvoice: employeeInvoiceFiles,
       isPaid: localIsPaid
     };
 
     console.log(updatedData);
-  }, [
-    localPaymentDateSupervisor,
-    invoiceFiles,
-    localAmount,
-    localMethod,
-    receiptFiles,
-    localTourAmount,
-    employeeInvoiceFiles,
-    localIsPaid
-  ]);
+  }, [localPaymentDateSupervisor, invoiceFiles, localAmount, localMethod, receiptFiles, localTourAmount, localIsPaid]);
 
   return (
     <Accordion
@@ -140,9 +127,6 @@ export const PaymentRow: FC<PaymentRowProps> = ({
                 value={localTourAmount}
                 onChange={(e) => setLocalTourAmount(e.target.value)}
               />
-            </td>
-            <td className={styles.item}>
-              <MultipleFilePicker files={employeeInvoiceFiles} editable={isEditable} onFilesChange={setEmployeeInvoiceFiles} />
             </td>
             <td className={cn(styles.item, styles.checkboxWrapper)}>
               <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={isEditable} onChange={handleCheckboxChange} />

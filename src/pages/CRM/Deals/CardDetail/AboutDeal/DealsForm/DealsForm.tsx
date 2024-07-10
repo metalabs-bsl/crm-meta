@@ -41,7 +41,7 @@ export const DealsForm: FC<IProps> = ({ formProps }) => {
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
-        if (key === 'customer_DOB' || key === 'date_created') {
+        if (key === 'customer_DOB') {
           setValue(key as keyof ICreateLeadParams, dayjs(formProps[key as keyof ICreateLeadParams]).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
@@ -66,6 +66,7 @@ export const DealsForm: FC<IProps> = ({ formProps }) => {
       createDeal({ ...data, column_id: column_id })
         .unwrap()
         .then(() => {
+          new Audio('/notification.mp3').play();
           notify(MESSAGE.SUCCESS, 'success');
           setIsEdit(false);
           reset();
@@ -129,15 +130,6 @@ export const DealsForm: FC<IProps> = ({ formProps }) => {
                 className={styles.date}
               />
               {errors.customer_DOB && <span className={styles.error}>{errors.customer_DOB.message}</span>}
-            </div>
-            <div className={styles.inpBlock}>
-              <label>Дата создания сделки</label>
-              <DatePicker
-                {...register('date_created', { required: 'Дата создания сделки обязательна' })}
-                disabled={!isEdit}
-                className={styles.date}
-              />
-              {errors.date_created && <span className={styles.error}>{errors.date_created.message}</span>}
             </div>
           </div>
           {responsibleOptions && (

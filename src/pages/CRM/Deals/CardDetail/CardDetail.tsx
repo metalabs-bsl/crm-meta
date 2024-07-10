@@ -43,7 +43,7 @@ export const CardDetail = () => {
 
   useEffect(() => {
     if (data) {
-      const { responsible_employee, customer, date_created, lead_column, lead_name, source } = data;
+      const { responsible_employee, customer, lead_column, lead_name, source } = data;
       const updatedData = {
         responsible_employee_id: responsible_employee.id,
         lead_name,
@@ -53,7 +53,6 @@ export const CardDetail = () => {
         customer_id: customer.id,
         city: customer.city,
         source_id: source.id,
-        date_created: date_created,
         column_id: lead_column.id
       };
       setFormData(updatedData);

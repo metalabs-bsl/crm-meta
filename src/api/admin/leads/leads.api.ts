@@ -15,7 +15,7 @@ import {
 export const leadsApi = createApi({
   reducerPath: 'leadsApi',
   baseQuery: getBaseQuery(),
-  tagTypes: ['Detail-Lead'],
+  tagTypes: ['Detail-Lead', 'Reminders'],
   endpoints: ({ query, mutation }) => ({
     createLead: mutation<ICreateLead.Response, ICreateLead.Params>({
       query: (body) => ({
@@ -47,14 +47,21 @@ export const leadsApi = createApi({
         url: `/leadsReminder`,
         body
       }),
-      invalidatesTags: ['Detail-Lead']
+      invalidatesTags: ['Detail-Lead', 'Reminders']
     }),
     deleteReminder: mutation<void, string>({
       query: (id) => ({
         method: 'DELETE',
         url: `/leadsReminder/${id}`
       }),
-      invalidatesTags: ['Detail-Lead']
+      invalidatesTags: ['Detail-Lead', 'Reminders']
+    }),
+    doneReminder: mutation<void, string>({
+      query: (id) => ({
+        method: 'PATCH',
+        url: `/leadsReminder/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead', 'Reminders']
     }),
     createComment: mutation<ICreateComment.Response, ICreateComment.Params>({
       query: (body) => ({
@@ -72,7 +79,8 @@ export const leadsApi = createApi({
       invalidatesTags: ['Detail-Lead']
     }),
     getLeadsForTodo: query<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
-      query: () => `/leads/deal`
+      query: () => `/leads/deal`,
+      providesTags: ['Reminders']
     }),
     getLead: query<IGetLead.Response, IGetLead.Params>({
       query: (id) => `/leads/find/${id}`,
@@ -99,5 +107,6 @@ export const {
   useUpdateLeadColumnMutation,
   useDeleteReminderMutation,
   useCreateCommentMutation,
-  useDeleteCommentMutation
+  useDeleteCommentMutation,
+  useDoneReminderMutation
 } = leadsApi;

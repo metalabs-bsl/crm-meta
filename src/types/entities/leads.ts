@@ -8,7 +8,6 @@ export interface ICreateLeadParams {
   customer_phone: string;
   city: string;
   source_id: string;
-  date_created: string;
   column_id?: string;
   customer_DOB: string;
   customer_id?: string;
@@ -85,7 +84,6 @@ export interface ILead {
   lead_name: string;
   lead_column: ILeadColumn;
   id: string;
-  date_created: string;
   customer: ICustomer;
   created_at: string;
   comments: IComment[];

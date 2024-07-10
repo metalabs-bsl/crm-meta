@@ -38,7 +38,8 @@ export const Deals = () => {
 
   useEffect(() => {
     if (TodoData) {
-      setReminderCount(TodoData.reduce((a, b) => a + b.leads_count, 0));
+      const count = TodoData.find((i) => i.id === 'dueToday')?.leads_count;
+      setReminderCount(count || 0);
     }
   }, [TodoData]);
 

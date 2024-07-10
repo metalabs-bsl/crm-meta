@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
-import { Button, Icon } from 'common/ui';
-import { DeleteModal } from 'common/components';
+import { Button, Icon, Loading } from 'common/ui';
+import { DeleteModal, Modal } from 'common/components';
 import { dateFormatWithHour } from 'common/helpers';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useDeleteReminderMutation } from 'api/admin/leads/leads.api';
+import { useDeleteReminderMutation, useDoneReminderMutation } from 'api/admin/leads/leads.api';
 import { ICreateReminderParams } from 'types/entities';
 import styles from './styles.module.scss';
 
@@ -20,14 +20,27 @@ export const TodoItem: FC<IProps> = ({ item }) => {
   const formatedCreatedAt = dateFormatWithHour(created_at);
   const formatedDateToFinish = dateFormatWithHour(date_to_finish);
   const [reminderDelete] = useDeleteReminderMutation();
+  const [doneReminder, { isLoading }] = useDoneReminderMutation();
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const [isDoneOpen, setIsDoneOpen] = useState<boolean>(false);
 
   const onDelete = () => {
     reminderDelete(id)
       .unwrap()
       .then(() => {
-        notify(MESSAGE.DELETED);
+        notify(MESSAGE.DELETED, 'success');
         setIsDeleteOpen(false);
+      });
+  };
+
+  const onDone = () => {
+    doneReminder(id)
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.UPDATED, 'success');
+      })
+      .catch(() => {
+        notify(MESSAGE.ERROR, 'error');
       });
   };
 
@@ -43,7 +56,7 @@ export const TodoItem: FC<IProps> = ({ item }) => {
             <span>Сделать до:</span>
             <span className={styles.date}>{formatedDateToFinish}</span>
           </div>
-          <Button styleType={BUTTON_TYPES.YELLOW} text='выполнено' className={styles.done_btn} />
+          <Button styleType={BUTTON_TYPES.YELLOW} text='выполнено' className={styles.done_btn} onClick={() => setIsDoneOpen(true)} />
         </div>
         <Icon type='delete' className={styles.delete} onClick={() => setIsDeleteOpen(true)} />
         {isDeleteOpen && (
@@ -53,6 +66,28 @@ export const TodoItem: FC<IProps> = ({ item }) => {
             onDelete={onDelete}
             onCancel={() => setIsDeleteOpen(false)}
           />
+        )}
+        {isDoneOpen && (
+          <Modal
+            isOpen={isDoneOpen}
+            leftBtnText='Подтверждаю'
+            leftBtnStyle={BUTTON_TYPES.YELLOW}
+            leftBtnAction={onDone}
+            rightBtnText='отменить'
+            rightBtnStyle={BUTTON_TYPES.LINK_GRAY}
+            rightBtnAction={() => setIsDoneOpen(false)}
+            onClose={() => setIsDoneOpen(false)}
+          >
+            <Loading isSpin={isLoading}>
+              <p className={styles.doneModalText}>
+                Вы уверены что хотите отметить дело
+                <br />
+                <span className={styles.reminder_title}>{reminder_text}</span>
+                <br />
+                как выполненное?
+              </p>
+            </Loading>
+          </Modal>
         )}
       </div>
     </div>

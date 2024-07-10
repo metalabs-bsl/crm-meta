@@ -50,7 +50,7 @@ export const UpsellForm = () => {
         </div>
         <div className={styles.blocks}>
           <div className={styles.item_block}>
-            <label>Валюта</label>
+            <label>Валюта (сом)</label>
             <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
           </div>
           <div className={styles.item_block}>
