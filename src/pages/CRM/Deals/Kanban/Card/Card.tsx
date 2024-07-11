@@ -78,7 +78,7 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
       )}
       <div className={styles.cardFooter}>
         <div className={styles.todoBlock}>
-          {canDrag && <Icon type='plus-gray' alt='plus' className={styles.todoCreate} onClick={() => setOpenTodoModal(true)} />}
+          <Icon type='plus-gray' alt='plus' className={styles.todoCreate} onClick={() => setOpenTodoModal(true)} />
           <span className={styles.todo}>Дело</span>
           <span className={styles.count}>{count_of_reminders}</span>
         </div>

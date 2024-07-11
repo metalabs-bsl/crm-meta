@@ -9,5 +9,7 @@
   cursor: pointer;
   &:disabled {
     cursor: not-allowed;
+    background-color: lighten($seaSalt, 20%) !important;
+    opacity: 0.3;
   }
 }

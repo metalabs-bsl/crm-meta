@@ -18,8 +18,8 @@
       color: $gray;
     }
     .btnsBlock {
-      display: flex;
       gap: 30px;
+      display: flex;
       align-items: center;
     }
     .edit {
@@ -59,10 +59,13 @@
       .inp {
         background-color: $seaSalt;
         border-radius: 5px;
+
         input {
           font-weight: 400;
           font-size: 16px;
           color: $gray-btn-bg-hover;
+          padding-right: 0;
+          border-radius: 5px;
         }
       }
       .hasPrevIcon {

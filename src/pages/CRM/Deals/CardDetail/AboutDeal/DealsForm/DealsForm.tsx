@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import cn from 'classnames';
 import { Button, DatePicker, Icon, Input, Loading, Select } from 'common/ui';
@@ -14,11 +15,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
 
 interface IProps {
-  leadId?: string;
   formProps?: ICreateLeadParams;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, leadId }) => {
+export const DealsForm: FC<IProps> = ({ formProps }) => {
   const {
     register,
     handleSubmit,
@@ -36,12 +36,12 @@ export const DealsForm: FC<IProps> = ({ formProps, leadId }) => {
   const [createDeal, { isLoading: isCreateLoading }] = useCreateLeadMutation();
   const [updateLead, { isLoading: isUpdateLoading }] = useUpdateLeadMutation();
   const notify = useNotify();
+  const { search } = useLocation();
 
   useEffect(() => {
-    console.log('HELLO');
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
-        if (key === 'customer_DOB' || key === 'date_created') {
+        if (key === 'customer_DOB') {
           setValue(key as keyof ICreateLeadParams, dayjs(formProps[key as keyof ICreateLeadParams]).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
@@ -55,8 +55,8 @@ export const DealsForm: FC<IProps> = ({ formProps, leadId }) => {
   }, [isNewDeal]);
 
   const onsubmit: SubmitHandler<ICreateLeadParams> = (data) => {
-    if (formProps && leadId) {
-      updateLead({ body: data, id: leadId })
+    if (formProps) {
+      updateLead({ body: data, id: search.substring(1) })
         .unwrap()
         .then(() => {
           notify(MESSAGE.SUCCESS, 'success');
@@ -66,6 +66,7 @@ export const DealsForm: FC<IProps> = ({ formProps, leadId }) => {
       createDeal({ ...data, column_id: column_id })
         .unwrap()
         .then(() => {
+          new Audio('/notification.mp3').play();
           notify(MESSAGE.SUCCESS, 'success');
           setIsEdit(false);
           reset();
@@ -129,15 +130,6 @@ export const DealsForm: FC<IProps> = ({ formProps, leadId }) => {
                 className={styles.date}
               />
               {errors.customer_DOB && <span className={styles.error}>{errors.customer_DOB.message}</span>}
-            </div>
-            <div className={styles.inpBlock}>
-              <label>Дата создания сделки</label>
-              <DatePicker
-                {...register('date_created', { required: 'Дата создания сделки обязательна' })}
-                disabled={!isEdit}
-                className={styles.date}
-              />
-              {errors.date_created && <span className={styles.error}>{errors.date_created.message}</span>}
             </div>
           </div>
           {responsibleOptions && (

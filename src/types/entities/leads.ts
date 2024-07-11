@@ -28,11 +28,19 @@ export interface ISourse {
 
 export type IResSource = ISourse[];
 
+export interface ICreateCommentParams {
+  comment_text: string;
+  lead_id: string;
+}
+
 export interface ICreateReminderParams {
   reminder_text: string;
   status: number;
   date_to_finish: string;
   lead_id: string;
+  created_at: string;
+  id: string;
+  updated_at: string;
 }
 
 export interface IResponsible_Employee extends IUserInfoRes {
@@ -78,9 +86,18 @@ export interface ILead {
   lead_name: string;
   lead_column: ILeadColumn;
   id: string;
-  date_created: string;
   customer: ICustomer;
   created_at: string;
   comments: IComment[];
   calculator: ICalculator[];
+}
+
+export interface IUpdateLeadColumnParams {
+  column_id: string;
+  lead_id: string;
+}
+
+export interface IUpdateLeadCalcPaidStatusParams {
+  calc_id: string;
+  paid_status: string;
 }

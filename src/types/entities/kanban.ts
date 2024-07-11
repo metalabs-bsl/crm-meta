@@ -54,3 +54,13 @@ export interface ICreateColumnParams {
   id: string;
   body: IColumnInfo;
 }
+
+export interface IGetColumnsRes {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  color: string;
+  order: number;
+  status: number;
+}

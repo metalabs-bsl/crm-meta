@@ -2,11 +2,13 @@ import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { DeleteModal, DropdownModal, FilterByDate, Modal } from 'common/components';
-import { useAppDispatch, useNotify } from 'common/hooks';
+import { useAppDispatch, useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
 import { setChangeOpenEdgeModal, setColumnId, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { IColumn, IColumnInfo } from 'types/entities';
+import { ROLES } from 'types/roles';
 import { Card } from '../Card';
 import { ColumnForm } from './ColumnForm';
 import styles from './styles.module.scss';
@@ -27,10 +29,12 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
   const filterRef = useRef(null);
+  const { role } = useAppSelector(employeesSelectors.employees);
+  const isManagement = role === ROLES.SENIOR_MANAGER || role === ROLES.DIRECTOR;
   const isSaleColumn = status === 6;
-  const isEditableColumn = status === 1 || status === 7;
+  const isEditableColumn = isManagement && (status === 1 || status === 7);
   const isDelitableColumn = leads_count === 0 && isEditableColumn;
-  const isLeadCreatable = status === 1 || status === 2 || status === 3 || status === 4;
+  const isLeadCreatable = status === 1 || status === 2 || status === 3 || status === 4 || status === 5;
   const [createColumn] = useCreateColumnMutation();
   const [deleteColumn] = useDeleteColumnMutation();
   const [updateColumn] = useUpdateColumnMutation();
@@ -107,6 +111,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
       .then(() => {
         onCloseDeleteModal();
         notify(MESSAGE.DELETED, 'success');
+      })
+      .catch((e) => {
+        notify(e.data.message, 'error');
       });
   };
 
@@ -133,7 +140,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
           )}
           {canDrag && isEditableColumn && <Icon type='edit' onClick={onOpenEditModal} />}
           {canDrag && isDelitableColumn && <Icon type='delete' alt='delete' onClick={() => setOpenDeleteModal(true)} />}
-          {canDrag && (
+          {canDrag && isManagement && (
             <div className={styles.plus}>
               <Icon type='plus-icon' alt='plus' onClick={onOpenCreateModal} />
             </div>

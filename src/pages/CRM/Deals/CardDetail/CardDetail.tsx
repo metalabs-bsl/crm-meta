@@ -38,12 +38,12 @@ export const CardDetail = () => {
   const [updateLead, { isLoading }] = useUpdateLeadMutation();
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
-  const [editedTitle, setEditedTitle] = useState<string>('');
+  const [editedTitle, setEditedTitle] = useState<string>('Наименование');
   const [formData, setFormData] = useState<ICreateLeadParams>();
 
   useEffect(() => {
     if (data) {
-      const { responsible_employee, customer, date_created, lead_column, lead_name, source } = data;
+      const { responsible_employee, customer, lead_column, lead_name, source } = data;
       const updatedData = {
         responsible_employee_id: responsible_employee.id,
         lead_name,
@@ -53,7 +53,6 @@ export const CardDetail = () => {
         customer_id: customer.id,
         city: customer.city,
         source_id: source.id,
-        date_created: date_created,
         column_id: lead_column.id
       };
       setFormData(updatedData);
@@ -70,7 +69,9 @@ export const CardDetail = () => {
 
   const getComponent = (type: string) => {
     const components = {
-      [tabItems[0].type]: <AboutDeal formData={formData} leadId={data?.id} />,
+      [tabItems[0].type]: (
+        <AboutDeal formData={formData} reminders={data?.reminders} comments={data?.comments} calcData={data?.calculator[0]} />
+      ),
       [tabItems[1].type]: <History history={history} />,
       [tabItems[2].type]: <p>WhatsApp</p>
     };
@@ -114,7 +115,9 @@ export const CardDetail = () => {
           </div>
           <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
         </div>
-        <Progress currentStage='received' />
+        <div>
+          <Progress currentStage={data?.lead_column.id} lead_id={data?.id} />
+        </div>
         <div className={styles.content}>{getComponent(isActiveTab)}</div>
       </div>
     </Loading>

@@ -4,7 +4,9 @@ import cn from 'classnames';
 import { Options } from 'types/pages';
 import { Button, SearchInput, Select } from 'common/ui';
 import { AccessChangeble, EdgeModal } from 'common/components';
-import { useAppDispatch, useAppSelector } from 'common/hooks';
+import { useAppDispatch, useAppSelector, useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useGetAppSettingsQuery, useUpdateAppSettingsMutation } from 'api/admin/appSettings/appSettings.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useGetLeadsForTodoQuery } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
@@ -25,11 +27,13 @@ const options: Options[] = [
 ];
 
 export const Deals = () => {
+  const notify = useNotify();
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { data: TodoData, isFetching } = useGetLeadsForTodoQuery();
+  const { data } = useGetAppSettingsQuery();
+  const [updateAppSettings, { isLoading }] = useUpdateAppSettingsMutation();
   const { role } = useAppSelector(employeesSelectors.employees);
-  const [access, setAccess] = useState<boolean>(true);
   const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
   const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -38,7 +42,8 @@ export const Deals = () => {
 
   useEffect(() => {
     if (TodoData) {
-      setReminderCount(TodoData.reduce((a, b) => a + b.leads_count, 0));
+      const count = TodoData.find((i) => i.id === 'dueToday')?.leads_count;
+      setReminderCount(count || 0);
     }
   }, [TodoData]);
 
@@ -69,6 +74,16 @@ export const Deals = () => {
     return components[isActiveTab];
   };
 
+  const updateAccessSettings = () => {
+    if (data) {
+      updateAppSettings({ is_calculator_open: !data.is_calculator_open })
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.UPDATED, 'success');
+        });
+    }
+  };
+
   return (
     <div className={styles.deals}>
       <div className={styles.headBlock}>
@@ -79,7 +94,7 @@ export const Deals = () => {
           )}
         </div>
         <div className={styles.filterBlock}>
-          {isManagement && isActiveTab !== DEALS_TABS.todos && (
+          {isManagement && (
             <Select
               defaultValue={options[0].value}
               options={options}
@@ -92,7 +107,9 @@ export const Deals = () => {
       </div>
       <div className={styles.access_block}>
         <DealsTabFilter setIsActiveTab={setIsActiveTab} isActiveTab={isActiveTab} mainTabs={mainTabs} reminderCount={reminderCount} />
-        {isManagement && <AccessChangeble isAccess={access} setIsAccess={setAccess} isDeal={true} />}
+        {isManagement && (
+          <AccessChangeble isLoading={isLoading} isAccess={data?.is_calculator_open} onUpdateAccess={updateAccessSettings} />
+        )}
       </div>
       <div className={cn(styles.deal_content)}>{getDealsComponent()}</div>
       <EdgeModal>

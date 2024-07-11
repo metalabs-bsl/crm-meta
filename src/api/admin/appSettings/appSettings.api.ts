@@ -5,16 +5,19 @@ import { IGetAppSettings, IUpdateAppSettings } from 'types/requests/admin/appSet
 export const appSettingsApi = createApi({
   reducerPath: 'appSettingsApi',
   baseQuery: getBaseQuery(),
+  tagTypes: ['mainAccess'],
   endpoints: ({ query, mutation }) => ({
     getAppSettings: query<IGetAppSettings.Response, IGetAppSettings.Params>({
-      query: () => '/app-settings'
+      query: () => '/app-settings',
+      providesTags: ['mainAccess']
     }),
     updateAppSettings: mutation<IUpdateAppSettings.Response, IUpdateAppSettings.Params>({
       query: (body) => ({
         method: 'PATCH',
         url: `/app-settings`,
         body
-      })
+      }),
+      invalidatesTags: ['mainAccess']
     })
   })
 });

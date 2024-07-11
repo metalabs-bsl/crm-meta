@@ -1,8 +1,5 @@
-import { IResponsibleEmployees } from './employees';
 import { IComment_or_Reminder, ICustomer, IResponsible_employee } from './kanban';
 import { ILeadColumn } from './leads';
-
-// export interface IRespo
 
 export interface IListLead {
   brutto: string;
@@ -10,7 +7,6 @@ export interface IListLead {
   count_of_reminders: number;
   created_at: string;
   customer: ICustomer;
-  date_created: string;
   id: string;
   lead_column: ILeadColumn & {
     source: {

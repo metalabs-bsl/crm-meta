@@ -17,8 +17,8 @@ export const ResponsibleWindow: FC<ClientProps> = ({ data }) => {
     <div className={styles.wrapper}>
       <p>Ответственный</p>
       <p className={styles.name}>
-        {firstName}
-        {lastName}
+        <span>{firstName}</span>
+        <span>{lastName}</span>
       </p>
     </div>
   );

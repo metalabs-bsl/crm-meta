@@ -11,5 +11,7 @@
   .name {
     margin-top: 5px;
     color: $gray-btn-bg-hover;
+    display: flex;
+    gap: 5px;
   }
 }
