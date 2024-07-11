@@ -6,7 +6,7 @@ import { useAppDispatch, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
 import { useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
-import { useDeleteLeadsMutation, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useUpdateLeadMutation } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ILeadRow, IStageData, TableColumn } from '../../types/types';
 import MiniProgressBar from '../MiniProgressBar';
@@ -51,7 +51,7 @@ export const TableRowData: FC<IProps> = ({
 
   const [updateLead] = useUpdateLeadMutation();
   const [updateColumn] = useUpdateColumnMutation();
-  const [deleteLeads] = useDeleteLeadsMutation();
+  // const [deleteLeads] = useDeleteLeadsMutation();
   const notify = useNotify();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const redirect = useRedirect();
@@ -108,19 +108,19 @@ export const TableRowData: FC<IProps> = ({
     setShowEditField(true);
   };
 
-  const handleConfirmDelete = async () => {
-    deleteLeads(id)
-      .unwrap()
-      .then(() => {
-        notify('Lead deleted successfully', 'success');
-      })
-      .catch(() => {
-        notify('Error deleting lead', 'error');
-      })
-      .finally(() => {
-        setShowDeleteModal(false);
-      });
-  };
+  // const handleConfirmDelete = async () => {
+  //   deleteLeads(id)
+  //     .unwrap()
+  //     .then(() => {
+  //       notify('Lead deleted successfully', 'success');
+  //     })
+  //     .catch(() => {
+  //       notify('Error deleting lead', 'error');
+  //     })
+  //     .finally(() => {
+  //       setShowDeleteModal(false);
+  //     });
+  // };
 
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
@@ -237,7 +237,7 @@ export const TableRowData: FC<IProps> = ({
       <DeleteModal
         text='Вы уверены, что хотите удалить выбранные элементы?'
         isOpen={showDeleteModal}
-        onDelete={handleConfirmDelete}
+        // onDelete={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
     </>
