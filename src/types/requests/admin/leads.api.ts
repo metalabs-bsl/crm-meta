@@ -48,6 +48,11 @@ export module IUpdateLeadColumn {
   export type Params = IUpdateLeadColumnParams;
 }
 
+export module IDeleteLead {
+  export type Response = ILead;
+  export type Params = string;
+}
+
 export module IUpdateLeadCalcPaidStatus {
   export type Response = void;
   export type Params = IUpdateLeadCalcPaidStatusParams;

@@ -4,6 +4,7 @@ import Break from '../../assets/icons/break.svg';
 import calcClose from '../../assets/icons/calc-close.svg';
 import calcOpen from '../../assets/icons/calc-open.svg';
 import calendarOutline from '../../assets/icons/calendar-outline.svg';
+import check from '../../assets/icons/check.svg';
 import comment from '../../assets/icons/comment.svg';
 import countMinusActive from '../../assets/icons/count-minus-active.svg';
 import countMinusUnActive from '../../assets/icons/count-minus-unactive.svg';
@@ -102,5 +103,6 @@ export const icons: IIcons = {
   ['search-clear']: clear,
   ['search-black']: searchBlackIcon,
   ['calc-open']: calcOpen,
-  ['calc-close']: calcClose
+  ['calc-close']: calcClose,
+  ['check']: check
 };

@@ -9,8 +9,7 @@
   .table {
     width: 100%;
     border-radius: 10px;
-    border-collapse: collapse !important;
-    overflow: hidden;
+    border-collapse: collapse;
 
     .table_header {
       background: $seaSalt;
@@ -23,18 +22,32 @@
       }
     }
 
-    .table_header_titles th {
-      padding: 10px;
-      text-align: left;
-      font-weight: bold;
-      border-bottom: 1px solid $border-color;
+    .clientName {
+      display: flex;
+      margin-top: 15px;
+      align-items: center;
     }
 
-    .main_checkbox {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
+    .clientName {
+      position: relative;
+    }
+
+    .check {
+      width: 10%;
+      color: $gray !important;
+      cursor: pointer;
+    }
+
+    .plus {
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .table_header_titles th {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid $border-color;
     }
 
     .table_text {
@@ -53,8 +66,7 @@
     }
 
     .table_body td {
-      padding: 10px;
-      vertical-align: top;
+      padding: 14px;
     }
 
     .stage {
@@ -100,8 +112,54 @@
   }
 }
 
+.deleteIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+// mini progress bar
+
+.miniprogress_wrapper {
+  padding-top: 25px !important;
+}
+
+.miniProgressBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .progressContainer {
+    display: flex;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .progressStage {
+    flex: 1;
+    height: 25px;
+    border-radius: 4px;
+    margin-right: 2px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .stageTitle {
+    font-size: 14px;
+    color: $gray;
+  }
+
+  .active {
+    background-color: inherit;
+  }
+}
+
 .input_edit {
-  background: #f8f8f8;
+  background: $input-edit-bg;
   padding: 6px;
   border: none;
   outline: none;

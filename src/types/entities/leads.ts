@@ -2,14 +2,14 @@ import { IUserInfoRes } from './employees';
 import { ICustomer } from './kanban';
 
 export interface ICreateLeadParams {
-  responsible_employee_id: string;
-  lead_name: string;
-  customer_name: string;
-  customer_phone: string;
-  city: string;
-  source_id: string;
+  responsible_employee_id?: string;
+  lead_name?: string;
+  customer_name?: string;
+  customer_phone?: string;
+  city?: string;
+  source_id?: string;
   column_id?: string;
-  customer_DOB: string;
+  customer_DOB?: string;
   customer_id?: string;
 }
 
@@ -17,6 +17,7 @@ export interface IUpdateLeadParams {
   body: ICreateLeadParams;
   id: string;
 }
+
 export interface ISourse {
   id: string;
   created_at: string;
