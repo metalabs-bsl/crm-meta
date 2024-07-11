@@ -11,6 +11,7 @@ export type {
   ICreateReminderParams,
   ILead,
   IResSource,
+  IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,
   IUpdateLeadParams
 } from './leads';

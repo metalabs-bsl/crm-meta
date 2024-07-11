@@ -5,6 +5,7 @@ import {
   ICreateReminderParams,
   ILead,
   IResSource,
+  IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,
   IUpdateLeadParams
 } from 'types/entities';
@@ -45,4 +46,9 @@ export module IGetLead {
 export module IUpdateLeadColumn {
   export type Response = void;
   export type Params = IUpdateLeadColumnParams;
+}
+
+export module IUpdateLeadCalcPaidStatus {
+  export type Response = void;
+  export type Params = IUpdateLeadCalcPaidStatusParams;
 }

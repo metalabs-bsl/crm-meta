@@ -58,6 +58,11 @@
       .done_btn {
         width: min-content;
       }
+      .alreadyFinished {
+        color: $green-btn-default;
+        margin-left: 9px;
+        font-size: 14px;
+      }
     }
   }
   .doneModalText {

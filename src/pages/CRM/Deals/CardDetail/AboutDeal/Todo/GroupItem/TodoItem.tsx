@@ -16,7 +16,7 @@ interface IProps {
 
 export const TodoItem: FC<IProps> = ({ item }) => {
   const notify = useNotify();
-  const { date_to_finish, reminder_text, created_at, id } = item;
+  const { date_to_finish, reminder_text, created_at, id, status } = item;
   const formatedCreatedAt = dateFormatWithHour(created_at);
   const formatedDateToFinish = dateFormatWithHour(date_to_finish);
   const [reminderDelete] = useDeleteReminderMutation();
@@ -56,7 +56,11 @@ export const TodoItem: FC<IProps> = ({ item }) => {
             <span>Сделать до:</span>
             <span className={styles.date}>{formatedDateToFinish}</span>
           </div>
-          <Button styleType={BUTTON_TYPES.YELLOW} text='выполнено' className={styles.done_btn} onClick={() => setIsDoneOpen(true)} />
+          {status !== 1 ? (
+            <Button styleType={BUTTON_TYPES.YELLOW} text='выполнено' className={styles.done_btn} onClick={() => setIsDoneOpen(true)} />
+          ) : (
+            <span className={styles.alreadyFinished}>уже выполнено</span>
+          )}
         </div>
         <Icon type='delete' className={styles.delete} onClick={() => setIsDeleteOpen(true)} />
         {isDeleteOpen && (

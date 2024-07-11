@@ -69,7 +69,9 @@ export const CardDetail = () => {
 
   const getComponent = (type: string) => {
     const components = {
-      [tabItems[0].type]: <AboutDeal formData={formData} reminders={data?.reminders} comments={data?.comments} />,
+      [tabItems[0].type]: (
+        <AboutDeal formData={formData} reminders={data?.reminders} comments={data?.comments} calcData={data?.calculator[0]} />
+      ),
       [tabItems[1].type]: <History history={history} />,
       [tabItems[2].type]: <p>WhatsApp</p>
     };
@@ -113,7 +115,9 @@ export const CardDetail = () => {
           </div>
           <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
         </div>
-        <Progress currentStage={data?.lead_column.id} lead_id={data?.id} />
+        <div>
+          <Progress currentStage={data?.lead_column.id} lead_id={data?.id} />
+        </div>
         <div className={styles.content}>{getComponent(isActiveTab)}</div>
       </div>
     </Loading>

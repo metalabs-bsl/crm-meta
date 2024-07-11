@@ -94,3 +94,8 @@ export interface IUpdateLeadColumnParams {
   column_id: string;
   lead_id: string;
 }
+
+export interface IUpdateLeadCalcPaidStatusParams {
+  calc_id: string;
+  paid_status: string;
+}
