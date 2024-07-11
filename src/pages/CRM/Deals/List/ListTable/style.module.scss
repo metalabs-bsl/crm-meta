@@ -32,23 +32,11 @@
       position: relative;
     }
 
-    .clientName .plus {
-      display: none;
-    }
-
-    .clientName:hover .plus {
-      display: inline-block;
-    }
-
     .check {
       width: 10%;
       color: $gray !important;
       cursor: pointer;
     }
-
-    // .focused {
-    //   border: 1px solid blue; // например, выделение рамкой при фокусе
-    // }
 
     .plus {
       cursor: pointer;
@@ -57,23 +45,9 @@
     }
 
     .table_header_titles th {
-      padding: 10px;
+      padding: 14px;
       text-align: left;
       border-bottom: 1px solid $border-color;
-    }
-
-    .main_checkbox {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-    }
-
-    .checkbox {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
     }
 
     .table_text {
@@ -92,7 +66,8 @@
     }
 
     .table_body td {
-      padding: 10px;
+      padding: 14px;
+      // margin-left: 30px;
     }
 
     .stage {
@@ -136,6 +111,13 @@
       cursor: pointer;
     }
   }
+}
+
+.deleteIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 // mini progress bar

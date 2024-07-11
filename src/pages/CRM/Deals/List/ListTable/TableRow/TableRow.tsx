@@ -1,11 +1,12 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { CardDetail } from 'pages/CRM/Deals/CardDetail';
 import { Icon, Select } from 'common/ui';
-import { ClientWindow, DropdownModal, EdgeModal } from 'common/components';
-import { useAppDispatch, useRedirect } from 'common/hooks';
+import { ClientWindow, DeleteModal, DropdownModal, EdgeModal } from 'common/components';
+import { useAppDispatch, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
-import { useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
+import { useDeleteLeadsMutation, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ILeadRow, IStageData, TableColumn } from '../../types/types';
 import MiniProgressBar from '../MiniProgressBar';
@@ -34,25 +35,27 @@ export const TableRowData: FC<IProps> = ({
   customer,
   lead_column,
   stages,
-  // selectedRows,
   order,
   responsible_employee,
-  handleDelete,
   isEditing,
-  onRowChange
+  onRowChange,
+  handleDelete
 }) => {
   const profileRef = useRef(null);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [editedLeadName, setEditedLeadName] = useState<string>(lead_name);
-  const [editedResponsibleEmployee, setEditedResponsibleEmployee] = useState<string>(responsible_employee.id);
-  const [currentStage, setCurrentStage] = useState<string>(lead_column?.id || '');
+  const [editedResponsibleEmployee, setEditedResponsibleEmployee] = useState<string>(responsible_employee?.id || '');
+  const [currentStage] = useState<string>(lead_column?.id || '');
   const [showEditField, setShowEditField] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
+  const [updateLead] = useUpdateLeadMutation();
+  const [updateColumn] = useUpdateColumnMutation();
+  const [deleteLeads] = useDeleteLeadsMutation();
+  const notify = useNotify();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const redirect = useRedirect();
   const dispatch = useAppDispatch();
-
-  const {} = useUpdateLeadMutation();
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -67,12 +70,24 @@ export const TableRowData: FC<IProps> = ({
     }
   };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEditedResponsibleEmployee(e.target.value);
-  };
+  const handleSelectChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newResponsibleEmployee = e.target.value;
+    setEditedResponsibleEmployee(newResponsibleEmployee);
 
-  const handleStageChange = (stageId: string) => {
-    setCurrentStage(stageId);
+    updateLead({
+      id,
+      body: {
+        lead_name: editedLeadName,
+        responsible_employee_id: newResponsibleEmployee
+      }
+    })
+      .unwrap()
+      .then(() => {
+        notify('Lead updated successfully', 'success');
+      })
+      .catch(() => {
+        notify('Error', 'error');
+      });
   };
 
   useEffect(() => {
@@ -88,14 +103,64 @@ export const TableRowData: FC<IProps> = ({
     }
   }, [currentStage, editedLeadName, editedResponsibleEmployee, id, isEditing, onRowChange]);
 
-  const handleIconClick = (e: React.MouseEvent) => {
+  const handleIconClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     setShowEditField(true);
   };
 
-  const handleCheckClick = (e: React.MouseEvent) => {
+  const handleConfirmDelete = async () => {
+    deleteLeads(id)
+      .unwrap()
+      .then(() => {
+        notify('Lead deleted successfully', 'success');
+      })
+      .catch(() => {
+        notify('Error deleting lead', 'error');
+      })
+      .finally(() => {
+        setShowDeleteModal(false);
+      });
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+  };
+
+  const handleCheckClick = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowEditField(false);
+
+    updateLead({
+      id,
+      body: {
+        lead_name: editedLeadName,
+        responsible_employee_id: editedResponsibleEmployee
+      }
+    })
+      .unwrap()
+      .then(() => {
+        notify('Lead updated successfully', 'success');
+        setShowEditField(false);
+      })
+      .catch(() => {
+        notify('Error updating lead', 'error');
+      });
+  };
+
+  const handleColumnUpdate = async (newStageId: string) => {
+    updateColumn({
+      id,
+      body: {
+        name: newStageId,
+        color: ''
+      }
+    })
+      .unwrap()
+      .then(() => {
+        notify('Column updated successfully', 'success');
+      })
+      .then(() => {
+        notify('Error updating column', 'error');
+      });
   };
 
   return (
@@ -125,7 +190,6 @@ export const TableRowData: FC<IProps> = ({
             </div>
           )}
         </td>
-
         <td>
           <span ref={profileRef} onMouseEnter={() => setIsShowModal(true)} onMouseLeave={() => setIsShowModal(false)}>
             {customer?.fullname}
@@ -133,19 +197,13 @@ export const TableRowData: FC<IProps> = ({
         </td>
         <td className={styles.miniprogress_wrapper}>
           {lead_column && lead_column.id ? (
-            <MiniProgressBar currentStage={currentStage} stages={stages} isEditable={true} onStageChange={handleStageChange} />
+            <MiniProgressBar currentStage={currentStage} stages={stages} isEditable={true} onStageChange={handleColumnUpdate} />
           ) : (
             <div>No stage data</div>
           )}
         </td>
-        <td
-          style={{
-            maxWidth: '280px'
-          }}
-        >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus voluptatem sunt dolor.
-        </td>
-        <td>{order}</td>
+        <td style={{ maxWidth: '280px' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus voluptatem sunt dolor.</td>
+        <td style={{ textAlign: 'center' }}>{order}</td>
         <td>
           <div className={styles.inpBlock}>
             <Select
@@ -157,17 +215,17 @@ export const TableRowData: FC<IProps> = ({
           </div>
         </td>
         <td className={styles.deleteIcon}>
-          <Icon type='delete' onClick={handleDelete} />
+          <Icon type='delete' onClick={() => handleDelete()} />
         </td>
       </tr>
       <DropdownModal targetRef={profileRef} isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
         <ClientWindow
           data={{
-            name: customer.fullname,
-            phone: customer.phone,
-            birthday: customer.birthday,
-            city: customer.city,
-            source: customer.source
+            name: customer?.fullname,
+            phone: customer?.phone,
+            birthday: customer?.birthday,
+            city: customer?.city,
+            source: customer?.source
           }}
         />
       </DropdownModal>
@@ -175,6 +233,15 @@ export const TableRowData: FC<IProps> = ({
       <EdgeModal>
         <CardDetail />
       </EdgeModal>
+
+      <DeleteModal
+        text='Вы уверены, что хотите удалить выбранные элементы?'
+        isOpen={showDeleteModal}
+        onDelete={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </>
   );
 };
+
+export default TableRowData;

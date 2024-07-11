@@ -28,3 +28,8 @@ export module IGetLead {
   export type Response = ILead;
   export type Params = string;
 }
+
+export module IDeleteLead {
+  export type Response = ILead;
+  export type Params = string;
+}

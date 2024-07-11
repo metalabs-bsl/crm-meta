@@ -45,7 +45,7 @@ export interface IColumn {
 }
 
 export interface IColumnInfo {
-  name: string;
+  name?: string;
   color: string;
   status?: number;
 }
