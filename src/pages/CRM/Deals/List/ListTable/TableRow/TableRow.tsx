@@ -1,12 +1,13 @@
 import React, { FC, useRef, useState } from 'react';
 import { Icon, Select } from 'common/ui';
 import { ClientWindow, DeleteModal, DropdownModal } from 'common/components';
-import { useAppDispatch, useNotify, useRedirect } from 'common/hooks';
+import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
-import { useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
-import { useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { useDeleteLeadMutation, useUpdateLeadColumnMutation, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
+import { ROLES } from 'types/roles';
 import { ILeadRow, IStageData } from '../../types/types';
 import MiniProgressBar from '../MiniProgressBar';
 import styles from '../style.module.scss';
@@ -24,12 +25,15 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const [updateLead] = useUpdateLeadMutation();
-  const [updateColumn] = useUpdateColumnMutation();
-  // const [deleteLeads] = useDeleteLeadsMutation();
-  const notify = useNotify();
+  // const [updateColumn] = useUpdateColumnMutation();
+  const [deleteLead] = useDeleteLeadMutation();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
+  const [update] = useUpdateLeadColumnMutation();
+  const notify = useNotify();
   const redirect = useRedirect();
   const dispatch = useAppDispatch();
+
+  const { role } = useAppSelector(employeesSelectors.employees);
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -69,19 +73,19 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
     setShowEditField(true);
   };
 
-  // const handleConfirmDelete = async () => {
-  //   deleteLeads(id)
-  //     .unwrap()
-  //     .then(() => {
-  //       notify('Lead deleted successfully', 'success');
-  //     })
-  //     .catch(() => {
-  //       notify('Error deleting lead', 'error');
-  //     })
-  //     .finally(() => {
-  //       setShowDeleteModal(false);
-  //     });
-  // };
+  const handleConfirmDelete = async () => {
+    deleteLead(id)
+      .unwrap()
+      .then(() => {
+        notify('Lead deleted successfully', 'success');
+      })
+      .catch(() => {
+        notify('Error deleting lead', 'error');
+      })
+      .finally(() => {
+        setShowDeleteModal(false);
+      });
+  };
 
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
@@ -107,21 +111,17 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
       });
   };
 
-  const handleColumnUpdate = async (newStageId: string) => {
-    updateColumn({
-      id,
-      body: {
-        name: newStageId,
-        color: ''
-      }
-    })
-      .unwrap()
-      .then(() => {
-        notify('Column updated successfully', 'success');
-      })
-      .then(() => {
-        notify('Error updating column', 'error');
-      });
+  const handleColumnUpdate = async (stageId: string) => {
+    try {
+      await update({
+        column_id: stageId,
+        lead_id: id
+      }).unwrap();
+
+      notify(`Выбран статус - "${stages.find((stage) => stage.id === stageId)?.name}"`);
+    } catch (error) {
+      notify('Произошла ошибка при обновлении статуса', 'error');
+    }
   };
 
   return (
@@ -163,20 +163,20 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
           )}
         </td>
         <td style={{ maxWidth: '280px' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus voluptatem sunt dolor.</td>
-        <td style={{ textAlign: 'center' }}>{order}</td>
+        <td>{order}</td>
         <td>
-          <div className={styles.inpBlock}>
-            <Select
-              value={editedResponsibleEmployee}
-              options={responsibleOptions || []}
-              onChange={handleSelectChange}
-              className={styles.select}
-            />
-          </div>
+          {role !== ROLES.MANAGER && (
+            <div className={styles.inpBlock}>
+              <Select
+                value={editedResponsibleEmployee}
+                options={responsibleOptions || []}
+                onChange={handleSelectChange}
+                className={styles.select}
+              />
+            </div>
+          )}
         </td>
-        <td className={styles.deleteIcon}>
-          <Icon type='delete' />
-        </td>
+        <td className={styles.deleteIcon}>{role === ROLES.DIRECTOR && <Icon type='delete' onClick={() => setShowDeleteModal(true)} />}</td>
       </tr>
       <DropdownModal targetRef={profileRef} isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
         <ClientWindow
@@ -193,7 +193,7 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
       <DeleteModal
         text={`Вы уверены, что хотите удалить ${lead_name}?`}
         isOpen={showDeleteModal}
-        // onDelete={handleConfirmDelete}
+        onDelete={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
     </>
