@@ -6,6 +6,11 @@
   background: $white;
   border-radius: 10px;
 
+  .tableContainer {
+    max-height: 600px;
+    overflow-x: scroll;
+  }
+
   .table {
     width: 100%;
     border-radius: 10px;
@@ -14,11 +19,26 @@
     .table_header {
       background: $seaSalt;
       height: 50px;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: $seaSalt;
+        z-index: 1;
+        height: 50px;
+        width: 6%;
+        border-bottom: 1px solid $border-color;
+      }
 
       .table_titles {
         color: $table-title-color;
         font-size: 14px;
         font-weight: 400;
+        z-index: 1;
+        position: relative;
       }
     }
 
@@ -113,9 +133,6 @@
 }
 
 .deleteIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
 }
 

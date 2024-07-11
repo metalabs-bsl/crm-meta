@@ -5,6 +5,7 @@ import {
   ICreateComment,
   ICreateLead,
   ICreateReminder,
+  IDeleteLead,
   IGetLead,
   IGetLeadsDeal,
   ISourceLead,
@@ -108,6 +109,13 @@ export const leadsApi = createApi({
         url: `/leadsCalculator/payment/${calc_id}/status/${paid_status}`
       }),
       invalidatesTags: ['Detail-Lead']
+    }),
+    deleteLead: mutation<IDeleteLead.Response, IDeleteLead.Params>({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/leads/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead']
     })
   })
 });
@@ -117,6 +125,7 @@ export const {
   useGetSourseLeadQuery,
   useCreateReminderMutation,
   useGetLeadsForTodoQuery,
+  useDeleteLeadMutation,
   useLazyGetLeadQuery,
   useUpdateLeadMutation,
   useUpdateLeadColumnMutation,
