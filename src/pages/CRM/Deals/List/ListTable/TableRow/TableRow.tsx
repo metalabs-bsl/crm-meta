@@ -1,51 +1,25 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { CardDetail } from 'pages/CRM/Deals/CardDetail';
+import React, { FC, useRef, useState } from 'react';
 import { Icon, Select } from 'common/ui';
-import { ClientWindow, DeleteModal, DropdownModal, EdgeModal } from 'common/components';
+import { ClientWindow, DeleteModal, DropdownModal } from 'common/components';
 import { useAppDispatch, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
 import { useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
 import { useUpdateLeadMutation } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
-import { ILeadRow, IStageData, TableColumn } from '../../types/types';
+import { ILeadRow, IStageData } from '../../types/types';
 import MiniProgressBar from '../MiniProgressBar';
 import styles from '../style.module.scss';
 
-interface IChange {
-  id: string;
-  lead_name: string;
-  responsible_employee: string;
-  currentStage: string;
-}
-
 interface IProps extends ILeadRow {
-  selectedRows: string[];
-  handleSelectRow: (id: string) => void;
   stages: IStageData[];
-  columns: TableColumn[];
-  isEditing: boolean;
-  onRowChange: (data: IChange) => void;
-  handleDelete: () => void;
 }
 
-export const TableRowData: FC<IProps> = ({
-  id,
-  lead_name,
-  customer,
-  lead_column,
-  stages,
-  order,
-  responsible_employee,
-  isEditing,
-  onRowChange,
-  handleDelete
-}) => {
+export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column, stages, order, responsible_employee }) => {
   const profileRef = useRef(null);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [editedLeadName, setEditedLeadName] = useState<string>(lead_name);
   const [editedResponsibleEmployee, setEditedResponsibleEmployee] = useState<string>(responsible_employee?.id || '');
-  const [currentStage] = useState<string>(lead_column?.id || '');
   const [showEditField, setShowEditField] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
@@ -89,19 +63,6 @@ export const TableRowData: FC<IProps> = ({
         notify('Error', 'error');
       });
   };
-
-  useEffect(() => {
-    if (isEditing) {
-      const updatedData = {
-        id,
-        lead_name: editedLeadName,
-        responsible_employee: editedResponsibleEmployee,
-        currentStage
-      };
-
-      onRowChange(updatedData);
-    }
-  }, [currentStage, editedLeadName, editedResponsibleEmployee, id, isEditing, onRowChange]);
 
   const handleIconClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -179,12 +140,11 @@ export const TableRowData: FC<IProps> = ({
           ) : (
             <span>{editedLeadName}</span>
           )}
-          {!showEditField && (
+          {!showEditField ? (
             <div className={styles.plus} onClick={handleIconClick}>
               <Icon type='edit' alt='edit' />
             </div>
-          )}
-          {showEditField && (
+          ) : (
             <div className={styles.check} onClick={handleCheckClick}>
               <Icon type='check' alt='check' />
             </div>
@@ -197,7 +157,7 @@ export const TableRowData: FC<IProps> = ({
         </td>
         <td className={styles.miniprogress_wrapper}>
           {lead_column && lead_column.id ? (
-            <MiniProgressBar currentStage={currentStage} stages={stages} isEditable={true} onStageChange={handleColumnUpdate} />
+            <MiniProgressBar currentStage={lead_column?.id} stages={stages} isEditable onStageChange={handleColumnUpdate} />
           ) : (
             <div>No stage data</div>
           )}
@@ -215,7 +175,7 @@ export const TableRowData: FC<IProps> = ({
           </div>
         </td>
         <td className={styles.deleteIcon}>
-          <Icon type='delete' onClick={() => handleDelete()} />
+          <Icon type='delete' />
         </td>
       </tr>
       <DropdownModal targetRef={profileRef} isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
@@ -230,12 +190,8 @@ export const TableRowData: FC<IProps> = ({
         />
       </DropdownModal>
 
-      <EdgeModal>
-        <CardDetail />
-      </EdgeModal>
-
       <DeleteModal
-        text='Вы уверены, что хотите удалить выбранные элементы?'
+        text={`Вы уверены, что хотите удалить ${lead_name}?`}
         isOpen={showDeleteModal}
         // onDelete={handleConfirmDelete}
         onCancel={handleCancelDelete}
