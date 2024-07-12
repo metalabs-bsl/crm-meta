@@ -39,9 +39,10 @@ interface IProps {
   reminders?: ICreateReminderParams[];
   comments?: IComment[];
   calcData?: ICalculator;
+  colStatus?: number;
 }
 
-export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData }) => {
+export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData, colStatus }) => {
   const notify = useNotify();
   const [updateCalcAccess, { isLoading }] = useUpdateLeadCalcAccessMutation();
   const { role } = useAppSelector(employeesSelectors.employees);
@@ -70,7 +71,7 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData 
 
   return (
     <div className={styles.aboutDeal}>
-      {!isCalculatorTab && <DealsForm formProps={formData} />}
+      {!isCalculatorTab && <DealsForm formProps={formData} colStatus={colStatus} />}
       <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
         <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
           {isCalculatorTab && (

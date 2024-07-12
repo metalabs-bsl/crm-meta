@@ -16,9 +16,10 @@ import { BUTTON_TYPES } from 'types/enums';
 
 interface IProps {
   formProps?: ICreateLeadParams;
+  colStatus?: number;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps }) => {
+export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   const {
     register,
     handleSubmit,
@@ -37,6 +38,7 @@ export const DealsForm: FC<IProps> = ({ formProps }) => {
   const [updateLead, { isLoading: isUpdateLoading }] = useUpdateLeadMutation();
   const notify = useNotify();
   const { search } = useLocation();
+  const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
 
   useEffect(() => {
     if (formProps) {
@@ -138,7 +140,7 @@ export const DealsForm: FC<IProps> = ({ formProps }) => {
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={!isEdit}
+                disabled={isResponseEmployeeEditable || !isEdit}
                 className={styles.select}
               />
               {errors.responsible_employee_id && <span className={styles.error}>{errors.responsible_employee_id.message}</span>}
