@@ -56,7 +56,7 @@ export const TodoItem: FC<IProps> = ({ item }) => {
             <span>Сделать до:</span>
             <span className={styles.date}>{formatedDateToFinish}</span>
           </div>
-          {status !== 1 ? (
+          {status === 1 ? (
             <Button styleType={BUTTON_TYPES.YELLOW} text='выполнено' className={styles.done_btn} onClick={() => setIsDoneOpen(true)} />
           ) : (
             <span className={styles.alreadyFinished}>уже выполнено</span>

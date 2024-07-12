@@ -46,6 +46,7 @@
     position: absolute;
     left: -1px;
     top: 43px;
+    z-index: 10000;
     &_item {
       font-weight: 400;
       font-size: 16px;
