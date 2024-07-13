@@ -94,12 +94,12 @@
       padding: 14px;
       text-align: left;
       border-bottom: 1px solid $border-color;
-      min-width: 100px; /* добавлено */
+      min-width: 100px;
     }
 
     .table_text {
       font-size: 14px;
-      word-wrap: break-word; // Добавлено для переноса длинного текста
+      word-wrap: break-word;
     }
 
     .table_titles_named {
@@ -115,7 +115,7 @@
 
     .table_body td {
       padding: 14px;
-      min-width: 100px; /* добавлено */
+      min-width: 100px;
     }
 
     .stage {
