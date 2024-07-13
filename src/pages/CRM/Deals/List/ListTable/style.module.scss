@@ -7,14 +7,40 @@
   border-radius: 10px;
 
   .tableContainer {
+    height: calc(100vh - 485px);
     max-height: 600px;
-    overflow-x: scroll;
+    overflow-y: auto;
+    overflow-x: auto !important;
+    width: 100%;
+    max-width: 100%;
+
+    .innerTableContainer {
+      width: 100%;
+    }
+
+    @media (max-width: 1879px) {
+      max-height: 500px;
+    }
+
+    @media (max-width: 1400px) {
+      max-height: 400px;
+    }
+
+    @media (max-width: 1024px) {
+      max-height: 300px;
+    }
+
+    @media (max-width: 768px) {
+      max-height: 200px;
+    }
   }
 
   .table {
     width: 100%;
+    max-width: 100%;
     border-radius: 10px;
     border-collapse: collapse;
+    table-layout: auto;
 
     .table_header {
       background: $seaSalt;
@@ -68,10 +94,12 @@
       padding: 14px;
       text-align: left;
       border-bottom: 1px solid $border-color;
+      min-width: 100px; /* добавлено */
     }
 
     .table_text {
       font-size: 14px;
+      word-wrap: break-word; // Добавлено для переноса длинного текста
     }
 
     .table_titles_named {
@@ -87,6 +115,7 @@
 
     .table_body td {
       padding: 14px;
+      min-width: 100px; /* добавлено */
     }
 
     .stage {

@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Icon, Select } from 'common/ui';
 import { ClientWindow, DeleteModal, DropdownModal } from 'common/components';
 import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/hooks';
@@ -23,9 +23,10 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
   const [editedResponsibleEmployee, setEditedResponsibleEmployee] = useState<string>(responsible_employee?.id || '');
   const [showEditField, setShowEditField] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [currentStage, setCurrentStage] = useState<string>(lead_column?.id || '');
+  const [isDisabledSelect, setIsDisabledSelect] = useState<boolean>(false);
 
   const [updateLead] = useUpdateLeadMutation();
-  // const [updateColumn] = useUpdateColumnMutation();
   const [deleteLead] = useDeleteLeadMutation();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const [update] = useUpdateLeadColumnMutation();
@@ -34,6 +35,17 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
   const dispatch = useAppDispatch();
 
   const { role } = useAppSelector(employeesSelectors.employees);
+
+  useEffect(() => {
+    if (stages && lead_column) {
+      const currentStatus = stages.find((i) => i.id === lead_column.id)?.status;
+      if ((currentStatus && currentStatus === 5) || currentStatus === 6 || currentStatus === 7) {
+        setIsDisabledSelect(true);
+      }
+    }
+  }, [lead_column, stages]);
+
+  console.log(isDisabledSelect);
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -118,6 +130,7 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
         lead_id: id
       }).unwrap();
 
+      setCurrentStage(stageId);
       notify(`Выбран статус - "${stages.find((stage) => stage.id === stageId)?.name}"`);
     } catch (error) {
       notify('Произошла ошибка при обновлении статуса', 'error');
@@ -157,7 +170,7 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
         </td>
         <td className={styles.miniprogress_wrapper}>
           {lead_column && lead_column.id ? (
-            <MiniProgressBar currentStage={lead_column?.id} stages={stages} isEditable onStageChange={handleColumnUpdate} />
+            <MiniProgressBar currentStage={currentStage} stages={stages} isEditable onStageChange={handleColumnUpdate} />
           ) : (
             <div>No stage data</div>
           )}
@@ -172,6 +185,7 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
                 options={responsibleOptions || []}
                 onChange={handleSelectChange}
                 className={styles.select}
+                disabled={isDisabledSelect}
               />
             </div>
           )}
