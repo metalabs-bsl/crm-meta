@@ -7,6 +7,7 @@
   border-radius: 10px;
 
   .tableContainer {
+
     height: calc(100vh - 485px);
     max-height: 600px;
     overflow-y: auto;
@@ -33,6 +34,10 @@
     @media (max-width: 768px) {
       max-height: 200px;
     }
+
+    max-height: 600px;
+    overflow-x: scroll;
+
   }
 
   .table {
