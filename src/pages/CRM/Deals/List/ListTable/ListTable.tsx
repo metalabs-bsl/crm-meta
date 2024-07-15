@@ -2,12 +2,11 @@ import { FC, useEffect, useState } from 'react';
 import { useAppSelector } from 'common/hooks';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { ROLES } from 'types/roles';
-import { ILeadRow, TableColumn, TableRow } from '../types/types';
+import { ILeadRow, TableRow } from '../types/types';
 import { TableRowData } from './TableRow';
 import styles from './style.module.scss';
 
 interface TableProps {
-  columns: TableColumn[];
   data: TableRow;
 }
 

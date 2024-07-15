@@ -13,7 +13,7 @@ export const List: FC<IListProps> = ({ dataType }) => {
 
   return (
     <Loading isSpin={loading}>
-      <ListTable columns={[]} data={dataType === '1' ? list : listAll} />
+      <ListTable data={dataType === '1' ? list : listAll} />
     </Loading>
   );
 };
