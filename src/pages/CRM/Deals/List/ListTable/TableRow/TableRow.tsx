@@ -37,7 +37,6 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
 
   const { role } = useAppSelector(employeesSelectors.employees);
 
-
   useEffect(() => {
     if (stages && lead_column) {
       const currentStatus = stages.find((i) => i.id === lead_column.id)?.status;
@@ -46,9 +45,6 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
       }
     }
   }, [lead_column, stages]);
-
-  console.log(isDisabledSelect);
-
 
   const onOpen = () => {
     dispatch(setChangeOpenEdgeModal(true));
@@ -133,7 +129,6 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
         lead_id: id
       }).unwrap();
 
-
       setCurrentStage(stageId);
 
       notify(`Выбран статус - "${stages.find((stage) => stage.id === stageId)?.name}"`);
@@ -190,9 +185,7 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
                 options={responsibleOptions || []}
                 onChange={handleSelectChange}
                 className={styles.select}
-
                 disabled={isDisabledSelect}
-
               />
             </div>
           )}

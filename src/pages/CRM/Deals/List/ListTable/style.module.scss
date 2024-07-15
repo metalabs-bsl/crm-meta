@@ -7,37 +7,10 @@
   border-radius: 10px;
 
   .tableContainer {
-
     height: calc(100vh - 485px);
     max-height: 600px;
     overflow-y: auto;
     overflow-x: auto !important;
-    width: 100%;
-    max-width: 100%;
-
-    .innerTableContainer {
-      width: 100%;
-    }
-
-    @media (max-width: 1879px) {
-      max-height: 500px;
-    }
-
-    @media (max-width: 1400px) {
-      max-height: 400px;
-    }
-
-    @media (max-width: 1024px) {
-      max-height: 300px;
-    }
-
-    @media (max-width: 768px) {
-      max-height: 200px;
-    }
-
-    max-height: 600px;
-    overflow-x: scroll;
-
   }
 
   .table {
@@ -51,6 +24,11 @@
       background: $seaSalt;
       height: 50px;
       position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      width: 100%;
+      overflow: hidden;
 
       &::before {
         content: '';
@@ -60,7 +38,7 @@
         background: $seaSalt;
         z-index: 1;
         height: 50px;
-        width: 6%;
+        width: 100%;
         border-bottom: 1px solid $border-color;
       }
 
