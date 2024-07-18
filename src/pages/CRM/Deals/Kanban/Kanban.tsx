@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
 import { IColumn, Task } from 'types/entities';
 import { DraggableColumn } from './DraggableColumn';
 import styles from './styles.module.scss';
@@ -96,7 +97,7 @@ export const Kanban: FC<IProps> = ({ data, onChange, canDrag = true }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={styles.kanbanBoardWrapper}>
-        <button className={`${styles.navButton} ${styles.navButtonLeft} `} onClick={() => scroll(-310)} disabled={!canScrollLeft}>
+        <button className={cn(styles.navButton, styles.navButtonLeft)} onClick={() => scroll(-310)} disabled={!canScrollLeft}>
           &lt;
         </button>
         <div className={styles.kanbanBoard} ref={scrollContainerRef}>
@@ -104,7 +105,7 @@ export const Kanban: FC<IProps> = ({ data, onChange, canDrag = true }) => {
             <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} canDrag={canDrag} />
           ))}
         </div>
-        <button className={`${styles.navButton} ${styles.navButtonRight} `} onClick={() => scroll(310)} disabled={!canScrollRight}>
+        <button className={cn(styles.navButton, styles.navButtonRight)} onClick={() => scroll(310)} disabled={!canScrollRight}>
           &gt;
         </button>
       </div>
