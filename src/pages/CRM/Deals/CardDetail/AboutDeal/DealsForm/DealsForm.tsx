@@ -25,7 +25,9 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue
+    setValue,
+    setError,
+    clearErrors
   } = useForm<ICreateLeadParams>({
     defaultValues: formProps || {}
   });
@@ -57,6 +59,11 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   }, [isNewDeal]);
 
   const onsubmit: SubmitHandler<ICreateLeadParams> = (data) => {
+    if (!data.customer_phone || data.customer_phone.replace(/[^\d]/g, '').length < 9) {
+      setError('customer_phone', { type: 'manual', message: 'Phone number must have at least 9 digits' });
+      return;
+    }
+
     if (formProps) {
       updateLead({ body: data, id: search.substring(1) })
         .unwrap()
@@ -78,6 +85,10 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
 
   const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue('customer_phone', event.target.value, { shouldValidate: true });
+
+    if (event.target.value.replace(/[^\d]/g, '').length >= 9) {
+      clearErrors('customer_phone');
+    }
   };
 
   return (
@@ -111,6 +122,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               {...register('customer_phone', { required: 'Номер телефона обязателен' })}
               className={styles.inp}
               onChange={handlePhoneChange}
+              initialValue={formProps?.customer_phone}
               disabled={!isEdit}
             />
             {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
@@ -149,7 +161,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={isResponseEmployeeEditable || !isEdit}
+                disabled={!isEdit && !isResponseEmployeeEditable}
                 className={styles.select}
               />
               {errors.responsible_employee_id && <span className={styles.error}>{errors.responsible_employee_id.message}</span>}
