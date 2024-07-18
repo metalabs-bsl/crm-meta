@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { IColumn, Task } from 'types/entities';
 import { DraggableColumn } from './DraggableColumn';
 import styles from './styles.module.scss';
@@ -14,11 +14,43 @@ interface IProps {
 
 export const Kanban: FC<IProps> = ({ data, onChange, canDrag = true }) => {
   const [columns, setColumns] = useState(data);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
   useEffect(() => {
     if (data) {
       setColumns(data);
     }
   }, [data]);
+
+  const checkScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
+    }
+  };
+
+  const scroll = (scrollOffset: number) => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: scrollOffset, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    checkScroll();
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', checkScroll);
+      }
+    };
+  }, []);
 
   const onCardDrop = (id: string, newColIndex: number, targetIndex: number) => {
     let movedCard: Task | undefined;
@@ -63,10 +95,18 @@ export const Kanban: FC<IProps> = ({ data, onChange, canDrag = true }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className={styles.kanbanBoard}>
-        {columns.map((col, index) => (
-          <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} canDrag={canDrag} />
-        ))}
+      <div className={styles.kanbanBoardWrapper}>
+        <button className={`${styles.navButton} ${styles.navButtonLeft} `} onClick={() => scroll(-310)} disabled={!canScrollLeft}>
+          &lt;
+        </button>
+        <div className={styles.kanbanBoard} ref={scrollContainerRef}>
+          {columns.map((col, index) => (
+            <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} canDrag={canDrag} />
+          ))}
+        </div>
+        <button className={`${styles.navButton} ${styles.navButtonRight} `} onClick={() => scroll(310)} disabled={!canScrollRight}>
+          &gt;
+        </button>
       </div>
     </DndProvider>
   );
