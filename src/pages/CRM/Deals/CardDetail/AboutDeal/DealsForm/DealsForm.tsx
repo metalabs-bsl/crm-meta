@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import cn from 'classnames';
-import { Button, DatePicker, Icon, Input, Loading, Select } from 'common/ui';
+import { Button, DatePicker, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
@@ -76,6 +76,10 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
     }
   };
 
+  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue('customer_phone', event.target.value, { shouldValidate: true });
+  };
+
   return (
     <form className={cn(styles.dealsForm, { [styles.isNewDeal]: isNewDeal })} onSubmit={handleSubmit(onsubmit)}>
       <Loading isSpin={isResponsibleFetching || isSourceFetching || isCreateLoading || isUpdateLoading}>
@@ -103,7 +107,12 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           </div>
           <div className={styles.inpBlock}>
             <label>Номер телефона</label>
-            <Input {...register('customer_phone', { required: 'Номер телефона обязателен' })} className={styles.inp} disabled={!isEdit} />
+            <PhoneInput
+              {...register('customer_phone', { required: 'Номер телефона обязателен' })}
+              className={styles.inp}
+              onChange={handlePhoneChange}
+              disabled={!isEdit}
+            />
             {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
           </div>
           <div className={styles.inpBlock}>
