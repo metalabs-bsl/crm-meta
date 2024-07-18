@@ -38,6 +38,7 @@ export const TodoItem: FC<IProps> = ({ item }) => {
       .unwrap()
       .then(() => {
         notify(MESSAGE.UPDATED, 'success');
+        setIsDoneOpen(false);
       })
       .catch(() => {
         notify(MESSAGE.ERROR, 'error');
