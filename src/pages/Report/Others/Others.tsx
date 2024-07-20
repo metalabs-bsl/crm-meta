@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { StartEndPeriodPicker } from 'pages/CRM/Start/Personal/StartEndPeriodPicker';
+import { StartEndPeriodPicker } from 'common/ui';
 import { DownloadCard } from './DownloadCard';
 import styles from './styles.module.scss';
 
