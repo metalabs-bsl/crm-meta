@@ -1,61 +1,67 @@
-import { ChangeEventHandler, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 
-import IMask from 'imask';
-
 interface IProps {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
   initialValue?: string;
-  disabled?: boolean;
   className?: string;
-  onBlur?: ChangeEventHandler<HTMLInputElement>;
-  name: string;
-  required?: boolean;
+  disabled?: boolean;
 }
 
-export const PhoneInput: React.FC<IProps> = ({ onChange, initialValue, disabled = false, className, onBlur, name, required }) => {
+const formatPhoneNumber = (phoneNumber: string): string => {
+  const cleanedPhoneNumber = phoneNumber.replace(/[^\d]/g, '');
+  let formattedNumber = '+996';
+
+  if (cleanedPhoneNumber.length > 3) {
+    formattedNumber += `(${cleanedPhoneNumber.slice(3, 6)}`;
+  }
+  if (cleanedPhoneNumber.length > 6) {
+    formattedNumber += `)${cleanedPhoneNumber.slice(6, 9)}`;
+  }
+  if (cleanedPhoneNumber.length > 9) {
+    formattedNumber += `-${cleanedPhoneNumber.slice(9, 12)}`;
+  }
+
+  return formattedNumber;
+};
+
+export const PhoneInput: React.FC<IProps> = ({ onChange, initialValue, className, disabled }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [value, setValue] = useState<string>(initialValue || '+996');
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (inputRef.current) {
-      const mask = IMask(inputRef.current, {
-        mask: '+{996}(000)000-000'
-      });
-
-      const updatePhoneNumber = () => {
-        const cleanedPhoneNumber = mask.unmaskedValue;
-        if (onChange && inputRef.current) {
-          const event = {
-            target: inputRef.current
-          } as React.ChangeEvent<HTMLInputElement>;
-          event.target.value = `+${cleanedPhoneNumber}`;
-          onChange(event);
-        }
-      };
-
-      mask.on('accept', updatePhoneNumber);
-
-      if (initialValue) {
-        mask.value = initialValue;
-      }
-
-      return () => {
-        mask.off('accept', updatePhoneNumber);
-        mask.destroy();
-      };
+    if (initialValue) {
+      setValue(formatPhoneNumber(initialValue));
     }
-  }, [onChange, initialValue]);
+  }, [initialValue]);
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const inputValue = event.target.value;
+    const formattedValue = formatPhoneNumber(inputValue);
+    setValue(formattedValue);
+
+    if (formattedValue.replace(/[^\d]/g, '').length < 9) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+
+    if (onChange) {
+      onChange(event);
+    }
+  };
 
   return (
     <input
       ref={inputRef}
-      className={`${styles.phoneInput} ${className}`}
+      className={`${styles.phoneInput} ${className || ''}`}
       type='text'
       placeholder='+996(000)000-000'
-      onBlur={onBlur}
-      name={name}
+      value={value}
+      onChange={handleInputChange}
       disabled={disabled}
-      required={required}
+      style={{ borderColor: error ? 'red' : undefined }}
     />
   );
 };
