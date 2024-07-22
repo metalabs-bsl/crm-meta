@@ -116,7 +116,7 @@ export const Header = () => {
         <Button text='Профиль' styleType={BUTTON_TYPES.GRAY} onClick={openProfileModal} ref={profileRef} />
         {isProfileModalOpen && (
           <DropdownModal isOpen={isProfileModalOpen} targetRef={profileRef} onClose={closeProfileModal}>
-            <ProfileWindow />
+            <ProfileWindow onClose={closeProfileModal} />
           </DropdownModal>
         )}
       </div>

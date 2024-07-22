@@ -4,11 +4,11 @@ import cn from 'classnames';
 import { Options } from 'types/pages';
 import { Button, SearchInput, Select } from 'common/ui';
 import { AccessChangeble, EdgeModal } from 'common/components';
-import { useAppDispatch, useAppSelector, useNotify } from 'common/hooks';
-import { MESSAGE } from 'common/constants';
+import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/hooks';
+import { crmChapters, MESSAGE } from 'common/constants';
 import { useGetAppSettingsQuery, useUpdateAppSettingsMutation } from 'api/admin/appSettings/appSettings.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
-import { useGetLeadsForTodoQuery } from 'api/admin/leads/leads.api';
+import { useLazyGetLeadsForTodoQuery, useLazySearchLeadsQuery } from 'api/admin/leads/leads.api';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { CardDetail } from './CardDetail';
@@ -30,15 +30,22 @@ export const Deals = () => {
   const notify = useNotify();
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { data: TodoData, isFetching } = useGetLeadsForTodoQuery();
   const { data } = useGetAppSettingsQuery();
   const [updateAppSettings, { isLoading }] = useUpdateAppSettingsMutation();
   const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
   const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [reminderCount, setReminderCount] = useState<number>(0);
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
+  const [getTodos, { data: TodoData, isFetching }] = useLazyGetLeadsForTodoQuery();
+  const [getSearchedLeads, { data: searchData, isFetching: isSearchFetching }] = useLazySearchLeadsQuery();
+  const redirect = useRedirect();
+
+  useEffect(() => {
+    if (wsDataType) {
+      getTodos(wsDataType === '1' ? 'my' : 'all');
+    }
+  }, [getTodos, wsDataType]);
 
   useEffect(() => {
     if (TodoData) {
@@ -59,10 +66,9 @@ export const Deals = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  console.log(searchValue);
-
-  const handleSearchValue = (id: string) => {
-    setSearchValue(id);
+  const onClickSearchValue = (id: string) => {
+    redirect.crm({ chapter: crmChapters.transactions.chapter, search: id });
+    dispatch(setChangeOpenEdgeModal(true));
   };
 
   const getDealsComponent = () => {
@@ -102,7 +108,14 @@ export const Deals = () => {
               onChange={(e) => setWsDataType(e.target.value)}
             />
           )}
-          <SearchInput placeholder='Поиск' showCoincidences onCoincidencesChange={handleSearchValue} />
+          <SearchInput
+            placeholder='Поиск'
+            showCoincidences
+            onCoincidencesClick={onClickSearchValue}
+            onValueChange={(text) => getSearchedLeads(text)}
+            coincidenceOptions={searchData}
+            coincidenceLoading={isSearchFetching}
+          />
         </div>
       </div>
       <div className={styles.access_block}>
