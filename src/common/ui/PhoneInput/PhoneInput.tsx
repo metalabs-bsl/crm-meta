@@ -41,13 +41,11 @@ export const PhoneInput: React.FC<IProps> = ({ onChange, initialValue, className
     const formattedValue = formatPhoneNumber(inputValue);
     setValue(formattedValue);
 
-    if (formattedValue.replace(/[^\d]/g, '').length < 9) {
-      setError(true);
-    } else {
-      setError(false);
-    }
+    const isValid = /^\+996\(\d{3}\)\d{3}-\d{3}$/.test(formattedValue);
+    setError(!isValid);
 
     if (onChange) {
+      event.target.value = formattedValue;
       onChange(event);
     }
   };

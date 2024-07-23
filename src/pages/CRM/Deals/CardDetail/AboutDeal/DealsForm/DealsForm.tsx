@@ -59,7 +59,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   }, [isNewDeal]);
 
   const onsubmit: SubmitHandler<ICreateLeadParams> = (data) => {
-    if (!data.customer_phone || data.customer_phone.replace(/[^\d]/g, '').length < 9) {
+    if (!data.customer_phone || data.customer_phone.replace(/[^\d]/g, '').length < 12) {
       setError('customer_phone', { type: 'manual', message: 'Phone number must have at least 9 digits' });
       return;
     }
@@ -84,10 +84,14 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   };
 
   const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('customer_phone', event.target.value, { shouldValidate: true });
+    const value = event.target.value;
+    const cleanedValue = value.replace(/[^\d]/g, '');
 
-    if (event.target.value.replace(/[^\d]/g, '').length >= 9) {
+    if (cleanedValue.length >= 12) {
+      setValue('customer_phone', cleanedValue, { shouldValidate: true });
       clearErrors('customer_phone');
+    } else {
+      setValue('customer_phone', cleanedValue);
     }
   };
 
@@ -117,14 +121,18 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
             {errors.customer_name && <span className={styles.error}>{errors.customer_name.message}</span>}
           </div>
           <div className={styles.inpBlock}>
-            <label>Номер телефона</label>
-            <PhoneInput
-              {...register('customer_phone', { required: 'Номер телефона обязателен' })}
-              className={styles.inp}
-              onChange={handlePhoneChange}
-              initialValue={formProps?.customer_phone}
-              disabled={!isEdit}
-            />
+            <div className={styles.inpBlock}>
+              <label>Номер телефона</label>
+              <PhoneInput
+                {...register('customer_phone', { required: 'Номер телефона обязателен' })}
+                className={styles.inp}
+                onChange={handlePhoneChange}
+                initialValue={formProps?.customer_phone}
+                disabled={!isEdit}
+              />
+              {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
+            </div>
+
             {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
           </div>
           <div className={styles.inpBlock}>
