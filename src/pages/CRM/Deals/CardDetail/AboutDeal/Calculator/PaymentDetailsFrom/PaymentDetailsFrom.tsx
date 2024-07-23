@@ -1,35 +1,12 @@
 import { FC, useEffect, useState } from 'react';
-import { Options } from 'types/pages';
 import { DatePicker, Icon, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
+import { currenciesOptions, paymentOptions } from 'common/constants';
 import styles from './styles.module.scss';
 
 interface IProps {
   isActiveTab: string;
 }
-
-const payOptions: Options[] = [
-  {
-    label: 'Наличными, сом',
-    value: 'som'
-  },
-  {
-    label: 'Наличными, $',
-    value: 'usd'
-  },
-  {
-    label: 'Наличными, €',
-    value: 'eur'
-  },
-  {
-    label: 'Переводом',
-    value: 'transaction'
-  },
-  {
-    label: 'Через банк',
-    value: 'bank'
-  }
-];
 
 const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
 
@@ -90,7 +67,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({ isActiveTab }) => {
                 </div>
                 <div className={styles.item_block}>
                   <label>Способ оплаты</label>
-                  <Select options={payOptions} className={styles.select} disabled={!isEdit} />
+                  <Select options={paymentOptions} className={styles.select} disabled={!isEdit} />
                 </div>
               </div>
               <div className={styles.blocks}>
@@ -113,6 +90,10 @@ export const PaymentDetailsFrom: FC<IProps> = ({ isActiveTab }) => {
                     <label>СО клиента</label>
                     <DatePicker className={styles.datepicker} disabled={!isEdit} />
                   </div>
+                </div>
+                <div className={styles.item_block}>
+                  <label>Валюта (Брутто/Нетто/Комиссия)</label>
+                  <Select options={currenciesOptions} className={styles.select} disabled={!isEdit} />
                 </div>
               </div>
             </form>

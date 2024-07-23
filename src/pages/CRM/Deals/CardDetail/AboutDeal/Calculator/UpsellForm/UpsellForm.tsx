@@ -1,30 +1,8 @@
 import { useState } from 'react';
 import { DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
+import { currenciesOptions, paymentOptions } from 'common/constants';
 import styles from './style.module.scss';
-
-const payOptions = [
-  {
-    label: 'Наличными, сом',
-    value: 'som'
-  },
-  {
-    label: 'Наличными, $',
-    value: 'usd'
-  },
-  {
-    label: 'Наличными, €',
-    value: 'eur'
-  },
-  {
-    label: 'Переводом',
-    value: 'transaction'
-  },
-  {
-    label: 'Через банк',
-    value: 'bank'
-  }
-];
 
 export const UpsellForm = () => {
   const [isEditUpsell, setIsEditUpsell] = useState<boolean>(false);
@@ -45,7 +23,7 @@ export const UpsellForm = () => {
           </div>
           <div className={styles.item_block}>
             <label>Способ оплаты</label>
-            <Select options={payOptions} className={styles.select} disabled={isEditable} />
+            <Select options={paymentOptions} className={styles.select} disabled={isEditable} />
           </div>
         </div>
         <div className={styles.blocks}>
@@ -61,7 +39,7 @@ export const UpsellForm = () => {
         <div className={styles.blocks}>
           <div className={styles.more_items_block}>
             <div className={styles.item_block}>
-              <label>Курс ТО</label>
+              <label>Курс ТО (сом)</label>
               <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
             </div>
             <div className={styles.item_block}>
@@ -70,8 +48,8 @@ export const UpsellForm = () => {
             </div>
           </div>
           <div className={styles.item_block}>
-            <label>Комментарий</label>
-            <Input placeholder='Комментарий отсутствует' className={styles.inp_wrapper} disabled={isEditable} />
+            <label>Валюта (Брутто/Нетто/Комиссия)</label>
+            <Select options={currenciesOptions} className={styles.select} disabled={isEditable} />
           </div>
         </div>
       </form>
