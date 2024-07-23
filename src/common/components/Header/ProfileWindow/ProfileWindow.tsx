@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { Button } from 'common/ui';
 import { dateFormat } from 'common/helpers';
 import { useAppSelector, useNotify } from 'common/hooks';
@@ -7,8 +8,11 @@ import { AvatarUpload } from '../AvatarUpload';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
+interface IProps {
+  onClose: () => void;
+}
 
-export const ProfileWindow = () => {
+export const ProfileWindow: FC<IProps> = ({ onClose }) => {
   const { userInfo } = useAppSelector(employeesSelectors.employees);
 
   const [handleLogout] = useLogoutMutation();
@@ -24,6 +28,7 @@ export const ProfileWindow = () => {
       .unwrap()
       .then((res) => {
         notify(res.message, 'success');
+        onClose();
       });
   };
 

@@ -1,43 +1,42 @@
 import { FC, forwardRef, InputHTMLAttributes, useEffect, useState } from 'react';
 import cn from 'classnames';
+import { useDebounce } from 'common/hooks';
+import { IResSearch } from 'types/entities';
 import { Icon } from '../Icon';
+import { Loading } from '../Loading';
 import styles from './style.module.scss';
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   showCoincidences?: boolean;
   onValueChange?: (text: string) => void;
-  onCoincidencesChange?: (id: string) => void;
+  onCoincidencesClick?: (id: string) => void;
+  coincidenceOptions?: IResSearch[];
+  coincidenceLoading?: boolean;
 }
 
-const coincidenceOptions = [
-  {
-    label: 'dfgh',
-    Value: '4a0a217f-c1b7-4961-a8d8-c805c7b896ec'
-  },
-  {
-    label: 'test 2',
-    Value: '631b0db9-3109-4a6c-bb49-c0fbea1890c1'
-  }
-];
-
 export const SearchInput: FC<IProps> = forwardRef<HTMLInputElement, IProps>(
-  ({ showCoincidences = false, onValueChange, onCoincidencesChange, className, ...rest }, ref) => {
+  (
+    { showCoincidences = false, onValueChange, onCoincidencesClick, className, coincidenceOptions, coincidenceLoading = false, ...rest },
+    ref
+  ) => {
     const [value, setValue] = useState<string>('');
+    const [debouncedValue] = useDebounce(value, 500);
 
     const handleClear = () => {
       setValue('');
     };
 
     const onCoincidenceClick = (id: string) => {
-      onCoincidencesChange && onCoincidencesChange(id);
+      onCoincidencesClick && onCoincidencesClick(id);
       setValue('');
     };
 
     useEffect(() => {
-      if (onValueChange) {
-        onValueChange(value);
+      if (onValueChange && debouncedValue.length) {
+        onValueChange(debouncedValue);
       }
-    }, [onValueChange, value]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedValue]);
 
     return (
       <div
@@ -53,11 +52,17 @@ export const SearchInput: FC<IProps> = forwardRef<HTMLInputElement, IProps>(
         </div>
         {showCoincidences && !!value.length && (
           <div className={styles.coincidence}>
-            {coincidenceOptions.map((item) => (
-              <div key={item.Value} className={styles.coincidence_item} onClick={() => onCoincidenceClick(item.Value)}>
-                {item.label}
-              </div>
-            ))}
+            <Loading isSpin={coincidenceLoading}>
+              {coincidenceOptions?.length ? (
+                coincidenceOptions?.map((item) => (
+                  <div key={item.id} className={styles.coincidence_item} onClick={() => onCoincidenceClick(item.id)}>
+                    {item.lead_name}
+                  </div>
+                ))
+              ) : (
+                <div className={cn(styles.coincidence_item, styles.empty)}>Совпадений не найдено</div>
+              )}
+            </Loading>
           </div>
         )}
       </div>

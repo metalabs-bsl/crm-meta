@@ -4,6 +4,7 @@ import {
   ICreateLeadParams,
   ICreateReminderParams,
   ILead,
+  IResSearch,
   IResSource,
   IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,
@@ -36,7 +37,7 @@ export module ICreateReminder {
 
 export module IGetLeadsDeal {
   export type Response = IColumn[];
-  export type Params = void;
+  export type Params = 'my' | 'all';
 }
 export module IGetLead {
   export type Response = ILead;
@@ -56,4 +57,9 @@ export module IDeleteLead {
 export module IUpdateLeadCalcPaidStatus {
   export type Response = void;
   export type Params = IUpdateLeadCalcPaidStatusParams;
+}
+
+export module IGetSearch {
+  export type Response = IResSearch[];
+  export type Params = string;
 }

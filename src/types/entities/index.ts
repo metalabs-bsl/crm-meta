@@ -10,6 +10,7 @@ export type {
   ICreateLeadParams,
   ICreateReminderParams,
   ILead,
+  IResSearch,
   IResSource,
   IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
+import { StartEndPeriodPicker } from 'common/ui';
 import { StartTable } from '../StartTable';
 import { IEmployeeInfo } from '../types/IEmployee';
-import { StartEndPeriodPicker } from './StartEndPeriodPicker';
 import { StartSummary } from './StartSummary';
 import styles from './styles.module.scss';
 

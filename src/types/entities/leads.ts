@@ -100,3 +100,8 @@ export interface IUpdateLeadCalcPaidStatusParams {
   calc_id: string;
   paid_status: string;
 }
+
+export interface IResSearch {
+  lead_name: string;
+  id: string;
+}

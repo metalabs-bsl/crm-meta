@@ -8,6 +8,7 @@ import {
   IDeleteLead,
   IGetLead,
   IGetLeadsDeal,
+  IGetSearch,
   ISourceLead,
   IUpdateLead,
   IUpdateLeadCalcPaidStatus,
@@ -81,7 +82,7 @@ export const leadsApi = createApi({
       invalidatesTags: ['Detail-Lead']
     }),
     getLeadsForTodo: query<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
-      query: () => `/leads/deal`,
+      query: (type) => `/leads/deal/${type}`,
       providesTags: ['Reminders']
     }),
     getLead: query<IGetLead.Response, IGetLead.Params>({
@@ -116,6 +117,14 @@ export const leadsApi = createApi({
         url: `/leads/${id}`
       }),
       invalidatesTags: ['Detail-Lead']
+    }),
+    searchLeads: query<IGetSearch.Response, IGetSearch.Params>({
+      query: (value) => `/leads/search/${value}`,
+      keepUnusedDataFor: 0
+      // Ищет по:
+      // Наименованию сделки
+      // Имени клиента
+      // Номеру договора
     })
   })
 });
@@ -124,7 +133,7 @@ export const {
   useCreateLeadMutation,
   useGetSourseLeadQuery,
   useCreateReminderMutation,
-  useGetLeadsForTodoQuery,
+  useLazyGetLeadsForTodoQuery,
   useDeleteLeadMutation,
   useLazyGetLeadQuery,
   useUpdateLeadMutation,
@@ -134,5 +143,6 @@ export const {
   useDeleteCommentMutation,
   useDoneReminderMutation,
   useUpdateLeadCalcAccessMutation,
-  useUpdateLeadCalcPaidStatusMutation
+  useUpdateLeadCalcPaidStatusMutation,
+  useLazySearchLeadsQuery
 } = leadsApi;
