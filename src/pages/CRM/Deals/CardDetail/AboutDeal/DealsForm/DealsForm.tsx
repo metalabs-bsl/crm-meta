@@ -132,8 +132,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               />
               {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
             </div>
-
-            {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
           </div>
           <div className={styles.inpBlock}>
             <label>Город проживания</label>
