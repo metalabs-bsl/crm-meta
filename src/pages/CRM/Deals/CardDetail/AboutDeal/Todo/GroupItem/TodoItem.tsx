@@ -4,7 +4,7 @@ import { DeleteModal, Modal } from 'common/components';
 import { dateFormatWithHour } from 'common/helpers';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useDeleteReminderMutation, useDoneReminderMutation } from 'api/admin/leads/leads.api';
+import { useDeleteReminderMutation, useDoneReminderMutation } from 'api/admin/leads/endpoints/lead';
 import { ICreateReminderParams } from 'types/entities';
 import styles from './styles.module.scss';
 

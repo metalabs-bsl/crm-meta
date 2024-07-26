@@ -6,7 +6,7 @@ import { Button, DatePicker, Icon, Input, Loading, PhoneInput, Select } from 'co
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
-import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import styles from './styles.module.scss';

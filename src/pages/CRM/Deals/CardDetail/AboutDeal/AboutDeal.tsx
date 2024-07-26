@@ -6,7 +6,7 @@ import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
-import { useUpdateLeadCalcAccessMutation } from 'api/admin/leads/leads.api';
+import { useUpdateLeadCalcAccessMutation } from 'api/admin/leads/endpoints/calculator';
 import { IComment, ICreateLeadParams, ICreateReminderParams } from 'types/entities';
 import { ICalculator } from 'types/entities/leads';
 import { ROLES } from 'types/roles';

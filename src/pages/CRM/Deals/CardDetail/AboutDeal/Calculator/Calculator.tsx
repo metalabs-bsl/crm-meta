@@ -6,7 +6,7 @@ import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/leads.api';
+import { useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
 import { ICalculator } from 'types/entities/leads';
 import { AgreementForm } from './AgreementForm';
 import { PaymentDetailsFrom } from './PaymentDetailsFrom';

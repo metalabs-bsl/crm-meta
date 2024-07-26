@@ -4,7 +4,7 @@ import { DeleteModal } from 'common/components';
 import { dateFormatWithHour } from 'common/helpers';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useDeleteCommentMutation } from 'api/admin/leads/leads.api';
+import { useDeleteCommentMutation } from 'api/admin/leads/endpoints/lead';
 import { IComment } from 'types/entities';
 import styles from './styles.module.scss';
 
