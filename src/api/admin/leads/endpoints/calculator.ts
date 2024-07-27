@@ -1,8 +1,12 @@
-import { IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
+import { IGetCalc, IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
 import { leadsMainApi } from '../leads.api';
 
 const calculatorApi = leadsMainApi.injectEndpoints({
-  endpoints: ({ mutation }) => ({
+  endpoints: ({ query, mutation }) => ({
+    getLeadCalc: query<IGetCalc.Response, IGetCalc.Params>({
+      query: (leadId) => `/leadsCalculator/${leadId}`,
+      providesTags: ['Calculator']
+    }),
     updateLeadCalcAccess: mutation<void, string>({
       query: (calc_id) => ({
         method: 'PATCH',
@@ -16,8 +20,17 @@ const calculatorApi = leadsMainApi.injectEndpoints({
         url: `/leadsCalculator/payment/${calc_id}/status/${paid_status}`
       }),
       invalidatesTags: ['Detail-Lead']
+    }),
+    updateContract: mutation<void, FormData>({
+      query: (body) => ({
+        method: 'PATCH',
+        url: `/leads-calculator-contract`,
+        body
+      }),
+      invalidatesTags: ['Calculator']
     })
   })
 });
 
-export const { useUpdateLeadCalcAccessMutation, useUpdateLeadCalcPaidStatusMutation } = calculatorApi;
+export const { useUpdateLeadCalcAccessMutation, useUpdateLeadCalcPaidStatusMutation, useLazyGetLeadCalcQuery, useUpdateContractMutation } =
+  calculatorApi;

@@ -4,6 +4,7 @@ import {
   ICreateLeadParams,
   ICreateReminderParams,
   ILead,
+  IResCalc,
   IResSearch,
   IResSource,
   IUpdateLeadCalcPaidStatusParams,
@@ -61,5 +62,10 @@ export module IUpdateLeadCalcPaidStatus {
 
 export module IGetSearch {
   export type Response = IResSearch[];
+  export type Params = string;
+}
+
+export module IGetCalc {
+  export type Response = IResCalc;
   export type Params = string;
 }
