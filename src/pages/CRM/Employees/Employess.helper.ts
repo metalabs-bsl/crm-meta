@@ -1,4 +1,4 @@
-import { Column, DataColumn } from './types/types';
+import { Column } from './types/types';
 
 // список разделов таблице
 export const columns: Column[] = [
@@ -75,7 +75,7 @@ export const columns: Column[] = [
 ];
 
 // данные таблицы
-export const dataColumns: DataColumn[] = [
+export const dataColumns = [
   {
     fullName: '',
     status: 'Менеджер руководитель',
