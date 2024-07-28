@@ -6,6 +6,7 @@ import styles from './styles.module.scss';
 
 interface IEmployeesTableRowProps extends IEmployeeData {
   onSelectRow: (index: number) => void;
+  index: number;
 }
 
 export const EmployeesTableRow: FC<IEmployeesTableRowProps> = ({
@@ -13,62 +14,81 @@ export const EmployeesTableRow: FC<IEmployeesTableRowProps> = ({
   first_name,
   middle_name,
   date_of_birth,
-  job_title,
   phone,
-  email,
-  email_password,
-  start_of_internship,
-  start_of_work,
-  login,
-  password,
-  contracts,
-  passports
+  onSelectRow,
+  index
 }) => {
-  const [isEdit, setIsEdit] = useState<boolean>();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth);
   const [phoneNumber, setPhoneNumber] = useState<string>(phone);
-  const [emailData, setEmailData] = useState<string>(phone);
-  const [emailPassword, setEmailPassword] = useState<string>(phone);
+  const [emailData, setEmailData] = useState<string>('');
+  const [emailPassword, setEmailPassword] = useState<string>('');
+  const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
+  const [localTourAmount, setLocalTourAmount] = useState<string>('');
+  const [employeeInvoiceFiles, setEmployeeInvoiceFiles] = useState<File[]>([]);
+  const [localIsPaid, setLocalIsPaid] = useState<boolean>(false);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+
+  const handleCheckboxChange = () => {
+    setLocalIsPaid(!localIsPaid);
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    // Your logic for handling select change
+  };
+
   return (
     <tr>
       <td className={styles.item}>
-        <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
+        <Checkbox
+          checked={isSelected}
+          onChange={() => {
+            setIsSelected(!isSelected);
+            onSelectRow(index);
+          }}
+        />
       </td>
       <td className={styles.item}>{second_name}</td>
       <td className={styles.item}>{first_name}</td>
       <td className={styles.item}>{middle_name}</td>
       <td className={styles.item}>
-        <DatePicker className={styles.datepicker} disabled={isEdit} value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
+        <DatePicker className={styles.datepicker} disabled={!isEdit} value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
       </td>
       <td className={styles.item}>
-        <Select value={} options={} className={styles.select} disabled={isEdit} onChange={(e) => {}} />
-      </td>
-      <td className={styles.item}>
-        <Input className={styles.inp} disabled={isEdit} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} type='phone' />
-      </td>
-      <td className={styles.item}>
-        <Input className={styles.inp} disabled={isEdit} value={emailData} type='email' onChange={(e) => setEmailData(e.target.value)} />
+        <Select value={''} options={[]} className={styles.select} disabled={!isEdit} onChange={handleSelectChange} />
       </td>
       <td className={styles.item}>
         <Input
           className={styles.inp}
-          disabled={isEdit}
+          disabled={!isEdit}
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          type='phone'
+        />
+      </td>
+      <td className={styles.item}>
+        <Input className={styles.inp} disabled={!isEdit} value={emailData} type='email' onChange={(e) => setEmailData(e.target.value)} />
+      </td>
+      <td className={styles.item}>
+        <Input
+          className={styles.inp}
+          disabled={!isEdit}
           value={emailPassword}
           type='text'
           onChange={(e) => setEmailPassword(e.target.value)}
         />
       </td>
       <td className={styles.item}>
-        <MultipleFilePicker files={receiptFiles} editable={isEditable} onFilesChange={setReceiptFiles} />
+        <MultipleFilePicker files={receiptFiles} editable={isEdit} onFilesChange={setReceiptFiles} />
       </td>
       <td className={styles.item}>
-        <Input className={styles.inp} disabled={isEditable} value={localTourAmount} onChange={(e) => setLocalTourAmount(e.target.value)} />
+        <Input className={styles.inp} disabled={!isEdit} value={localTourAmount} onChange={(e) => setLocalTourAmount(e.target.value)} />
       </td>
       <td className={styles.item}>
-        <MultipleFilePicker files={employeeInvoiceFiles} editable={isEditable} onFilesChange={setEmployeeInvoiceFiles} />
+        <MultipleFilePicker files={employeeInvoiceFiles} editable={isEdit} onFilesChange={setEmployeeInvoiceFiles} />
       </td>
-      <td className={cn(styles.item, styles.checkboxWrapper)}>
-        <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={isEditable} onChange={handleCheckboxChange} />
+      <td className={styles.item}>
+        <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={!isEdit} onChange={handleCheckboxChange} />
       </td>
     </tr>
   );

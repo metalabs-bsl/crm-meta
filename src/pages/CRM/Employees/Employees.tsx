@@ -26,51 +26,6 @@ export const Employees = () => {
   const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [, setBirthdayData] = useState<{ [key: number]: Date | null }>({});
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
-  const handleSearchValueChange = (text: string) => {
-    setSearchTerm(text);
-  };
-
-  const filterData = (data: DataColumn[], term: string): DataColumn[] => {
-    if (!term) return data;
-
-    return data.filter((item) => {
-      const fullName = `${item.fullName}`.toLowerCase();
-      const jobTitle = `${item.job_title}`.toLowerCase();
-      return fullName.includes(term.toLowerCase()) || jobTitle.includes(term.toLowerCase());
-    });
-  };
-
-  const filteredData = useMemo(() => filterData(tableData, searchTerm), [tableData, searchTerm]);
-
-  const transformData = (data: IEmployee[]): DataColumn[] => {
-    return data.map((item) => ({
-      id: item.id,
-      fullName: `${item.first_name} ${item.second_name}`,
-      birthday: dateFormat(item.date_of_birth),
-      phoneNumber: item.phone,
-      job_title: item.job_title,
-      email: item.email,
-      startDateInternship: item.start_of_internship,
-      startDateWork: dateFormat(item.created_at),
-      agreement: item.contract && Array.isArray(item.contract) ? item.contract.join(', ') : 'Нету файлов',
-      passport: item.passport && Array.isArray(item.passport) ? item.passport.join(', ') : 'Нету файлов'
-    }));
-  };
-
-  useEffect(() => {
-    if (data) {
-      const transformedData = transformData(data);
-      setTableData(transformedData);
-    }
-  }, [data]);
-
-  const jobOptions = useMemo(() => {
-    if (!data) return [];
-    const jobs = data.map((employee) => employee.job_title);
-    return Array.from(new Set(jobs)).map((job) => ({ label: job, value: job }));
-  }, [data]);
 
   const handleMainCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -172,11 +127,11 @@ export const Employees = () => {
         <div className={styles.btn_title}>
           <h2 className={styles.title}>Сотрудники</h2>
           <button className={styles.addEmployeeButton} onClick={() => setShowAddEmployeeForm(true)}>
-            Добавить сотрудника
+            добавить сотрудника
           </button>
         </div>
         <div>
-          <SearchInput onValueChange={handleSearchValueChange} />
+          <SearchInput />
         </div>
       </div>
       <div className={styles.wrapper}>
@@ -206,7 +161,7 @@ export const Employees = () => {
               {data?.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length + 1} className={styles.emptyTable}>
-                    <h3 className={styles.search_text}> Совпадений не найдено</h3>
+                    <h3 className={styles.table_text}> Добавьте данные</h3>
                   </td>
                 </tr>
               ) : (
@@ -228,22 +183,26 @@ export const Employees = () => {
                               className={styles.editInput}
                             />
                           ) : isEditOptions(column.isEdit) && column.isEdit.component === 'select' ? (
-                            <Select
-                              options={jobOptions}
-                              defaultValue={data[column.key]}
+                            <select
+                              value={editedData[index]?.[column.key] ?? data[column.key]}
                               onChange={(e) => handleInputChange(index, column.key, e.target.value)}
-                            />
+                              className={styles.editSelect}
+                            >
+                              <option value='Менеджер'>Менеджер</option>
+                              <option value='Планктон'>Планктон</option>
+                              <option value='Спанчбоб'>Спанчбоб</option>
+                            </select>
                           ) : column.key === 'agreement' ? (
                             <MultipleFilePicker
-                              onFilesChange={(files: string[]) => handleAgreementFilesChange(index, files)}
-                              files={agreementFiles[index] || []}
+                              files={agreementFiles[index] ?? []}
                               editable={false}
+                              onFilesChange={(newFiles) => handleAgreementFilesChange(index, newFiles)}
                             />
                           ) : column.key === 'passport' ? (
                             <MultipleFilePicker
-                              onFilesChange={(files: string[]) => handlePassportFilesChange(index, files)}
-                              files={passportFiles[index] || []}
+                              files={passportFiles[index] ?? []}
                               editable={false}
+                              onFilesChange={(newFiles) => handlePassportFilesChange(index, newFiles)}
                             />
                           ) : column.key === 'start_of_work' || column.key === 'start_of_internship' ? (
                             <DatePicker
@@ -288,43 +247,37 @@ export const Employees = () => {
               )}
             </tbody>
           </table>
+        </div>
 
-          <div className={styles.actionButtons}>
-            {selectedRows.length > 0 && (
-              <>
-                {isEditing ? (
-                  <>
-                    <button className={styles.dtnEdit} onClick={handleSave}>
-                      Сохранить
-                    </button>
-                    <button className={styles.btnDelete} onClick={handleCancelEdit}>
-                      Отменить
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button className={styles.dtnEdit} onClick={handleEdit}>
-                      Редактировать
-                    </button>
-                    <button className={styles.btnDelete} onClick={() => setShowDeleteModal(true)}>
-                      Удалить
-                    </button>
-                  </>
-                )}
-              </>
-            )}
-          </div>
+        <div>
+          {selectedRows.length > 0 && !isEditing && (
+            <div className={styles.actionButtons}>
+              <button className={styles.dtnEdit} onClick={handleEdit}>
+                Редактировать
+              </button>
+              <button className={styles.btnDelete} onClick={() => setShowDeleteModal(true)}>
+                Удалить
+              </button>
+            </div>
+          )}
+          {isEditing && (
+            <div className={styles.actionButtons}>
+              <button className={styles.dtnEdit} onClick={handleSave}>
+                Сохранить
+              </button>
+              <button className={styles.btnDelete} onClick={handleCancelEdit}>
+                Отменить
+              </button>
+            </div>
+          )}
         </div>
       </div>
-
       <DeleteModal
         isOpen={showDeleteModal}
+        text='Вы уверены, что хотите удалить выбранные элементы?'
         onDelete={handleDelete}
         onCancel={handleCancelDelete}
-        text={'Вы уверены, что хотите удалить сотрудника?'}
       />
     </>
   );
 };
-
-export default Employees;
