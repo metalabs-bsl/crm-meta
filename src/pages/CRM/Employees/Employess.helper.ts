@@ -16,8 +16,8 @@ export const columns: Column[] = [
   },
 
   {
-    title: 'статус',
-    key: 'status',
+    title: 'Должность',
+    key: 'job_title',
     isEdit: {
       value: true,
       component: 'select'

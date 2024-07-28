@@ -176,6 +176,7 @@ const tabItems = [
 export const Document = () => {
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [files, setFiles] = useState<File[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -211,7 +212,7 @@ export const Document = () => {
         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
           <div className={styles.modalInner}>
             <div className={styles.filePickerWrapper}>
-              <FilePicker />
+              <FilePicker onFilesSelect={setFiles} />
             </div>
             <div className={styles.readyBtnWrapper}>
               <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' onClick={handleModalClose} />

@@ -52,12 +52,13 @@ export interface IEmployee {
   second_name: string;
   email: string;
   date_of_birth: string;
-  status: string;
+  // status: string;
   start_of_internship: string;
   created_at: string;
   phone: string;
-  contract_id: string;
-  passport_id: string;
+  contract: string;
+  passport: string;
+  job_title: string;
 }
 
 export interface iAddEmployee {
