@@ -1,4 +1,5 @@
-import { iAddEmployee, IEmployee, IResResponsible, IUserInfoRes } from 'types/entities';
+import { IEmployeeData } from 'pages/CRM/Employees/types/types';
+import { IResResponsible, IUserInfoRes } from 'types/entities';
 
 export module IGetResponsibleEmployees {
   export type Response = IResResponsible;
@@ -10,12 +11,7 @@ export module IGetUserInfo {
   export type Params = void;
 }
 
-export module IGetEmployee {
-  export type Response = IEmployee;
-  export type Params = void;
-}
-
-export module IAddEmployeeForm {
-  export type Response = iAddEmployee;
+export module IGetAllEmployees {
+  export type Response = IEmployeeData[];
   export type Params = void;
 }

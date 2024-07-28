@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useMemo, useState } from 'react';
-import { Checkbox, DatePicker, SearchInput, Select } from 'common/ui';
+import React, { useState } from 'react';
+import { Checkbox, DatePicker, SearchInput } from 'common/ui';
 import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
 import { dateFormat } from 'common/helpers';
 import { useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
-import { IEmployee } from 'types/entities/employees';
-import AddEmployess from './AddEmployess/AddEmployess';
-import { DataColumn, EditOptions } from './types/types';
-import { columns } from './Employess.helper';
+import AddEmployees from './AddEmployees/AddEmployees';
+import { EditOptions, IEmployeeData } from './types/types';
+import { columns } from './Employees.helper';
 import styles from './style.module.scss';
 
 const isEditOptions = (isEdit: any): isEdit is EditOptions => {
@@ -15,15 +14,14 @@ const isEditOptions = (isEdit: any): isEdit is EditOptions => {
 };
 
 export const Employees = () => {
-  const { data } = useGetAllEmployeesQuery();
-  console.log(data);
+  const { data, isFetching: isGetAllEmployeesFetching } = useGetAllEmployeesQuery();
+  console.log(data, isGetAllEmployeesFetching);
 
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [tableData, setTableData] = useState<DataColumn[]>([]);
   const [, setIsMainChecked] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editedData, setEditedData] = useState<{ [key: number]: Partial<DataColumn> }>({});
+  const [editedData, setEditedData] = useState<{ [key: number]: Partial<IEmployeeData> }>({});
   const [agreementFiles, setAgreementFiles] = useState<{ [key: number]: string[] }>({});
   const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
@@ -77,8 +75,8 @@ export const Employees = () => {
   const handleMainCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setIsMainChecked(checked);
-    if (checked) {
-      setSelectedRows(tableData.map((_, index) => index));
+    if (checked && data) {
+      setSelectedRows(data.map((_, index) => index));
     } else {
       setSelectedRows([]);
     }
@@ -95,7 +93,7 @@ export const Employees = () => {
   };
 
   const handleDelete = () => {
-    setTableData((prev) => prev.filter((_, index) => !selectedRows.includes(index)));
+    // setTableData((prev) => prev.filter((_, index) => !selectedRows.includes(index)));
     setShowDeleteModal(false);
     setSelectedRows([]);
   };
@@ -109,7 +107,7 @@ export const Employees = () => {
   };
 
   const handleSave = () => {
-    setTableData((prev) => prev.map((item: any, index: number) => (editedData[index] ? { ...item, ...editedData[index] } : item)));
+    // setTableData((prev) => prev.map((item: any, index: number) => (editedData[index] ? { ...item, ...editedData[index] } : item)));
     setIsEditing(false);
     setSelectedRows([]);
     console.log('Saved Data:', editedData);
@@ -182,8 +180,8 @@ export const Employees = () => {
         </div>
       </div>
       <div className={styles.wrapper}>
-        <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)} className={styles.modal}>
-          {showAddEmployeeForm && <AddEmployess />}
+        <Modal className={styles.modal} isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)}>
+          <AddEmployees setShowAddEmployee={setShowAddEmployeeForm} />
         </Modal>
 
         <div className={styles.employeesContainer}>
@@ -193,9 +191,9 @@ export const Employees = () => {
                 <th>
                   <div className={styles.main_checkbox}>
                     <Checkbox
-                      checked={selectedRows.length === tableData.length && tableData.length > 0}
+                      checked={selectedRows.length === data?.length && data.length > 0}
                       onChange={handleMainCheckboxChange}
-                      disabled={tableData.length === 0}
+                      disabled={data?.length === 0}
                     />
                   </div>
                 </th>
@@ -205,14 +203,14 @@ export const Employees = () => {
               </tr>
             </thead>
             <tbody className={styles.table_body}>
-              {filteredData.length === 0 ? (
+              {data?.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length + 1} className={styles.emptyTable}>
                     <h3 className={styles.search_text}> Совпадений не найдено</h3>
                   </td>
                 </tr>
               ) : (
-                filteredData.map((data, index) => (
+                data?.map((data, index) => (
                   <tr key={index}>
                     <td>
                       <div className={styles.checkbox}>
@@ -247,12 +245,39 @@ export const Employees = () => {
                               files={passportFiles[index] || []}
                               editable={false}
                             />
-                          ) : (
+                          ) : column.key === 'start_of_work' || column.key === 'start_of_internship' ? (
                             <DatePicker
-                              value={editedData[index]?.[column.key] ?? data[column.key]}
+                              defaultValue={editedData[index]?.[column.key] ? dateFormat(editedData[index][column.key]) : undefined}
                               onChange={handleDateChange(index, column.key)}
                             />
+                          ) : column.key === 'date_of_birth' ? (
+                            <DatePicker
+                              defaultValue={
+                                editedData[index]?.[column.key]
+                                  ? new Date(editedData[index][column.key] as string).toISOString().slice(0, 10)
+                                  : undefined
+                              }
+                              onChange={handleDateChange(index, column.key)}
+                            />
+                          ) : (
+                            data[column.key]
                           )
+                        ) : column.key === 'agreement' ? (
+                          (agreementFiles[index] ?? data[column.key]?.split(','))?.map((file, fileIndex) => (
+                            <div key={fileIndex}>
+                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer' className={styles.fileLink}>
+                                {file || 'No file'}
+                              </a>
+                            </div>
+                          ))
+                        ) : column.key === 'passport' ? (
+                          (passportFiles[index] ?? data[column.key]?.split(','))?.map((file, fileIndex) => (
+                            <div key={fileIndex}>
+                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer' className={styles.fileLink}>
+                                {file || 'No file'}
+                              </a>
+                            </div>
+                          ))
                         ) : (
                           data[column.key]
                         )}

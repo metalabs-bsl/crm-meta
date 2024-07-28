@@ -1,14 +1,19 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
-import { IAddEmployeeForm, IGetEmployee, IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
+import { IGetAllEmployees, IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
 
 import { BG_TYPES } from 'types/enums';
 
 export const employessApi = createApi({
   reducerPath: 'employessApi',
   baseQuery: getBaseQuery(),
+  tagTypes: ['EmployeesList'],
   endpoints: ({ query, mutation }) => ({
+    getAllEmployees: query<IGetAllEmployees.Response, IGetAllEmployees.Params>({
+      query: () => `/employees/all`,
+      providesTags: ['EmployeesList']
+    }),
     getResponsibleEmployees: query<Options[], IGetResponsibleEmployees.Params>({
       query: () => `/employees/all`,
       transformResponse: (data: IGetResponsibleEmployees.Response) => {
@@ -41,25 +46,23 @@ export const employessApi = createApi({
     getUserInfo: query<IGetUserInfo.Response, IGetUserInfo.Params>({
       query: () => `/employees`
     }),
-    addEmployee: mutation<IAddEmployeeForm.Response, FormData>({
+    createEmployee: mutation<void, FormData>({
       query: (body) => ({
         method: 'POST',
-        url: `/auth/register`,
+        url: 'employees/create',
         body
-      })
-    }),
-    getAllEmployees: query<IGetEmployee.Response[], void>({
-      query: () => `/employees/all`
+      }),
+      invalidatesTags: ['EmployeesList']
     })
   })
 });
 
 export const {
+  useGetAllEmployeesQuery,
   useGetResponsibleEmployeesQuery,
   useUploadAvatarMutation,
   useUpdateBgMutation,
   useLazyGetUserInfoQuery,
   useDeleteAvatarMutation,
-  useGetAllEmployeesQuery,
-  useAddEmployeeMutation
+  useCreateEmployeeMutation
 } = employessApi;
