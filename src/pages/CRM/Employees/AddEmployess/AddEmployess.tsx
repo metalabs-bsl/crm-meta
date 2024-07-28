@@ -241,4 +241,3 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
 };
 
 export default AddEmployees;
-

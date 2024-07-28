@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { Checkbox, DatePicker, Input, Select } from 'common/ui';
+import { MultipleFilePicker } from 'common/components';
 import { IEmployeeData } from '../types/types';
 import styles from './styles.module.scss';
 
