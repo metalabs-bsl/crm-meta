@@ -7,6 +7,7 @@ import {
   ICreateReminder,
   IDeleteLead,
   IGetLead,
+  IgetLeadAdditional,
   IGetLeadsDeal,
   IGetSearch,
   ISourceLead,
@@ -74,6 +75,24 @@ export const leadsApi = createApi({
       }),
       invalidatesTags: ['Detail-Lead']
     }),
+
+    // leads invoice payments
+    createInvoice: mutation<void, FormData>({
+      query: (formData) => ({
+        method: 'POST',
+        url: `/leads-invoice-for-payments`,
+        body: formData
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    //===//
+
+    // leads-calculator-additional-payments
+    getLeadAdditionalPayments: query<IgetLeadAdditional.Response, void>({
+      query: () => `/leads-calculator-additional-payments`,
+      providesTags: ['Detail-Lead']
+    }),
+
     deleteComment: mutation<void, string>({
       query: (id) => ({
         method: 'DELETE',
@@ -142,7 +161,9 @@ export const {
   useCreateCommentMutation,
   useDeleteCommentMutation,
   useDoneReminderMutation,
+  useCreateInvoiceMutation,
   useUpdateLeadCalcAccessMutation,
   useUpdateLeadCalcPaidStatusMutation,
-  useLazySearchLeadsQuery
+  useLazySearchLeadsQuery,
+  useGetLeadAdditionalPaymentsQuery
 } = leadsApi;

@@ -10,6 +10,7 @@ import {
   IUpdateLeadColumnParams,
   IUpdateLeadParams
 } from 'types/entities';
+import { ICreateInvoiceParams, IgetLeadAdditionalPayments } from 'types/entities/leads';
 
 export module ICreateLead {
   export type Response = void;
@@ -30,6 +31,17 @@ export module ICreateComment {
   export type Response = void;
   export type Params = ICreateCommentParams;
 }
+
+export module ICreateInvoice {
+  export type Response = void;
+  export type Params = ICreateInvoiceParams;
+}
+
+export module IgetLeadAdditional {
+  export type Response = void;
+  export type Params = IgetLeadAdditionalPayments;
+}
+
 export module ICreateReminder {
   export type Response = void;
   export type Params = ICreateReminderParams;
