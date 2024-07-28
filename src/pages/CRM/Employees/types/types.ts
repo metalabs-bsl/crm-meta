@@ -17,7 +17,7 @@ export interface DataColumn {
   fullName: string;
   birthday: string;
   phoneNumber: string;
-  status: string;
+  // status: string;
   email: string;
   startDateInternship: string;
   startDateWork: string;

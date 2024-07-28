@@ -59,5 +59,7 @@ export const {
   useUploadAvatarMutation,
   useUpdateBgMutation,
   useLazyGetUserInfoQuery,
-  useDeleteAvatarMutation
+  useDeleteAvatarMutation,
+  useGetAllEmployeesQuery,
+  useAddEmployeeMutation
 } = employessApi;
