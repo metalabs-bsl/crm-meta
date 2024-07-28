@@ -30,6 +30,10 @@ export const Modal: FC<ModalProps> = ({
   onClose,
   className
 }) => {
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <>
       {isOpen && (

@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Options } from 'types/pages';
-import { Select } from 'common/ui';
+import { Loading, Select } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/leads.api';
+import { ICalculator } from 'types/entities/leads';
 import { AgreementForm } from './AgreementForm';
 import { PaymentDetailsFrom } from './PaymentDetailsFrom';
 import { TourInfoForm } from './TourInfoForm';
@@ -24,44 +28,70 @@ const tabItems: ITabsItem[] = [
 const payOptions: Options[] = [
   {
     label: 'Оплачено',
-    value: 'paid'
+    value: 'Оплачено'
   },
   {
-    label: 'Частичная',
-    value: 'partial'
+    label: 'Частично',
+    value: 'Частично'
   },
   {
     label: 'Не оплачено',
-    value: 'not-paid'
+    value: 'Не оплачено'
   }
 ];
 
-export const Calculator = () => {
+interface IProps {
+  calcData?: ICalculator;
+}
+
+export const Calculator: FC<IProps> = ({ calcData }) => {
+  const [updatePaidStatus, { isLoading }] = useUpdateLeadCalcPaidStatusMutation();
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
-  const [selectValue, setSelectValue] = useState<string | number>(payOptions[2].value);
+  const [servises, setServises] = useState<Options[]>([]);
+  const notify = useNotify();
+
+  const changePaidStatus = (status: string) => {
+    if (calcData) {
+      updatePaidStatus({ calc_id: calcData.id, paid_status: status })
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.UPDATED, 'success');
+        });
+    }
+  };
 
   return (
-    <div className={styles.calculator}>
-      <AgreementForm />
-      <div className={styles.tab_block}>
-        <Tabs
-          isActiveTab={isActiveTab}
-          setIsActiveTab={setIsActiveTab}
-          tabItems={tabItems}
-          className={styles.tabs}
-          tabClassName={styles.tab}
-          activeTabClassName={styles.activeTab}
-        />
-        <Select
-          defaultValue={selectValue}
-          options={payOptions}
-          className={cn(styles.select, styles[selectValue])}
-          onChange={(e) => setSelectValue(e.target.value)}
-        />
+    <Loading isSpin={isLoading}>
+      <div className={styles.calculator}>
+        <AgreementForm />
+        <div className={styles.tab_block}>
+          <Tabs
+            isActiveTab={isActiveTab}
+            setIsActiveTab={setIsActiveTab}
+            tabItems={tabItems}
+            className={styles.tabs}
+            tabClassName={styles.tab}
+            activeTabClassName={styles.activeTab}
+          />
+          {calcData && (
+            <Select
+              defaultValue={calcData.payment_status}
+              options={payOptions}
+              className={cn(styles.select, {
+                [styles.not_paid]: calcData.payment_status === 'Не оплачено',
+                [styles.paid]: calcData.payment_status === 'Оплачено',
+                [styles.partial]: calcData.payment_status === 'Частично'
+              })}
+              onChange={(e) => changePaidStatus(e.target.value)}
+            />
+          )}
+        </div>
+        <PaymentDetailsFrom isActiveTab={isActiveTab} />
+        <TourInfoForm setServises={setServises} />
+        {servises.map((_, index) => (
+          <UpsellForm key={index} />
+        ))}
       </div>
-      <PaymentDetailsFrom isActiveTab={isActiveTab} />
-      <TourInfoForm />
-      <UpsellForm />
-    </div>
+    </Loading>
   );
 };

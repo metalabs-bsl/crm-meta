@@ -1,18 +1,39 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
-import { ICreateLead, ISourceLead } from 'types/requests/admin/leads.api';
+import {
+  ICreateComment,
+  ICreateLead,
+  ICreateReminder,
+  IDeleteLead,
+  IGetLead,
+  IGetLeadsDeal,
+  IGetSearch,
+  ISourceLead,
+  IUpdateLead,
+  IUpdateLeadCalcPaidStatus,
+  IUpdateLeadColumn
+} from 'types/requests/admin/leads.api';
 
 export const leadsApi = createApi({
   reducerPath: 'leadsApi',
   baseQuery: getBaseQuery(),
+  tagTypes: ['Detail-Lead', 'Reminders'],
   endpoints: ({ query, mutation }) => ({
     createLead: mutation<ICreateLead.Response, ICreateLead.Params>({
       query: (body) => ({
-        method: 'post',
+        method: 'POST',
         url: `/leads`,
         body
       })
+    }),
+    updateLead: mutation<IUpdateLead.Response, IUpdateLead.Params>({
+      query: ({ body, id }) => ({
+        method: 'PATCH',
+        url: `/leads/update/${id}`,
+        body
+      }),
+      invalidatesTags: ['Detail-Lead']
     }),
     getSourseLead: query<Options[], ISourceLead.Params>({
       query: () => `/leadSources`,
@@ -22,8 +43,106 @@ export const leadsApi = createApi({
           value: source.id
         }));
       }
+    }),
+    createReminder: mutation<ICreateReminder.Response, ICreateReminder.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leadsReminder`,
+        body
+      }),
+      invalidatesTags: ['Detail-Lead', 'Reminders']
+    }),
+    deleteReminder: mutation<void, string>({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/leadsReminder/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead', 'Reminders']
+    }),
+    doneReminder: mutation<void, string>({
+      query: (id) => ({
+        method: 'PATCH',
+        url: `/leadsReminder/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead', 'Reminders']
+    }),
+    createComment: mutation<ICreateComment.Response, ICreateComment.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leadsComments`,
+        body
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    deleteComment: mutation<void, string>({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/leadsComments/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    getLeadsForTodo: query<IGetLeadsDeal.Response, IGetLeadsDeal.Params>({
+      query: (type) => `/leads/deal/${type}`,
+      providesTags: ['Reminders']
+    }),
+    getLead: query<IGetLead.Response, IGetLead.Params>({
+      query: (id) => `/leads/find/${id}`,
+      providesTags: ['Detail-Lead']
+    }),
+    updateLeadColumn: mutation<IUpdateLeadColumn.Response, IUpdateLeadColumn.Params>({
+      query: (body) => ({
+        method: 'PATCH',
+        url: `/leads/column`,
+        body
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    updateLeadCalcAccess: mutation<void, string>({
+      query: (calc_id) => ({
+        method: 'PATCH',
+        url: `/leadsCalculator/access/toggle/${calc_id}`
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    updateLeadCalcPaidStatus: mutation<IUpdateLeadCalcPaidStatus.Response, IUpdateLeadCalcPaidStatus.Params>({
+      query: ({ calc_id, paid_status }) => ({
+        method: 'PATCH',
+        url: `/leadsCalculator/payment/${calc_id}/status/${paid_status}`
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    deleteLead: mutation<IDeleteLead.Response, IDeleteLead.Params>({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/leads/${id}`
+      }),
+      invalidatesTags: ['Detail-Lead']
+    }),
+    searchLeads: query<IGetSearch.Response, IGetSearch.Params>({
+      query: (value) => `/leads/search/${value}`,
+      keepUnusedDataFor: 0
+      // Ищет по:
+      // Наименованию сделки
+      // Имени клиента
+      // Номеру договора
     })
   })
 });
 
-export const { useCreateLeadMutation, useGetSourseLeadQuery } = leadsApi;
+export const {
+  useCreateLeadMutation,
+  useGetSourseLeadQuery,
+  useCreateReminderMutation,
+  useLazyGetLeadsForTodoQuery,
+  useDeleteLeadMutation,
+  useLazyGetLeadQuery,
+  useUpdateLeadMutation,
+  useUpdateLeadColumnMutation,
+  useDeleteReminderMutation,
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+  useDoneReminderMutation,
+  useUpdateLeadCalcAccessMutation,
+  useUpdateLeadCalcPaidStatusMutation,
+  useLazySearchLeadsQuery
+} = leadsApi;

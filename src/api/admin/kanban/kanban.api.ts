@@ -1,11 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { getBaseQuery } from 'common/helpers';
-import { ICreateColumn } from 'types/requests/admin/kanban.api';
+import { ICreateColumn, IGetColumns } from 'types/requests/admin/kanban.api';
 
 export const kanbanApi = createApi({
   reducerPath: 'kanbanApi',
   baseQuery: getBaseQuery(),
-  endpoints: ({ mutation }) => ({
+  endpoints: ({ query, mutation }) => ({
+    getColumns: query<IGetColumns.Response, IGetColumns.Params>({
+      query: () => `/leadsColumns`,
+      keepUnusedDataFor: 0
+    }),
     createColumn: mutation<ICreateColumn.Response, ICreateColumn.Params>({
       query: ({ body, id }) => ({
         method: 'POST',
@@ -29,4 +33,4 @@ export const kanbanApi = createApi({
   })
 });
 
-export const { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation } = kanbanApi;
+export const { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation, useGetColumnsQuery } = kanbanApi;

@@ -1,89 +1,22 @@
 import { IIconType } from 'types/common';
+import { IComment, ICreateReminderParams } from 'types/entities';
 
 export interface TodoItem {
-  dedline?: string;
+  created_at: string;
+  date_to_finish: string;
   text: string;
-  dateTime?: string;
-}
-
-export interface TodoList {
-  date: string;
-  items: TodoItem[];
+  id: string;
+  reminder_text: string;
+  status: number;
+  updated_at: string;
 }
 
 export type ItemCardType = 'comments' | 'todos';
 
-const todosData: TodoList[] = [
-  {
-    date: '2024-05-29',
-    items: [
-      {
-        dedline: '9.05.2024, 11:11',
-        text: 'Ограничить права прищелцев на планете Пандора.',
-        dateTime: '11:11'
-      },
-      {
-        dedline: '9.05.2024, 11:11',
-        text: 'Ограничить права прищелцев на планете Марс',
-        dateTime: '11:11'
-      }
-    ]
-  },
-  {
-    date: '2024-05-27',
-    items: [
-      {
-        dedline: '9.05.2024, 11:11',
-        text: 'Ограничить права прищелцев на планете Пандора.',
-        dateTime: '11:11'
-      }
-    ]
-  }
-];
-
-const commentsData: TodoList[] = [
-  {
-    date: '2024-05-29',
-    items: [
-      {
-        dateTime: '11:11',
-        text: 'Пришельцы атакуют!'
-      },
-      {
-        dateTime: '11:11',
-        text: 'Пришельцы атакуют!'
-      }
-    ]
-  },
-  {
-    date: '2024-05-27',
-    items: [
-      {
-        dateTime: '11:11',
-        text: 'Пришельцы атакуют!'
-      }
-    ]
-  }
-];
-
-interface IDataBlock {
+export interface IDataBlock {
   icon: IIconType;
   blockTitle: string;
-  data: TodoList[];
+  todoData?: ICreateReminderParams[];
+  commentData?: IComment[];
   cardsType: ItemCardType;
 }
-
-export const dataBlocks: IDataBlock[] = [
-  {
-    icon: 'history-todo',
-    blockTitle: 'Запланированные дела',
-    data: todosData,
-    cardsType: 'todos'
-  },
-  {
-    icon: 'history-comment',
-    blockTitle: 'Комментарии',
-    data: commentsData,
-    cardsType: 'comments'
-  }
-];

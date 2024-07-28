@@ -88,10 +88,6 @@ export const paymentRowHeaders = [
     classNames: ['title']
   },
   {
-    title: 'счёт от сотрудника',
-    classNames: ['title']
-  },
-  {
     title: 'оплачено',
     classNames: ['title']
   }

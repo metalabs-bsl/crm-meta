@@ -7,12 +7,11 @@ interface IProps {
   mainTabs: IMainTabs[];
   isActiveTab: string;
   setIsActiveTab: (type: DEALS_TABS) => void;
+  reminderCount: number;
 }
 
-export const DealsTabFilter: FC<IProps> = ({ mainTabs, isActiveTab, setIsActiveTab }) => {
+export const DealsTabFilter: FC<IProps> = ({ mainTabs, isActiveTab, setIsActiveTab, reminderCount }) => {
   const [active, setActive] = useState<boolean>(false);
-  const [count] = useState<number>(0);
-
   const onChangeTab = (type: DEALS_TABS) => {
     setIsActiveTab(type);
   };
@@ -45,7 +44,7 @@ export const DealsTabFilter: FC<IProps> = ({ mainTabs, isActiveTab, setIsActiveT
         <span>Мои:</span>
         <div className={cn(styles.tab, { [styles.activeTab]: active })} onClick={onActiveClick}>
           Запланированные
-          <span className={cn(styles.count, { [styles.notZeroCount]: count > 0 })}>{count}</span>
+          <span className={cn(styles.count, { [styles.notZeroCount]: reminderCount > 0 })}>{reminderCount}</span>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Button, Checkbox, Input, Loading } from 'common/ui';
 import { useNotify, useRedirect } from 'common/hooks';
 import { crmChapters, MESSAGE } from 'common/constants';
@@ -19,6 +19,7 @@ export const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm<IFormInput>();
   const notify = useNotify();
@@ -27,19 +28,47 @@ export const LoginForm: FC = () => {
   const [login, { isLoading }] = useLoginMutation();
   const isFormValid = Object.keys(errors).length === 0;
 
+  useEffect(() => {
+    const fetchCredentials = async () => {
+      if ('credentials' in navigator) {
+        try {
+          const cred = (await navigator.credentials.get({ password: true })) as PasswordCredential;
+          if (cred) {
+            setValue('email', cred.id);
+            setValue('password', cred.password || '');
+          }
+        } catch (error) {
+          console.error('Error retrieving credentials:', error);
+        }
+      }
+    };
+
+    fetchCredentials();
+  }, [setValue]);
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     const loginData = {
       login: data.email,
       password: data.password
     };
+
     login(loginData)
       .unwrap()
-      .then(() =>
+      .then(() => {
+        if (data.rememberMe && 'credentials' in navigator) {
+          const cred = new PasswordCredential({
+            id: data.email,
+            password: data.password
+          });
+
+          navigator.credentials.store(cred);
+        }
+
         getUserInfo()
           .unwrap()
           .then(() => redirect.crm({ chapter: crmChapters.transactions.chapter }))
-          .catch(() => notify(MESSAGE.ERROR, 'error'))
-      )
+          .catch(() => notify(MESSAGE.ERROR, 'error'));
+      })
       .catch(() => notify(MESSAGE.ERROR, 'error'));
   };
 

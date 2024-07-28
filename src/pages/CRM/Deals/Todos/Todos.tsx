@@ -1,11 +1,12 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { Loading } from 'common/ui';
 import { IColumn } from 'types/entities';
 import { Kanban } from '../Kanban';
 interface IProps {
-  data: IColumn[];
+  data: IColumn[] | undefined;
+  isFetching: boolean;
 }
 
-export const Todos: FC<IProps> = ({ data }) => {
-  const [changeTodosData, setChangeTodosData] = useState<IColumn[]>(data);
-  return <Kanban data={changeTodosData} onChange={setChangeTodosData} />;
+export const Todos: FC<IProps> = ({ data, isFetching = false }) => {
+  return <Loading isSpin={isFetching}> {data && <Kanban canDrag={false} data={data} />}</Loading>;
 };

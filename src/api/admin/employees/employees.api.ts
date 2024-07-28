@@ -25,6 +25,13 @@ export const employessApi = createApi({
         body
       })
     }),
+    deleteAvatar: mutation<void, void>({
+      query: (body) => ({
+        method: 'DELETE',
+        url: `/employees/avatar`,
+        body
+      })
+    }),
     updateBg: mutation<void, BG_TYPES>({
       query: (background) => ({
         method: 'PATCH',
@@ -52,6 +59,5 @@ export const {
   useUploadAvatarMutation,
   useUpdateBgMutation,
   useLazyGetUserInfoQuery,
-  useAddEmployeeMutation,
-  useGetAllEmployeesQuery
+  useDeleteAvatarMutation
 } = employessApi;

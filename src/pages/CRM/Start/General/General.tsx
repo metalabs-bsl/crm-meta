@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { StartEndPeriodPicker } from 'common/ui';
 import { StartTable } from '../StartTable';
 import { IEmployeeInfo } from '../types/IEmployee';
 import styles from './styles.module.scss';
@@ -153,8 +154,17 @@ const employees: IEmployeeInfo[] = [
 ];
 
 export const General: FC = () => {
+  const [startDate, setStartDate] = useState<string>('2024-06-01T00:00');
+  const [endDate, setEndDate] = useState<string>('2024-06-30T00:00');
   return (
     <div className={styles.content}>
+      <StartEndPeriodPicker
+        startValue={startDate}
+        endValue={endDate}
+        onChangeStart={setStartDate}
+        onChangeEnd={setEndDate}
+        className={styles.datePicker}
+      />
       {employees.map((employee, index) => (
         <StartTable key={index} employee={employee} />
       ))}

@@ -1,0 +1,204 @@
+@import '../../../../../common/styles/variables.scss';
+
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+  background: $white;
+  border-radius: 10px;
+
+  .tableContainer {
+    height: calc(100vh - 485px);
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: auto !important;
+  }
+
+  .table {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 10px;
+    border-collapse: collapse;
+    table-layout: auto;
+
+    .table_header {
+      background: $seaSalt;
+      height: 50px;
+      position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      width: 100%;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: $seaSalt;
+        z-index: 1;
+        height: 50px;
+        width: 100%;
+        border-bottom: 1px solid $border-color;
+      }
+
+      .table_titles {
+        color: $table-title-color;
+        font-size: 14px;
+        font-weight: 400;
+        z-index: 1;
+        position: relative;
+      }
+    }
+
+    .clientName {
+      display: flex;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    .clientName {
+      position: relative;
+    }
+
+    .check {
+      width: 10%;
+      color: $gray !important;
+      cursor: pointer;
+    }
+
+    .plus {
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .table_header_titles th {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid $border-color;
+      min-width: 100px;
+    }
+
+    .table_text {
+      font-size: 14px;
+      word-wrap: break-word;
+    }
+
+    .table_titles_named {
+      padding: 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .table_body tr {
+      font-size: 14px;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .table_body td {
+      padding: 14px;
+      min-width: 100px;
+    }
+
+    .stage {
+      display: flex;
+      align-items: center;
+    }
+
+    .deal {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    gap: 30px;
+    padding-bottom: 15px;
+
+    .btnSave,
+    .btnEdit {
+      padding: 5px 20px;
+      background: $table-dtn-save;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .btnDelete,
+    .btnCancel {
+      padding: 5px 20px;
+      border-radius: 10px;
+      border: none;
+      color: $table-btn-delete;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+}
+
+.deleteIcon {
+  cursor: pointer;
+}
+
+// mini progress bar
+
+.miniprogress_wrapper {
+  padding-top: 25px !important;
+}
+
+.miniProgressBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .progressContainer {
+    display: flex;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .progressStage {
+    flex: 1;
+    height: 25px;
+    border-radius: 4px;
+    margin-right: 2px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .stageTitle {
+    font-size: 14px;
+    color: $gray;
+  }
+
+  .active {
+    background-color: inherit;
+  }
+}
+
+.input_edit {
+  background: $input-edit-bg;
+  padding: 6px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+input:disabled {
+  color: $table-column-color;
+  background: transparent;
+  border: none;
+  font-weight: 400;
+}

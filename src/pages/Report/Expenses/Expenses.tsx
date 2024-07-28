@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { StartEndPeriodPicker } from 'pages/CRM/Start/Personal/StartEndPeriodPicker';
-import { Button } from 'common/ui';
+import { Button, StartEndPeriodPicker } from 'common/ui';
 import { ITableData } from './types/ITableData';
 import { addTotalToTableData, calculateTotalTableDataPrice } from './Expenses.helper';
 import { ExpensesTable } from './ExpensesTable';

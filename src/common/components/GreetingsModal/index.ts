@@ -1,0 +1,1 @@
+export { GreetingsModal } from './GreetingsModal';

@@ -1,10 +1,13 @@
 @import '../../../../../../common/styles/variables.scss';
 .textareaBlock {
-  border: 1px solid $seaSalt;
-  border-radius: 5px;
-  padding: 10px 15px;
-  display: flex;
-  flex-direction: column;
+  .wrapper {
+    flex-direction: column;
+    display: flex;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid $seaSalt;
+    margin-bottom: 15px;
+  }
   textarea {
     outline: none;
     min-height: 80px;
@@ -17,5 +20,18 @@
     &::placeholder {
       color: $gray;
     }
+  }
+  .modalBtnWrapper {
+    gap: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+  .errorMessage {
+    color: $not-paid;
   }
 }
