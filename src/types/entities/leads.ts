@@ -90,6 +90,7 @@ export interface ICalculator {
   created_at: string;
   id: string;
   is_closed: true;
+  is_full_payment: boolean;
   payment_status: string;
   updated_at: string;
 }
@@ -122,4 +123,116 @@ export interface IUpdateLeadCalcPaidStatusParams {
 export interface IResSearch {
   lead_name: string;
   id: string;
+}
+
+export interface IAdditionalPayment {
+  brutto: number;
+  name: string;
+  netto: number;
+  currency: string;
+  exchange_rate: number;
+  payment_method: string;
+  commission: number;
+  comment: string;
+  calculator: {
+    id: string;
+  };
+}
+
+export interface ICalcPayment {
+  id?: string;
+  brutto: number;
+  netto: number;
+  currency: {
+    id: string;
+  };
+  exchange_rate: number;
+  course_TO: number;
+  payment_method: number;
+  commission: number;
+  client_due_date: string;
+  calculator: {
+    id: string;
+  };
+}
+
+export interface ITourData {
+  booking_number: string;
+  departure_city: string;
+  arrival_city: string;
+  brand: string;
+  departure_date: string;
+  arrival_date: string;
+  hotel: string;
+  adult_passengers: number;
+  child_passengers: number;
+  services: string[];
+  tour_category: string;
+  calculator: {
+    id: string;
+  };
+}
+
+export interface ICalcCustomer extends ICustomer {
+  created_at: string;
+  updated_at: string;
+  address: string;
+  issuingAuthority: string;
+  datePassportGiven: string;
+  passports: string[];
+}
+export interface IContract {
+  id: string;
+  contract_number: number;
+  booking_date: string;
+  created_at: string;
+  updated_at: string;
+  customer: ICalcCustomer;
+  responsible: IResponsible_Employee;
+}
+
+export interface IUpdateContract {
+  id: string;
+  contract_number?: number;
+  booking_date?: string;
+  customer_passport?: string;
+  customer_inn?: string;
+  customer_address?: string;
+  passports?: string[];
+  customer_fullname?: string;
+  responsible_id?: string;
+  customer_passportDateGiven?: string;
+  customer_issuingAuthority?: string;
+}
+
+export interface IResCalc extends ICalculator {
+  contracts: IContract[];
+  additionalPayments: IAdditionalPayment[];
+  paymentData: ICalcPayment[];
+  tourData: ITourData[];
+  lead: ILead;
+}
+
+export interface ICreatePaymentParams {
+  id?: string | null;
+  brutto: number;
+  netto: number;
+  currency: IResPaymentCurrency;
+  exchange_rate: number;
+  payment_method: number;
+  course_TO: number;
+  commission: number;
+  client_due_date: string;
+  calculator: {
+    id: string;
+  };
+  title?: string;
+  isEdit?: boolean;
+}
+
+export interface IResPaymentCurrency {
+  id: string;
+  created_at?: string;
+  updated_at?: string;
+  currency?: string;
 }

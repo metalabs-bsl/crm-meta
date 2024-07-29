@@ -4,7 +4,7 @@ import { Loading } from 'common/ui';
 import { LossForm, Modal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { useGetColumnsQuery } from 'api/admin/kanban/kanban.api';
-import { useUpdateLeadColumnMutation } from 'api/admin/leads/leads.api';
+import { useUpdateLeadColumnMutation } from 'api/admin/leads/endpoints/lead';
 import { IGetColumnsRes } from 'types/entities';
 import styles from './styles.module.scss';
 

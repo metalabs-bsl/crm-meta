@@ -6,7 +6,7 @@ import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import { AboutDeal } from './AboutDeal';

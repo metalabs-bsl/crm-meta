@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/h
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
-import { useDeleteLeadMutation, useUpdateLeadColumnMutation, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useDeleteLeadMutation, useUpdateLeadColumnMutation, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { ILeadRow, IStageData } from '../../types/types';

@@ -3,7 +3,7 @@ import { Options } from 'types/pages';
 import { Button, FilePicker, Loading, Select } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useCreateInvoiceMutation, useGetLeadAdditionalPaymentsQuery } from 'api/admin/leads/leads.api';
+import { useCreateInvoiceMutation, useGetLeadAdditionalPaymentsQuery } from 'api/admin/leads/endpoints/calculator';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';

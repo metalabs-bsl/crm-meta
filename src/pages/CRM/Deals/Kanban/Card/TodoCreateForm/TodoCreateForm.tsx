@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Button, DatePicker, Loading } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useCreateReminderMutation } from 'api/admin/leads/leads.api';
+import { useCreateReminderMutation } from 'api/admin/leads/endpoints/lead';
 import { ICreateReminderParams } from 'types/entities';
 import styles from './style.module.scss';
 

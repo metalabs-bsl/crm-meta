@@ -2,8 +2,11 @@ import {
   IColumn,
   ICreateCommentParams,
   ICreateLeadParams,
+  ICreatePaymentParams,
   ICreateReminderParams,
   ILead,
+  IResCalc,
+  IResPaymentCurrency,
   IResSearch,
   IResSource,
   IUpdateLeadCalcPaidStatusParams,
@@ -37,7 +40,7 @@ export module ICreateInvoice {
   export type Params = ICreateInvoiceParams;
 }
 
-export module IgetLeadAdditional {
+export module IGetLeadAdditional {
   export type Response = void;
   export type Params = IgetLeadAdditionalPayments;
 }
@@ -74,4 +77,19 @@ export module IUpdateLeadCalcPaidStatus {
 export module IGetSearch {
   export type Response = IResSearch[];
   export type Params = string;
+}
+
+export module IGetCalc {
+  export type Response = IResCalc;
+  export type Params = string;
+}
+
+export module ICreatePayment {
+  export type Response = void;
+  export type Params = ICreatePaymentParams;
+}
+
+export module IGetPaymentCurrency {
+  export type Response = IResPaymentCurrency[];
+  export type Params = void;
 }
