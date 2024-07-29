@@ -32,6 +32,24 @@ export interface ICreateCommentParams {
   lead_id: string;
 }
 
+export interface ICreateInvoiceParams {
+  invoice_text: string;
+  file_id: File;
+}
+
+export interface IgetLeadAdditionalPayments {
+  id: string;
+  name: string;
+  brutto: string;
+  netto: string;
+  exchange_rate: string;
+  payment_method: number;
+  commission: string;
+  comment: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface ICreateReminderParams {
   reminder_text: string;
   status: number;

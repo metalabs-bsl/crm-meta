@@ -1,4 +1,4 @@
-import { IGetCalc, IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
+import { IGetCalc, IGetLeadAdditional, IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
 import { leadsMainApi } from '../leads.api';
 
 const calculatorApi = leadsMainApi.injectEndpoints({
@@ -28,9 +28,27 @@ const calculatorApi = leadsMainApi.injectEndpoints({
         body
       }),
       invalidatesTags: ['Calculator']
+    }),
+    getLeadAdditionalPayments: query<IGetLeadAdditional.Response, void>({
+      query: () => `/leads-calculator-additional-payments`,
+      providesTags: ['Detail-Lead']
+    }),
+    createInvoice: mutation<void, FormData>({
+      query: (formData) => ({
+        method: 'POST',
+        url: `/leads-invoice-for-payments`,
+        body: formData
+      }),
+      invalidatesTags: ['Detail-Lead']
     })
   })
 });
 
-export const { useUpdateLeadCalcAccessMutation, useUpdateLeadCalcPaidStatusMutation, useLazyGetLeadCalcQuery, useUpdateContractMutation } =
-  calculatorApi;
+export const {
+  useUpdateLeadCalcAccessMutation,
+  useUpdateLeadCalcPaidStatusMutation,
+  useLazyGetLeadCalcQuery,
+  useUpdateContractMutation,
+  useGetLeadAdditionalPaymentsQuery,
+  useCreateInvoiceMutation
+} = calculatorApi;
