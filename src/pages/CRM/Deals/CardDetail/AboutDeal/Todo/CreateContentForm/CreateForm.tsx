@@ -4,7 +4,7 @@ import { Options } from 'types/pages';
 import { Button, DatePicker, Loading, Select } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useCreateCommentMutation, useCreateReminderMutation } from 'api/admin/leads/leads.api';
+import { useCreateCommentMutation, useCreateReminderMutation } from 'api/admin/leads/endpoints/lead';
 import { ICreateReminderParams } from 'types/entities';
 import styles from './style.module.scss';
 

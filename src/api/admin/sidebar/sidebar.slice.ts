@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ISidebarAction, ISidebarState } from 'types/store/admin/header.slice.types';
-import { leadsApi } from '../leads/leads.api';
+import { leadApi } from '../leads/endpoints/lead';
 
 const initialState: ISidebarState = {
   isShowSidebar: true,
@@ -27,7 +27,7 @@ export const sidebarSlice = createSlice({
     }
   },
   extraReducers(builder) {
-    builder.addMatcher(leadsApi.endpoints.createLead.matchFulfilled, (state) => {
+    builder.addMatcher(leadApi.endpoints.createLead.matchFulfilled, (state) => {
       state.isOpenEdgeModal = false;
       state.column_id = '';
     });

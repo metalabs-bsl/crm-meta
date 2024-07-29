@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { Checkbox, DatePicker, SearchInput } from 'common/ui';
-import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
+import { DeleteModal, Modal } from 'common/components';
 import AddEmployess from './AddEmployess/AddEmployess';
 import { DataColumn, EditOptions } from './types/types';
 import { columns, dataColumns } from './Employess.helper';
@@ -86,25 +86,25 @@ export const Employees = () => {
     }));
   };
 
-  const handleAgreementFilesChange = (index: number, newFiles: string[]) => {
-    try {
-      console.log('Новые файлы договора:', newFiles);
-      setAgreementFiles((prevFiles) => ({
-        ...prevFiles,
-        [index]: newFiles
-      }));
-    } catch (error) {
-      console.error('Ошибка обработки файлов договора:', error);
-    }
-  };
+  // const handleAgreementFilesChange = (index: number, newFiles: string[]) => {
+  //   try {
+  //     console.log('Новые файлы договора:', newFiles);
+  //     setAgreementFiles((prevFiles) => ({
+  //       ...prevFiles,
+  //       [index]: newFiles
+  //     }));
+  //   } catch (error) {
+  //     console.error('Ошибка обработки файлов договора:', error);
+  //   }
+  // };
 
-  const handlePassportFilesChange = (index: number, newFiles: string[]) => {
-    console.log('Новые файлы паспорта:', newFiles);
-    setPassportFiles((prevFiles) => ({
-      ...prevFiles,
-      [index]: newFiles
-    }));
-  };
+  // const handlePassportFilesChange = (index: number, newFiles: string[]) => {
+  //   console.log('Новые файлы паспорта:', newFiles);
+  //   setPassportFiles((prevFiles) => ({
+  //     ...prevFiles,
+  //     [index]: newFiles
+  //   }));
+  // };
 
   const handleDateChange = (index: number, key: keyof Partial<DataColumn>) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -213,18 +213,6 @@ export const Employees = () => {
                               <option value='Планктон'>Планктон</option>
                               <option value='Спанчбоб'>Спанчбоб</option>
                             </select>
-                          ) : column.key === 'agreement' ? (
-                            <MultipleFilePicker
-                              files={agreementFiles[index] ?? []}
-                              editable={false}
-                              onFilesChange={(newFiles) => handleAgreementFilesChange(index, newFiles)}
-                            />
-                          ) : column.key === 'passport' ? (
-                            <MultipleFilePicker
-                              files={passportFiles[index] ?? []}
-                              editable={false}
-                              onFilesChange={(newFiles) => handlePassportFilesChange(index, newFiles)}
-                            />
                           ) : column.key === 'startDateWork' || column.key === 'startDateInternship' ? (
                             <DatePicker
                               defaultValue={
