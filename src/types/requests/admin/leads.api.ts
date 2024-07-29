@@ -2,9 +2,11 @@ import {
   IColumn,
   ICreateCommentParams,
   ICreateLeadParams,
+  ICreatePaymentParams,
   ICreateReminderParams,
   ILead,
   IResCalc,
+  IResPaymentCurrency,
   IResSearch,
   IResSource,
   IUpdateLeadCalcPaidStatusParams,
@@ -68,4 +70,14 @@ export module IGetSearch {
 export module IGetCalc {
   export type Response = IResCalc;
   export type Params = string;
+}
+
+export module ICreatePayment {
+  export type Response = void;
+  export type Params = ICreatePaymentParams;
+}
+
+export module IGetPaymentCurrency {
+  export type Response = IResPaymentCurrency[];
+  export type Params = void;
 }
