@@ -3,7 +3,7 @@ import { Icon } from '../Icon';
 import styles from './style.module.scss';
 
 interface FilePickerProps {
-  onChange: (file: File | null) => void;
+  onChange?: (file: File | null) => void;
 }
 
 export const FilePicker: React.FC<FilePickerProps> = ({ onChange }) => {
@@ -17,14 +17,14 @@ export const FilePicker: React.FC<FilePickerProps> = ({ onChange }) => {
       const file = event.target.files[0];
       setFileName(file.name);
       setFileUrl(URL.createObjectURL(file));
-      onChange(file);
+      onChange && onChange(file);
     }
   };
 
   const handleFileDelete = () => {
     setFileName(null);
     setFileUrl(null);
-    onChange(null);
+    onChange && onChange(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
