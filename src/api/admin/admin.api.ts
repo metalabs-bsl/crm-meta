@@ -4,9 +4,13 @@ import { employessApi } from './employees/employees.api';
 import { kanbanApi } from './kanban/kanban.api';
 import { leadsMainApi } from './leads/leads.api';
 import { loginApi } from './login/login.api';
+import { paymentApi } from './payment/payment.api';
+import { paymentCurrencyApi } from './paymentCurrency/paymentCurrency.api';
 import { workTime } from './workTime/workTime.api';
 
 export const adminApiReducers = {
+  [paymentApi.reducerPath]: paymentApi.reducer,
+  [paymentCurrencyApi.reducerPath]: paymentCurrencyApi.reducer,
   [currenciesApi.reducerPath]: currenciesApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
   [leadsMainApi.reducerPath]: leadsMainApi.reducer,
@@ -17,6 +21,8 @@ export const adminApiReducers = {
 };
 
 export const adminApiMiddlewares = [
+  paymentApi.middleware,
+  paymentCurrencyApi.middleware,
   currenciesApi.middleware,
   loginApi.middleware,
   leadsMainApi.middleware,

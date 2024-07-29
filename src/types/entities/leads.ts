@@ -72,6 +72,7 @@ export interface ICalculator {
   created_at: string;
   id: string;
   is_closed: true;
+  is_full_payment: boolean;
   payment_status: string;
   updated_at: string;
 }
@@ -121,13 +122,15 @@ export interface IAdditionalPayment {
 }
 
 export interface ICalcPayment {
+  id?: string;
   brutto: number;
   netto: number;
   currency: {
     id: string;
   };
   exchange_rate: number;
-  payment_method: string;
+  course_TO: number;
+  payment_method: number;
   commission: number;
   client_due_date: string;
   calculator: {
@@ -190,4 +193,28 @@ export interface IResCalc extends ICalculator {
   paymentData: ICalcPayment[];
   tourData: ITourData[];
   lead: ILead;
+}
+
+export interface ICreatePaymentParams {
+  id?: string | null;
+  brutto: number;
+  netto: number;
+  currency: IResPaymentCurrency;
+  exchange_rate: number;
+  payment_method: number;
+  course_TO: number;
+  commission: number;
+  client_due_date: string;
+  calculator: {
+    id: string;
+  };
+  title?: string;
+  isEdit?: boolean;
+}
+
+export interface IResPaymentCurrency {
+  id: string;
+  created_at?: string;
+  updated_at?: string;
+  currency?: string;
 }

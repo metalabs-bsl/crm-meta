@@ -9,8 +9,8 @@ import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useLazyGetLeadCalcQuery, useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
 import { ICalculator, IUpdateContract } from 'types/entities/leads';
+import { PaymentsDetails } from './PaymentDetailsFrom/PaymentsDetails';
 import { AgreementForm } from './AgreementForm';
-import { PaymentDetailsFrom } from './PaymentDetailsFrom';
 import { TourInfoForm } from './TourInfoForm';
 import { UpsellForm } from './UpsellForm';
 import styles from './styles.module.scss';
@@ -79,6 +79,12 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
     }
   }, [getCalc, search]);
 
+  useEffect(() => {
+    if (data) {
+      setIsActiveTab(data.is_full_payment ? 'full' : 'partial');
+    }
+  }, [data]);
+
   const changePaidStatus = (status: string) => {
     if (calcData) {
       updatePaidStatus({ calc_id: calcData.id, paid_status: status })
@@ -115,7 +121,12 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
             />
           )}
         </div>
-        <PaymentDetailsFrom isActiveTab={isActiveTab} />
+        <PaymentsDetails
+          calculator_id={data?.id || ''}
+          isActiveTab={isActiveTab}
+          isFullPayment={data?.is_full_payment}
+          paymentsList={data?.paymentData}
+        />
         <TourInfoForm setServises={setServises} />
         {servises.map((_, index) => (
           <UpsellForm key={index} />
