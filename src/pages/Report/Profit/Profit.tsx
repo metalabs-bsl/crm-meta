@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Button, StartEndPeriodPicker } from 'common/ui';
-import { Empty } from 'common/ui/Empty';
+import { Button, Empty, StartEndPeriodPicker } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ProfitTable } from './ProfitTable/ProfitTable';
 import styles from './styles.module.scss';

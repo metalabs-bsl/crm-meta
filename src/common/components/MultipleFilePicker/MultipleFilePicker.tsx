@@ -12,8 +12,6 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uniqueId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
 
-  console.log(files);
-
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files.length > 0) {

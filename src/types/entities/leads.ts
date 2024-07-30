@@ -143,9 +143,7 @@ export interface ICalcPayment {
   id?: string;
   brutto: number;
   netto: number;
-  currency: {
-    id: string;
-  };
+  currency: string;
   exchange_rate: number;
   course_TO: number;
   payment_method: number;
@@ -168,6 +166,7 @@ export interface ITourData {
   child_passengers: number;
   services: string[];
   tour_category: string;
+  id?: string;
   calculator: {
     id: string;
   };
@@ -217,7 +216,7 @@ export interface ICreatePaymentParams {
   id?: string | null;
   brutto: number;
   netto: number;
-  currency: IResPaymentCurrency;
+  currency: string;
   exchange_rate: number;
   payment_method: number;
   course_TO: number;

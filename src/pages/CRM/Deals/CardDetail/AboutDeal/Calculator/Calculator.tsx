@@ -7,7 +7,11 @@ import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useLazyGetLeadCalcQuery, useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
+import {
+  useChoicePaymentToggleMutation,
+  useLazyGetLeadCalcQuery,
+  useUpdateLeadCalcPaidStatusMutation
+} from 'api/admin/leads/endpoints/calculator';
 import { ICalculator, IUpdateContract } from 'types/entities/leads';
 import { PaymentsDetails } from './PaymentDetailsFrom/PaymentsDetails';
 import { AgreementForm } from './AgreementForm';
@@ -50,8 +54,8 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
   const notify = useNotify();
   const [updatePaidStatus, { isLoading }] = useUpdateLeadCalcPaidStatusMutation();
   const [getCalc, { data, isFetching }] = useLazyGetLeadCalcQuery();
+  const [choicePaymentToggle] = useChoicePaymentToggleMutation();
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
-  const [servises, setServises] = useState<Options[]>([]);
 
   const contractFormProps: IUpdateContract | null = useMemo(() => {
     if (data) {
@@ -85,6 +89,10 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
     }
   }, [data]);
 
+  const togllePaymentType = () => {
+    data && choicePaymentToggle(data?.id);
+  };
+
   const changePaidStatus = (status: string) => {
     if (calcData) {
       updatePaidStatus({ calc_id: calcData.id, paid_status: status })
@@ -101,12 +109,14 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
         <AgreementForm formProps={contractFormProps} />
         <div className={styles.tab_block}>
           <Tabs
+            disabled={!!data?.paymentData.length}
             isActiveTab={isActiveTab}
             setIsActiveTab={setIsActiveTab}
             tabItems={tabItems}
             className={styles.tabs}
             tabClassName={styles.tab}
             activeTabClassName={styles.activeTab}
+            onChange={togllePaymentType}
           />
           {calcData && (
             <Select
@@ -127,10 +137,8 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
           isFullPayment={data?.is_full_payment}
           paymentsList={data?.paymentData}
         />
-        <TourInfoForm setServises={setServises} />
-        {servises.map((_, index) => (
-          <UpsellForm key={index} />
-        ))}
+        <TourInfoForm formProps={data?.tourData[0]} calcId={data?.id} />
+        {data?.tourData[0]?.services?.map((_, index) => <UpsellForm key={index} />)}
       </div>
     </Loading>
   );

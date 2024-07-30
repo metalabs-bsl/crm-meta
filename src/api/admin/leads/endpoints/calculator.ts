@@ -1,7 +1,7 @@
-import { IGetCalc, IGetLeadAdditional, IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
+import { ICreatePayment, IGetCalc, IGetLeadAdditional, ISetTourInfo, IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
 import { leadsMainApi } from '../leads.api';
 
-const calculatorApi = leadsMainApi.injectEndpoints({
+export const calculatorApi = leadsMainApi.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
     getLeadCalc: query<IGetCalc.Response, IGetCalc.Params>({
       query: (leadId) => `/leadsCalculator/${leadId}`,
@@ -40,6 +40,29 @@ const calculatorApi = leadsMainApi.injectEndpoints({
         body: formData
       }),
       invalidatesTags: ['Detail-Lead']
+    }),
+    choicePaymentToggle: mutation<void, string>({
+      query: (id) => ({
+        method: 'PATCH',
+        url: `/leadsCalculator/change/payment/full/toggle/${id}`
+      }),
+      invalidatesTags: ['Calculator']
+    }),
+    setTourData: mutation<ISetTourInfo.Response, ISetTourInfo.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leads-calculator-tour-data`,
+        body
+      }),
+      invalidatesTags: ['Calculator']
+    }),
+    createPayment: mutation<ICreatePayment.Response, ICreatePayment.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leads-calculator-payment-data`,
+        body
+      }),
+      invalidatesTags: ['Calculator']
     })
   })
 });
@@ -50,5 +73,8 @@ export const {
   useLazyGetLeadCalcQuery,
   useUpdateContractMutation,
   useGetLeadAdditionalPaymentsQuery,
-  useCreateInvoiceMutation
+  useCreateInvoiceMutation,
+  useChoicePaymentToggleMutation,
+  useSetTourDataMutation,
+  useCreatePaymentMutation
 } = calculatorApi;

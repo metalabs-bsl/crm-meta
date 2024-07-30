@@ -27,8 +27,7 @@ export const AgreementForm: FC<IProps> = ({ formProps }) => {
   useEffect(() => {
     if (formProps) {
       if (formProps.passports) {
-        console.log(formProps.passports);
-
+        // console.log(formProps.passports);
         //   setPassportFiles(formProps.passports);
       }
       delete formProps.passports;
@@ -63,12 +62,7 @@ export const AgreementForm: FC<IProps> = ({ formProps }) => {
   };
 
   return (
-    <Accordion
-      title='Договор'
-      onEditAction={() => setIsEditAgreement(!isEditAgreement)}
-      isEdit={isEditAgreement}
-      onSaveAction={() => onSubmit()}
-    >
+    <Accordion title='Договор' onEditAction={() => setIsEditAgreement(!isEditAgreement)} isEdit={isEditAgreement} onSaveAction={onSubmit}>
       <Loading isSpin={isLoading}>
         <form className={styles.form}>
           <div className={styles.blocks}>

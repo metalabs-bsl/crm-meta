@@ -1,19 +1,21 @@
 import {
   IColumn,
   ICreateCommentParams,
+  ICreateInvoiceParams,
   ICreateLeadParams,
   ICreatePaymentParams,
   ICreateReminderParams,
+  IgetLeadAdditionalPayments,
   ILead,
   IResCalc,
   IResPaymentCurrency,
   IResSearch,
   IResSource,
+  ITourData,
   IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,
   IUpdateLeadParams
 } from 'types/entities';
-import { ICreateInvoiceParams, IgetLeadAdditionalPayments } from 'types/entities/leads';
 
 export module ICreateLead {
   export type Response = void;
@@ -92,4 +94,9 @@ export module ICreatePayment {
 export module IGetPaymentCurrency {
   export type Response = IResPaymentCurrency[];
   export type Params = void;
+}
+
+export module ISetTourInfo {
+  export type Response = void;
+  export type Params = ITourData;
 }

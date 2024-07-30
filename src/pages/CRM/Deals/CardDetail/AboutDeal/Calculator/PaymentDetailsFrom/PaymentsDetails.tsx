@@ -19,11 +19,9 @@ const defaultPayment = [
   }
 ];
 
-export const PaymentsDetails: FC<IProps> = ({ isActiveTab, isFullPayment, paymentsList, calculator_id }) => {
+export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calculator_id }) => {
   const [paymentAccordions, setPaymentAccordions] = useState(defaultPayment);
   const [paymentForms, setPaymentForms] = useState<ICreatePaymentParams[]>([]);
-
-  console.log(isFullPayment);
 
   useEffect(() => {
     if (paymentsList && paymentsList.length > 0) {
@@ -39,9 +37,7 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, isFullPayment, paymen
         calculator: {
           id: calculator_id || ''
         },
-        currency: {
-          id: payment?.currency?.id
-        }
+        currency: payment?.currency
       }));
       setPaymentForms(initialPaymentForms);
 
@@ -64,9 +60,7 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, isFullPayment, paymen
         calculator: {
           id: calculator_id || ''
         },
-        currency: {
-          id: ''
-        }
+        currency: ''
       };
       setPaymentForms([newPaymentForm]);
       setPaymentAccordions([
@@ -97,9 +91,7 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, isFullPayment, paymen
       calculator: {
         id: calculator_id || ''
       },
-      currency: {
-        id: ''
-      }
+      currency: ''
     };
     setPaymentAccordions([
       ...paymentAccordions,

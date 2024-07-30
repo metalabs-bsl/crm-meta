@@ -28,9 +28,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
     setValue,
     setError,
     clearErrors
-  } = useForm<ICreateLeadParams>({
-    defaultValues: formProps || {}
-  });
+  } = useForm<ICreateLeadParams>();
 
   const { isNewDeal, column_id } = useAppSelector(sidebarSelectors.sidebar);
   const [isEdit, setIsEdit] = useState<boolean>(isNewDeal);
@@ -112,12 +110,22 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
         <div className={styles.formItems}>
           <div className={styles.inpBlock}>
             <label>Наименование</label>
-            <Input {...register('lead_name', { required: 'Наименование обязательно' })} className={styles.inp} disabled={!isEdit} />
+            <Input
+              {...register('lead_name', { required: 'Наименование обязательно' })}
+              className={styles.inp}
+              disabled={!isEdit}
+              placeholder='Введите наименование сделки'
+            />
             {errors.lead_name && <span className={styles.error}>{errors.lead_name.message}</span>}
           </div>
           <div className={styles.inpBlock}>
             <label>Клиент</label>
-            <Input {...register('customer_name', { required: 'Клиент обязателен' })} className={styles.inp} disabled={!isEdit} />
+            <Input
+              {...register('customer_name', { required: 'Клиент обязателен' })}
+              className={styles.inp}
+              disabled={!isEdit}
+              placeholder='Введите ФИО'
+            />
             {errors.customer_name && <span className={styles.error}>{errors.customer_name.message}</span>}
           </div>
           <div className={styles.inpBlock}>
@@ -135,7 +143,12 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           </div>
           <div className={styles.inpBlock}>
             <label>Город проживания</label>
-            <Input {...register('city', { required: 'Город проживания обязателен' })} className={styles.inp} disabled={!isEdit} />
+            <Input
+              {...register('city', { required: 'Город проживания обязателен' })}
+              className={styles.inp}
+              disabled={!isEdit}
+              placeholder='Введите город проживания'
+            />
             {errors.city && <span className={styles.error}>{errors.city.message}</span>}
           </div>
           {sourceOptions && (

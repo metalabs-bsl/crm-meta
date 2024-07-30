@@ -18,30 +18,34 @@ export const MultipleSelect: FC<IProps> = ({ placeholder = '', options, defaultV
   const [selectedValues, setSelectedValues] = useState<Options[]>([]);
 
   useEffect(() => {
-    setSelectedValues(defaultValue ?? options.filter((item) => !item.value && item));
-  }, [defaultValue, options]);
-
-  useEffect(() => {
-    onChange && onChange(selectedValues);
-  }, [onChange, selectedValues]);
+    if (defaultValue) {
+      setSelectedValues(defaultValue);
+    }
+  }, [defaultValue]);
 
   const handleChange = (value: Options) => {
+    let updatedValues: Options[];
+
     if (!value.value) {
-      setSelectedValues([value]);
+      updatedValues = [value];
     } else {
-      setSelectedValues((prev) => {
-        const updatedPrev = prev.filter((item) => !!item.value && item);
-        const isSelected = updatedPrev.some((item) => item.value === value.value);
-        if (isSelected) {
-          if (updatedPrev.length > 1) {
-            return updatedPrev.filter((item) => item.value !== value.value);
-          } else {
-            return options.filter((item) => !item.value && item);
-          }
+      updatedValues = selectedValues.filter((item) => !!item.value && item);
+      const isSelected = updatedValues.some((item) => item.value === value.value);
+
+      if (isSelected) {
+        if (updatedValues.length > 1) {
+          updatedValues = updatedValues.filter((item) => item.value !== value.value);
         } else {
-          return [...updatedPrev, value];
+          updatedValues = options.filter((item) => !item.value && item);
         }
-      });
+      } else {
+        updatedValues = [...updatedValues, value];
+      }
+    }
+
+    setSelectedValues(updatedValues);
+    if (onChange) {
+      onChange(updatedValues);
     }
   };
 
@@ -67,7 +71,9 @@ export const MultipleSelect: FC<IProps> = ({ placeholder = '', options, defaultV
         <div className={styles.options_area}>
           {options.map((op) => (
             <div className={styles.option} key={op.value} onClick={() => handleChange(op)}>
-              <Radio onClick={() => handleChange(op)} readOnly checked={selectedValues.some((i) => i.value === op.value)} />
+              <div className={styles.radioWrapper}>
+                <Radio readOnly checked={selectedValues.some((i) => i.value === op.value)} />
+              </div>
               {op.label}
             </div>
           ))}
