@@ -1,4 +1,11 @@
-import { ICreatePayment, IGetCalc, IGetLeadAdditional, ISetTourInfo, IUpdateLeadCalcPaidStatus } from 'types/requests/admin/leads.api';
+import {
+  ICreatePayment,
+  IGetCalc,
+  IGetLeadAdditional,
+  ISetAdditionalPayment,
+  ISetTourInfo,
+  IUpdateLeadCalcPaidStatus
+} from 'types/requests/admin/leads.api';
 import { leadsMainApi } from '../leads.api';
 
 export const calculatorApi = leadsMainApi.injectEndpoints({
@@ -32,6 +39,14 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
     getLeadAdditionalPayments: query<IGetLeadAdditional.Response, void>({
       query: () => `/leads-calculator-additional-payments`,
       providesTags: ['Detail-Lead']
+    }),
+    setAdditionalPayment: mutation<ISetAdditionalPayment.Response, ISetAdditionalPayment.Params>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/leads-calculator-additional-payments`,
+        body
+      }),
+      invalidatesTags: ['Calculator']
     }),
     createInvoice: mutation<void, FormData>({
       query: (formData) => ({
@@ -76,5 +91,6 @@ export const {
   useCreateInvoiceMutation,
   useChoicePaymentToggleMutation,
   useSetTourDataMutation,
-  useCreatePaymentMutation
+  useCreatePaymentMutation,
+  useSetAdditionalPaymentMutation
 } = calculatorApi;

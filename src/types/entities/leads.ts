@@ -134,6 +134,9 @@ export interface IAdditionalPayment {
   payment_method: string;
   commission: number;
   comment: string;
+  course_TO: number;
+  client_due_date: string;
+  id?: string;
   calculator: {
     id: string;
   };
@@ -152,6 +155,11 @@ export interface ICalcPayment {
   calculator: {
     id: string;
   };
+}
+
+export interface ISetAdditionalPaymentRes extends Omit<ICalcPayment, 'course_TO' | 'payment_method'> {
+  name: string;
+  comment: string;
 }
 
 export interface ITourData {

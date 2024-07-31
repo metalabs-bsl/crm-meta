@@ -38,18 +38,3 @@ export const paymentOptions: Options[] = [
     value: 9
   }
 ];
-
-export const currenciesOptions: Options[] = [
-  {
-    label: 'Доллар, $',
-    value: 'usd'
-  },
-  {
-    label: 'Евро, €',
-    value: 'eur'
-  },
-  {
-    label: 'Сом, с',
-    value: 'som'
-  }
-];

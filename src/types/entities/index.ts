@@ -17,6 +17,7 @@ export type {
   IResPaymentCurrency,
   IResSearch,
   IResSource,
+  ISetAdditionalPaymentRes,
   ITourData,
   IUpdateContract,
   IUpdateLeadCalcPaidStatusParams,

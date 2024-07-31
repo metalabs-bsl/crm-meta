@@ -11,6 +11,7 @@ import {
   IResPaymentCurrency,
   IResSearch,
   IResSource,
+  ISetAdditionalPaymentRes,
   ITourData,
   IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,
@@ -99,4 +100,9 @@ export module IGetPaymentCurrency {
 export module ISetTourInfo {
   export type Response = void;
   export type Params = ITourData;
+}
+
+export module ISetAdditionalPayment {
+  export type Response = void;
+  export type Params = ISetAdditionalPaymentRes;
 }

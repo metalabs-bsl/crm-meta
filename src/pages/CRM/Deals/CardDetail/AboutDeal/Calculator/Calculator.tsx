@@ -138,7 +138,7 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
           paymentsList={data?.paymentData}
         />
         <TourInfoForm formProps={data?.tourData[0]} calcId={data?.id} />
-        {data?.tourData[0]?.services?.map((_, index) => <UpsellForm key={index} />)}
+        {data?.additionalPayments?.map((item, index) => <UpsellForm calcId={data?.id} title={item.name} formProps={item} key={index} />)}
       </div>
     </Loading>
   );
