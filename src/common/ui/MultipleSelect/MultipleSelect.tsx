@@ -27,7 +27,7 @@ export const MultipleSelect: FC<IProps> = ({ placeholder = '', options, defaultV
     let updatedValues: Options[];
 
     if (!value.value) {
-      updatedValues = [value];
+      updatedValues = [];
     } else {
       updatedValues = selectedValues.filter((item) => !!item.value && item);
       const isSelected = updatedValues.some((item) => item.value === value.value);

@@ -74,18 +74,17 @@ export const CreateFileForm: React.FC = () => {
     formData.append('leadsInvoiceInfo', JSON.stringify(leadsInvoiceInfo));
     formData.append('file', selectedFile);
 
-    try {
-      const response = await createInvoice(formData).unwrap();
-      console.log(response);
-
-      setAdditionalPayments((additionalPaymentsData as unknown as AdditionalPaymentsData[]).map((payment) => payment.id));
-      setSelectedOption(selectedOption);
-
-      notify(MESSAGE.SUCCESS, 'success');
-    } catch (error) {
-      notify(MESSAGE.ERROR, 'error');
-      console.error('Error uploading data:', error);
-    }
+    createInvoice(formData)
+      .unwrap()
+      .then(() => {
+        setAdditionalPayments((additionalPaymentsData as unknown as AdditionalPaymentsData[]).map((payment) => payment.id));
+        setSelectedOption(selectedOption);
+        notify(MESSAGE.SUCCESS, 'success');
+      })
+      .catch((error) => {
+        notify(MESSAGE.ERROR, 'error');
+        console.error('Error uploading data:', error);
+      });
   };
 
   return (

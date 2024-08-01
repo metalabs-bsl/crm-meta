@@ -13,6 +13,8 @@ export type {
   ICreateReminderParams,
   IgetLeadAdditionalPayments,
   ILead,
+  IPassportParams,
+  IPassportResponse,
   IResCalc,
   IResPaymentCurrency,
   IResSearch,

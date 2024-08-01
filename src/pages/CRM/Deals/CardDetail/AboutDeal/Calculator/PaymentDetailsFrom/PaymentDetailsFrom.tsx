@@ -50,7 +50,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     }
   });
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
-
+  const updatedTitle = index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title;
   useEffect(() => {
     if (formProps) {
       setValue('brutto', formProps.brutto);
@@ -73,6 +73,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       calculator: {
         id: formProps?.calculator.id || ''
       },
+      name: updatedTitle,
       ...(formProps?.id && { id: formProps.id })
     };
     createPayment(createPaymentDto)
@@ -89,7 +90,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   return (
     <>
       <Accordion
-        title={index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title}
+        title={updatedTitle}
         onEditAction={() => handleEditPaymentAccordion(index)}
         isEdit={isEdit}
         onSaveAction={() => onSubmit()}
@@ -169,6 +170,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                     {...register('client_due_date', { required: 'обязательное поле' })}
                     className={styles.datepicker}
                     disabled={!isEdit}
+                    defaultValue={dayjs().format('YYYY-MM-DDTHH:mm')}
                   />
                 </div>
               </div>

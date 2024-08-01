@@ -7,12 +7,14 @@ import {
   ICreateReminderParams,
   IgetLeadAdditionalPayments,
   ILead,
+  IPassportParams,
   IResCalc,
   IResPaymentCurrency,
   IResSearch,
   IResSource,
   ISetAdditionalPaymentRes,
   ITourData,
+  IUpdateContract,
   IUpdateLeadCalcPaidStatusParams,
   IUpdateLeadColumnParams,
   IUpdateLeadParams
@@ -105,4 +107,14 @@ export module ISetTourInfo {
 export module ISetAdditionalPayment {
   export type Response = void;
   export type Params = ISetAdditionalPaymentRes;
+}
+
+export module ISetContract {
+  export type Response = void;
+  export type Params = IUpdateContract;
+}
+
+export module IUploadPassport {
+  export type Response = void;
+  export type Params = IPassportParams;
 }

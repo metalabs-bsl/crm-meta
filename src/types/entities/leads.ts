@@ -180,13 +180,19 @@ export interface ITourData {
   };
 }
 
+export interface IPassportResponse {
+  original_name: string;
+  path: string;
+  id: string;
+}
 export interface ICalcCustomer extends ICustomer {
   created_at: string;
   updated_at: string;
   address: string;
   issuingAuthority: string;
   datePassportGiven: string;
-  passports: string[];
+  passport_back: IPassportResponse[];
+  passport_front: IPassportResponse[];
 }
 export interface IContract {
   id: string;
@@ -198,6 +204,11 @@ export interface IContract {
   responsible: IResponsible_Employee;
 }
 
+export interface IPassportParams {
+  body: FormData;
+  customerId: string;
+}
+
 export interface IUpdateContract {
   id: string;
   contract_number?: number;
@@ -205,11 +216,12 @@ export interface IUpdateContract {
   customer_passport?: string;
   customer_inn?: string;
   customer_address?: string;
-  passports?: string[];
   customer_fullname?: string;
   responsible_id?: string;
   customer_passportDateGiven?: string;
   customer_issuingAuthority?: string;
+  passport_back: IPassportResponse[];
+  passport_front: IPassportResponse[];
 }
 
 export interface IResCalc extends ICalculator {

@@ -3,8 +3,10 @@ import {
   IGetCalc,
   IGetLeadAdditional,
   ISetAdditionalPayment,
+  ISetContract,
   ISetTourInfo,
-  IUpdateLeadCalcPaidStatus
+  IUpdateLeadCalcPaidStatus,
+  IUploadPassport
 } from 'types/requests/admin/leads.api';
 import { leadsMainApi } from '../leads.api';
 
@@ -28,7 +30,7 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
       }),
       invalidatesTags: ['Detail-Lead']
     }),
-    updateContract: mutation<void, FormData>({
+    updateContract: mutation<ISetContract.Response, ISetContract.Params>({
       query: (body) => ({
         method: 'PATCH',
         url: `/leads-calculator-contract`,
@@ -78,6 +80,29 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
         body
       }),
       invalidatesTags: ['Calculator']
+    }),
+    uploadBackPassport: mutation<IUploadPassport.Response, IUploadPassport.Params>({
+      query: ({ body, customerId }) => ({
+        method: 'POST',
+        url: `/customer/upload/passport-back/${customerId}`,
+        body
+      }),
+      invalidatesTags: ['Calculator']
+    }),
+    uploadFrontPassport: mutation<IUploadPassport.Response, IUploadPassport.Params>({
+      query: ({ body, customerId }) => ({
+        method: 'POST',
+        url: `/customer/upload/passport-front/${customerId}`,
+        body
+      }),
+      invalidatesTags: ['Calculator']
+    }),
+    deleteFile: mutation<void, string>({
+      query: (file_id) => ({
+        method: 'DELETE',
+        url: `/files/${file_id}`
+      }),
+      invalidatesTags: ['Calculator']
     })
   })
 });
@@ -92,5 +117,8 @@ export const {
   useChoicePaymentToggleMutation,
   useSetTourDataMutation,
   useCreatePaymentMutation,
-  useSetAdditionalPaymentMutation
+  useSetAdditionalPaymentMutation,
+  useUploadBackPassportMutation,
+  useUploadFrontPassportMutation,
+  useDeleteFileMutation
 } = calculatorApi;

@@ -37,9 +37,13 @@
     cursor: pointer;
     font-weight: 400;
     font-size: 14px;
-    color: $gray-btn-bg-hover;
+    color: $gray-btn-bg-hover !important;
     &:hover {
       filter: brightness(0.9);
     }
+  }
+  .disabled {
+    cursor: not-allowed !important;
+    color: $gray !important;
   }
 }
