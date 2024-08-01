@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
+import { WhatsApp } from './Whatsapp';
 import { Icon, Input, Loading } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
@@ -79,7 +80,7 @@ export const CardDetail = () => {
         />
       ),
       [tabItems[1].type]: <History history={history} />,
-      [tabItems[2].type]: <p>WhatsApp</p>
+      [tabItems[2].type]: <WhatsApp />
     };
     return components[type];
   };
