@@ -1,106 +1,92 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Options } from 'types/pages';
 import { Button, FilePicker, Loading, Select } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useCreateInvoiceMutation, useGetLeadAdditionalPaymentsQuery } from 'api/admin/leads/endpoints/calculator';
+import { useCreateInvoiceMutation, useGetPaymentsForInvoicesFormQuery } from 'api/admin/leads/endpoints/invoice';
+import { IInvoiseSelectOptions } from 'types/entities';
 import styles from './styles.module.scss';
 
+import { useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
 
-interface AdditionalPaymentsData {
-  name: string;
-  id: string;
+interface FormFields {
+  invoice_text: string;
+  payment_id: string;
 }
 
-export const CreateFileForm: React.FC = () => {
+interface IProps {
+  leadId: string;
+}
+
+export const CreateFileForm: FC<IProps> = ({ leadId }) => {
   const notify = useNotify();
   const [createInvoice, { isLoading }] = useCreateInvoiceMutation();
-  const { data: additionalPaymentsData, isLoading: isLoadingAdditionalPayments } = useGetLeadAdditionalPaymentsQuery();
-
-  // Опции для селекта
-  const [options, setOptions] = useState<Options[]>([
-    { label: 'Первая оплата', value: 'first' },
-    { label: 'Вторая оплата', value: 'second' },
-    { label: 'Третья оплата', value: 'third' },
-    { label: 'Четвертая оплата', value: 'fourth' },
-    { label: 'Пятая оплата', value: 'fifth' }
-  ]);
-
-  // Выбранный элемент из селекта
-  const [selectedOption, setSelectedOption] = useState<string>('');
-  const [additionalPayments, setAdditionalPayments] = useState<string[]>([]);
-  const [textareaValue, setTextareaValue] = useState<string>('');
+  const { data } = useGetPaymentsForInvoicesFormQuery(leadId);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isFileReset, setIsFileReset] = useState<boolean>(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors }
+  } = useForm<FormFields>();
 
   useEffect(() => {
-    if (additionalPaymentsData) {
-      const paymentOptions = (additionalPaymentsData as AdditionalPaymentsData[]).map((payment) => ({
-        label: payment.name,
-        value: payment.id // Используем id как value, поскольку это UUID
-      }));
-      setOptions((prevOptions) => [...prevOptions, ...paymentOptions]);
+    if (data && data.length > 2) {
+      setValue('payment_id', data[0].id);
     }
-  }, [additionalPaymentsData]);
+  }, [data, setValue]);
 
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value);
-  };
+  const selectOptions = useMemo<Options[]>(() => {
+    return (
+      data?.map((i: IInvoiseSelectOptions) => {
+        return { label: i.name, value: i.id };
+      }) || []
+    );
+  }, [data]);
 
-  const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setTextareaValue(e.target.value);
-  };
+  const onSubmit = (formFields: FormFields) => {
+    if (data && selectedFile) {
+      const updatedData = {
+        ...formFields,
+        is_payment_data: data.find((i) => i.id === formFields.payment_id)?.isPaymentsData
+      };
 
-  const handleFileChange = (file: File | null) => {
-    setSelectedFile(file);
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!selectedFile) {
-      console.error('File is required');
-      return;
+      const formData = new FormData();
+      formData.append('leadsInvoiceInfo', JSON.stringify(updatedData));
+      formData.append('file', selectedFile);
+      createInvoice(formData)
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.SUCCESS, 'success');
+          reset();
+          setSelectedFile(null);
+          setIsFileReset(true);
+        })
+        .catch(() => {
+          notify(MESSAGE.ERROR, 'error');
+        });
     }
-
-    const leadsInvoiceInfo = {
-      invoice_text: textareaValue,
-      leads_calculator_additional_payments: additionalPayments,
-      leads_calculator_payment_data: [selectedOption],
-      file_id: selectedFile.name
-    };
-
-    const formData = new FormData();
-    formData.append('leadsInvoiceInfo', JSON.stringify(leadsInvoiceInfo));
-    formData.append('file', selectedFile);
-
-    createInvoice(formData)
-      .unwrap()
-      .then(() => {
-        setAdditionalPayments((additionalPaymentsData as unknown as AdditionalPaymentsData[]).map((payment) => payment.id));
-        setSelectedOption(selectedOption);
-        notify(MESSAGE.SUCCESS, 'success');
-      })
-      .catch((error) => {
-        notify(MESSAGE.ERROR, 'error');
-        console.error('Error uploading data:', error);
-      });
   };
 
   return (
-    <Loading isSpin={isLoading || isLoadingAdditionalPayments}>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <Select options={options} value={selectedOption} onChange={handleSelectChange} />
+    <Loading isSpin={isLoading}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <Select options={selectOptions} {...register('payment_id', { required: 'Поле обязательно' })} />
+        {errors.payment_id && <span className={styles.errorMessage}>{errors.payment_id.message}</span>}
+
         <textarea
-          name='description'
           id='description'
           placeholder='Напишите что нужно сделать'
-          value={textareaValue}
-          onChange={handleTextareaChange}
           className={styles.textarea}
+          {...register('invoice_text', { required: 'Поле обязательно' })}
         />
-        <FilePicker onChange={handleFileChange} />
-        <Button styleType={BUTTON_TYPES.YELLOW} text='отправить' type='submit' />
+        {errors.invoice_text && <span className={styles.errorMessage}>{errors.invoice_text.message}</span>}
+        <FilePicker onChange={setSelectedFile} isAfterReset={isFileReset} setIsAfterReset={setIsFileReset} />
+        <Button styleType={BUTTON_TYPES.YELLOW} text='отправить' type='submit' disabled={!selectedFile} />
       </form>
     </Loading>
   );

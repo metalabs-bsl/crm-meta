@@ -36,7 +36,7 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
         url: `/leads-calculator-contract`,
         body
       }),
-      invalidatesTags: ['Calculator']
+      invalidatesTags: ['Calculator', 'Invoice']
     }),
     getLeadAdditionalPayments: query<IGetLeadAdditional.Response, void>({
       query: () => `/leads-calculator-additional-payments`,
@@ -49,14 +49,6 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
         body
       }),
       invalidatesTags: ['Calculator']
-    }),
-    createInvoice: mutation<void, FormData>({
-      query: (formData) => ({
-        method: 'POST',
-        url: `/leads-invoice-for-payments`,
-        body: formData
-      }),
-      invalidatesTags: ['Detail-Lead']
     }),
     choicePaymentToggle: mutation<void, string>({
       query: (id) => ({
@@ -71,7 +63,7 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
         url: `/leads-calculator-tour-data`,
         body
       }),
-      invalidatesTags: ['Calculator']
+      invalidatesTags: ['Calculator', 'Invoice']
     }),
     createPayment: mutation<ICreatePayment.Response, ICreatePayment.Params>({
       query: (body) => ({
@@ -113,7 +105,6 @@ export const {
   useLazyGetLeadCalcQuery,
   useUpdateContractMutation,
   useGetLeadAdditionalPaymentsQuery,
-  useCreateInvoiceMutation,
   useChoicePaymentToggleMutation,
   useSetTourDataMutation,
   useCreatePaymentMutation,

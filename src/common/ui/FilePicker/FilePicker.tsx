@@ -4,13 +4,22 @@ import { IPassportResponse } from 'types/entities';
 import { Icon } from '../Icon';
 import styles from './style.module.scss';
 interface FilePickerProps {
+  isAfterReset?: boolean;
   disabled?: boolean;
   onDelete?: () => void;
   onChange?: (file: File | null) => void;
   defaultValue?: IPassportResponse;
+  setIsAfterReset?: (e: boolean) => void;
 }
 
-export const FilePicker: React.FC<FilePickerProps> = ({ onChange, disabled = false, defaultValue, onDelete }) => {
+export const FilePicker: React.FC<FilePickerProps> = ({
+  onChange,
+  disabled = false,
+  defaultValue,
+  onDelete,
+  isAfterReset = false,
+  setIsAfterReset
+}) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +52,14 @@ export const FilePicker: React.FC<FilePickerProps> = ({ onChange, disabled = fal
       }
     }
   };
+
+  useEffect(() => {
+    if (isAfterReset) {
+      handleFileDelete();
+      setIsAfterReset && setIsAfterReset(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAfterReset]);
 
   return (
     <div className={styles.picker_container}>

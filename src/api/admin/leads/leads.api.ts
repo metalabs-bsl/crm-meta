@@ -4,6 +4,6 @@ import { getBaseQuery } from 'common/helpers';
 export const leadsMainApi = createApi({
   reducerPath: 'leadsApi',
   baseQuery: getBaseQuery(),
-  tagTypes: ['Detail-Lead', 'Reminders', 'Calculator'],
+  tagTypes: ['Detail-Lead', 'Reminders', 'Calculator', 'Invoice'],
   endpoints: () => ({})
 });

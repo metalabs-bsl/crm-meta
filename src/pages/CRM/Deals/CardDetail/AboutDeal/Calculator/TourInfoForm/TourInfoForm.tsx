@@ -5,11 +5,11 @@ import { Options } from 'types/pages';
 import { DatePicker, Input, Loading, MultipleSelect, Select } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { useNotify } from 'common/hooks';
-import { MESSAGE } from 'common/constants';
+import { MESSAGE, servicesOptions } from 'common/constants';
 import { useSetTourDataMutation } from 'api/admin/leads/endpoints/calculator';
 import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
-import { brandOptions, categoryTourTimeOptions, PassengerCounts, servicesOptions } from './TourInfoForm.helper';
+import { brandOptions, categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
 
 import { useForm } from 'react-hook-form';

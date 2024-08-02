@@ -12,6 +12,8 @@ export type {
   ICreatePaymentParams,
   ICreateReminderParams,
   IgetLeadAdditionalPayments,
+  IInvoice,
+  IInvoiseSelectOptions,
   ILead,
   IPassportParams,
   IPassportResponse,
