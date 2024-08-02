@@ -6,6 +6,8 @@ import {
   ICreatePaymentParams,
   ICreateReminderParams,
   IgetLeadAdditionalPayments,
+  IInvoice,
+  IInvoiseSelectOptions,
   ILead,
   IPassportParams,
   IResCalc,
@@ -117,4 +119,14 @@ export module ISetContract {
 export module IUploadPassport {
   export type Response = void;
   export type Params = IPassportParams;
+}
+
+export module IGetInvoices {
+  export type Response = IInvoice[];
+  export type Params = string;
+}
+
+export module IGetInvoicesSelectData {
+  export type Response = IInvoiseSelectOptions[];
+  export type Params = string;
 }

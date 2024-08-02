@@ -255,3 +255,19 @@ export interface IResPaymentCurrency {
   updated_at?: string;
   currency?: string;
 }
+
+export interface IInvoiseSelectOptions {
+  id: string;
+  isPaymentsData: boolean;
+  name: string;
+}
+
+export interface IInvoice {
+  created_at: string;
+  file_link: string;
+  file_name: string;
+  id: string;
+  invoice_text: string;
+  title: string;
+  updated_at: string;
+}

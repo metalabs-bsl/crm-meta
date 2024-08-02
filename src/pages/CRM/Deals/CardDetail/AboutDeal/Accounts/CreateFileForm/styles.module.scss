@@ -27,4 +27,7 @@
   button {
     width: min-content;
   }
+  .errorMessage {
+    color: $not-paid;
+  }
 }

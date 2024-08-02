@@ -1,14 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { Options } from 'types/pages';
 import { DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
-import { MESSAGE, paymentOptions } from 'common/constants';
+import { MESSAGE, paymentOptions, servicesOptions } from 'common/constants';
 import { useSetAdditionalPaymentMutation } from 'api/admin/leads/endpoints/calculator';
 import { useGetPaymentCurrencyQuery } from 'api/admin/paymentCurrency/paymentCurrency.api';
 import { IAdditionalPayment } from 'types/entities/leads';
-import { servicesOptions } from '../TourInfoForm/TourInfoForm.helper';
 import styles from './style.module.scss';
 
 import { useForm } from 'react-hook-form';
@@ -23,20 +22,19 @@ export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
   const [isEditUpsell, setIsEditUpsell] = useState<boolean>(false);
   const isEditable = !isEditUpsell;
   const serviceTitle = servicesOptions.find((i) => i.value === title);
-  const { register, getValues, setValue } = useForm<IAdditionalPayment>({
-    defaultValues: {
-      payment_method: paymentOptions[0].value as string
-    }
-  });
+  const { register, getValues, setValue } = useForm<IAdditionalPayment>();
   const [postPayment] = useSetAdditionalPaymentMutation();
   const { data } = useGetPaymentCurrencyQuery();
   const notify = useNotify();
 
-  const paymentCurrencyOptions: Options[] =
-    data?.map((currency) => ({
-      value: currency.id,
-      label: currency?.currency || ''
-    })) || [];
+  const paymentCurrencyOptions = useMemo<Options[]>(() => {
+    return (
+      data?.map((currency) => ({
+        value: currency.id,
+        label: currency?.currency || ''
+      })) || []
+    );
+  }, [data]);
 
   useEffect(() => {
     if (formProps) {
@@ -50,6 +48,11 @@ export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
       });
     }
   }, [formProps, setValue]);
+
+  useEffect(() => {
+    if (!formProps?.currency) setValue('currency', paymentCurrencyOptions[0]?.value as string);
+    if (!formProps?.payment_method) setValue('payment_method', paymentOptions[0]?.value as string);
+  }, [formProps?.currency, formProps?.payment_method, paymentCurrencyOptions, setValue]);
 
   const onSubmit = () => {
     if (calcId) {

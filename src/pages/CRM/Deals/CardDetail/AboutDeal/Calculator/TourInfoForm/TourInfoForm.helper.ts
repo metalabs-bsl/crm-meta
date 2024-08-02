@@ -105,30 +105,3 @@ export const categoryTourTimeOptions: Options[] = [
     value: 'period-later'
   }
 ];
-
-export const servicesOptions: Options[] = [
-  {
-    label: 'Не выбрано',
-    value: ''
-  },
-  {
-    label: 'Виза',
-    value: 'visa'
-  },
-  {
-    label: 'Страховка',
-    value: 'insurance'
-  },
-  {
-    label: 'Авиабилеты',
-    value: 'airtTickets'
-  },
-  {
-    label: 'Индивидуальный транспорт',
-    value: 'individualTransport'
-  },
-  {
-    label: 'Экскурсии',
-    value: 'excursions'
-  }
-];

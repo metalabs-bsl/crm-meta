@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { Options } from 'types/pages';
 import { DatePicker, Icon, Input, Loading, Select } from 'common/ui';
@@ -38,19 +38,20 @@ export const PaymentDetailsFrom: FC<IProps> = ({
 }) => {
   const notify = useNotify();
   const { data } = useGetPaymentCurrencyQuery();
-  const paymentCurrencyOptions: Options[] =
-    data?.map((currency) => ({
-      value: currency.id,
-      label: currency?.currency || ''
-    })) || [];
-  const { register, getValues, setValue } = useForm<ICalcPayment>({
-    defaultValues: {
-      payment_method: paymentOptions[0]?.value as number,
-      currency: paymentCurrencyOptions[0]?.value as string
-    }
-  });
+
+  const paymentCurrencyOptions = useMemo<Options[]>(() => {
+    return (
+      data?.map((currency) => ({
+        value: currency.id,
+        label: currency?.currency || ''
+      })) || []
+    );
+  }, [data]);
+
+  const { register, getValues, setValue } = useForm<ICalcPayment>();
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
   const updatedTitle = index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title;
+
   useEffect(() => {
     if (formProps) {
       setValue('brutto', formProps.brutto);
@@ -63,6 +64,11 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       setValue('currency', formProps.currency);
     }
   }, [formProps, setValue]);
+
+  useEffect(() => {
+    if (!formProps?.currency) setValue('currency', paymentCurrencyOptions[0]?.value as string);
+    if (!formProps?.payment_method) setValue('payment_method', paymentOptions[0]?.value as number);
+  }, [formProps?.currency, formProps?.payment_method, paymentCurrencyOptions, setValue]);
 
   const onSubmit = () => {
     const data = getValues();

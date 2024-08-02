@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import { Options } from 'types/pages';
 import { Loading, Select } from 'common/ui';
@@ -7,28 +6,13 @@ import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import {
-  useChoicePaymentToggleMutation,
-  useLazyGetLeadCalcQuery,
-  useUpdateLeadCalcPaidStatusMutation
-} from 'api/admin/leads/endpoints/calculator';
-import { ICalculator, IUpdateContract } from 'types/entities/leads';
+import { useChoicePaymentToggleMutation, useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
+import { ICalculator, IResCalc, IUpdateContract } from 'types/entities/leads';
 import { PaymentsDetails } from './PaymentDetailsFrom/PaymentsDetails';
 import { AgreementForm } from './AgreementForm';
 import { TourInfoForm } from './TourInfoForm';
 import { UpsellForm } from './UpsellForm';
 import styles from './styles.module.scss';
-
-const tabItems: ITabsItem[] = [
-  {
-    title: 'Полная оплата',
-    type: 'full'
-  },
-  {
-    title: 'Частичная оплата',
-    type: 'partial'
-  }
-];
 
 const payOptions: Options[] = [
   {
@@ -46,15 +30,28 @@ const payOptions: Options[] = [
 ];
 
 interface IProps {
+  data?: IResCalc;
   calcData?: ICalculator;
 }
 
-export const Calculator: FC<IProps> = ({ calcData }) => {
-  const { search } = useLocation();
+export const Calculator: FC<IProps> = ({ calcData, data }) => {
   const notify = useNotify();
   const [updatePaidStatus, { isLoading }] = useUpdateLeadCalcPaidStatusMutation();
-  const [getCalc, { data, isFetching }] = useLazyGetLeadCalcQuery();
   const [choicePaymentToggle] = useChoicePaymentToggleMutation();
+
+  const tabItems: ITabsItem[] = [
+    {
+      title: 'Полная оплата',
+      type: 'full',
+      disabled: !!data?.paymentData.length
+    },
+    {
+      title: 'Частичная оплата',
+      type: 'partial',
+      disabled: !!data?.paymentData.length
+    }
+  ];
+
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
 
   const contractFormProps: IUpdateContract | null = useMemo(() => {
@@ -78,13 +75,6 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
   }, [data]);
 
   useEffect(() => {
-    if (search) {
-      const leadId = search.substring(1);
-      getCalc(leadId);
-    }
-  }, [getCalc, search]);
-
-  useEffect(() => {
     if (data) {
       setIsActiveTab(data.is_full_payment ? 'full' : 'partial');
     }
@@ -105,12 +95,11 @@ export const Calculator: FC<IProps> = ({ calcData }) => {
   };
 
   return (
-    <Loading isSpin={isLoading || isFetching}>
+    <Loading isSpin={isLoading}>
       <div className={styles.calculator}>
         {data && <AgreementForm formProps={contractFormProps} customerId={data?.contracts[0].customer.id} />}
         <div className={styles.tab_block}>
           <Tabs
-            disabled={!!data?.paymentData.length}
             isActiveTab={isActiveTab}
             setIsActiveTab={setIsActiveTab}
             tabItems={tabItems}
