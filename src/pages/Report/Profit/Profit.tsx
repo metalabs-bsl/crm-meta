@@ -90,7 +90,7 @@ export const Profit = () => {
                   <p className={styles.commonText}>Отчет по общей прибыли сотрудников</p>
                   <div className={styles.commonBtnWrapper}>
                     <a href='#' download>
-                      <Button styleType={BUTTON_TYPES.GREEN} className={styles.greenBTn} text='Выгрузить в PDF' />
+                      <Button styleType={BUTTON_TYPES.YELLOW} className={styles.greenBTn} text='Выгрузить в PDF' />
                     </a>
                     <a href='#' className={styles.commonDownload} download>
                       Выгрузить в Excel

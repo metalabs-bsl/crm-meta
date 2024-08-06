@@ -9,7 +9,6 @@ export interface ICreateLeadParams {
   city?: string;
   source_id?: string;
   column_id?: string;
-  customer_DOB?: string;
   customer_id?: string;
 }
 
@@ -222,6 +221,7 @@ export interface IUpdateContract {
   customer_issuingAuthority?: string;
   passport_back: IPassportResponse[];
   passport_front: IPassportResponse[];
+  customer_DOB: string;
 }
 
 export interface IResCalc extends ICalculator {
