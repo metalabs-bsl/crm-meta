@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import cn from 'classnames';
-import { Button, DatePicker, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
+import { Button, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
@@ -163,17 +163,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               {errors.source_id && <span className={styles.error}>{errors.source_id.message}</span>}
             </div>
           )}
-          <div className={styles.moreWrapper}>
-            <div className={styles.inpBlock}>
-              <label>Дата рождения клиента</label>
-              <DatePicker
-                {...register('customer_DOB', { required: 'Дата рождения клиента обязательна' })}
-                disabled={!isEdit}
-                className={styles.date}
-              />
-              {errors.customer_DOB && <span className={styles.error}>{errors.customer_DOB.message}</span>}
-            </div>
-          </div>
           {responsibleOptions && (
             <div className={styles.inpBlock}>
               <label>Ответственный</label>

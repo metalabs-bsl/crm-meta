@@ -63,6 +63,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
         customer_passport: data?.contracts[0].customer.passport,
         customer_inn: data?.contracts[0].customer.inn,
         customer_address: data?.contracts[0].customer.address,
+        customer_DOB: data?.contracts[0].customer.date_of_birth,
         customer_fullname: data?.contracts[0].customer.fullname,
         responsible_id: data?.contracts[0].responsible.id,
         customer_passportDateGiven: data?.contracts[0].customer.datePassportGiven,
