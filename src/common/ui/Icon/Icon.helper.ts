@@ -51,8 +51,10 @@ import reportDark from '../../assets/icons/sidebar/report-dark.svg';
 import smsGrayIcon from '../../assets/icons/sms-gray.svg';
 import trashGrayIcon from '../../assets/icons/trash-gray.svg';
 import userIcon from '../../assets/icons/userIcon.svg';
+import whastApp from '../../assets/icons/whatsApp-svg.svg';
 
 export const icons: IIcons = {
+  ['whatsApp-svg']: whastApp,
   ['reply-arrow']: replyArrow,
   ['go-back']: goBackArrow,
   ['trash-gray']: trashGrayIcon,
