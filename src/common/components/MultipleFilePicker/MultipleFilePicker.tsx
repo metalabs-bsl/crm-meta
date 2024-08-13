@@ -1,15 +1,14 @@
-import { ChangeEvent, FC, useCallback, useRef, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useRef } from 'react';
 import { Icon } from 'common/ui/Icon';
 import styles from './styles.module.scss';
 
 interface MultipleFilePickerProps {
-  files: string[];
+  files: File[];
   editable: boolean;
-  onFilesChange: (files: string[]) => void;
+  onFilesChange: (files: File[]) => void;
 }
 
 export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editable, onFilesChange }) => {
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uniqueId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
 
@@ -17,8 +16,8 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
     (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files.length > 0) {
         const file = event.target.files[0];
-        setFileUrl(URL.createObjectURL(file));
-        onFilesChange([...files, file.name]);
+        // setFileUrl(URL.createObjectURL(file));
+        onFilesChange([...files, file]);
       }
     },
     [files, onFilesChange]
@@ -26,7 +25,7 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
 
   const handleFileDelete = useCallback(
     (fileName: string) => {
-      const updatedFiles = files.filter((file) => file !== fileName);
+      const updatedFiles = files.filter((file) => file.name !== fileName);
       onFilesChange(updatedFiles);
     },
     [files, onFilesChange]
@@ -36,11 +35,11 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
     <div className={styles.picker_container}>
       {files.length ? (
         files.map((file) => (
-          <div className={styles.fileBox} key={file}>
-            <a href={fileUrl!} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
-              {file}
+          <div className={styles.fileBox} key={file.name}>
+            <a href={URL.createObjectURL(file)} target='_blank' rel='noopener noreferrer' className={styles.fileName}>
+              {file.name}
             </a>
-            {!editable && <Icon type='delete' onClick={() => handleFileDelete(file)} />}
+            {!editable && <Icon type='delete' onClick={() => handleFileDelete(file.name)} />}
           </div>
         ))
       ) : (

@@ -16,7 +16,6 @@
     &:last-child {
       width: 20%;
       min-width: min-content;
-      justify-content: flex-end;
     }
 
     .item_block {
@@ -47,6 +46,13 @@
             color: $gray;
           }
         }
+      }
+      select {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray;
+        padding: 9px 15px;
+        height: 46px;
       }
       .withIcon {
         input {

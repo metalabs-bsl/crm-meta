@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
+import { WhatsApp } from './Whatsapp';
 import { Icon, Input, Loading } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import { AboutDeal } from './AboutDeal';
@@ -79,7 +80,7 @@ export const CardDetail = () => {
         />
       ),
       [tabItems[1].type]: <History history={history} />,
-      [tabItems[2].type]: <p>WhatsApp</p>
+      [tabItems[2].type]: <WhatsApp />
     };
     return components[type];
   };

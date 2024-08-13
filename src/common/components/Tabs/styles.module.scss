@@ -31,4 +31,8 @@
       background-color: $count-active-bg;
     }
   }
+
+  .disabled {
+    cursor: not-allowed;
+  }
 }

@@ -97,7 +97,7 @@ export const NoteForm: FC<IProps> = ({ createAction, deleteAction, editAction, f
         </div>
         <div className={styles.item}>
           <label>Напоминание</label>
-          <MultipleSelect disabled={disabled} placeholder='Не выбрано' options={selectOptions} defaultValue={formProps?.reminder} />
+          <MultipleSelect disabled={disabled} placeholder='Не выбрано' options={selectOptions} defaultValue={formProps?.reminder || []} />
         </div>
         <div className={styles.item}>
           <label>Участник</label>

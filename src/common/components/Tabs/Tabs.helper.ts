@@ -3,4 +3,5 @@ export interface ITabsItem {
   type: string;
   badgeCount?: number;
   hasBadge?: boolean;
+  disabled?: boolean;
 }

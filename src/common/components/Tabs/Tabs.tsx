@@ -11,11 +11,15 @@ interface IProps {
   className?: string;
   tabClassName?: string;
   activeTabClassName?: string;
+  onChange?: () => void;
 }
 
-export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, className, tabClassName, activeTabClassName }) => {
-  const onChangeTab = (type: string) => {
-    setIsActiveTab(type);
+export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, className, tabClassName, activeTabClassName, onChange }) => {
+  const onChangeTab = (type: string, itemDisabled?: boolean) => {
+    if (!itemDisabled) {
+      onChange && onChange();
+      setIsActiveTab(type);
+    }
   };
 
   return (
@@ -23,8 +27,13 @@ export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, classN
       {tabItems.map((tab, index) => (
         <div
           key={index}
-          className={cn(styles.tab, tabClassName, { [cn(styles.activeTab, activeTabClassName)]: isActiveTab === tab.type })}
-          onClick={() => onChangeTab(tab.type)}
+          className={cn(
+            styles.tab,
+            tabClassName,
+            { [cn(styles.activeTab, activeTabClassName)]: isActiveTab === tab.type },
+            { [styles.disabled]: tab.disabled }
+          )}
+          onClick={() => onChangeTab(tab.type, tab.disabled)}
         >
           {tab.hasBadge ? <Badge count={tab.badgeCount}>{tab.title}</Badge> : tab.title}
         </div>

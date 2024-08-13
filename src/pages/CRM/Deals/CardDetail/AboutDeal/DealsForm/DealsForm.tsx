@@ -2,11 +2,11 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import cn from 'classnames';
-import { Button, DatePicker, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
+import { Button, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
-import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/leads.api';
+import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import styles from './styles.module.scss';
@@ -28,9 +28,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
     setValue,
     setError,
     clearErrors
-  } = useForm<ICreateLeadParams>({
-    defaultValues: formProps || {}
-  });
+  } = useForm<ICreateLeadParams>();
 
   const { isNewDeal, column_id } = useAppSelector(sidebarSelectors.sidebar);
   const [isEdit, setIsEdit] = useState<boolean>(isNewDeal);
@@ -112,12 +110,22 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
         <div className={styles.formItems}>
           <div className={styles.inpBlock}>
             <label>Наименование</label>
-            <Input {...register('lead_name', { required: 'Наименование обязательно' })} className={styles.inp} disabled={!isEdit} />
+            <Input
+              {...register('lead_name', { required: 'Наименование обязательно' })}
+              className={styles.inp}
+              disabled={!isEdit}
+              placeholder='Введите наименование сделки'
+            />
             {errors.lead_name && <span className={styles.error}>{errors.lead_name.message}</span>}
           </div>
           <div className={styles.inpBlock}>
             <label>Клиент</label>
-            <Input {...register('customer_name', { required: 'Клиент обязателен' })} className={styles.inp} disabled={!isEdit} />
+            <Input
+              {...register('customer_name', { required: 'Клиент обязателен' })}
+              className={styles.inp}
+              disabled={!isEdit}
+              placeholder='Введите ФИО'
+            />
             {errors.customer_name && <span className={styles.error}>{errors.customer_name.message}</span>}
           </div>
           <div className={styles.inpBlock}>
@@ -135,7 +143,12 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           </div>
           <div className={styles.inpBlock}>
             <label>Город проживания</label>
-            <Input {...register('city', { required: 'Город проживания обязателен' })} className={styles.inp} disabled={!isEdit} />
+            <Input
+              {...register('city', { required: 'Город проживания обязателен' })}
+              className={styles.inp}
+              disabled={!isEdit}
+              placeholder='Введите город проживания'
+            />
             {errors.city && <span className={styles.error}>{errors.city.message}</span>}
           </div>
           {sourceOptions && (
@@ -150,17 +163,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               {errors.source_id && <span className={styles.error}>{errors.source_id.message}</span>}
             </div>
           )}
-          <div className={styles.moreWrapper}>
-            <div className={styles.inpBlock}>
-              <label>Дата рождения клиента</label>
-              <DatePicker
-                {...register('customer_DOB', { required: 'Дата рождения клиента обязательна' })}
-                disabled={!isEdit}
-                className={styles.date}
-              />
-              {errors.customer_DOB && <span className={styles.error}>{errors.customer_DOB.message}</span>}
-            </div>
-          </div>
           {responsibleOptions && (
             <div className={styles.inpBlock}>
               <label>Ответственный</label>

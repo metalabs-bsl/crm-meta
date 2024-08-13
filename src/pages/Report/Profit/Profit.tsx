@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Button, StartEndPeriodPicker } from 'common/ui';
-import { Empty } from 'common/ui/Empty';
+import { Button, Empty, StartEndPeriodPicker } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ProfitTable } from './ProfitTable/ProfitTable';
 import styles from './styles.module.scss';
@@ -91,7 +90,7 @@ export const Profit = () => {
                   <p className={styles.commonText}>Отчет по общей прибыли сотрудников</p>
                   <div className={styles.commonBtnWrapper}>
                     <a href='#' download>
-                      <Button styleType={BUTTON_TYPES.GREEN} className={styles.greenBTn} text='Выгрузить в PDF' />
+                      <Button styleType={BUTTON_TYPES.YELLOW} className={styles.greenBTn} text='Выгрузить в PDF' />
                     </a>
                     <a href='#' className={styles.commonDownload} download>
                       Выгрузить в Excel

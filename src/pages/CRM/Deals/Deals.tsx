@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/h
 import { crmChapters, MESSAGE } from 'common/constants';
 import { useGetAppSettingsQuery, useUpdateAppSettingsMutation } from 'api/admin/appSettings/appSettings.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
-import { useLazyGetLeadsForTodoQuery, useLazySearchLeadsQuery } from 'api/admin/leads/leads.api';
+import { useLazyGetLeadsForTodoQuery, useLazySearchLeadsQuery } from 'api/admin/leads/endpoints/lead';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { ROLES } from 'types/roles';
 import { CardDetail } from './CardDetail';

@@ -20,6 +20,78 @@ export const brandOptions: Options[] = [
   {
     label: 'Pegasus Asia',
     value: 'pegasus'
+  },
+  {
+    label: 'Pegas Touristik',
+    value: 'pegasTouristik'
+  },
+  {
+    label: 'Корпорация Арнесто (JTB)',
+    value: 'arnestoCorporation'
+  },
+  {
+    label: 'Corendon ',
+    value: 'corendon '
+  },
+  {
+    label: 'Инфотур ',
+    value: 'infotour'
+  },
+  {
+    label: 'Хит-Трэвел ',
+    value: 'hitTravel'
+  },
+  {
+    label: 'Kazunion Alliance',
+    value: 'kazunionAlliance'
+  },
+  {
+    label: 'Easy Booking ',
+    value: 'easyBooking '
+  },
+  {
+    label: 'Avia Travel Club ',
+    value: 'aviaTravelClub '
+  },
+  {
+    label: 'Travel Emirates (voyager) ',
+    value: 'voyager '
+  },
+  {
+    label: 'Селфи Трэвел ',
+    value: 'selfieTravel'
+  },
+  {
+    label: 'Best Service ',
+    value: 'bestService '
+  },
+  {
+    label: 'CIP',
+    value: 'cip'
+  },
+  {
+    label: 'Великолепный век',
+    value: 'magnificentCentury'
+  },
+  {
+    label: 'НСК',
+    value: 'nsk'
+  },
+  {
+    label: 'ФС Тревел ',
+    value: 'fsTravel'
+  },
+  {
+    label: 'Компас',
+    value: 'compass'
+  },
+  {
+    label: 'Travel Advisor  ',
+    value: 'travelAdvisor  '
+  },
+  {
+    label: 'anex tour',
+    value: 'anexTour'
   }
 ];
 
@@ -31,20 +103,5 @@ export const categoryTourTimeOptions: Options[] = [
   {
     label: 'На период позже',
     value: 'period-later'
-  }
-];
-
-export const servicesOptions: Options[] = [
-  {
-    label: 'Не выбрано',
-    value: ''
-  },
-  {
-    label: 'Виза',
-    value: 'visa'
-  },
-  {
-    label: 'Страховка',
-    value: 'insurance'
   }
 ];

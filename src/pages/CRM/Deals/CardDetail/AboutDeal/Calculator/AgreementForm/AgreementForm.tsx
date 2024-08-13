@@ -1,68 +1,216 @@
-import { useState } from 'react';
-import cn from 'classnames';
-import { DatePicker, Input } from 'common/ui';
-import { Accordion, MultipleFilePicker } from 'common/components';
+import { FC, useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { DatePicker, FilePicker, Input, Loading, Select } from 'common/ui';
+import { Accordion } from 'common/components';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
+import {
+  useDeleteFileMutation,
+  useUpdateContractMutation,
+  useUploadBackPassportMutation,
+  useUploadFrontPassportMutation
+} from 'api/admin/leads/endpoints/calculator';
+import { IUpdateContract } from 'types/entities';
 import styles from './style.module.scss';
 
-export const AgreementForm = () => {
+import { useForm } from 'react-hook-form';
+
+interface IProps {
+  customerId: string;
+  formProps: IUpdateContract | null;
+}
+
+export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
+  const notify = useNotify();
+  const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
+  const [updateContract, { isLoading }] = useUpdateContractMutation();
+  const [uploadBack, { isLoading: isBackLoading }] = useUploadBackPassportMutation();
+  const [uploadFront, { isLoading: isFrontLoading }] = useUploadFrontPassportMutation();
+  const [deleteFile, { isLoading: isDeleteLoading, isSuccess }] = useDeleteFileMutation();
   const [isEditAgreement, setIsEditAgreement] = useState<boolean>(false);
+  const [frontOfPassport, setFrontOfPassport] = useState<File | null>(null);
+  const [backOfPassport, setBackOfPassport] = useState<File | null>(null);
+  const [deletedFront, setDeletedFront] = useState<boolean>(false);
+  const [deletedBack, setDeletedBack] = useState<boolean>(false);
+  const { register, getValues, setValue } = useForm<IUpdateContract>();
   const isEditable = !isEditAgreement;
-  const [passwordFiles, setPasswordFiles] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (formProps) {
+      Object.keys(formProps).forEach((key) => {
+        const value = formProps[key as keyof IUpdateContract];
+        if ((key === 'booking_date' || key === 'customer_passportDateGiven' || key === 'customer_DOB') && typeof value === 'string') {
+          setValue(key as keyof IUpdateContract, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+        } else {
+          setValue(key as keyof IUpdateContract, formProps[key as keyof IUpdateContract]);
+        }
+      });
+    }
+  }, [formProps, setValue]);
+
+  useEffect(() => {
+    if (!isDeleteLoading && isSuccess) {
+      setDeletedFront(false);
+      setDeletedBack(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+  const onSubmit = () => {
+    if (deletedFront && formProps?.passport_front[0]?.id) {
+      deleteFile(formProps?.passport_front[0].id);
+    }
+
+    if (deletedBack && formProps?.passport_back[0]?.id) {
+      deleteFile(formProps?.passport_back[0].id);
+    }
+
+    if (backOfPassport) {
+      const backformData = new FormData();
+      backformData.append('file', backOfPassport);
+      uploadBack({ body: backformData, customerId });
+    }
+
+    if (frontOfPassport) {
+      const frontData = new FormData();
+      frontData.append('file', frontOfPassport);
+      uploadFront({ body: frontData, customerId });
+    }
+
+    updateContract(getValues())
+      .unwrap()
+      .then(() => {
+        setIsEditAgreement(!isEditAgreement);
+        notify(MESSAGE.UPDATED, 'success');
+      })
+      .catch(() => {
+        notify(MESSAGE.ERROR, 'error');
+      });
+  };
+
   return (
-    <Accordion title='Договор' onEditAction={() => setIsEditAgreement(!isEditAgreement)} isEdit={isEditAgreement}>
-      <form className={styles.form}>
-        <div className={styles.blocks}>
-          <div className={styles.item_block}>
-            <label>Номер договора</label>
-            <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
-          </div>
-          <div className={styles.more_items_block}>
+    <Accordion title='Договор' onEditAction={() => setIsEditAgreement(!isEditAgreement)} isEdit={isEditAgreement} onSaveAction={onSubmit}>
+      <Loading isSpin={isLoading || isBackLoading || isFrontLoading || isDeleteLoading}>
+        <form className={styles.form}>
+          <div className={styles.blocks}>
             <div className={styles.item_block}>
-              <label>ID паспорта</label>
-              <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
+              <label>Номер договора</label>
+              <Input
+                {...register('contract_number', { required: 'обязательное поле' })}
+                placeholder='Не заполнено'
+                className={styles.inp_wrapper}
+                disabled={isEditable}
+                type='number'
+              />
+            </div>
+            <div className={styles.more_items_block}>
+              <div className={styles.item_block}>
+                <label>ID паспорта</label>
+                <Input
+                  {...register('customer_passport', { required: 'обязательное поле' })}
+                  placeholder='Не заполнено'
+                  className={styles.inp_wrapper}
+                  disabled={isEditable}
+                />
+              </div>
+              <div className={styles.item_block}>
+                <label>ИНН</label>
+                <Input
+                  {...register('customer_inn', { required: 'обязательное поле' })}
+                  placeholder='Не заполнено'
+                  className={styles.inp_wrapper}
+                  disabled={isEditable}
+                />
+              </div>
             </div>
             <div className={styles.item_block}>
-              <label>ИНН</label>
-              <Input placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
+              <label>Адрес</label>
+              <Input
+                {...register('customer_address', { required: 'обязательное поле' })}
+                placeholder='Не заполнено'
+                className={styles.inp_wrapper}
+                disabled={isEditable}
+              />
+            </div>
+            <div className={styles.item_block}>
+              <label>Передняя сторона паспорта</label>
+              <FilePicker
+                onChange={setFrontOfPassport}
+                disabled={isEditable}
+                defaultValue={formProps?.passport_front[0]}
+                onDelete={() => setDeletedFront(true)}
+              />
             </div>
           </div>
-          <div className={styles.item_block}>
-            <label>Комментарий</label>
-            <Input placeholder='Комментарий отсутствует' className={styles.inp_wrapper} disabled={isEditable} />
-          </div>
-          <div className={styles.item_block}>
-            <label>Паспорт</label>
-            <div className={styles.password_wrapper}>
-              <MultipleFilePicker files={passwordFiles} editable={isEditable} onFilesChange={setPasswordFiles} />
+          <div className={styles.blocks}>
+            <div className={styles.item_block}>
+              <label>ФИО</label>
+              <Input
+                {...register('customer_fullname', { required: 'обязательное поле' })}
+                placeholder='Не заполнено'
+                className={styles.inp_wrapper}
+                disabled={isEditable}
+              />
+            </div>
+            <div className={styles.item_block}>
+              <label>Орган выдавший документ</label>
+              <Input
+                {...register('customer_issuingAuthority', { required: 'обязательное поле' })}
+                placeholder='Не заполнено'
+                className={styles.inp_wrapper}
+                disabled={isEditable}
+              />
+            </div>
+            <div className={styles.item_block}>
+              <label>Дата выдачи</label>
+              <DatePicker
+                {...register('customer_passportDateGiven', { required: 'обязательное поле' })}
+                className={styles.datepicker}
+                disabled={isEditable}
+              />
+            </div>
+            <div className={styles.item_block}>
+              <label>Задняя сторона паспорта</label>
+              <FilePicker
+                onChange={setBackOfPassport}
+                disabled={isEditable}
+                defaultValue={formProps?.passport_back[0]}
+                onDelete={() => setDeletedBack(true)}
+              />
             </div>
           </div>
-        </div>
-        <div className={styles.blocks}>
-          <div className={styles.item_block}>
-            <label>ФИО</label>
-            <Input placeholder='Комментарий отсутствует' className={styles.inp_wrapper} disabled={isEditable} />
+          <div className={styles.blocks}>
+            <div className={styles.item_block}>
+              <label>Ответственный</label>
+              {responsibleOptions && (
+                <Select
+                  {...register('responsible_id', { required: 'обязательное поле' })}
+                  options={responsibleOptions}
+                  disabled={isEditable}
+                  className={styles.inp_wrapper}
+                />
+              )}
+            </div>
+            <div className={styles.item_block}>
+              <label>Дата бронирования</label>
+              <DatePicker
+                {...register('booking_date', { required: 'обязательное поле' })}
+                className={styles.datepicker}
+                disabled={isEditable}
+              />
+            </div>
+            <div className={styles.item_block}>
+              <label>Дата рождения клиента</label>
+              <DatePicker
+                {...register('customer_DOB', { required: 'Дата рождения клиента обязательна' })}
+                disabled={isEditable}
+                className={styles.datepicker}
+              />
+            </div>
           </div>
-          <div className={styles.item_block}>
-            <label>Источник</label>
-            <Input placeholder='Комментарий отсутствует' className={styles.inp_wrapper} disabled={isEditable} />
-          </div>
-          <div className={styles.item_block}>
-            <label>Ответственный</label>
-            <Input
-              placeholder='Не назначен'
-              prevIcon='userIcon'
-              className={cn(styles.inp_wrapper, styles.withIcon)}
-              disabled={isEditable}
-            />
-          </div>
-        </div>
-        <div className={styles.blocks}>
-          <div className={styles.item_block}>
-            <label>Дата бронирования</label>
-            <DatePicker className={styles.datepicker} disabled={isEditable} />
-          </div>
-        </div>
-      </form>
+        </form>
+      </Loading>
     </Accordion>
   );
 };
