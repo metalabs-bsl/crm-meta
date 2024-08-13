@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Checkbox, DatePicker, SearchInput, Select } from 'common/ui';
-import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
+import { Checkbox, DatePicker, FilePicker, SearchInput, Select } from 'common/ui';
+import { DeleteModal, Modal } from 'common/components';
 import { dateFormat } from 'common/helpers';
 import { useNotify } from 'common/hooks';
 import { useDeleteEMployeeMutation, useGetAllEmployeesQuery, useUpdateEmployeeInfoMutation } from 'api/admin/employees/employees.api';
@@ -25,8 +25,11 @@ export const Employees = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedData, setEditedData] = useState<{ [key: number | string]: Partial<IEmployeeData> }>({});
-  const [agreementFiles, setAgreementFiles] = useState<{ [key: number]: string[] }>({});
-  const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
+  const [agreementFile, setAgreementFile] = useState<File | null>(null);
+
+  const [, setFrontPassport] = useState<File | null>(null);
+  const [, setBackPassport] = useState<File | null>(null);
+  // const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [, setBirthdayData] = useState<{ [key: number]: Date | null }>({});
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -35,9 +38,6 @@ export const Employees = () => {
 
   const [deleteEmployee] = useDeleteEMployeeMutation();
   const [updateEmployeeInfo] = useUpdateEmployeeInfoMutation();
-
-  // const { data: passportFront } = useGetPassportFrontQuery(employeeId);
-  // const { data: passportBack } = useGetPassportBackQuery(employeeId);
 
   const handleSearchValueChange = (text: string) => {
     setSearchTerm(text);
@@ -154,7 +154,6 @@ export const Employees = () => {
   const handleEdit = () => {
     setIsEditing(true);
   };
-
   const handleSave = async () => {
     try {
       const updatedEmployees: IEmployeeData[] = [];
@@ -162,50 +161,30 @@ export const Employees = () => {
       for (const index of selectedRows) {
         const updatedEmployee = { ...tableData[index], ...editedData[index] };
 
-        const formData = new FormData();
+        const updatedData = {
+          ...updatedEmployee,
+          contracts: agreementFile ? [agreementFile.name] : updatedEmployee.contracts,
 
-        formData.append('id', tableData[index].id);
-        formData.append('job_title', updatedEmployee.job_title);
-        formData.append('date_of_birth', updatedEmployee.birthday);
-        formData.append('phone', updatedEmployee.phoneNumber);
-        formData.append('email', updatedEmployee.email);
-        formData.append('start_of_internship', updatedEmployee.startDateInternship);
-        formData.append('start_of_work', updatedEmployee.startDateWork);
-
-        // Преобразование в массивы
-        const contractsArray = Array.isArray(agreementFiles[index])
-          ? agreementFiles[index]
-          : Array.isArray(updatedEmployee.contracts)
-            ? updatedEmployee.contracts
-            : [];
-        const passportsArray = Array.isArray(passportFiles[index]) ? passportFiles[index] : [];
-        const passportFrontArray = Array.isArray(updatedEmployee.passportFront) ? updatedEmployee.passportFront : [];
-        const passportBackArray = Array.isArray(updatedEmployee.passportBack) ? updatedEmployee.passportBack : [];
-
-        // Объединение всех файлов
-        const allContracts = [...contractsArray];
-        const allPassports = [...passportsArray, ...passportFrontArray, ...passportBackArray];
-
-        // Добавление файлов в FormData
-        allContracts.forEach((fileUrl) => {
-          formData.append('contracts', fileUrl);
-        });
-
-        allPassports.forEach((fileUrl) => {
-          formData.append('passports', fileUrl);
-        });
+          // passports: frontPassport || backPassport || updatedEmployee.passportFront || updatedEmployee.passportBack,
+          backPassport: updatedEmployee.passportBack,
+          frontPassport: updatedEmployee.passportFront,
+          id: tableData[index].id,
+          job_title: updatedEmployee.job_title,
+          date_of_birth: updatedEmployee.birthday,
+          phone: updatedEmployee.phoneNumber,
+          email: updatedEmployee.email,
+          start_of_internship: updatedEmployee.startDateInternship,
+          start_of_work: updatedEmployee.startDateWork
+        };
 
         // Логирование обновленных данных
-        console.log('Отправляемые данные:', formData);
+        console.log('Отправляемые данные:', updatedData);
 
         // Отправляем данные на сервер
-        await updateEmployeeInfo(formData).unwrap();
+        await updateEmployeeInfo(updatedData).unwrap();
 
         // Сохраняем обновленные данные
-        updatedEmployees.push({
-          ...updatedEmployee,
-          id: tableData[index].id
-        });
+        updatedEmployees.push(updatedData);
       }
 
       // Обновляем состояние таблицы
@@ -218,10 +197,6 @@ export const Employees = () => {
 
       // Очищаем состояния редактирования
       setIsEditing(false);
-      setSelectedRows([]);
-      setEditedData({});
-      setAgreementFiles({});
-      setPassportFiles({});
       notify('Изменения успешно сохранены', 'success');
     } catch (error) {
       console.error('Ошибка при сохранении изменений:', error);
@@ -233,8 +208,9 @@ export const Employees = () => {
     setIsEditing(false);
     setSelectedRows([]);
     setEditedData({});
-    setAgreementFiles({});
-    setPassportFiles({});
+    setAgreementFile(null);
+    setBackPassport(null);
+    setFrontPassport(null);
     setBirthdayData({});
   };
 
@@ -264,19 +240,19 @@ export const Employees = () => {
   //   }));
   // };
 
-  const handleFileChange = (index: number, field: string, files: string[]) => {
-    if (field === 'agreements') {
-      setAgreementFiles((prev) => ({
-        ...prev,
-        [index]: files
-      }));
-    } else if (field === 'passports') {
-      setPassportFiles((prev) => ({
-        ...prev,
-        [index]: files
-      }));
-    }
-  };
+  // const handleFileChange = (index: number, field: string, files: string[]) => {
+  //   if (field === 'agreements') {
+  //     setAgreementFiles((prev) => ({
+  //       ...prev,
+  //       [index]: files
+  //     }));
+  //   } else if (field === 'passports') {
+  //     setPassportFiles((prev) => ({
+  //       ...prev,
+  //       [index]: files
+  //     }));
+  //   }
+  // };
 
   const handleDateChange = (index: number, key: keyof Partial<IEmployeeData>) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -365,18 +341,14 @@ export const Employees = () => {
                               onChange={(e) => handleInputChange(index, column.key, e.target.value)}
                             />
                           ) : column.key === 'agreement' ? (
-                            <MultipleFilePicker
-                              files={agreementFiles[index] ?? []}
-                              onFilesChange={(files) => handleFileChange(index, 'agreements', files)}
-                              editable={false}
-                            />
-                          ) : column.key === 'passport' ? (
+                            <FilePicker onChange={setAgreementFile} disabled={false} />
+                          ) : column.key === 'passportFront' ? (
                             <th>
-                              <MultipleFilePicker
-                                files={passportFiles[index] ?? []}
-                                onFilesChange={(files) => handleFileChange(index, 'passports', files)}
-                                editable={false}
-                              />
+                              <FilePicker onChange={setFrontPassport} disabled={false} />
+                            </th>
+                          ) : column.key === 'passportBack' ? (
+                            <th>
+                              <FilePicker onChange={setBackPassport} disabled={false} />
                             </th>
                           ) : (
                             <DatePicker
@@ -399,7 +371,28 @@ export const Employees = () => {
                               {data.passportBack.original_name}
                             </a>
                           </div>
-                        ) : column.key === 'passport' ? (
+                        ) : column.key === 'passportFront' ? (
+                          <>
+                            <div>
+                              <a
+                                href={`${process.env.REACT_APP_BASE_URL}${data.passportFront.path}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                {data.passportFront.original_name}
+                              </a>
+                            </div>
+                            <div>
+                              <a
+                                href={`${process.env.REACT_APP_BASE_URL}${data.passportBack.path}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                {data.passportBack.original_name}
+                              </a>
+                            </div>
+                          </>
+                        ) : column.key === 'passportBack' ? (
                           <>
                             <div>
                               <a

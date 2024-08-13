@@ -26,8 +26,9 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
   const [startWork, setStartWork] = useState<string>('');
   const [loginCRM, setLoginCRM] = useState<string>('');
   const [passwordCRM, setPasswordCRM] = useState<string>('');
-  const [contractFiles, setContractFiles] = useState<File[]>([]);
-  const [passportFiles, setPassportFiles] = useState<File[]>([]);
+  const [contractFile, setContractFile] = useState<File | null>(null);
+  const [frontPassport, setFrontPassport] = useState<File | null>(null);
+  const [backPassport, setBackPassport] = useState<File | null>(null);
   const [createEmployee, { isLoading }] = useCreateEmployeeMutation();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -75,12 +76,11 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
 
     formData.append('employeeInfo', JSON.stringify(employeeData));
 
-    contractFiles.forEach((file) => {
-      formData.append(`contract`, file);
-    });
-    passportFiles.forEach((file) => {
-      formData.append(`passport`, file);
-    });
+    if (contractFile && frontPassport && backPassport) {
+      formData.append(`contract`, contractFile);
+      formData.append(`frontPassport`, frontPassport);
+      formData.append(`backPassport`, backPassport);
+    }
 
     createEmployee(formData)
       .unwrap()
@@ -227,11 +227,15 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
             </div>
             <div className={styles.agreement}>
               <label>Договор</label>
-              <FilePicker onFilesSelect={setContractFiles} />
+              <FilePicker onChange={setContractFile} />
             </div>
             <div className={styles.passport}>
-              <label>ID паспорт</label>
-              <FilePicker onFilesSelect={setPassportFiles} />
+              <label>Передняя сторона паспорта</label>
+              <FilePicker onChange={setFrontPassport} />
+            </div>
+            <div className={styles.passport}>
+              <label>Задняя сторона паспорта</label>
+              <FilePicker onChange={setBackPassport} />
             </div>
           </div>
         </form>

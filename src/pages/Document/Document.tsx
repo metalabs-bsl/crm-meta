@@ -212,7 +212,7 @@ export const Document = () => {
         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
           <div className={styles.modalInner}>
             <div className={styles.filePickerWrapper}>
-              <FilePicker onFilesSelect={setFiles} />
+              <FilePicker />
             </div>
             <div className={styles.readyBtnWrapper}>
               <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' onClick={handleModalClose} />

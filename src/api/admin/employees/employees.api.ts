@@ -53,10 +53,10 @@ export const employessApi = createApi({
       query: (employee) => ({
         method: 'PUT',
         url: `/employees/${employee.id}`,
-        body: employee,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        body: employee
+        // headers: {
+        //   'Content-Type': 'multipart/form-data'
+        // }
       })
     }),
     getUserInfo: query<IGetUserInfo.Response, IGetUserInfo.Params>({
