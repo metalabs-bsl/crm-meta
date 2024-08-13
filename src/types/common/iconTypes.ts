@@ -3,6 +3,9 @@ export type IIcons = {
 };
 
 export type IIconType =
+  | 'done'
+  | 'settings'
+  | 'settings-dark'
   | 'reply-arrow'
   | 'go-back'
   | 'sms-gray'

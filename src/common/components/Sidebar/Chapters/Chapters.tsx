@@ -42,6 +42,12 @@ const Chapters: FC = () => {
       icon: 'report',
       path: adminPath.report,
       action: () => redirect.report({ chapter: reportChapters.profit.chapter })
+    },
+    {
+      title: 'Настройки',
+      icon: 'settings',
+      path: adminPath.settings,
+      action: () => redirect.settings({})
     }
   ];
 
