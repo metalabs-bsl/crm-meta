@@ -46,6 +46,10 @@
   overflow: auto;
 }
 
+.titles_table {
+  width: 200px;
+}
+
 .employeesTable {
   width: 100%;
   border-collapse: collapse;
@@ -63,7 +67,7 @@
 }
 
 .employeesTable th {
-  background-color: $input-edit-bg;
+  // background-color: $input-edit-bg;
   color: $table-title-color;
   font-weight: 400;
 }

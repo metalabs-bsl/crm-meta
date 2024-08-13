@@ -1,3 +1,4 @@
+import { IEmployeeRole } from 'pages/CRM/Employees/types/types';
 import { UserRoleUnionType } from 'types/roles/roles';
 
 import { BG_TYPES } from 'types/enums';
@@ -47,18 +48,37 @@ export interface IUserInfoRes {
 }
 
 export interface IEmployee {
-  id: string;
-  first_name: string;
-  second_name: string;
-  email: string;
-  date_of_birth: string;
-  // status: string;
-  start_of_internship: string;
+  background: string;
   created_at: string;
-  phone: string;
-  contract: string;
-  passport: string;
+  date_of_birth: string;
+  email: string;
+  email_password: string;
+  end_of_internship: string;
+  first_name: string;
+  id: string;
   job_title: string;
+  login: string;
+  middle_name: string;
+  password: string;
+  phone: string;
+  refreshToken: string;
+  roles: IEmployeeRole[];
+  second_name: string;
+  start_of_internship: string;
+  start_of_work: string;
+  status: number;
+  updated_at: string;
+  contracts: string[];
+  passportFront: {
+    path: string;
+    filename: string;
+    original_name: string;
+  };
+  passportBack: {
+    path: string;
+    filename: string;
+    original_name: string;
+  };
 }
 
 export interface iAddEmployee {

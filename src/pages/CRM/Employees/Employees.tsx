@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
-import { Checkbox, DatePicker, SearchInput } from 'common/ui';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Checkbox, DatePicker, SearchInput, Select } from 'common/ui';
 import { DeleteModal, Modal, MultipleFilePicker } from 'common/components';
 import { dateFormat } from 'common/helpers';
-import { useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
-import AddEmployees from './AddEmployees/AddEmployees';
+import { useNotify } from 'common/hooks';
+import { useDeleteEMployeeMutation, useGetAllEmployeesQuery, useUpdateEmployeeInfoMutation } from 'api/admin/employees/employees.api';
+import { IEmployee } from 'types/entities/employees';
+import AddEmployees from './AddEmployess/AddEmployess';
 import { EditOptions, IEmployeeData } from './types/types';
-import { columns } from './Employees.helper';
+import { columns } from './Employess.helper';
 import styles from './style.module.scss';
 
 const isEditOptions = (isEdit: any): isEdit is EditOptions => {
@@ -14,24 +16,121 @@ const isEditOptions = (isEdit: any): isEdit is EditOptions => {
 };
 
 export const Employees = () => {
-  const { data, isFetching: isGetAllEmployeesFetching } = useGetAllEmployeesQuery();
-  console.log(data, isGetAllEmployeesFetching);
+  const { data } = useGetAllEmployeesQuery();
+  console.log(data);
 
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [tableData, setTableData] = useState<IEmployeeData[]>([]);
   const [, setIsMainChecked] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editedData, setEditedData] = useState<{ [key: number]: Partial<IEmployeeData> }>({});
+  const [editedData, setEditedData] = useState<{ [key: number | string]: Partial<IEmployeeData> }>({});
   const [agreementFiles, setAgreementFiles] = useState<{ [key: number]: string[] }>({});
   const [passportFiles, setPassportFiles] = useState<{ [key: number]: string[] }>({});
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [, setBirthdayData] = useState<{ [key: number]: Date | null }>({});
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [employeeIdToDelete, setEmployeeIdToDelete] = useState<string | null>(null);
+  const notify = useNotify();
+
+  const [deleteEmployee] = useDeleteEMployeeMutation();
+  const [updateEmployeeInfo] = useUpdateEmployeeInfoMutation();
+
+  // const { data: passportFront } = useGetPassportFrontQuery(employeeId);
+  // const { data: passportBack } = useGetPassportBackQuery(employeeId);
+
+  const handleSearchValueChange = (text: string) => {
+    setSearchTerm(text);
+  };
+
+  const filterData = (data: IEmployeeData[], term: string): IEmployeeData[] => {
+    if (!term) return data;
+
+    return data.filter((item) => {
+      const fullName = `${item.first_name} `.toLowerCase();
+      const jobTitle = `${item.job_title}`.toLowerCase();
+      return fullName.includes(term.toLowerCase()) || jobTitle.includes(term.toLowerCase());
+    });
+  };
+
+  const filteredData = useMemo(() => filterData(tableData, searchTerm), [tableData, searchTerm]);
+
+  const transformData = (data: IEmployee[]): IEmployeeData[] => {
+    return data.map((item) => ({
+      id: item.id.toString(),
+      fullName: `${item.first_name} ${item.second_name} ${item.middle_name}`,
+      birthday: dateFormat(item.date_of_birth),
+      phoneNumber: item.phone,
+      job_title: item.job_title,
+      email: item.email,
+      startDateInternship: dateFormat(item.start_of_internship),
+      startDateWork: dateFormat(item.start_of_work),
+      agreement: item.contracts || [],
+      passportBack: item.passportBack || [],
+      created_at: item.created_at,
+      date_of_birth: item.date_of_birth,
+      first_name: item.first_name,
+      phone: item.phone,
+      second_name: item.second_name,
+      start_of_internship: dateFormat(item.start_of_internship),
+      contracts: item.contracts || [],
+      passports: item.passportBack || [],
+      passportFront: item.passportFront || [],
+      background: item.background,
+      email_password: item.email_password,
+      end_of_internship: dateFormat(item.end_of_internship),
+      login: item.login,
+      middle_name: item.middle_name,
+      password: item.password,
+      refreshToken: item.refreshToken,
+      roles: item.roles,
+      start_of_work: dateFormat(item.start_of_work),
+      status: item.status,
+      updated_at: item.updated_at
+    }));
+  };
+
+  const handleDeleteClick = (employeeId: string) => {
+    console.log('Deleting employee with ID:', employeeId);
+    setEmployeeIdToDelete(employeeId);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (employeeIdToDelete !== null) {
+      try {
+        await deleteEmployee(employeeIdToDelete).unwrap();
+        setTableData((prev) => prev.filter((employee) => employee.id !== employeeIdToDelete));
+        setShowDeleteModal(false);
+        setSelectedRows([]);
+        setEmployeeIdToDelete(null);
+        notify('Сотрудник успешно удален', 'success');
+      } catch (error) {
+        notify('Ошибка при удалении Сотрудника', 'error');
+      }
+    } else {
+      console.error('Invalid employee ID:', employeeIdToDelete);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      const transformedData = transformData(data);
+      setTableData(transformedData);
+    }
+  }, [data]);
+
+  const jobOptions = useMemo(() => {
+    if (!data) return [];
+    const jobs = data.map((employee) => employee.job_title);
+    return Array.from(new Set(jobs)).map((job) => ({ label: job, value: job }));
+  }, [data]);
 
   const handleMainCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setIsMainChecked(checked);
-    if (checked && data) {
-      setSelectedRows(data.map((_, index) => index));
+    if (checked) {
+      setSelectedRows(tableData.map((_, index) => index));
     } else {
       setSelectedRows([]);
     }
@@ -47,28 +146,87 @@ export const Employees = () => {
     });
   };
 
-  const handleDelete = () => {
-    // setTableData((prev) => prev.filter((_, index) => !selectedRows.includes(index)));
-    setShowDeleteModal(false);
-    setSelectedRows([]);
-  };
-
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
+    setEmployeeIdToDelete(null);
   };
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    // setTableData((prev) => prev.map((item: any, index: number) => (editedData[index] ? { ...item, ...editedData[index] } : item)));
-    setIsEditing(false);
-    setSelectedRows([]);
-    console.log('Saved Data:', editedData);
+  const handleSave = async () => {
+    try {
+      const updatedEmployees: IEmployeeData[] = [];
 
-    setEditedData({});
-    setBirthdayData({});
+      for (const index of selectedRows) {
+        const updatedEmployee = { ...tableData[index], ...editedData[index] };
+
+        const formData = new FormData();
+
+        formData.append('id', tableData[index].id);
+        formData.append('job_title', updatedEmployee.job_title);
+        formData.append('date_of_birth', updatedEmployee.birthday);
+        formData.append('phone', updatedEmployee.phoneNumber);
+        formData.append('email', updatedEmployee.email);
+        formData.append('start_of_internship', updatedEmployee.startDateInternship);
+        formData.append('start_of_work', updatedEmployee.startDateWork);
+
+        // Преобразование в массивы
+        const contractsArray = Array.isArray(agreementFiles[index])
+          ? agreementFiles[index]
+          : Array.isArray(updatedEmployee.contracts)
+            ? updatedEmployee.contracts
+            : [];
+        const passportsArray = Array.isArray(passportFiles[index]) ? passportFiles[index] : [];
+        const passportFrontArray = Array.isArray(updatedEmployee.passportFront) ? updatedEmployee.passportFront : [];
+        const passportBackArray = Array.isArray(updatedEmployee.passportBack) ? updatedEmployee.passportBack : [];
+
+        // Объединение всех файлов
+        const allContracts = [...contractsArray];
+        const allPassports = [...passportsArray, ...passportFrontArray, ...passportBackArray];
+
+        // Добавление файлов в FormData
+        allContracts.forEach((fileUrl) => {
+          formData.append('contracts', fileUrl);
+        });
+
+        allPassports.forEach((fileUrl) => {
+          formData.append('passports', fileUrl);
+        });
+
+        // Логирование обновленных данных
+        console.log('Отправляемые данные:', formData);
+
+        // Отправляем данные на сервер
+        await updateEmployeeInfo(formData).unwrap();
+
+        // Сохраняем обновленные данные
+        updatedEmployees.push({
+          ...updatedEmployee,
+          id: tableData[index].id
+        });
+      }
+
+      // Обновляем состояние таблицы
+      setTableData((prevTableData) =>
+        prevTableData.map((item) => {
+          const updatedItem = updatedEmployees.find((emp) => emp.id === item.id);
+          return updatedItem ? updatedItem : item;
+        })
+      );
+
+      // Очищаем состояния редактирования
+      setIsEditing(false);
+      setSelectedRows([]);
+      setEditedData({});
+      setAgreementFiles({});
+      setPassportFiles({});
+      notify('Изменения успешно сохранены', 'success');
+    } catch (error) {
+      console.error('Ошибка при сохранении изменений:', error);
+      notify('Ошибка при сохранении изменений', 'error');
+    }
   };
 
   const handleCancelEdit = () => {
@@ -90,27 +248,37 @@ export const Employees = () => {
     }));
   };
 
-  const handleAgreementFilesChange = (index: number, newFiles: string[]) => {
-    try {
-      console.log('Новые файлы договора:', newFiles);
-      setAgreementFiles((prevFiles) => ({
-        ...prevFiles,
-        [index]: newFiles
+  // const handleAgreementFilesChange = (index: number, newFiles: string[]) => {
+  //   console.log('Новые файлы договора:', newFiles);
+  //   setAgreementFiles((prevFiles) => ({
+  //     ...prevFiles,
+  //     [index]: newFiles
+  //   }));
+  // };
+
+  // const handlePassportFilesChange = (index: number, newFiles: string[]) => {
+  //   console.log('Новые файлы паспорта:', newFiles);
+  //   setPassportFiles((prevFiles) => ({
+  //     ...prevFiles,
+  //     [index]: newFiles
+  //   }));
+  // };
+
+  const handleFileChange = (index: number, field: string, files: string[]) => {
+    if (field === 'agreements') {
+      setAgreementFiles((prev) => ({
+        ...prev,
+        [index]: files
       }));
-    } catch (error) {
-      console.error('Ошибка обработки файлов договора:', error);
+    } else if (field === 'passports') {
+      setPassportFiles((prev) => ({
+        ...prev,
+        [index]: files
+      }));
     }
   };
 
-  const handlePassportFilesChange = (index: number, newFiles: string[]) => {
-    console.log('Новые файлы паспорта:', newFiles);
-    setPassportFiles((prevFiles) => ({
-      ...prevFiles,
-      [index]: newFiles
-    }));
-  };
-
-  const handleDateChange = (index: number, key: keyof Partial<DataColumn>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDateChange = (index: number, key: keyof Partial<IEmployeeData>) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEditedData((prev) => ({
       ...prev,
@@ -127,16 +295,22 @@ export const Employees = () => {
         <div className={styles.btn_title}>
           <h2 className={styles.title}>Сотрудники</h2>
           <button className={styles.addEmployeeButton} onClick={() => setShowAddEmployeeForm(true)}>
-            добавить сотрудника
+            Добавить сотрудника
           </button>
         </div>
-        <div>
-          <SearchInput />
+        <div className={styles.searc_wrapper}>
+          <SearchInput onValueChange={handleSearchValueChange} />
         </div>
       </div>
       <div className={styles.wrapper}>
-        <Modal className={styles.modal} isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)}>
-          <AddEmployees setShowAddEmployee={setShowAddEmployeeForm} />
+        <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)} className={styles.modal}>
+          {showAddEmployeeForm && (
+            <AddEmployees
+              setShowAddEmployee={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
+          )}
         </Modal>
 
         <div className={styles.employeesContainer}>
@@ -146,26 +320,28 @@ export const Employees = () => {
                 <th>
                   <div className={styles.main_checkbox}>
                     <Checkbox
-                      checked={selectedRows.length === data?.length && data.length > 0}
+                      checked={selectedRows.length === tableData.length && tableData.length > 0}
                       onChange={handleMainCheckboxChange}
-                      disabled={data?.length === 0}
+                      disabled={tableData.length === 0}
                     />
                   </div>
                 </th>
                 {columns.map((column) => (
-                  <th key={column.key}>{column.title}</th>
+                  <th key={column.key} className={styles.titles_table}>
+                    {column.title}
+                  </th>
                 ))}
               </tr>
             </thead>
             <tbody className={styles.table_body}>
-              {data?.length === 0 ? (
+              {filteredData.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length + 1} className={styles.emptyTable}>
-                    <h3 className={styles.table_text}> Добавьте данные</h3>
+                    <h3 className={styles.search_text}>Совпадений не найдено</h3>
                   </td>
                 </tr>
               ) : (
-                data?.map((data, index) => (
+                filteredData.map((data, index) => (
                   <tr key={index}>
                     <td>
                       <div className={styles.checkbox}>
@@ -183,60 +359,67 @@ export const Employees = () => {
                               className={styles.editInput}
                             />
                           ) : isEditOptions(column.isEdit) && column.isEdit.component === 'select' ? (
-                            <select
-                              value={editedData[index]?.[column.key] ?? data[column.key]}
+                            <Select
+                              options={jobOptions}
+                              defaultValue={data[column.key as keyof IEmployeeData] ?? ''}
                               onChange={(e) => handleInputChange(index, column.key, e.target.value)}
-                              className={styles.editSelect}
-                            >
-                              <option value='Менеджер'>Менеджер</option>
-                              <option value='Планктон'>Планктон</option>
-                              <option value='Спанчбоб'>Спанчбоб</option>
-                            </select>
+                            />
                           ) : column.key === 'agreement' ? (
                             <MultipleFilePicker
                               files={agreementFiles[index] ?? []}
+                              onFilesChange={(files) => handleFileChange(index, 'agreements', files)}
                               editable={false}
-                              onFilesChange={(newFiles) => handleAgreementFilesChange(index, newFiles)}
                             />
                           ) : column.key === 'passport' ? (
-                            <MultipleFilePicker
-                              files={passportFiles[index] ?? []}
-                              editable={false}
-                              onFilesChange={(newFiles) => handlePassportFilesChange(index, newFiles)}
-                            />
-                          ) : column.key === 'start_of_work' || column.key === 'start_of_internship' ? (
-                            <DatePicker
-                              defaultValue={editedData[index]?.[column.key] ? dateFormat(editedData[index][column.key]) : undefined}
-                              onChange={handleDateChange(index, column.key)}
-                            />
-                          ) : column.key === 'date_of_birth' ? (
+                            <th>
+                              <MultipleFilePicker
+                                files={passportFiles[index] ?? []}
+                                onFilesChange={(files) => handleFileChange(index, 'passports', files)}
+                                editable={false}
+                              />
+                            </th>
+                          ) : (
                             <DatePicker
                               defaultValue={
                                 editedData[index]?.[column.key]
                                   ? new Date(editedData[index][column.key] as string).toISOString().slice(0, 10)
                                   : undefined
                               }
+                              value={editedData[index]?.[column.key] ?? data[column.key]}
                               onChange={handleDateChange(index, column.key)}
                             />
-                          ) : (
-                            data[column.key]
                           )
                         ) : column.key === 'agreement' ? (
-                          (agreementFiles[index] ?? data[column.key]?.split(','))?.map((file, fileIndex) => (
-                            <div key={fileIndex}>
-                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer' className={styles.fileLink}>
-                                {file || 'No file'}
-                              </a>
-                            </div>
-                          ))
+                          <div>
+                            <a
+                              href={`${process.env.REACT_APP_BASE_URL}${data.passportBack.path}`}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              {data.passportBack.original_name}
+                            </a>
+                          </div>
                         ) : column.key === 'passport' ? (
-                          (passportFiles[index] ?? data[column.key]?.split(','))?.map((file, fileIndex) => (
-                            <div key={fileIndex}>
-                              <a href={`/${file}`} target='_blank' rel='noopener noreferrer' className={styles.fileLink}>
-                                {file || 'No file'}
+                          <>
+                            <div>
+                              <a
+                                href={`${process.env.REACT_APP_BASE_URL}${data.passportFront.path}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                {data.passportFront.original_name}
                               </a>
                             </div>
-                          ))
+                            <div>
+                              <a
+                                href={`${process.env.REACT_APP_BASE_URL}${data.passportBack.path}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                {data.passportBack.original_name}
+                              </a>
+                            </div>
+                          </>
                         ) : (
                           data[column.key]
                         )}
@@ -247,37 +430,43 @@ export const Employees = () => {
               )}
             </tbody>
           </table>
-        </div>
 
-        <div>
-          {selectedRows.length > 0 && !isEditing && (
-            <div className={styles.actionButtons}>
-              <button className={styles.dtnEdit} onClick={handleEdit}>
-                Редактировать
-              </button>
-              <button className={styles.btnDelete} onClick={() => setShowDeleteModal(true)}>
-                Удалить
-              </button>
-            </div>
-          )}
-          {isEditing && (
-            <div className={styles.actionButtons}>
-              <button className={styles.dtnEdit} onClick={handleSave}>
-                Сохранить
-              </button>
-              <button className={styles.btnDelete} onClick={handleCancelEdit}>
-                Отменить
-              </button>
-            </div>
-          )}
+          <div className={styles.actionButtons}>
+            {selectedRows.length > 0 && (
+              <>
+                {isEditing ? (
+                  <>
+                    <button className={styles.dtnEdit} onClick={handleSave}>
+                      Сохранить
+                    </button>
+                    <button className={styles.btnDelete} onClick={handleCancelEdit}>
+                      Отменить
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className={styles.dtnEdit} onClick={handleEdit}>
+                      Редактировать
+                    </button>
+                    <button className={styles.btnDelete} onClick={() => handleDeleteClick(filteredData[selectedRows[0]].id)}>
+                      Удалить
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
+
       <DeleteModal
         isOpen={showDeleteModal}
-        text='Вы уверены, что хотите удалить выбранные элементы?'
-        onDelete={handleDelete}
+        onDelete={handleConfirmDelete}
         onCancel={handleCancelDelete}
+        text={'Вы уверены, что хотите удалить сотрудника?'}
       />
     </>
   );
 };
+
+export default Employees;

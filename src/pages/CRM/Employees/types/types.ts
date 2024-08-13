@@ -11,7 +11,7 @@ export interface Column {
   isEdit?: EditOptions | boolean | { value: boolean; component?: string };
 }
 
-interface IEmployeeRole {
+export interface IEmployeeRole {
   created_at: string;
   id: string;
   role_name: string;
@@ -19,6 +19,8 @@ interface IEmployeeRole {
 }
 
 export interface IEmployeeData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
   background: string;
   created_at: string;
   date_of_birth: string;
@@ -40,5 +42,14 @@ export interface IEmployeeData {
   status: number;
   updated_at: string;
   contracts: string[];
-  passports: string[];
+  passportBack: {
+    path: string;
+    filename: string;
+    original_name: string;
+  };
+  passportFront: {
+    path: string;
+    filename: string;
+    original_name: string;
+  };
 }
