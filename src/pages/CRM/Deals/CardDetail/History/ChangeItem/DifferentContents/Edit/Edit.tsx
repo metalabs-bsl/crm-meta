@@ -33,9 +33,13 @@ export const Edit: FC<IProps> = ({ data }) => {
           <span className={styles.description}>{description}</span>
         </div>
         <div className={styles.bottom}>
-          <span className={cn(styles.blocks, styles[detail.prev.color])}>{detail.prev.label}</span>
+          <span style={{ background: detail.prev.color }} className={cn(styles.blocks, styles[detail.prev.color])}>
+            {detail.prev.label}
+          </span>
           <Icon type='arrow-left' />
-          <span className={cn(styles.blocks, styles[detail.current.color])}>{detail.current.label}</span>
+          <span style={{ background: detail.current.color }} className={cn(styles.blocks, styles[detail.current.color])}>
+            {detail.current.label}
+          </span>
         </div>
       </div>
     );
