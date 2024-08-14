@@ -22,7 +22,7 @@ export const App = () => {
   const routes = useRoutes(getRoutes(role));
   const { pathname } = useLocation();
   const { bgType } = useAppSelector(employeesSelectors.employees);
-  const [getData] = useLazyGetUserInfoQuery();
+  const [getData, { isFetching }] = useLazyGetUserInfoQuery();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -42,13 +42,15 @@ export const App = () => {
 
   return (
     <NotificationLayout>
-      <main className={cn(styles.main, styles[bgType], { [styles.unAuth]: pathname === adminPath.login })}>
-        <Header />
-        <div className={styles.content}>
-          <Sidebar />
-          <Suspense fallback={<Loading isSpin />}>{routes}</Suspense>
-        </div>
-      </main>
+      <Loading isSpin={isFetching}>
+        <main className={cn(styles.main, styles[bgType], { [styles.unAuth]: pathname === adminPath.login })}>
+          <Header />
+          <div className={styles.content}>
+            <Sidebar />
+            <Suspense fallback={<Loading isSpin />}>{routes}</Suspense>
+          </div>
+        </main>
+      </Loading>
     </NotificationLayout>
   );
 };

@@ -3,6 +3,7 @@ export type IIcons = {
 };
 
 export type IIconType =
+  | 'whatsApp-svg'
   | 'reply-arrow'
   | 'go-back'
   | 'sms-gray'
