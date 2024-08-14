@@ -82,15 +82,6 @@ export interface Deals_Responsible extends IChangeMark {
   detailType: Deals_Type;
 }
 
-export interface Deals_Sail {
-  detailType: Deals_Type;
-}
-
-export interface Deals_Loss {
-  detailType: Deals_Type;
-  lossText: string;
-}
-
 export interface Deals_Calc {
   detailType: Deals_Type;
   prev: {
@@ -103,10 +94,10 @@ export interface Deals_Calc {
   };
 }
 
-export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Sail | Deals_Loss | Deals_Calc;
+export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Calc;
 
 //-------------------------------------------------------------
-export type IDetail = EditDetail | TodoDetail | Account | Deals_Create | DealsDetail;
+export type IDetail = EditDetail | TodoDetail | Account | DealsDetail;
 
 export interface Change {
   description: string;

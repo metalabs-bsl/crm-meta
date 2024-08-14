@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
+import { Empty } from 'common/ui';
 import { IColumn, Task } from 'types/entities';
 import { DraggableColumn } from './DraggableColumn';
 import styles from './styles.module.scss';
@@ -95,20 +96,26 @@ export const Kanban: FC<IProps> = ({ data, onChange, canDrag = true }) => {
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className={styles.kanbanBoardWrapper}>
-        <button className={cn(styles.navButton, styles.navButtonLeft)} onClick={() => scroll(-310)} disabled={!canScrollLeft}>
-          &lt;
-        </button>
-        <div className={styles.kanbanBoard} ref={scrollContainerRef}>
-          {columns.map((col, index) => (
-            <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} canDrag={canDrag} />
-          ))}
-        </div>
-        <button className={cn(styles.navButton, styles.navButtonRight)} onClick={() => scroll(310)} disabled={!canScrollRight}>
-          &gt;
-        </button>
-      </div>
-    </DndProvider>
+    <>
+      {data.length ? (
+        <DndProvider backend={HTML5Backend}>
+          <div className={styles.kanbanBoardWrapper}>
+            <button className={cn(styles.navButton, styles.navButtonLeft)} onClick={() => scroll(-310)} disabled={!canScrollLeft}>
+              &lt;
+            </button>
+            <div className={styles.kanbanBoard} ref={scrollContainerRef}>
+              {columns.map((col, index) => (
+                <DraggableColumn col={col} key={index} moveColumn={moveColumn} onDropTask={onCardDrop} index={index} canDrag={canDrag} />
+              ))}
+            </div>
+            <button className={cn(styles.navButton, styles.navButtonRight)} onClick={() => scroll(310)} disabled={!canScrollRight}>
+              &gt;
+            </button>
+          </div>
+        </DndProvider>
+      ) : (
+        <Empty />
+      )}
+    </>
   );
 };

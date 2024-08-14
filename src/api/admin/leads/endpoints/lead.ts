@@ -1,4 +1,5 @@
 import { Options } from 'types/pages';
+import { historyApi } from 'api/admin/history/history.api';
 import {
   ICreateComment,
   ICreateLead,
@@ -28,7 +29,11 @@ export const leadApi = leadsMainApi.injectEndpoints({
         url: `/leads/update/${id}`,
         body
       }),
-      invalidatesTags: ['Detail-Lead']
+      invalidatesTags: ['Detail-Lead'],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(historyApi.util.invalidateTags(['History']));
+      }
     }),
     getSourseLead: query<Options[], ISourceLead.Params>({
       query: () => `/leadSources`,
@@ -90,7 +95,11 @@ export const leadApi = leadsMainApi.injectEndpoints({
         url: `/leads/column`,
         body
       }),
-      invalidatesTags: ['Detail-Lead']
+      invalidatesTags: ['Detail-Lead'],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(historyApi.util.invalidateTags(['History']));
+      }
     }),
     deleteLead: mutation<IDeleteLead.Response, IDeleteLead.Params>({
       query: (id) => ({

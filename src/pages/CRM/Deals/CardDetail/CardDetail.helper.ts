@@ -145,23 +145,6 @@ export const history: Record<string, Change[]> = {
       }
     },
     {
-      description: 'Результат закрытия сделки',
-      timestamp: '14:00',
-      status: 'history-deal',
-      detail: {
-        detailType: 'deals-sail'
-      }
-    },
-    {
-      description: 'Результат закрытия сделки',
-      timestamp: '14:00',
-      status: 'history-deal',
-      detail: {
-        detailType: 'deals-loss',
-        lossText: 'Не те даты'
-      }
-    },
-    {
       description: 'Калькулятор',
       timestamp: '14:00',
       status: 'history-deal',
