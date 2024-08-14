@@ -104,4 +104,5 @@ export interface Change {
   timestamp: string;
   status: IChangeItemStatus;
   detail?: IDetail;
+  employee: string;
 }

@@ -19,7 +19,7 @@ const isEditNaming = (detail: IDetail): detail is Edit_Naming => detail.detailTy
 const isEditOther = (detail: IDetail): detail is Edit_Other => detail.detailType === EDIT_TYPE_ENUM.OTHER;
 
 export const Edit: FC<IProps> = ({ data }) => {
-  const { description, detail } = data;
+  const { description, detail, employee } = data;
 
   if (!detail) {
     return null;
@@ -28,9 +28,12 @@ export const Edit: FC<IProps> = ({ data }) => {
   if (isEditStatus(detail)) {
     return (
       <div className={styles.editContent}>
-        <div className={styles.head}>
-          <span>Редактирование:</span>
-          <span className={styles.description}>{description}</span>
+        <div className={styles.headline}>
+          <div className={styles.head}>
+            <span>Редактирование:</span>
+            <span className={styles.description}>{description}</span>
+          </div>
+          <span className={styles.employee}>{employee}</span>
         </div>
         <div className={styles.bottom}>
           <span style={{ background: detail.prev.color }} className={cn(styles.blocks, styles[detail.prev.color])}>
@@ -48,9 +51,12 @@ export const Edit: FC<IProps> = ({ data }) => {
   if (isEditNaming(detail)) {
     return (
       <div className={styles.editContent}>
-        <div className={styles.head}>
-          <span>Редактирование:</span>
-          <span className={styles.description}>{description}</span>
+        <div className={styles.headline}>
+          <div className={styles.head}>
+            <span>Редактирование:</span>
+            <span className={styles.description}>{description}</span>
+          </div>
+          <span className={styles.employee}>{employee}</span>
         </div>
         <div className={styles.bottom}>
           <span className={styles.blocks}>{detail.prev}</span>
@@ -64,9 +70,12 @@ export const Edit: FC<IProps> = ({ data }) => {
   if (isEditOther(detail)) {
     return (
       <div className={styles.editContent}>
-        <div className={styles.head}>
-          <span>Редактирование:</span>
-          <span className={styles.description}>{description}</span>
+        <div className={styles.headline}>
+          <div className={styles.head}>
+            <span>Редактирование:</span>
+            <span className={styles.description}>{description}</span>
+          </div>
+          <span className={styles.employee}>{employee}</span>
         </div>
         <div className={styles.bottom_other}>
           {detail.items.map((item, index) => (

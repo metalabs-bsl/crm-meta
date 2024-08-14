@@ -22,7 +22,7 @@ const isResponsible = (detail: IDetail): detail is Deals_Responsible => detail.d
 const isCalc = (detail: IDetail): detail is Deals_Calc => detail.detailType === DEAL_TYPE_ENUM.CALC;
 
 export const Deal: FC<IProps> = ({ data }) => {
-  const { description, detail } = data;
+  const { description, detail, employee } = data;
 
   if (!detail) {
     return null;
@@ -31,9 +31,12 @@ export const Deal: FC<IProps> = ({ data }) => {
   if (isDealCreate(detail)) {
     return (
       <div className={styles.deal}>
-        <span className={styles.title}>
-          Сделка: <span className={styles.descTitle}>{description}</span>
-        </span>
+        <div className={styles.headline}>
+          <span className={styles.title}>
+            Сделка: <span className={styles.descTitle}>{description}</span>
+          </span>
+          <span className={styles.employee}>{employee}</span>
+        </div>
         <span className={styles.description}>{detail.title}</span>
       </div>
     );
@@ -42,9 +45,12 @@ export const Deal: FC<IProps> = ({ data }) => {
   if (isPaidStatus(detail)) {
     return (
       <div className={styles.deal}>
-        <span className={styles.title}>
-          Сделка: <span className={styles.descTitle}>{description}</span>
-        </span>
+        <div className={styles.headline}>
+          <span className={styles.title}>
+            Сделка: <span className={styles.descTitle}>{description}</span>
+          </span>
+          <span className={styles.employee}>{employee}</span>
+        </div>
         <div className={styles.bottom}>
           <span style={{ background: detail.current.color }} className={cn(styles.blocks, styles[detail.prev.color])}>
             {detail.prev.label}
@@ -61,9 +67,12 @@ export const Deal: FC<IProps> = ({ data }) => {
   if (isResponsible(detail)) {
     return (
       <div className={styles.deal}>
-        <span className={styles.title}>
-          Сделка: <span className={styles.descTitle}>{description}</span>
-        </span>
+        <div className={styles.headline}>
+          <span className={styles.title}>
+            Сделка: <span className={styles.descTitle}>{description}</span>
+          </span>
+          <span className={styles.employee}>{employee}</span>
+        </div>
         <div className={styles.bottom}>
           <span className={styles.blocks}>{detail.prev}</span>
           <Icon type='arrow-left' />
@@ -76,9 +85,12 @@ export const Deal: FC<IProps> = ({ data }) => {
   if (isCalc(detail)) {
     return (
       <div className={styles.deal}>
-        <span className={styles.title}>
-          Доступ: <span className={styles.descTitle}>{description}</span>
-        </span>
+        <div className={styles.headline}>
+          <span className={styles.title}>
+            Доступ: <span className={styles.descTitle}>{description}</span>
+          </span>
+          <span className={styles.employee}>{employee}</span>
+        </div>
         <div className={styles.bottom}>
           <div className={styles.bottom}>
             <span className={styles.blocks}>
