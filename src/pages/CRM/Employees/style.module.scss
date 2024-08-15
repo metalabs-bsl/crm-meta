@@ -33,57 +33,48 @@
   background: $white;
   height: auto;
   border-radius: 10px;
+  .modal {
+    max-width: 788px;
+  }
 }
 
-.employeesTable {
+.tableContainer {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  border-collapse: collapse;
+  overflow-x: auto; /* Включаем горизонтальный скроллинг */
   border-radius: 10px;
-  overflow: hidden;
-  background-color: $white;
 }
 
-.employeesTable th,
-.employeesTable td {
-  padding: 20px 10px;
-  text-align: left;
-  border-bottom: 1px solid $table-bottom-solid;
-  vertical-align: middle;
+.table {
+  display: grid;
+  grid-template-columns: 90px repeat(13, minmax(150px, 1fr));
+  border-collapse: collapse;
+  min-width: 2040px;
 }
 
-.employeesTable th {
-  background-color: $input-edit-bg;
-  color: $table-title-color;
-  font-weight: 400;
+.tableHeader {
+  display: contents;
 }
 
-.employeesTable td {
-  color: $table-column-color;
-  word-wrap: break-word;
-}
-
-.main_checkbox {
-  margin-bottom: 20px;
-  margin-left: 12px;
-}
-
-.checkbox {
+.headerItem {
+  padding: 9px;
+  height: 54px;
+  border: 1px solid #ccc;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin-bottom: 20px;
-  margin-left: 8px;
+  justify-content: flex-start;
+  background-color: $seaSalt;
+  &:first-child {
+    left: 0;
+    z-index: 10;
+    position: sticky;
+  }
 }
 
-.editInput,
-.editSelect {
-  background: $input-edit-bg;
-  border: none;
-  outline: none;
-  padding: 7px;
-  border-radius: 5px;
-  font-size: 15px;
+.tableHeader {
+  background-color: #f1f1f1;
+  font-weight: bold;
 }
 
 .actionButtons {
@@ -95,20 +86,11 @@
   padding-bottom: 20px;
 }
 
-.dtnEdit {
+.btnEdit {
   padding: 5px 20px;
   background: $yellow-btn-bg;
   font-size: 16px;
   color: $gray-btn-bg-hover;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.btnDelete {
-  padding: 5px 20px;
-  background: $gray-btn;
-  font-size: 16px;
   border: none;
   border-radius: 10px;
   cursor: pointer;

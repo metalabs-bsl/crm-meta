@@ -12,7 +12,7 @@ const MessageModal: FC<ModalProps> = ({ setModalActive }) => {
     recipient: '',
     subject: '',
     message: '',
-    signature: 'С уважением Абдулла и команда Хакуна Матата'
+    signature: 'С уважением Абдулла и команда "Тони Старк" :)'
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
