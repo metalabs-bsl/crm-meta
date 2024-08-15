@@ -7,16 +7,21 @@
     border-radius: 5px;
     background-color: $seaSalt;
     padding: 9px 15px;
-    padding-right: 35px;
+    padding-right: 70px;
     position: relative;
-    cursor: pointer;
     font-weight: 400;
     font-size: 16px;
     .arrow {
       position: absolute;
-      right: 15px;
+      right: 10px;
       transition: all 0.3s;
       top: 25%;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      img {
+        cursor: pointer;
+      }
     }
     .arrow_closed {
       transform: rotate(180deg);
@@ -35,6 +40,7 @@
     background-color: $white;
     max-height: 120px;
     overflow-y: scroll;
+    z-index: 100;
     &::-webkit-scrollbar {
       display: none;
     }

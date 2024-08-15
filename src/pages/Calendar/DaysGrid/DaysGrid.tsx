@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import dayjs, { Dayjs, extend } from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import utc from 'dayjs/plugin/utc';
 import weekday from 'dayjs/plugin/weekday';
 import cn from 'classnames';
-import { Birthday, Note } from 'types/pages';
 import { Icon } from 'common/ui';
 import { BirthDayModal, Modal } from 'common/components';
+import { Birthday, Note } from 'types/entities';
 import { NoteForm } from '../NoteForm';
 import styles from './styles.module.scss';
 
 extend(weekday);
 extend(isoWeek);
+extend(utc);
 
 interface DaysGridProps {
   currentMonth: Dayjs;
@@ -24,8 +26,8 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
   const [currentBirthday, setCurrentBirthday] = useState<Birthday | null>(null);
   const [birthdayOpen, setBirthdayOpen] = useState<boolean>(false);
 
-  const today = dayjs();
-  const startOfMonth = currentMonth.startOf('month');
+  const today = dayjs().utc();
+  const startOfMonth = currentMonth.startOf('month').utc();
   const daysInMonth = currentMonth.daysInMonth();
   const startDay = startOfMonth.day();
 
@@ -61,17 +63,13 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
     setBirthdayOpen(false);
   };
 
-  const editNote = () => {
-    console.log('edit');
+  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).utc().isSame(day, 'day'));
+  const getBirthdaysForDay = (day: Dayjs) => {
+    return birthdays.filter((birthday) => {
+      const birthdayDate = dayjs(birthday.date).utc();
+      return birthdayDate.month() === day.month() && birthdayDate.date() === day.date();
+    });
   };
-
-  const deleteNote = () => {
-    console.log('edit');
-    onCloseFormModal();
-  };
-
-  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).isSame(day, 'day'));
-  const getBirthdaysForDay = (day: Dayjs) => birthdays.filter((birthday) => dayjs(birthday.date).isSame(day, 'day'));
 
   return (
     <div className={styles.calendar_grid}>
@@ -118,7 +116,7 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
       </div>
       {currentNote && (
         <Modal isOpen={noteOpen} onClose={onCloseFormModal}>
-          <NoteForm deleteAction={deleteNote} editAction={editNote} formProps={currentNote} />
+          <NoteForm formProps={currentNote} onCloseModal={onCloseFormModal} />
         </Modal>
       )}
       {currentBirthday && <BirthDayModal isOpen={birthdayOpen} data={currentBirthday} onCancel={onCloseBirthdayModal} />}

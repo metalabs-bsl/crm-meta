@@ -1,8 +1,8 @@
 import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
-import { Options } from 'types/pages';
 import { Checkbox, DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
+import { Options } from 'types/common';
 import { paymentRowHeaders } from '../../../Account.helper';
 import styles from './styles.module.scss';
 

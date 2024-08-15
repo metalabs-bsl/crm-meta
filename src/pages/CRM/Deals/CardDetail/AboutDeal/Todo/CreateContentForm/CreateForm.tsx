@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Options } from 'types/pages';
 import { Button, DatePicker, Loading, Select } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useCreateCommentMutation, useCreateReminderMutation } from 'api/admin/leads/endpoints/lead';
+import { Options } from 'types/common';
 import { ICreateReminderParams } from 'types/entities';
 import styles from './style.module.scss';
 

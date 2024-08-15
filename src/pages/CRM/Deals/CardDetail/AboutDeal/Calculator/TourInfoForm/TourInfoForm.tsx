@@ -1,12 +1,12 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import cn from 'classnames';
-import { Options } from 'types/pages';
 import { DatePicker, Input, Loading, MultipleSelect, Select } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE, servicesOptions } from 'common/constants';
 import { useSetTourDataMutation } from 'api/admin/leads/endpoints/calculator';
+import { Options } from 'types/common';
 import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
 import { brandOptions, categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
@@ -25,6 +25,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps }) => {
   const passengersRef = useRef(null);
   const [isOpenPassengersModal, setIsOpenPassengersModal] = useState<boolean>(false);
   const [isEditTourInfo, setIsEditTourInfo] = useState<boolean>(false);
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
   const [passengerCounts, setPassengerCounts] = useState<PassengerCounts>({
     adults: 0,
     children: 0
@@ -186,10 +187,13 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps }) => {
             <div className={styles.item_block}>
               <label>Услуга</label>
               <MultipleSelect
+                openSelect={openSelect}
+                setOpenSelect={setOpenSelect}
+                selectId='services'
                 onChange={setServises}
                 options={servicesOptions}
                 disabled={isEditable}
-                placeholder='не выбрано'
+                placeholder='Не выбрано'
                 defaultValue={servises}
               />
             </div>
