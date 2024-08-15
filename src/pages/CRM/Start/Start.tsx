@@ -1,8 +1,8 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { Options } from 'types/pages';
 import { SearchInput, Select } from 'common/ui';
 import { useAppSelector } from 'common/hooks';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { Options } from 'types/common';
 import { ROLES } from 'types/roles';
 import { General } from './General';
 import { Personal } from './Personal';

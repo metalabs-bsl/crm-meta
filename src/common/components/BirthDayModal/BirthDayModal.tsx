@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Birthday } from 'types/pages';
 import { Icon } from 'common/ui';
+import { Birthday } from 'types/entities';
 import { Modal } from '../Modal';
 import styles from './styles.module.scss';
 
@@ -19,7 +19,7 @@ export const BirthDayModal: FC<IProps> = ({ isOpen = false, onCancel, data }) =>
         </div>
         <div className={styles.data}>
           <p className={styles.name_wrapper}>
-            День рождения клиента <br /> <span className={styles.name}>{data?.name}</span>
+            День рождения {data?.type === 1 ? 'сотрудника' : 'клиента'} <br /> <span className={styles.name}>{data?.name}</span>
           </p>
           <p className={styles.phone_wrapper}>
             номер телефона: <span className={styles.phone}>{data?.phone}</span>

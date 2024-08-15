@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
-import { Options } from 'types/pages';
 import { Button, SearchInput, Select } from 'common/ui';
 import { AccessChangeble, EdgeModal } from 'common/components';
 import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/hooks';
@@ -10,6 +9,7 @@ import { useGetAppSettingsQuery, useUpdateAppSettingsMutation } from 'api/admin/
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useLazyGetLeadsForTodoQuery, useLazySearchLeadsQuery } from 'api/admin/leads/endpoints/lead';
 import { setChangeOpenEdgeModal, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
+import { Options } from 'types/common';
 import { ROLES } from 'types/roles';
 import { CardDetail } from './CardDetail';
 import { DEALS_TABS, mainTabs } from './Deals.helper';

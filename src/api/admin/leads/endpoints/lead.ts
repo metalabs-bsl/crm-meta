@@ -1,5 +1,5 @@
-import { Options } from 'types/pages';
 import { historyApi } from 'api/admin/history/history.api';
+import { Options } from 'types/common';
 import {
   ICreateComment,
   ICreateLead,
