@@ -12,9 +12,11 @@ export interface IResponsibleEmployees {
 
 export type IResResponsible = IResponsibleEmployees[];
 
-interface IRole {
+export interface IRole {
+  created_at: string;
   id: string;
   role_name: UserRoleUnionType;
+  updated_at: string;
 }
 
 interface IAvatar {
@@ -53,7 +55,7 @@ export interface IEmployee {
   date_of_birth: string;
   email: string;
   email_password: string;
-  end_of_internship: string;
+  end_of_internship?: string;
   first_name: string;
   id: string;
   job_title: string;
@@ -68,15 +70,16 @@ export interface IEmployee {
   start_of_work: string;
   status: number;
   updated_at: string;
-  contracts: string[];
-  passportFront: {
-    path: string;
-    filename: string;
+  contract: {
+    id: string;
     original_name: string;
   };
-  passportBack: {
-    path: string;
-    filename: string;
+  passport_back: {
+    id: string;
+    original_name: string;
+  };
+  passport_front: {
+    id: string;
     original_name: string;
   };
 }

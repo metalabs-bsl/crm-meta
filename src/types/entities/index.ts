@@ -1,6 +1,6 @@
 export type { IResAppSettings, IUpdateAppSettings } from './appSettings';
 export type { IResCurrenciesLast } from './currencies';
-export type { iAddEmployee, IEmployee, IResResponsible, IUserInfoRes } from './employees';
+export type { iAddEmployee, IEmployee, IResResponsible, IRole, IUserInfoRes } from './employees';
 export type { IResExchangeRates } from './exchangeRates';
 export * from './history';
 export type { IColumn, IColumnInfo, ICreateColumnParams, ICustomer, IGetColumnsRes, Task } from './kanban';

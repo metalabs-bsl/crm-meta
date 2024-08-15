@@ -12,44 +12,41 @@ export interface Column {
 }
 
 export interface IEmployeeRole {
-  created_at: string;
   id: string;
   role_name: string;
-  updated_at: string;
 }
 
 export interface IEmployeeData {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-  background: string;
-  created_at: string;
+  background?: string;
+  created_at?: string;
   date_of_birth: string;
   email: string;
   email_password: string;
-  end_of_internship: string;
-  first_name: string;
+  end_of_internship?: string;
+  first_name?: string;
   id: string;
   job_title: string;
   login: string;
-  middle_name: string;
-  password: string;
+  middle_name?: string;
+  password?: string;
   phone: string;
-  refreshToken: string;
+  refreshToken?: string;
   roles: IEmployeeRole[];
-  second_name: string;
+  second_name?: string;
   start_of_internship: string;
   start_of_work: string;
-  status: number;
-  updated_at: string;
-  contracts: string[];
-  passportBack: {
-    path: string;
-    filename: string;
+  status?: number;
+  updated_at?: string;
+  contract?: {
+    id: string;
     original_name: string;
   };
-  passportFront: {
-    path: string;
-    filename: string;
+  passport_back?: {
+    id: string;
+    original_name: string;
+  };
+  passport_front?: {
+    id: string;
     original_name: string;
   };
 }

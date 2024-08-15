@@ -2,8 +2,8 @@ import { FC, FormEvent, useState } from 'react';
 import { FilePicker, Loading } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useCreateEmployeeMutation } from 'api/admin/employees/employees.api';
-import { getEngStatus } from '../Employees.helper';
+import { useCreateEmployeeMutation, useGetEmployeeRolesQuery } from 'api/admin/employees/employees.api';
+import { getRusRole } from '../Employees.helper';
 import styles from './style.module.scss';
 
 import { BG_TYPES } from 'types/enums';
@@ -12,13 +12,14 @@ interface IProps {
   setShowAddEmployee: (arg0: boolean) => void;
 }
 
-const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
+export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
   const notify = useNotify();
+  const { data: roles } = useGetEmployeeRolesQuery();
   const [firstName, setFirstName] = useState<string>('');
   const [secondName, setSecondName] = useState<string>('');
   const [middleName, setMiddleName] = useState<string>('');
   const [dateOfBirth, setDateOfBirth] = useState<string>('');
-  const [status, setStatus] = useState<string>('');
+  const [role, setRole] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [emailPassword, setEmailPassword] = useState<string>('');
@@ -34,35 +35,16 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // это создано временно и перестанет работать как только сотрётся база
-    const roles = [
-      {
-        id: 'ecc5edf6-6774-4dec-bb63-0c27d7c06777',
-        role_name: 'Intern'
-      },
-      {
-        id: '2d5e047a-56ac-4d90-924f-7c52174de3dc',
-        role_name: 'Manager'
-      },
-      {
-        id: '3b2fbba6-5fd0-41f5-b092-f619d82bd93a',
-        role_name: 'Senior Manager'
-      },
-      {
-        id: '8bd6cb95-ecb6-4a2a-a634-a9930ac3a468',
-        role_name: 'Director'
-      }
-    ];
-
     const formData = new FormData();
     const employeeData = {
       login: loginCRM,
       password: passwordCRM,
-      job_title: status,
+      job_title: getRusRole(roles?.find((el) => el.id === role)?.role_name || ''),
       date_of_birth: dateOfBirth,
       first_name: firstName,
       second_name: secondName,
       email: email,
+      email_password: emailPassword,
       middle_name: middleName,
       phone: phone,
       start_of_internship: startInternship,
@@ -70,16 +52,15 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
       start_of_work: startWork,
       background: BG_TYPES.SECOND_TEXTURE,
       status: 1,
-      roles: [roles.find((role) => role.role_name === getEngStatus(status))]
-      // роль надо переделать на get запрос получения всех ролей когда будет готово в бэке
+      roles: [roles?.find((el) => el.id === role)]
     };
 
     formData.append('employeeInfo', JSON.stringify(employeeData));
 
     if (contractFile && frontPassport && backPassport) {
       formData.append(`contract`, contractFile);
-      formData.append(`frontPassport`, frontPassport);
-      formData.append(`backPassport`, backPassport);
+      formData.append(`passport_front`, frontPassport);
+      formData.append(`passport_back`, backPassport);
     }
 
     createEmployee(formData)
@@ -144,12 +125,13 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
             </div>
             <div className={styles.field}>
               <label>Статус</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                <option value=''>Выберите статус</option>
-                <option value='Стажёр'>Стажёр</option>
-                <option value='Менеджер'>Менеджер</option>
-                <option value='Менеджер-руководитель'>Менеджер-руководитель</option>
-                <option value='Руководитель'>Руководитель</option>
+              <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value={''}>Выберите должность</option>
+                {roles?.map((role) => (
+                  <option value={role.id} key={role.id}>
+                    {getRusRole(role.role_name)}
+                  </option>
+                ))}
               </select>
             </div>
             <div className={styles.field}>
@@ -243,5 +225,3 @@ const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
     </div>
   );
 };
-
-export default AddEmployees;

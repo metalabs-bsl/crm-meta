@@ -10,6 +10,7 @@ interface FilePickerProps {
   onChange?: (file: File | null) => void;
   defaultValue?: IPassportResponse;
   setIsAfterReset?: (e: boolean) => void;
+  className?: string;
 }
 
 export const FilePicker: React.FC<FilePickerProps> = ({
@@ -18,7 +19,8 @@ export const FilePicker: React.FC<FilePickerProps> = ({
   defaultValue,
   onDelete,
   isAfterReset = false,
-  setIsAfterReset
+  setIsAfterReset,
+  className
 }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -62,7 +64,7 @@ export const FilePicker: React.FC<FilePickerProps> = ({
   }, [isAfterReset]);
 
   return (
-    <div className={styles.picker_container}>
+    <div className={cn(styles.picker_container, className)}>
       {fileName ? (
         <div className={styles.with_file}>
           <div className={styles.fileBox}>

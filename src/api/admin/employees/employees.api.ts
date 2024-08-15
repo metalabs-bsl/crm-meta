@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
-import { IGetAllEmployees, IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
+import { IGetAllEmployees, IGetEmployeeRoles, IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
 
 import { BG_TYPES } from 'types/enums';
 
@@ -70,12 +70,15 @@ export const employessApi = createApi({
       }),
       invalidatesTags: ['EmployeesList']
     }),
-    // получение паспортов
+    // получение паспортов (уточнить нужно ли оно ещё)
     getPassportFront: query({
       query: (employeeId) => `/employees/passport-front/${employeeId}`
     }),
     getPassportBack: query({
       query: (employeeId) => `/employees/passport-back/${employeeId}`
+    }),
+    getEmployeeRoles: query<IGetEmployeeRoles.Response, IGetEmployeeRoles.Params>({
+      query: () => `/roles`
     })
   })
 });
@@ -91,5 +94,6 @@ export const {
   useDeleteEMployeeMutation,
   useUpdateEmployeeInfoMutation,
   useGetPassportFrontQuery,
-  useGetPassportBackQuery
+  useGetPassportBackQuery,
+  useGetEmployeeRolesQuery
 } = employessApi;
