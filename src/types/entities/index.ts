@@ -1,4 +1,5 @@
 export type { IResAppSettings, IUpdateAppSettings } from './appSettings';
+export type { Birthday, ICalendarDataRes, Note } from './calendar';
 export type { IResCurrenciesLast } from './currencies';
 export type { iAddEmployee, IEmployee, IResResponsible, IRole, IUserInfoRes } from './employees';
 export type { IResExchangeRates } from './exchangeRates';

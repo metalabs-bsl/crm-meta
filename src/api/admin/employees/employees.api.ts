@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { Options } from 'types/pages';
 import { getBaseQuery } from 'common/helpers';
+import { Options } from 'types/common';
 import { IGetAllEmployees, IGetEmployeeRoles, IGetResponsibleEmployees, IGetUserInfo } from 'types/requests/admin/employees.api';
 
 import { BG_TYPES } from 'types/enums';

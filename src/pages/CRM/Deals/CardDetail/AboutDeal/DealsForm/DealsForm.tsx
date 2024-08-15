@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import dayjs from 'dayjs';
 import cn from 'classnames';
 import { Button, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
@@ -43,11 +42,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
-        if (key === 'customer_DOB') {
-          setValue(key as keyof ICreateLeadParams, dayjs(formProps[key as keyof ICreateLeadParams]).format('YYYY-MM-DDTHH:mm'));
-        } else {
-          setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
-        }
+        setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
       });
     }
   }, [formProps, setValue]);

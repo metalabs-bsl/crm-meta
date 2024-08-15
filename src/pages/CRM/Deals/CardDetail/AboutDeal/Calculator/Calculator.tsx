@@ -1,12 +1,12 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
-import { Options } from 'types/pages';
 import { Loading, Select } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useChoicePaymentToggleMutation, useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
+import { Options } from 'types/common';
 import { ICalculator, IResCalc, IUpdateContract } from 'types/entities/leads';
 import { PaymentsDetails } from './PaymentDetailsFrom/PaymentsDetails';
 import { AgreementForm } from './AgreementForm';

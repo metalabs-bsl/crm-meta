@@ -1,17 +1,17 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { Icon } from 'common/ui';
-import { Change } from 'types/entities';
+import { Change, IChangeItemStatus } from 'types/entities';
 import { HISTORY_ITEMS } from '../History.helper';
 import { Accounts, Comment, Deal, Edit, Todo } from './DifferentContents';
 import styles from '../styles.module.scss';
 
 interface IProps {
-  changes: Change;
+  change: Change;
   isFirstItem: boolean;
   isFirstGroup: boolean;
 }
-export const ChangeItem: FC<IProps> = ({ changes, isFirstItem, isFirstGroup }) => {
-  const { status } = changes;
+export const ChangeItem: FC<IProps> = ({ change, isFirstItem, isFirstGroup }) => {
+  const { status } = change;
   const itemRef = useRef<HTMLDivElement>(null);
   const [lineHeight, setLineHeight] = useState<number>(0);
 
@@ -21,13 +21,13 @@ export const ChangeItem: FC<IProps> = ({ changes, isFirstItem, isFirstGroup }) =
     }
   }, [isFirstItem, isFirstGroup]);
 
-  const getContent = () => {
+  const getContent = (status: IChangeItemStatus) => {
     const components = {
-      [HISTORY_ITEMS.Edit]: <Edit data={changes} />,
-      [HISTORY_ITEMS.TODO]: <Todo data={changes} />,
-      [HISTORY_ITEMS.COMMENT]: <Comment data={changes} />,
-      [HISTORY_ITEMS.ACCOUNTS]: <Accounts data={changes} />,
-      [HISTORY_ITEMS.DEAL]: <Deal data={changes} />
+      [HISTORY_ITEMS.Edit]: <Edit data={change} />,
+      [HISTORY_ITEMS.TODO]: <Todo data={change} />,
+      [HISTORY_ITEMS.COMMENT]: <Comment data={change} />,
+      [HISTORY_ITEMS.ACCOUNTS]: <Accounts data={change} />,
+      [HISTORY_ITEMS.DEAL]: <Deal data={change} />
     };
     return components[status];
   };
@@ -42,7 +42,7 @@ export const ChangeItem: FC<IProps> = ({ changes, isFirstItem, isFirstGroup }) =
           <Icon type={status} />
         </div>
       </div>
-      <div className={styles.change_content}>{getContent()}</div>
+      <div className={styles.change_content}>{getContent(status)}</div>
     </div>
   );
 };
