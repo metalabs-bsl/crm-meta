@@ -1,4 +1,3 @@
-import { IEmployeeRole } from 'pages/CRM/Employees/types/types';
 import { UserRoleUnionType } from 'types/roles/roles';
 
 import { BG_TYPES } from 'types/enums';
@@ -64,7 +63,7 @@ export interface IEmployee {
   password: string;
   phone: string;
   refreshToken: string;
-  roles: IEmployeeRole[];
+  roles: IRole[];
   second_name: string;
   start_of_internship: string;
   start_of_work: string;

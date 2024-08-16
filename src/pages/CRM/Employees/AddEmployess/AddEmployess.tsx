@@ -14,7 +14,7 @@ interface IProps {
 
 export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
   const notify = useNotify();
-  const { data: roles } = useGetEmployeeRolesQuery();
+  const { data: rolesAll } = useGetEmployeeRolesQuery();
   const [firstName, setFirstName] = useState<string>('');
   const [secondName, setSecondName] = useState<string>('');
   const [middleName, setMiddleName] = useState<string>('');
@@ -39,7 +39,7 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
     const employeeData = {
       login: loginCRM,
       password: passwordCRM,
-      job_title: getRusRole(roles?.find((el) => el.id === role)?.role_name || ''),
+      job_title: getRusRole(rolesAll?.find((el) => el.id === role)?.role_name || ''),
       date_of_birth: dateOfBirth,
       first_name: firstName,
       second_name: secondName,
@@ -52,7 +52,7 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
       start_of_work: startWork,
       background: BG_TYPES.SECOND_TEXTURE,
       status: 1,
-      roles: [roles?.find((el) => el.id === role)]
+      roles: [rolesAll?.find((el) => el.id === role)]
     };
 
     formData.append('employeeInfo', JSON.stringify(employeeData));
@@ -61,6 +61,10 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
       formData.append(`contract`, contractFile);
       formData.append(`passport_front`, frontPassport);
       formData.append(`passport_back`, backPassport);
+    }
+
+    for (const [key, value] of formData.entries()) {
+      console.log(`Key: ${key}, Value: ${value}`);
     }
 
     createEmployee(formData)
@@ -127,7 +131,7 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
               <label>Статус</label>
               <select value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value={''}>Выберите должность</option>
-                {roles?.map((role) => (
+                {rolesAll?.map((role) => (
                   <option value={role.id} key={role.id}>
                     {getRusRole(role.role_name)}
                   </option>

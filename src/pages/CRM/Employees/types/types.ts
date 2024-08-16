@@ -1,3 +1,5 @@
+import { IRole } from 'types/entities';
+
 export { Employees } from '../Employees';
 
 export interface EditOptions {
@@ -9,11 +11,6 @@ export interface Column {
   title: string;
   key: string;
   isEdit?: EditOptions | boolean | { value: boolean; component?: string };
-}
-
-export interface IEmployeeRole {
-  id: string;
-  role_name: string;
 }
 
 export interface IEmployeeData {
@@ -31,7 +28,7 @@ export interface IEmployeeData {
   password?: string;
   phone: string;
   refreshToken?: string;
-  roles: IEmployeeRole[];
+  roles: IRole[];
   second_name?: string;
   start_of_internship: string;
   start_of_work: string;

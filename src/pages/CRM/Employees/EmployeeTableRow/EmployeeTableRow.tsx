@@ -1,7 +1,9 @@
 import { FC, useState } from 'react';
 import cn from 'classnames';
 import { FilePicker, Icon } from 'common/ui';
-import { useGetEmployeeRolesQuery } from 'api/admin/employees/employees.api';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useCreateEmployeeMutation, useGetEmployeeRolesQuery } from 'api/admin/employees/employees.api';
 import { getRusRole } from '../Employees.helper';
 import { IEmployeeData } from '../types/types';
 import styles from './styles.module.scss';
@@ -28,7 +30,9 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   passport_back,
   handleDelete
 }) => {
+  const notify = useNotify();
   const { data: rolesAll } = useGetEmployeeRolesQuery();
+  const [createEmployee] = useCreateEmployeeMutation();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth.split('T')[0]);
   const [role, setRole] = useState<string>(roles[0].id);
@@ -39,9 +43,9 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const [startOfWork, setStartOfWork] = useState<string>(start_of_work?.split('T')[0] || '');
   const [loginCRM, setLoginCRM] = useState<string>(login || '');
   const [passwordCRM, setPasswordCRM] = useState<string>('');
-  const [contractLocal] = useState<{ id: string; original_name: string } | undefined>(contract);
-  const [passportFrontLocal] = useState<{ id: string; original_name: string } | undefined>(passport_front);
-  const [passportBackLocal] = useState<{ id: string; original_name: string } | undefined>(passport_back);
+  const [contractLocal, setContractLocal] = useState<{ id: string; original_name: string } | undefined>(contract);
+  const [passportFrontLocal, setPassportFrontLocal] = useState<{ id: string; original_name: string } | undefined>(passport_front);
+  const [passportBackLocal, setPassportBackLocal] = useState<{ id: string; original_name: string } | undefined>(passport_back);
 
   const [contractLocalFile, setContractLocalFile] = useState<File | null>(null);
   const [frontPassportLocalFile, setFrontPassportLocalFile] = useState<File | null>(null);
@@ -49,24 +53,25 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
 
   const handleSubmit = async () => {
     const formData = new FormData();
+
     const employeeData: IEmployeeData = {
       id: id,
       date_of_birth: dateOfBirth,
-      job_title: '',
+      job_title: getRusRole(rolesAll?.find((el) => el.id === role)?.role_name || ''),
       phone: phoneNumber,
       email: emailData,
       email_password: emailPassword,
       start_of_internship: startOfInternship,
       start_of_work: startOfWork,
       login: loginCRM,
-      roles: []
-      // roles: [roles.find((role) => role.role_name === getEngStatus(status))]
-      // роль надо переделать на get запрос получения всех ролей когда будет готово в бэке
+      //@ts-ignore
+      roles: [rolesAll?.find((el) => el.id === role)]
     };
 
     if (passwordCRM) {
       employeeData.password = passwordCRM;
     }
+
     formData.append('employeeInfo', JSON.stringify(employeeData));
 
     if (contractLocalFile) {
@@ -79,8 +84,26 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       formData.append(`passport_back`, backPassportLocalFile);
     }
 
-    console.log('save', formData);
+    for (const [key, value] of formData.entries()) {
+      console.log(`Key: ${key}, Value: ${value}`);
+    }
+
+    createEmployee(formData)
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.SUCCESS, 'success');
+        setIsEdit(false);
+      })
+      .catch(() => notify(MESSAGE.ERROR, 'error'));
   };
+
+  // const handleLinkClick = (fileId: string, fileName: string) => {
+  //   const link = document.createElement('a');
+  //   link.href = `${process.env.REACT_APP_BASE_URL}/files/download/${fileId}`;
+  //   link.download = fileName;
+  //   link.click();
+  //   link.remove();
+  // };
 
   return (
     <div className={styles.tableRow}>
@@ -88,7 +111,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
         {!isEdit ? (
           <>
             <div className={styles.button} onClick={() => handleDelete(id)}>
-              <Icon type={'delete'} />
+              <Icon type={'delete'} className={styles.button_delete} />
             </div>
             <div className={styles.button}>
               <Icon type={'edit'} onClick={() => setIsEdit(true)} />
@@ -97,10 +120,10 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
         ) : (
           <>
             <div className={styles.button}>
-              <Icon type={'search-clear'} onClick={() => setIsEdit(false)} />
+              <Icon type={'search-clear'} className={styles.button_cancel} onClick={() => setIsEdit(false)} />
             </div>
-            <div className={styles.button} onClick={() => handleSubmit}>
-              <Icon type={'check'} />
+            <div className={styles.button} onClick={() => handleSubmit()}>
+              <Icon type={'check'} className={styles.button_check} />
             </div>
           </>
         )}
@@ -182,7 +205,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
             <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${contractLocal.id}`} download>
               {contractLocal.original_name}
             </a>
-            <Icon type={'delete'} />
+            {isEdit && <Icon type={'delete'} onClick={() => setContractLocal(undefined)} />}
           </div>
         ) : (
           <FilePicker className={styles.fileInput} onChange={setContractLocalFile} disabled={!isEdit} />
@@ -195,7 +218,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
             <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${passportFrontLocal.id}`} download target='_blank' rel='noreferrer'>
               {passportFrontLocal.original_name}
             </a>
-            <Icon type={'delete'} />
+            {isEdit && <Icon type={'delete'} onClick={() => setPassportFrontLocal(undefined)} />}
           </div>
         ) : (
           <FilePicker className={styles.fileInput} onChange={setFrontPassportLocalFile} disabled={!isEdit} />
@@ -208,7 +231,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
             <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${passportBackLocal.id}`} download>
               {passportBackLocal.original_name}
             </a>
-            <Icon type={'delete'} />
+            {isEdit && <Icon type={'delete'} onClick={() => setPassportBackLocal(undefined)} />}
           </div>
         ) : (
           <FilePicker className={styles.fileInput} onChange={setBackPassportLocalFile} disabled={!isEdit} />
