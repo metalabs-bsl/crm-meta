@@ -9,10 +9,22 @@ type MockDataType = {
 };
 
 const mockData = {
-  conversionPercent: 25 // например, 25%
+  conversionPercent: 100 // например, 25%
 };
 
 export const Settings = () => {
+  const [conversionSwitchBtn, setConversionSwitchBtn] = useState(false);
+  const [profitSwitchBtn, setProfitSwitchBtn] = useState(false);
+  const [paxSwitchBtn, setPaxSwitchBtn] = useState(false);
+  const [conversionPercent, setConversionPercent] = useState(mockData.conversionPercent);
+  const [conversionIsEditing, setConversionIsEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [originalConversionPercent, setOriginalConversionPercent] = useState(mockData.conversionPercent);
+
+  const [bonusesPercent, setBonusesPercent] = useState(mockData.conversionPercent);
+  const [bonusesIsEditing, setBonusesIsEditing] = useState(false);
+  const bonusesInputRef = useRef<HTMLInputElement>(null);
+  const [originalBonusesPercent, setOriginalBonusesPercent] = useState(mockData.conversionPercent);
   // Состояние для блока "Бренды"
   const [brandData, setBrandData] = useState<MockDataType[]>([
     { id: 1, value: 'Бренд 1', isEditing: false },
@@ -108,20 +120,17 @@ export const Settings = () => {
     });
   }, [brandData, serviceData]);
 
-  const [switchBtn, setSwitchBtn] = useState(false);
-  const [conversionPercent, setConversionPercent] = useState(mockData.conversionPercent);
-  const [conversionIsEditing, setConversionIsEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [originalConversionPercent, setOriginalConversionPercent] = useState(mockData.conversionPercent);
-
-  const [bonusesPercent, setBonusesPercent] = useState(mockData.conversionPercent);
-  const [bonusesIsEditing, setBonusesIsEditing] = useState(false);
-  const bonusesInputRef = useRef<HTMLInputElement>(null);
-  const [originalBonusesPercent, setOriginalBonusesPercent] = useState(mockData.conversionPercent);
-
-  const handleClickSwitch = () => {
-    setSwitchBtn((prev) => !prev);
-    console.log(switchBtn);
+  const handleClickConversionSwitchBtn = () => {
+    setConversionSwitchBtn((prev) => !prev);
+    console.log(conversionSwitchBtn);
+  };
+  const handleClickProfitSwitchBtn = () => {
+    setProfitSwitchBtn((prev) => !prev);
+    console.log(profitSwitchBtn);
+  };
+  const handleClickPaxSwitchBtn = () => {
+    setPaxSwitchBtn((prev) => !prev);
+    console.log(paxSwitchBtn);
   };
   const startConversionEdit = () => {
     setOriginalConversionPercent(conversionPercent);
@@ -299,10 +308,10 @@ export const Settings = () => {
                     <Icon className={styles.conversionEdit} type='edit' onClick={startConversionEdit} />
                   )}
                   <button
-                    className={`${styles.switchWrapper} ${switchBtn ? styles.switchTrue : styles.switchFalse}`}
-                    onClick={handleClickSwitch}
+                    className={`${styles.switchWrapper} ${conversionSwitchBtn ? styles.switchTrue : styles.switchFalse}`}
+                    onClick={handleClickConversionSwitchBtn}
                   >
-                    <span className={`${styles.switch} ${switchBtn ? styles.switchTrue : styles.switchFalse}`}></span>
+                    <span className={`${styles.switch} ${conversionSwitchBtn ? styles.switchTrue : styles.switchFalse}`}></span>
                   </button>
                 </div>
               </li>
@@ -346,10 +355,10 @@ export const Settings = () => {
                   <p className={`${styles.startInnerText} ${styles.profitText}`}>Вы можете выключить - включить Прибыль, чтобы что-то...</p>
                 </div>
                 <button
-                  className={`${styles.switchWrapper} ${switchBtn ? styles.switchTrue : styles.switchFalse}`}
-                  onClick={handleClickSwitch}
+                  className={`${styles.switchWrapper} ${profitSwitchBtn ? styles.switchTrue : styles.switchFalse}`}
+                  onClick={handleClickProfitSwitchBtn}
                 >
-                  <span className={`${styles.switch} ${switchBtn ? styles.switchTrue : styles.switchFalse}`}></span>
+                  <span className={`${styles.switch} ${profitSwitchBtn ? styles.switchTrue : styles.switchFalse}`}></span>
                 </button>
               </li>
 
@@ -359,10 +368,10 @@ export const Settings = () => {
                   <p className={`${styles.startInnerText} ${styles.paxText}`}>Вы можете выключить - включить PAX, чтобы что-то...</p>
                 </div>
                 <button
-                  className={`${styles.switchWrapper} ${switchBtn ? styles.switchTrue : styles.switchFalse}`}
-                  onClick={handleClickSwitch}
+                  className={`${styles.switchWrapper} ${paxSwitchBtn ? styles.switchTrue : styles.switchFalse}`}
+                  onClick={handleClickPaxSwitchBtn}
                 >
-                  <span className={`${styles.switch} ${switchBtn ? styles.switchTrue : styles.switchFalse}`}></span>
+                  <span className={`${styles.switch} ${paxSwitchBtn ? styles.switchTrue : styles.switchFalse}`}></span>
                 </button>
               </li>
             </ul>

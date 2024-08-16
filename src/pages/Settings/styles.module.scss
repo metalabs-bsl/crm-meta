@@ -206,14 +206,27 @@
   }
 
   .conversionPercent {
-    border-radius: 5px;
-    width: 100px;
-    height: 40px;
-    background-color: $seaSalt;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 5px;
+    position: relative;
+
+    & input {
+      border-radius: 5px;
+      width: 100px;
+      height: 40px;
+      background-color: $seaSalt;
+      border: none;
+      outline: none;
+      padding-left: 33px;
+      padding-right: 20px;
+    }
+
+    & span {
+      position: absolute;
+      right: 30px;
+    }
   }
 
   .conversionInner {
@@ -255,7 +268,7 @@
     }
 
     &.switchFalse {
-      background-color: $not-paid;
+      background-color: $silver;
     }
   }
 
@@ -283,19 +296,30 @@
   }
 
   .bonusesPercent {
-    border-radius: 5px;
-    width: 100px;
-    height: 40px;
-    background-color: $seaSalt;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 5px;
+    position: relative;
 
     & input {
-      width: 50%;
-      background-color: transparent;
+      border-radius: 5px;
+      width: 100px;
+      height: 40px;
+      background-color: $seaSalt;
       border: none;
+      outline: none;
+      padding-left: 33px;
+      padding-right: 20px;
     }
+
+    & span {
+      position: absolute;
+      right: 30px;
+    }
+  }
+
+  .bonusesEditWrapper {
+    display: flex;
   }
 }
