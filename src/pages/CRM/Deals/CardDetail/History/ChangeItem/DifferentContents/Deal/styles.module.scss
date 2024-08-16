@@ -4,7 +4,13 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  .title {
+  .headline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .title,
+  .employee {
     font-weight: 400;
     font-size: 14px;
     color: $gray;

@@ -1,4 +1,4 @@
-import { Options } from 'types/pages';
+import { Options } from 'types/common';
 
 export interface PassengerCounts {
   adults: number;

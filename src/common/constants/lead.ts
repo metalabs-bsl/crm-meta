@@ -1,10 +1,6 @@
-import { Options } from 'types/pages';
+import { Options } from 'types/common';
 
 export const servicesOptions: Options[] = [
-  {
-    label: 'Не выбрано',
-    value: ''
-  },
   {
     label: 'Виза',
     value: 'Виза'

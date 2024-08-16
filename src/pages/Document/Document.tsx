@@ -176,6 +176,7 @@ const tabItems = [
 export const Document = () => {
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [files, setFiles] = useState<File[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const handleModalOpen = () => {
     setIsModalOpen(true);

@@ -11,7 +11,6 @@ import { useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endp
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import { AboutDeal } from './AboutDeal';
-import { history } from './CardDetail.helper';
 import { History } from './History';
 import { Progress } from './Progress';
 import styles from './style.module.scss';
@@ -50,7 +49,6 @@ export const CardDetail = () => {
         lead_name,
         customer_name: customer.fullname,
         customer_phone: customer.phone,
-        customer_DOB: customer.date_of_birth,
         customer_id: customer.id,
         city: customer.city,
         source_id: source.id,
@@ -79,7 +77,7 @@ export const CardDetail = () => {
           calcData={data?.calculator[0]}
         />
       ),
-      [tabItems[1].type]: <History history={history} />,
+      [tabItems[1].type]: <History />,
       [tabItems[2].type]: <WhatsApp />
     };
     return components[type];

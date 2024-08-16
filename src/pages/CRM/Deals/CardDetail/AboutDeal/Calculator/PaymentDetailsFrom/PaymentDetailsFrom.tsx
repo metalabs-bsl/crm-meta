@@ -1,12 +1,12 @@
 import { FC, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
-import { Options } from 'types/pages';
 import { DatePicker, Icon, Input, Loading, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE, paymentOptions } from 'common/constants';
 import { useCreatePaymentMutation } from 'api/admin/leads/endpoints/calculator';
 import { useGetPaymentCurrencyQuery } from 'api/admin/paymentCurrency/paymentCurrency.api';
+import { Options } from 'types/common';
 import { ICalcPayment, ICreatePaymentParams } from 'types/entities/leads';
 import styles from './styles.module.scss';
 

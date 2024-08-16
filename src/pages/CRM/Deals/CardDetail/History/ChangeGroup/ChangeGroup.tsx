@@ -15,7 +15,7 @@ export const ChangeGroup: FC<ChangeGroupProps> = ({ date, changes, isFirst }) =>
     <div className={styles.change_group}>
       <Date date={date} />
       {changes.map((change, index) => (
-        <ChangeItem key={index} changes={change} isFirstItem={index === 0} isFirstGroup={isFirst} />
+        <ChangeItem key={index} change={change} isFirstItem={index === 0} isFirstGroup={isFirst} />
       ))}
     </div>
   );
