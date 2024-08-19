@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  column-gap: 10px;
 
   .btn_title {
     display: flex;
@@ -74,6 +75,9 @@
     z-index: 10;
     position: sticky;
     padding: 9px;
+  }
+  &.scrolled {
+    box-shadow: 5px 0 10px -5px rgba(0, 0, 0, 0.5);
   }
 }
 

@@ -10,6 +10,7 @@ import styles from './styles.module.scss';
 
 interface IEmployeeTableRow extends IEmployeeData {
   handleDelete: (arg0: string) => void;
+  isScrolled: boolean;
 }
 
 export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
@@ -28,7 +29,8 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   contract,
   passport_front,
   passport_back,
-  handleDelete
+  handleDelete,
+  isScrolled
 }) => {
   const notify = useNotify();
   const { data: rolesAll } = useGetEmployeeRolesQuery();
@@ -107,7 +109,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
 
   return (
     <div className={styles.tableRow}>
-      <div className={cn(styles.item, styles.buttons)}>
+      <div className={cn(styles.item, styles.buttons, { [styles.scrolled]: isScrolled })}>
         {!isEdit ? (
           <>
             <div className={styles.button} onClick={() => handleDelete(id)}>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { SearchInput } from 'common/ui';
 import { DeleteModal, Modal } from 'common/components';
-import { useNotify } from 'common/hooks';
+import { useNotify, useSearch } from 'common/hooks';
 import { useDeleteEMployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
 import { IEmployeeData } from './types/types';
 import { AddEmployees } from './AddEmployess';
@@ -10,19 +11,33 @@ import { EmployeeTableRow } from './EmployeeTableRow';
 import styles from './style.module.scss';
 
 export const Employees = () => {
-  const { data } = useGetAllEmployeesQuery();
-  console.log(data);
-
-  const [tableData, setTableData] = useState<IEmployeeData[]>([]);
+  const { data: tableData = [] } = useGetAllEmployeesQuery();
+  const [searchText, setSearchText] = useState<string>('');
+  const filteredData = useSearch<IEmployeeData>(tableData, searchText);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState<string | null>(null);
   const notify = useNotify();
-
   const [deleteEmployee] = useDeleteEMployeeMutation();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const tableContainer = document.querySelector(`.${styles.tableContainer}`);
+
+    if (tableContainer) {
+      const handleScroll = () => {
+        setIsScrolled(tableContainer.scrollLeft > 0);
+      };
+
+      tableContainer.addEventListener('scroll', handleScroll);
+
+      return () => {
+        tableContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
 
   const handleDeleteClick = (employeeId: string) => {
-    console.log('Deleting employee with ID:', employeeId);
     setEmployeeIdToDelete(employeeId);
     setShowDeleteModal(true);
   };
@@ -31,15 +46,12 @@ export const Employees = () => {
     if (employeeIdToDelete !== null) {
       try {
         await deleteEmployee(employeeIdToDelete).unwrap();
-        setTableData((prev) => prev.filter((employee) => employee.id !== employeeIdToDelete));
+        notify('Сотрудник успешно удален', 'success');
         setShowDeleteModal(false);
         setEmployeeIdToDelete(null);
-        notify('Сотрудник успешно удален', 'success');
       } catch (error) {
-        notify('Ошибка при удалении Сотрудника', 'error');
+        notify('Ошибка при удалении сотрудника', 'error');
       }
-    } else {
-      console.error('Invalid employee ID:', employeeIdToDelete);
     }
   };
 
@@ -48,15 +60,6 @@ export const Employees = () => {
     setEmployeeIdToDelete(null);
   };
 
-  // const handleSave = async () => {
-  //   console.log('save employee');
-  // };
-
-  useEffect(() => {
-    if (data) {
-      setTableData(data);
-    }
-  }, [data]);
   return (
     <>
       <div className={styles.employeesHeader}>
@@ -67,7 +70,7 @@ export const Employees = () => {
           </button>
         </div>
         <div className={styles.search_wrapper}>
-          <SearchInput />
+          <SearchInput onValueChange={setSearchText} />
         </div>
       </div>
       <div className={styles.wrapper}>
@@ -84,14 +87,15 @@ export const Employees = () => {
         <div className={styles.tableContainer}>
           <div className={styles.table}>
             <div className={styles.tableHeader}>
+              <div className={cn(styles.headerItem, { [styles.scrolled]: isScrolled })}>действия</div>
               {columns.map((title) => (
                 <div key={title} className={styles.headerItem}>
                   {title}
                 </div>
               ))}
             </div>
-            {tableData.map((employee) => (
-              <EmployeeTableRow {...employee} key={employee.id} handleDelete={handleDeleteClick} />
+            {filteredData.map((employee) => (
+              <EmployeeTableRow {...employee} key={employee.id} handleDelete={handleDeleteClick} isScrolled={isScrolled} />
             ))}
           </div>
         </div>
