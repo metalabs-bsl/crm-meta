@@ -1,0 +1,306 @@
+@import '../../common/styles/variables.scss';
+.settings {
+  width: 100%;
+  overflow-y: hidden;
+  height: 100%;
+  border-radius: 10px;
+  padding: 20px 50px 10px 50px;
+  background: $baby-powder;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  overflow-y: auto;
+
+  .settingsContainer {
+    width: 100%;
+    max-width: 990px;
+    margin: 0 auto;
+  }
+  & h1 {
+    font-family: var(--font-family);
+    line-height: 1.3em;
+    font-weight: 500;
+    font-size: 30px;
+    color: $white;
+  }
+  .calculatorInner {
+    border-radius: 10px;
+    background-color: $white;
+    margin-bottom: 15px;
+  }
+  .blocksTitle {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.3em;
+    color: $white;
+    margin-bottom: 15px;
+    font-family: var(--font-family);
+  }
+  .calculatorBlock {
+    padding: 20px;
+    gap: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .blockTextWrapper {
+    width: 100%;
+    max-width: 300px;
+  }
+  .blockTitle {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.3em;
+    font-family: var(--font-family);
+    color: $table-column-color;
+    margin-bottom: 5px;
+  }
+  .blockText {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.3em;
+    color: $gray;
+    font-family: var(--font-family);
+  }
+  .dataWrapper {
+    list-style: none;
+    width: 100%;
+  }
+  .dataItem {
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    &:not(:last-child) {
+      margin-bottom: 3px;
+    }
+  }
+  .input {
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 100%;
+    max-width: 450px;
+    background-color: $seaSalt;
+    outline: none;
+    border: none;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    width: 40px;
+    height: 40px;
+    background-color: $white;
+    cursor: pointer;
+  }
+  .plussWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .saveBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: $btn_employess;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cancelBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .saveSvg {
+    width: 20px;
+    height: 20px;
+  }
+  .cancelSvg {
+    width: 30px;
+    height: 30px;
+  }
+  .addBtn {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: $gray-btn;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto 0;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      border-radius: 2px;
+      background-color: $table-title-color;
+    }
+
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+
+  .startInner {
+    list-style: none;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .startBlock {
+    gap: 20px;
+    padding: 20px;
+    background-color: $white;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $gray-btn;
+    }
+  }
+
+  .conversion {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      top: 0;
+      right: 90px;
+      background-color: $gray-btn;
+    }
+  }
+
+  .conversionPercent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    position: relative;
+
+    & input {
+      border-radius: 5px;
+      width: 100px;
+      height: 40px;
+      background-color: $seaSalt;
+      border: none;
+      outline: none;
+      padding-left: 33px;
+      padding-right: 20px;
+    }
+
+    & span {
+      position: absolute;
+      right: 30px;
+    }
+  }
+
+  .conversionInner {
+    display: flex;
+    align-items: center;
+  }
+
+  .conversionEditWrapper {
+    margin-right: 25px;
+    display: flex;
+    align-items: center;
+  }
+
+  .conversionEdit {
+    width: 24px;
+    height: 24px;
+    margin-right: 40px;
+  }
+
+  .conversionInput {
+    border: none;
+    width: 50%;
+    height: 100%;
+    background-color: transparent;
+    outline: none;
+  }
+
+  .switchWrapper {
+    position: relative;
+    width: 52px;
+    height: 25px;
+    border-radius: 20px;
+    border: 1px solid $gray-btn;
+    background-color: $gray;
+    transition: all 0.4s;
+
+    &.switchTrue {
+      background-color: $btn_employess;
+    }
+
+    &.switchFalse {
+      background-color: $silver;
+    }
+  }
+
+  .switch {
+    position: absolute;
+    display: inline-block;
+    border-radius: 50%;
+    width: 21px;
+    height: 21px;
+    background-color: $seaSalt;
+    top: 1px;
+    transition: right 0.3s ease;
+
+    &.switchTrue {
+      right: 1px;
+    }
+
+    &.switchFalse {
+      right: 28px;
+    }
+  }
+
+  .bonusesInner {
+    display: flex;
+  }
+
+  .bonusesPercent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    position: relative;
+
+    & input {
+      border-radius: 5px;
+      width: 100px;
+      height: 40px;
+      background-color: $seaSalt;
+      border: none;
+      outline: none;
+      padding-left: 33px;
+      padding-right: 20px;
+    }
+
+    & span {
+      position: absolute;
+      right: 30px;
+    }
+  }
+
+  .bonusesEditWrapper {
+    display: flex;
+  }
+}

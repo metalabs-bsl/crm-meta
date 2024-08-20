@@ -10,6 +10,7 @@ import countMinusActive from '../../assets/icons/count-minus-active.svg';
 import countMinusUnActive from '../../assets/icons/count-minus-unactive.svg';
 import countPlusActive from '../../assets/icons/count-plus-active.svg';
 import deleteIcon from '../../assets/icons/deleteIcon.svg';
+import doneSvg from '../../assets/icons/done-svg.svg';
 import download from '../../assets/icons/download-icon.svg';
 import edit from '../../assets/icons/edit.svg';
 import goBackArrow from '../../assets/icons/goBackArrow.svg';
@@ -48,13 +49,21 @@ import mail from '../../assets/icons/sidebar/mail.svg';
 import mailDark from '../../assets/icons/sidebar/mail-dark.svg';
 import report from '../../assets/icons/sidebar/report.svg';
 import reportDark from '../../assets/icons/sidebar/report-dark.svg';
+import settings from '../../assets/icons/sidebar/settings.svg';
+import settingsDark from '../../assets/icons/sidebar/settings-dark.svg';
 import smsGrayIcon from '../../assets/icons/sms-gray.svg';
 import trashGrayIcon from '../../assets/icons/trash-gray.svg';
 import userIcon from '../../assets/icons/userIcon.svg';
 import whastApp from '../../assets/icons/whatsApp-svg.svg';
 
 export const icons: IIcons = {
+<<<<<<< HEAD
+  ['done']: doneSvg,
+  ['settings']: settings,
+  ['settings-dark']: settingsDark,
+=======
   ['whatsApp-svg']: whastApp,
+>>>>>>> fd49ea0a796c130b6265798b5f8c301864944ae7
   ['reply-arrow']: replyArrow,
   ['go-back']: goBackArrow,
   ['trash-gray']: trashGrayIcon,

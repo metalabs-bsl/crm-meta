@@ -7,5 +7,6 @@ export const adminPath = {
   mail: '/mail',
   mailDetail: '/mail/:id',
   root: '/',
-  report: '/report/:chapter'
+  report: '/report/:chapter',
+  settings: '/settings'
 };
