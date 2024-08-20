@@ -57,13 +57,10 @@ import userIcon from '../../assets/icons/userIcon.svg';
 import whastApp from '../../assets/icons/whatsApp-svg.svg';
 
 export const icons: IIcons = {
-<<<<<<< HEAD
   ['done']: doneSvg,
   ['settings']: settings,
   ['settings-dark']: settingsDark,
-=======
   ['whatsApp-svg']: whastApp,
->>>>>>> fd49ea0a796c130b6265798b5f8c301864944ae7
   ['reply-arrow']: replyArrow,
   ['go-back']: goBackArrow,
   ['trash-gray']: trashGrayIcon,
