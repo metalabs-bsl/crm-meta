@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, FilePicker, Loading, SearchInput } from 'common/ui';
 import { Modal, Tabs } from 'common/components';
 import { DocumentTable } from './DocumentTable/DocumentTable';
@@ -176,17 +176,18 @@ const tabItems = [
 
 interface FormValues {
   documentName: string;
+  file: File;
 }
 
 export const Document = () => {
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [files, setFiles] = useState<File[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const [file, setFile] = useState<File>(); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const [inputWrapper, setInputWrapper] = useState(false);
 
-  const handleModalOpen = () => {
-    if (activeTab === 'tab1') {
-      setIsModalOpen(true);
-    }
+  const handleModalOpen = (): void => {
+    setIsModalOpen(true);
+    setInputWrapper(activeTab === 'tab1');
   };
 
   const handleModalClose = () => {
@@ -196,12 +197,19 @@ export const Document = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<FormValues>();
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+
+  const onSubmit: SubmitHandler<FormValues> = () => {
+    //обновляем форму после отправки
+    reset();
     handleModalClose();
   };
+
+  useEffect(() => {
+    isModalOpen && register('documentName', { required: false });
+  }, [isModalOpen, register]);
 
   return (
     <Loading>
@@ -229,13 +237,21 @@ export const Document = () => {
           <div className={styles.modalInner}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className={styles.filePickerWrapper}>
-                <FilePicker />
+                <FilePicker
+                  onChange={(file) => {
+                    if (file) {
+                      setFile(file); // Обновляем состояние с массивом файлов
+                    }
+                  }}
+                />
               </div>
-              <div className={styles.inputWrapper}>
-                <label htmlFor='documentName'>Название документа:</label>
-                <input id='documentName' {...register('documentName', { required: 'Это поле обязательно' })} />
-                {errors.documentName && <span>{errors.documentName.message}</span>}
-              </div>
+              {inputWrapper && (
+                <div className={styles.inputWrapper} style={{ display: 'flex' }}>
+                  <label htmlFor='documentName'>Название документа:</label>
+                  <input id='documentName' {...register('documentName', { required: 'Это поле обязательно' })} />
+                  {errors.documentName && <span>{errors.documentName.message}</span>}
+                </div>
+              )}
               <div className={styles.readyBtnWrapper}>
                 <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' type='submit' />
               </div>
