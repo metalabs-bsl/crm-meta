@@ -1,6 +1,5 @@
 import { FC, useCallback, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
-import { Checkbox } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { ContractModal } from './ContractModal';
 import { PaymentRow, PaymentRowProps } from './PaymentRow';
@@ -30,9 +29,6 @@ interface TableRowProps {
 const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
 
 export const TableRow: FC<TableRowProps> = ({
-  index,
-  isSelected,
-  onSelectRow,
   contractNumber,
   bookingNumber,
   gross,
@@ -61,9 +57,6 @@ export const TableRow: FC<TableRowProps> = ({
   return (
     <>
       <tr className={cn(styles.mainRow, { [styles.checkedRow]: allChecked })}>
-        <td className={styles.item}>
-          <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
-        </td>
         <td className={styles.item}>
           <span
             className={styles.contractNumber}

@@ -3,9 +3,9 @@ import { Icon } from 'common/ui/Icon';
 import styles from './styles.module.scss';
 
 interface MultipleFilePickerProps {
-  files: File[];
-  editable: boolean;
-  onFilesChange: (files: File[]) => void;
+  files?: File[];
+  editable?: boolean;
+  onFilesChange?: (files: File[]) => void;
 }
 
 export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editable, onFilesChange }) => {
@@ -17,7 +17,9 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
       if (event.target.files && event.target.files.length > 0) {
         const file = event.target.files[0];
         // setFileUrl(URL.createObjectURL(file));
-        onFilesChange([...files, file]);
+        if (onFilesChange && files) {
+          onFilesChange([...files, file]);
+        }
       }
     },
     [files, onFilesChange]
@@ -25,15 +27,17 @@ export const MultipleFilePicker: FC<MultipleFilePickerProps> = ({ files, editabl
 
   const handleFileDelete = useCallback(
     (fileName: string) => {
-      const updatedFiles = files.filter((file) => file.name !== fileName);
-      onFilesChange(updatedFiles);
+      const updatedFiles = files?.filter((file) => file.name !== fileName);
+      if (onFilesChange && updatedFiles) {
+        onFilesChange(updatedFiles);
+      }
     },
     [files, onFilesChange]
   );
 
   return (
     <div className={styles.picker_container}>
-      {files.length ? (
+      {files?.length ? (
         files.map((file) => (
           <div className={styles.fileBox} key={file.name}>
             <a href={URL.createObjectURL(file)} target='_blank' rel='noopener noreferrer' className={styles.fileName}>

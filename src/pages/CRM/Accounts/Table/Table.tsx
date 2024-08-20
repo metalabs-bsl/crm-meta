@@ -1,10 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Checkbox } from 'common/ui';
-import { DeleteModal } from 'common/components';
-import { indexToBookingNumberForDeleteModal, mainRowHeaders } from '../Account.helper';
+import { mainRowHeaders } from '../Account.helper';
 import { TableRowData } from '../types/tableRowData';
-import { DeleteRow } from './DeleteRow';
 import { TableRow } from './TableRow';
 import styles from './styles.module.scss';
 
@@ -93,21 +90,10 @@ const data: TableRowData[] = [
 
 export const Table: FC = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState<boolean>(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [localData, setLocalData] = useState<TableRowData[]>([]);
-
-  const handleSelectAll = useCallback(() => {
-    setSelectAll((prev) => !prev);
-    setSelectedRows(() => (!selectAll ? localData.map((_, index) => index) : []));
-  }, [selectAll, localData]);
 
   const handleSelectRow = useCallback((index: number) => {
     setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
-  }, []);
-
-  const handleDelete = useCallback(() => {
-    setOpenDeleteModal(true);
   }, []);
 
   useEffect(() => {
@@ -119,9 +105,6 @@ export const Table: FC = () => {
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr className={styles.tableRow}>
-            <th className={styles.title}>
-              <Checkbox checked={selectAll} onChange={handleSelectAll} />
-            </th>
             {mainRowHeaders.map((header, idx) => (
               <th key={idx} className={cn(header.classNames.map((el) => `${styles[el]}`).join(' '))}>
                 {header.title}
@@ -135,13 +118,6 @@ export const Table: FC = () => {
           ))}
         </tbody>
       </table>
-      {selectedRows.length !== 0 && <DeleteRow onClickEvent={handleDelete} />}
-      <DeleteModal
-        isOpen={openDeleteModal}
-        onCancel={() => setOpenDeleteModal(false)}
-        text={indexToBookingNumberForDeleteModal(selectedRows, localData) || ''}
-        onDelete={handleDelete}
-      />
     </div>
   );
 };

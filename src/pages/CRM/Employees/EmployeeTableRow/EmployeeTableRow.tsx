@@ -90,13 +90,14 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       console.log(`Key: ${key}, Value: ${value}`);
     }
 
-    createEmployee(formData)
-      .unwrap()
-      .then(() => {
-        notify(MESSAGE.SUCCESS, 'success');
-        setIsEdit(false);
-      })
-      .catch(() => notify(MESSAGE.ERROR, 'error'));
+    try {
+      await createEmployee(formData).unwrap();
+      notify(MESSAGE.SUCCESS, 'success');
+    } catch (error) {
+      notify(MESSAGE.ERROR, 'error');
+    } finally {
+      setIsEdit(false);
+    }
   };
 
   // const handleLinkClick = (fileId: string, fileName: string) => {

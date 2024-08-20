@@ -21,9 +21,11 @@ export const useSearch = <T extends Item>(data: T[], searchText: string): T[] =>
   const [filteredData, setFilteredData] = useState<T[]>([]);
 
   useEffect(() => {
-    const lowercasedSearchText = searchText.toLowerCase();
-    const filtered = data.filter((item) => recursiveSearch(item, lowercasedSearchText));
-    setFilteredData(filtered);
+    if (data.length > 0 && searchText !== undefined) {
+      const lowercasedSearchText = searchText.toLowerCase();
+      const filtered = data.filter((item) => recursiveSearch(item, lowercasedSearchText));
+      setFilteredData(filtered);
+    }
   }, [data, searchText]);
 
   return filteredData;
