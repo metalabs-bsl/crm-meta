@@ -47,7 +47,8 @@
     width: 100%;
     max-width: 300px;
   }
-  .blockTitle {
+  .blockTitle,
+  .startInnerTitle {
     font-size: 18px;
     font-weight: 400;
     line-height: 1.3em;
@@ -55,7 +56,8 @@
     color: $table-column-color;
     margin-bottom: 5px;
   }
-  .blockText {
+  .blockText,
+  .startInnerText {
     font-size: 14px;
     font-weight: 400;
     line-height: 1.3em;
