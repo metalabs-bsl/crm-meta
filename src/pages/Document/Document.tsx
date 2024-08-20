@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, FilePicker, Loading, SearchInput } from 'common/ui';
 import { Modal, Tabs } from 'common/components';
 import { DocumentTable } from './DocumentTable/DocumentTable';
 import { OriginalTable } from './OriginalTable';
 import styles from './styles.module.scss';
 
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
 
 export interface DocumentData {
@@ -173,19 +174,42 @@ const tabItems = [
   { type: 'tab2', title: 'Оригинальные' }
 ];
 
+interface FormValues {
+  documentName: string;
+  file: File;
+}
+
 export const Document = () => {
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [files, setFiles] = useState<File[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const [file, setFile] = useState<File>(); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const [inputWrapper, setInputWrapper] = useState(false);
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (): void => {
     setIsModalOpen(true);
-    console.log(isModalOpen);
+    setInputWrapper(activeTab === 'tab1');
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<FormValues>();
+
+  const onSubmit: SubmitHandler<FormValues> = () => {
+    //обновляем форму после отправки
+    reset();
+    handleModalClose();
+  };
+
+  useEffect(() => {
+    isModalOpen && register('documentName', { required: false });
+  }, [isModalOpen, register]);
 
   return (
     <Loading>
@@ -211,12 +235,27 @@ export const Document = () => {
         </div>
         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
           <div className={styles.modalInner}>
-            <div className={styles.filePickerWrapper}>
-              <FilePicker />
-            </div>
-            <div className={styles.readyBtnWrapper}>
-              <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' onClick={handleModalClose} />
-            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className={styles.filePickerWrapper}>
+                <FilePicker
+                  onChange={(file) => {
+                    if (file) {
+                      setFile(file); // Обновляем состояние с массивом файлов
+                    }
+                  }}
+                />
+              </div>
+              {inputWrapper && (
+                <div className={styles.inputWrapper} style={{ display: 'flex' }}>
+                  <label htmlFor='documentName'>Название документа:</label>
+                  <input id='documentName' {...register('documentName', { required: 'Это поле обязательно' })} />
+                  {errors.documentName && <span>{errors.documentName.message}</span>}
+                </div>
+              )}
+              <div className={styles.readyBtnWrapper}>
+                <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' type='submit' />
+              </div>
+            </form>
           </div>
         </Modal>
       </div>
