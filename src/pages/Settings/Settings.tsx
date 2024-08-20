@@ -177,7 +177,7 @@ export const Settings = () => {
 
   return (
     <Loading>
-      <section className={styles.settings}>
+      <div className={styles.settings}>
         <h1>Настройки</h1>
         <div className={styles.settingsContainer}>
           <div className={styles.calculator}>
@@ -377,7 +377,7 @@ export const Settings = () => {
             </ul>
           </div>
         </div>
-      </section>
+      </div>
     </Loading>
   );
 };
