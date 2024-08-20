@@ -8,9 +8,9 @@
   position: relative;
   .headBlock {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 26px;
+    margin-bottom: 20px;
     .titleBlock {
       display: flex;
       gap: 50px;
@@ -22,7 +22,7 @@
     }
   }
   .bodyBlock {
-    width: calc(100vw - 254px);
+    width: 100%;
     height: calc(100vh - 274px);
     border-radius: 10px;
     overflow: hidden;
