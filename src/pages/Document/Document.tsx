@@ -175,7 +175,7 @@ const tabItems = [
 ];
 
 interface FormValues {
-  documentName: string;
+  documentNumber: string;
   file: File;
 }
 
@@ -208,7 +208,7 @@ export const Document = () => {
   };
 
   useEffect(() => {
-    isModalOpen && register('documentName', { required: false });
+    isModalOpen && register('documentNumber', { required: false });
   }, [isModalOpen, register]);
 
   return (
@@ -247,9 +247,9 @@ export const Document = () => {
               </div>
               {inputWrapper && (
                 <div className={styles.inputWrapper} style={{ display: 'flex' }}>
-                  <label htmlFor='documentName'>Название документа:</label>
-                  <input id='documentName' {...register('documentName', { required: 'Это поле обязательно' })} />
-                  {errors.documentName && <span>{errors.documentName.message}</span>}
+                  <label htmlFor='documentNumber'>Номер договора:</label>
+                  <input id='documentNumber' {...register('documentNumber', { required: 'Это поле обязательно' })} />
+                  {errors.documentNumber && <span>{errors.documentNumber.message}</span>}
                 </div>
               )}
               <div className={styles.readyBtnWrapper}>
