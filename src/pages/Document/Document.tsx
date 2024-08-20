@@ -5,6 +5,7 @@ import { DocumentTable } from './DocumentTable/DocumentTable';
 import { OriginalTable } from './OriginalTable';
 import styles from './styles.module.scss';
 
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
 
 export interface DocumentData {
@@ -173,18 +174,33 @@ const tabItems = [
   { type: 'tab2', title: 'Оригинальные' }
 ];
 
+interface FormValues {
+  documentName: string;
+}
+
 export const Document = () => {
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState<File[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const handleModalOpen = () => {
-    setIsModalOpen(true);
-    console.log(isModalOpen);
+    if (activeTab === 'tab1') {
+      setIsModalOpen(true);
+    }
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormValues>();
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
+    handleModalClose();
   };
 
   return (
@@ -211,12 +227,19 @@ export const Document = () => {
         </div>
         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
           <div className={styles.modalInner}>
-            <div className={styles.filePickerWrapper}>
-              <FilePicker />
-            </div>
-            <div className={styles.readyBtnWrapper}>
-              <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' onClick={handleModalClose} />
-            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className={styles.filePickerWrapper}>
+                <FilePicker />
+              </div>
+              <div className={styles.inputWrapper}>
+                <label htmlFor='documentName'>Название документа:</label>
+                <input id='documentName' {...register('documentName', { required: 'Это поле обязательно' })} />
+                {errors.documentName && <span>{errors.documentName.message}</span>}
+              </div>
+              <div className={styles.readyBtnWrapper}>
+                <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' type='submit' />
+              </div>
+            </form>
           </div>
         </Modal>
       </div>
