@@ -3,6 +3,8 @@
 .profit {
   h1 {
     color: $white;
+    font-weight: 500;
+    font-size: 30px;
   }
 
   .titleWrapper {
@@ -26,11 +28,10 @@
   }
 
   .tableWrapper {
-    width: calc(90vw - 254px);
+    width: 100%;
     height: calc(80vh - 200px);
     border-radius: 8px;
     display: flex;
-    margin: 0 auto;
     overflow: hidden;
     flex-direction: column;
   }

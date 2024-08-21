@@ -8,6 +8,7 @@ const NotFound = lazy(() => import('../pages/NotFound'));
 const CRM = lazy(() => import('../pages/CRM'));
 const Login = lazy(() => import('../pages/Login'));
 const Calendar = lazy(() => import('../pages/Calendar'));
+const Settings = lazy(() => import('../pages/Settings'));
 const Document = lazy(() => import('../pages/Document'));
 const Mail = lazy(() => import('../pages/Mail'));
 const MessageDetail = lazy(() => import('../pages/Mail/MessageDetail'));
@@ -43,6 +44,12 @@ export const mainRoutes: IRoute[] = [
     label: labels.calendar,
     roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Calendar />
+  },
+  {
+    path: paths.settings,
+    label: labels.settings,
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
+    element: <Settings />
   },
   {
     path: paths.document,
