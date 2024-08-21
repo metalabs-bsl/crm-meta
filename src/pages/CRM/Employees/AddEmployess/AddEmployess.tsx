@@ -67,13 +67,16 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
       console.log(`Key: ${key}, Value: ${value}`);
     }
 
-    createEmployee(formData)
-      .unwrap()
-      .then(() => {
-        notify(MESSAGE.SUCCESS, 'success');
-        setShowAddEmployee(false);
-      })
-      .catch(() => notify(MESSAGE.ERROR, 'error'));
+    try {
+      await createEmployee(formData).unwrap();
+      notify(MESSAGE.SUCCESS, 'success');
+      console.log('успешно');
+    } catch (error) {
+      notify(MESSAGE.ERROR, 'error');
+      console.log('не успешно', error);
+    } finally {
+      setShowAddEmployee(false);
+    }
   };
 
   return (

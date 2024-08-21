@@ -70,18 +70,12 @@ export const Employees = () => {
           </button>
         </div>
         <div className={styles.search_wrapper}>
-          <SearchInput onValueChange={setSearchText} />
+          <SearchInput placeholder='Поиск' onValueChange={setSearchText} />
         </div>
       </div>
       <div className={styles.wrapper}>
         <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)} className={styles.modal}>
-          {showAddEmployeeForm && (
-            <AddEmployees
-              setShowAddEmployee={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
-          )}
+          {showAddEmployeeForm && <AddEmployees setShowAddEmployee={setShowAddEmployeeForm} />}
         </Modal>
 
         <div className={styles.tableContainer}>

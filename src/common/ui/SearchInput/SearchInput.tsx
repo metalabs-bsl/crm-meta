@@ -32,7 +32,7 @@ export const SearchInput: FC<IProps> = forwardRef<HTMLInputElement, IProps>(
     };
 
     useEffect(() => {
-      if (onValueChange) {
+      if (onValueChange && debouncedValue.length) {
         onValueChange(debouncedValue);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
