@@ -30,8 +30,8 @@ export interface IEmployeeData {
   refreshToken?: string;
   roles: IRole[];
   second_name?: string;
-  start_of_internship: string;
-  start_of_work: string;
+  start_of_internship: string | null;
+  start_of_work: string | null;
   status?: number;
   updated_at?: string;
   contract?: {

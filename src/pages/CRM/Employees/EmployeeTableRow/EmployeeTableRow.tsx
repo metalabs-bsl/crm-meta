@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { FilePicker, Icon } from 'common/ui';
 import { useNotify } from 'common/hooks';
@@ -9,7 +9,7 @@ import { IEmployeeData } from '../types/types';
 import styles from './styles.module.scss';
 
 interface IEmployeeTableRow extends IEmployeeData {
-  handleDelete: (arg0: string) => void;
+  handleDelete: (arg0: string, arg1: string) => void;
   isScrolled: boolean;
 }
 
@@ -35,6 +35,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const notify = useNotify();
   const { data: rolesAll } = useGetEmployeeRolesQuery();
   const [createEmployee] = useCreateEmployeeMutation();
+
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth.split('T')[0]);
   const [role, setRole] = useState<string>(roles[0].id);
@@ -53,6 +54,12 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const [frontPassportLocalFile, setFrontPassportLocalFile] = useState<File | null>(null);
   const [backPassportLocalFile, setBackPassportLocalFile] = useState<File | null>(null);
 
+  useEffect(() => {
+    setContractLocal(contract);
+    setPassportFrontLocal(passport_front);
+    setPassportBackLocal(passport_back);
+  }, [contract, passport_front, passport_back]);
+
   const handleSubmit = async () => {
     const formData = new FormData();
 
@@ -63,8 +70,8 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       phone: phoneNumber,
       email: emailData,
       email_password: emailPassword,
-      start_of_internship: startOfInternship,
-      start_of_work: startOfWork,
+      start_of_internship: startOfInternship || null,
+      start_of_work: startOfWork || null,
       login: loginCRM,
       //@ts-ignore
       roles: [rolesAll?.find((el) => el.id === role)]
@@ -97,23 +104,18 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       notify(MESSAGE.ERROR, 'error');
     } finally {
       setIsEdit(false);
+      setContractLocalFile(null);
+      setFrontPassportLocalFile(null);
+      setBackPassportLocalFile(null);
     }
   };
-
-  // const handleLinkClick = (fileId: string, fileName: string) => {
-  //   const link = document.createElement('a');
-  //   link.href = `${process.env.REACT_APP_BASE_URL}/files/download/${fileId}`;
-  //   link.download = fileName;
-  //   link.click();
-  //   link.remove();
-  // };
 
   return (
     <div className={styles.tableRow}>
       <div className={cn(styles.item, styles.buttons, { [styles.scrolled]: isScrolled })}>
         {!isEdit ? (
           <>
-            <div className={styles.button} onClick={() => handleDelete(id)}>
+            <div className={styles.button} onClick={() => handleDelete(id, `${second_name} ${first_name} ${middle_name}`)}>
               <Icon type={'delete'} className={styles.button_delete} />
             </div>
             <div className={styles.button}>
@@ -205,7 +207,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       <div className={cn(styles.item, styles.fileItem)}>
         {contractLocal ? (
           <div className={styles.file}>
-            <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${contractLocal.id}`} download>
+            <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${contractLocal.id}`} download target='_blank' rel='noreferrer'>
               {contractLocal.original_name}
             </a>
             {isEdit && <Icon type={'delete'} onClick={() => setContractLocal(undefined)} />}
@@ -231,7 +233,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       <div className={cn(styles.item, styles.fileItem)}>
         {passportBackLocal ? (
           <div className={styles.file}>
-            <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${passportBackLocal.id}`} download>
+            <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${passportBackLocal.id}`} download target='_blank' rel='noreferrer'>
               {passportBackLocal.original_name}
             </a>
             {isEdit && <Icon type={'delete'} onClick={() => setPassportBackLocal(undefined)} />}

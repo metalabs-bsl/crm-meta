@@ -37,11 +37,12 @@ export const employessApi = createApi({
         body
       })
     }),
-    deleteEMployee: mutation({
+    deleteEmployee: mutation({
       query: (id: string) => ({
         method: 'DELETE',
         url: `/employees/${id}`
-      })
+      }),
+      invalidatesTags: ['EmployeesList']
     }),
     updateBg: mutation<void, BG_TYPES>({
       query: (background) => ({
@@ -54,9 +55,6 @@ export const employessApi = createApi({
         method: 'PUT',
         url: `/employees/${employee.id}`,
         body: employee
-        // headers: {
-        //   'Content-Type': 'multipart/form-data'
-        // }
       })
     }),
     getUserInfo: query<IGetUserInfo.Response, IGetUserInfo.Params>({
@@ -69,13 +67,6 @@ export const employessApi = createApi({
         body
       }),
       invalidatesTags: ['EmployeesList']
-    }),
-    // получение паспортов (уточнить нужно ли оно ещё)
-    getPassportFront: query({
-      query: (employeeId) => `/employees/passport-front/${employeeId}`
-    }),
-    getPassportBack: query({
-      query: (employeeId) => `/employees/passport-back/${employeeId}`
     }),
     getEmployeeRoles: query<IGetEmployeeRoles.Response, IGetEmployeeRoles.Params>({
       query: () => `/roles`
@@ -91,9 +82,7 @@ export const {
   useLazyGetUserInfoQuery,
   useDeleteAvatarMutation,
   useCreateEmployeeMutation,
-  useDeleteEMployeeMutation,
+  useDeleteEmployeeMutation,
   useUpdateEmployeeInfoMutation,
-  useGetPassportFrontQuery,
-  useGetPassportBackQuery,
   useGetEmployeeRolesQuery
 } = employessApi;

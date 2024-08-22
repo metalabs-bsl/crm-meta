@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { SearchInput } from 'common/ui';
+import { Loading, SearchInput } from 'common/ui';
 import { DeleteModal, Modal } from 'common/components';
 import { useNotify, useSearch } from 'common/hooks';
-import { useDeleteEMployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
+import { useDeleteEmployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
 import { IEmployeeData } from './types/types';
 import { AddEmployees } from './AddEmployess';
 import { columns } from './Employees.helper';
@@ -11,34 +11,33 @@ import { EmployeeTableRow } from './EmployeeTableRow';
 import styles from './style.module.scss';
 
 export const Employees = () => {
-  const { data: tableData = [] } = useGetAllEmployeesQuery();
+  const { data: tableData = [], isFetching } = useGetAllEmployeesQuery();
+  console.log(tableData);
+  const [deleteEmployee, { isLoading }] = useDeleteEmployeeMutation();
   const [searchText, setSearchText] = useState<string>('');
   const filteredData = useSearch<IEmployeeData>(tableData, searchText);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState<string | null>(null);
+  const [employeeFioToDelete, setEmployeeFioToDelete] = useState<string | null>(null);
   const notify = useNotify();
-  const [deleteEmployee] = useDeleteEMployeeMutation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const tableContainer = document.querySelector(`.${styles.tableContainer}`);
-
+    const tableContainer = tableContainerRef.current;
     if (tableContainer) {
       const handleScroll = () => {
         setIsScrolled(tableContainer.scrollLeft > 0);
       };
-
       tableContainer.addEventListener('scroll', handleScroll);
-
-      return () => {
-        tableContainer.removeEventListener('scroll', handleScroll);
-      };
+      return () => tableContainer.removeEventListener('scroll', handleScroll);
     }
   }, []);
 
-  const handleDeleteClick = (employeeId: string) => {
+  const handleDeleteClick = (employeeId: string, fio: string) => {
     setEmployeeIdToDelete(employeeId);
+    setEmployeeFioToDelete(fio);
     setShowDeleteModal(true);
   };
 
@@ -47,10 +46,12 @@ export const Employees = () => {
       try {
         await deleteEmployee(employeeIdToDelete).unwrap();
         notify('Сотрудник успешно удален', 'success');
-        setShowDeleteModal(false);
-        setEmployeeIdToDelete(null);
       } catch (error) {
         notify('Ошибка при удалении сотрудника', 'error');
+      } finally {
+        setShowDeleteModal(false);
+        setEmployeeIdToDelete(null);
+        setEmployeeFioToDelete(null);
       }
     }
   };
@@ -58,10 +59,11 @@ export const Employees = () => {
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
     setEmployeeIdToDelete(null);
+    setEmployeeFioToDelete(null);
   };
 
   return (
-    <>
+    <Loading isSpin={isFetching || isLoading}>
       <div className={styles.employeesHeader}>
         <div className={styles.btn_title}>
           <h2 className={styles.title}>Сотрудники</h2>
@@ -78,7 +80,7 @@ export const Employees = () => {
           {showAddEmployeeForm && <AddEmployees setShowAddEmployee={setShowAddEmployeeForm} />}
         </Modal>
 
-        <div className={styles.tableContainer}>
+        <div className={styles.tableContainer} ref={tableContainerRef}>
           <div className={styles.table}>
             <div className={styles.tableHeader}>
               <div className={cn(styles.headerItem, { [styles.scrolled]: isScrolled })}>действия</div>
@@ -99,9 +101,9 @@ export const Employees = () => {
         isOpen={showDeleteModal}
         onDelete={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={'Вы уверены, что хотите удалить сотрудника?'}
+        text={`Вы уверены, что хотите удалить сотрудника: "${employeeFioToDelete}"?`}
       />
-    </>
+    </Loading>
   );
 };
 
