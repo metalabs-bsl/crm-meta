@@ -12,7 +12,6 @@ import styles from './style.module.scss';
 
 export const Employees = () => {
   const { data: tableData = [], isFetching } = useGetAllEmployeesQuery();
-  console.log(tableData);
   const [deleteEmployee, { isLoading }] = useDeleteEmployeeMutation();
   const [searchText, setSearchText] = useState<string>('');
   const filteredData = useSearch<IEmployeeData>(tableData, searchText);

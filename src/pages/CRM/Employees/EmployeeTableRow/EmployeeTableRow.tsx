@@ -93,10 +93,6 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       formData.append(`passport_back`, backPassportLocalFile);
     }
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`Key: ${key}, Value: ${value}`);
-    }
-
     try {
       await createEmployee(formData).unwrap();
       notify(MESSAGE.SUCCESS, 'success');

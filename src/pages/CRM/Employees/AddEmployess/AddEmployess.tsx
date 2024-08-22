@@ -63,17 +63,11 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
       formData.append(`passport_back`, backPassport);
     }
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`Key: ${key}, Value: ${value}`);
-    }
-
     try {
       await createEmployee(formData).unwrap();
       notify(MESSAGE.SUCCESS, 'success');
-      console.log('успешно');
     } catch (error) {
       notify(MESSAGE.ERROR, 'error');
-      console.log('не успешно', error);
     } finally {
       setShowAddEmployee(false);
     }
