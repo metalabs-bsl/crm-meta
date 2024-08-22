@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { SearchInput } from 'common/ui';
+import { useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
+import { Loading, SearchInput } from 'common/ui';
 import { DeleteModal, Modal } from 'common/components';
-import { useNotify } from 'common/hooks';
-import { useDeleteEMployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
+import { useNotify, useSearch } from 'common/hooks';
+import { useDeleteEmployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
 import { IEmployeeData } from './types/types';
 import { AddEmployees } from './AddEmployess';
 import { columns } from './Employees.helper';
@@ -10,20 +11,32 @@ import { EmployeeTableRow } from './EmployeeTableRow';
 import styles from './style.module.scss';
 
 export const Employees = () => {
-  const { data } = useGetAllEmployeesQuery();
-  console.log(data);
-
-  const [tableData, setTableData] = useState<IEmployeeData[]>([]);
+  const { data: tableData = [], isFetching } = useGetAllEmployeesQuery();
+  const [deleteEmployee, { isLoading }] = useDeleteEmployeeMutation();
+  const [searchText, setSearchText] = useState<string>('');
+  const filteredData = useSearch<IEmployeeData>(tableData, searchText);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState<string | null>(null);
+  const [employeeFioToDelete, setEmployeeFioToDelete] = useState<string | null>(null);
   const notify = useNotify();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const [deleteEmployee] = useDeleteEMployeeMutation();
+  useEffect(() => {
+    const tableContainer = tableContainerRef.current;
+    if (tableContainer) {
+      const handleScroll = () => {
+        setIsScrolled(tableContainer.scrollLeft > 0);
+      };
+      tableContainer.addEventListener('scroll', handleScroll);
+      return () => tableContainer.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
-  const handleDeleteClick = (employeeId: string) => {
-    console.log('Deleting employee with ID:', employeeId);
+  const handleDeleteClick = (employeeId: string, fio: string) => {
     setEmployeeIdToDelete(employeeId);
+    setEmployeeFioToDelete(fio);
     setShowDeleteModal(true);
   };
 
@@ -31,34 +44,25 @@ export const Employees = () => {
     if (employeeIdToDelete !== null) {
       try {
         await deleteEmployee(employeeIdToDelete).unwrap();
-        setTableData((prev) => prev.filter((employee) => employee.id !== employeeIdToDelete));
-        setShowDeleteModal(false);
-        setEmployeeIdToDelete(null);
         notify('Сотрудник успешно удален', 'success');
       } catch (error) {
-        notify('Ошибка при удалении Сотрудника', 'error');
+        notify('Ошибка при удалении сотрудника', 'error');
+      } finally {
+        setShowDeleteModal(false);
+        setEmployeeIdToDelete(null);
+        setEmployeeFioToDelete(null);
       }
-    } else {
-      console.error('Invalid employee ID:', employeeIdToDelete);
     }
   };
 
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
     setEmployeeIdToDelete(null);
+    setEmployeeFioToDelete(null);
   };
 
-  // const handleSave = async () => {
-  //   console.log('save employee');
-  // };
-
-  useEffect(() => {
-    if (data) {
-      setTableData(data);
-    }
-  }, [data]);
   return (
-    <>
+    <Loading isSpin={isFetching || isLoading}>
       <div className={styles.employeesHeader}>
         <div className={styles.btn_title}>
           <h2 className={styles.title}>Сотрудники</h2>
@@ -67,31 +71,26 @@ export const Employees = () => {
           </button>
         </div>
         <div className={styles.search_wrapper}>
-          <SearchInput />
+          <SearchInput placeholder='Поиск' onValueChange={setSearchText} />
         </div>
       </div>
       <div className={styles.wrapper}>
         <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)} className={styles.modal}>
-          {showAddEmployeeForm && (
-            <AddEmployees
-              setShowAddEmployee={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
-          )}
+          {showAddEmployeeForm && <AddEmployees setShowAddEmployee={setShowAddEmployeeForm} />}
         </Modal>
 
-        <div className={styles.tableContainer}>
+        <div className={styles.tableContainer} ref={tableContainerRef}>
           <div className={styles.table}>
             <div className={styles.tableHeader}>
+              <div className={cn(styles.headerItem, { [styles.scrolled]: isScrolled })}>действия</div>
               {columns.map((title) => (
                 <div key={title} className={styles.headerItem}>
                   {title}
                 </div>
               ))}
             </div>
-            {tableData.map((employee) => (
-              <EmployeeTableRow {...employee} key={employee.id} handleDelete={handleDeleteClick} />
+            {filteredData.map((employee) => (
+              <EmployeeTableRow {...employee} key={employee.id} handleDelete={handleDeleteClick} isScrolled={isScrolled} />
             ))}
           </div>
         </div>
@@ -101,9 +100,9 @@ export const Employees = () => {
         isOpen={showDeleteModal}
         onDelete={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={'Вы уверены, что хотите удалить сотрудника?'}
+        text={`Вы уверены, что хотите удалить сотрудника: "${employeeFioToDelete}"?`}
       />
-    </>
+    </Loading>
   );
 };
 

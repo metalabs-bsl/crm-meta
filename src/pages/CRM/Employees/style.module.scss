@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  column-gap: 10px;
 
   .btn_title {
     display: flex;
@@ -30,9 +31,10 @@
 }
 
 .wrapper {
-  background: $white;
   height: auto;
   border-radius: 10px;
+  overflow-y: auto;
+  height: calc(100vh - 274px);
   .modal {
     max-width: 788px;
   }
@@ -58,17 +60,24 @@
 }
 
 .headerItem {
-  padding: 9px;
+  padding-right: 9px;
   height: 54px;
-  border: 1px solid #ccc;
+  border-bottom: 1px solid $silver;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   background-color: $seaSalt;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray;
   &:first-child {
     left: 0;
     z-index: 10;
     position: sticky;
+    padding: 9px;
+  }
+  &.scrolled {
+    box-shadow: 5px 0 10px -5px rgba(0, 0, 0, 0.5);
   }
 }
 
