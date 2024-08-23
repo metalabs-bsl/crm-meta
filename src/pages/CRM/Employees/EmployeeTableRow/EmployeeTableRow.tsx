@@ -37,7 +37,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const [createEmployee] = useCreateEmployeeMutation();
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth.split('T')[0]);
+  const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth?.split('T')[0]);
   const [role, setRole] = useState<string>(roles[0].id);
   const [phoneNumber, setPhoneNumber] = useState<string>(phone || '');
   const [emailData, setEmailData] = useState<string>(email || '');

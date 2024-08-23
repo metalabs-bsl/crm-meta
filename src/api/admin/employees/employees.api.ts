@@ -5,7 +5,7 @@ import { IGetAllEmployees, IGetEmployeeRoles, IGetResponsibleEmployees, IGetUser
 
 import { BG_TYPES } from 'types/enums';
 
-export const employessApi = createApi({
+export const employeesApi = createApi({
   reducerPath: 'employessApi',
   baseQuery: getBaseQuery(),
   tagTypes: ['EmployeesList'],
@@ -85,4 +85,4 @@ export const {
   useDeleteEmployeeMutation,
   useUpdateEmployeeInfoMutation,
   useGetEmployeeRolesQuery
-} = employessApi;
+} = employeesApi;

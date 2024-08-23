@@ -19,21 +19,12 @@
 }
 
 .title {
-  padding: 10px 30px 10px 0;
+  padding: 10px 20px 10px 10px;
   text-align: start;
   font-weight: 400;
   font-size: 14px;
   color: $gray;
-  &:not(:first-child) {
-    min-width: 106px;
-  }
-  &:first-child {
-    padding-top: 18px;
-    padding-left: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  white-space: nowrap;
 }
 
 .title.paymentStatus {

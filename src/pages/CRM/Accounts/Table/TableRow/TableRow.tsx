@@ -1,58 +1,29 @@
-import { FC, useCallback, useMemo, useRef, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Accordion, DropdownModal } from 'common/components';
+import { IAccountData } from 'types/entities/accounts';
 import { ContractModal } from './ContractModal';
-import { PaymentRow, PaymentRowProps } from './PaymentRow';
+import { PaymentRow } from './PaymentRow';
 import styles from './styles.module.scss';
 
-type PaymentDetails = Omit<PaymentRowProps, 'accordionTitle'>;
+// type PaymentDetails = Omit<PaymentRowProps, 'accordionTitle'>;
 
-interface TableRowProps {
-  index: number;
-  isSelected: boolean;
-  onSelectRow: (index: number) => void;
-  contractNumber: string;
-  bookingNumber: string;
-  gross: string;
-  net: string;
-  rate: string;
-  commission: string;
-  paymentMethod: string;
-  destination: string;
-  tourDates: string;
-  tourOperator: string;
-  tourInvoice: string;
-  whoCreated: string;
-  paymentDetails: PaymentDetails[];
-}
+interface ITableRowProps extends IAccountData {}
 
-const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
-
-export const TableRow: FC<TableRowProps> = ({
+export const TableRow: FC<ITableRowProps> = ({
   contractNumber,
-  bookingNumber,
   gross,
   net,
-  rate,
   commission,
-  paymentMethod,
-  destination,
   tourDates,
-  tourOperator,
   tourInvoice,
   whoCreated,
-  paymentDetails
+  paymentDetails,
+  paymentStatus
 }) => {
   const contractNumberRef = useRef(null);
   const [contractOpen, setContractOpen] = useState<boolean>(false);
-  const allChecked = useMemo(() => paymentDetails.every((detail) => detail.isPaid), [paymentDetails]);
-
-  const renderPaymentRowTitle = useCallback(
-    (index: number, titles: string[]): string => {
-      return paymentDetails.length === 1 ? 'Полная оплата' : titles[index];
-    },
-    [paymentDetails.length]
-  );
+  const allChecked = useMemo(() => paymentDetails.every((payment) => payment.isPaid), [paymentDetails]);
 
   return (
     <>
@@ -64,41 +35,43 @@ export const TableRow: FC<TableRowProps> = ({
             onMouseLeave={() => setContractOpen(false)}
             ref={contractNumberRef}
           >
-            {contractNumber}
+            {contractNumber || 'null'}
           </span>
         </td>
-        <td className={styles.item}>{bookingNumber}</td>
+        <td className={styles.item}>{'данных нет'}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
-          {allChecked ? (
-            <span className={styles.paymentStatus_true}>Оплачено</span>
-          ) : (
-            <span className={styles.paymentStatus_false}>Не оплачено</span>
-          )}
+          <span
+            className={cn({
+              [styles.not_paid]: paymentStatus === 'Не оплачено',
+              [styles.paid]: paymentStatus === 'Оплачено',
+              [styles.partial]: paymentStatus === 'Частично'
+            })}
+          >
+            {paymentStatus || 'null'}
+          </span>
         </td>
-        <td className={styles.item}>{gross}</td>
-        <td className={styles.item}>{net}</td>
-        <td className={styles.item}>{rate}</td>
-        <td className={styles.item}>{commission}</td>
-        <td className={styles.item}>{paymentMethod}</td>
-        <td className={styles.item}>{destination}</td>
-        <td className={styles.item}>{tourDates}</td>
-        <td className={styles.item}>{tourOperator}</td>
-        <td className={styles.item}>{tourInvoice}</td>
-        <td className={styles.item}>{whoCreated}</td>
+        <td className={styles.item}>{gross || 'null'}</td>
+        <td className={styles.item}>{net || 'null'}</td>
+        <td className={styles.item}>{commission || 'null'}</td>
+        <td className={styles.item}>{'данных нет'}</td>
+        <td className={styles.item}>{tourDates || 'null'}</td>
+        <td className={styles.item}>{'данных нет'}</td>
+        <td className={styles.item}>{tourInvoice || 'null'}</td>
+        <td className={styles.item}>{whoCreated || 'null'}</td>
       </tr>
       <tr className={styles.accordionRow}>
         <td colSpan={14} className={styles.accordionContainer}>
           <Accordion className={styles.accordion} title='Информация об оплате'>
             <div className={styles.expandedContent}>
-              {paymentDetails.map((detail, idx) => (
-                <PaymentRow {...detail} key={idx} accordionTitle={renderPaymentRowTitle(idx, ordinalTitles)} />
+              {paymentDetails.map((details) => (
+                <PaymentRow {...details} key={details.id} />
               ))}
             </div>
           </Accordion>
         </td>
       </tr>
       <DropdownModal targetRef={contractNumberRef} isOpen={contractOpen} onClose={() => setContractOpen(false)}>
-        <ContractModal name={'Азатов Азат'} phone={'+996500500500'} />
+        <ContractModal name={'Данных нет'} phone={'Данных нет'} city={'данных нет'} source={'данных нет'} dateOfBirth={'данных нет'} />
       </DropdownModal>
     </>
   );
