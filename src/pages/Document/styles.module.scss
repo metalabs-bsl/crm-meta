@@ -56,42 +56,6 @@
   margin: 0 auto;
 }
 
-.filePickerWrapper {
-  margin: 20px 0 30px;
-}
-
-.inputWrapper {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-
-  label {
-    margin-bottom: 0.5rem;
-  }
-
-  input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
-  span {
-    color: red;
-    margin-top: 0.5rem;
-  }
-}
-
-.readyBtnWrapper {
-  width: 100%;
-  max-width: 200px;
-  margin: 0 auto;
-}
-
-.readyBtn {
-  width: 100%;
-  max-width: 200px;
-}
-
 @media (max-width: 991px) {
   .tableWrapper {
     overflow-x: auto;

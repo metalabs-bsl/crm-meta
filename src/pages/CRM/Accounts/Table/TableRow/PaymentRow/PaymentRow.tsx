@@ -1,8 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
-import { Checkbox, DatePicker, Input, Select } from 'common/ui';
-import { Accordion } from 'common/components';
-import { Options } from 'types/common';
+import { Checkbox, DatePicker, Input } from 'common/ui';
+import { Accordion, MultipleFilePicker } from 'common/components';
 import { paymentRowHeaders } from '../../../Account.helper';
 import styles from './styles.module.scss';
 
@@ -19,22 +18,12 @@ export interface PaymentRowProps {
   accordionTitle: string;
 }
 
-const payOptions: Options[] = [
-  { label: 'Наличными, сом', value: 'som' },
-  { label: 'Наличными, $', value: 'usd' },
-  { label: 'Наличными, €', value: 'eur' },
-  { label: 'Переводом', value: 'transaction' },
-  { label: 'Через банк', value: 'bank' }
-];
-
 export const PaymentRow: FC<PaymentRowProps> = ({
   paymentDateClient,
   comment,
   paymentDateSupervisor,
-  // invoice,
   amount,
   method,
-  // receipt,
   tourAmount,
   isPaid,
   accordionTitle
@@ -42,8 +31,6 @@ export const PaymentRow: FC<PaymentRowProps> = ({
   const [isEditPaymentInfo, setIsEditPaymentInfo] = useState<boolean>(false);
   const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
   const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor);
-  const [localAmount, setLocalAmount] = useState<string>(amount);
-  const [localMethod, setLocalMethod] = useState<string>(method);
   const [localTourAmount, setLocalTourAmount] = useState<string>(tourAmount);
   // const [invoiceFiles, setInvoiceFiles] = useState<string[]>(invoice);
   // const [receiptFiles, setReceiptFiles] = useState<string[]>(receipt);
@@ -62,8 +49,6 @@ export const PaymentRow: FC<PaymentRowProps> = ({
   //   const updatedData = {
   //     paymentDateSupervisor: localPaymentDateSupervisor,
   //     invoice: invoiceFiles,
-  //     amount: localAmount,
-  //     method: localMethod,
   //     receipt: receiptFiles,
   //     tourAmount: localTourAmount,
   //     isPaid: localIsPaid
@@ -102,24 +87,14 @@ export const PaymentRow: FC<PaymentRowProps> = ({
                 onChange={(e) => setLocalPaymentDateSupervisor(e.target.value)}
               />
             </td>
-            {/* <td className={styles.item}>
-              <MultipleFilePicker files={invoiceFiles} editable={isEditable} onFilesChange={setInvoiceFiles} />
-            </td> */}
             <td className={styles.item}>
-              <Input className={styles.inp} disabled={isEditable} value={localAmount} onChange={(e) => setLocalAmount(e.target.value)} />
+              <MultipleFilePicker editable={isEditable} />
             </td>
+            <td className={styles.item}>{amount}</td>
+            <td className={styles.item}>{method}</td>
             <td className={styles.item}>
-              <Select
-                value={localMethod}
-                options={payOptions}
-                className={styles.select}
-                disabled={isEditable}
-                onChange={(e) => setLocalMethod(e.target.value)}
-              />
+              <MultipleFilePicker editable={isEditable} />
             </td>
-            {/* <td className={styles.item}>
-              <MultipleFilePicker files={receiptFiles} editable={isEditable} onFilesChange={setReceiptFiles} />
-            </td> */}
             <td className={styles.item}>
               <Input
                 className={styles.inp}
