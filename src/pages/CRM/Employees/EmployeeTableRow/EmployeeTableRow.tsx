@@ -4,11 +4,11 @@ import { FilePicker, Icon } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useCreateEmployeeMutation, useGetEmployeeRolesQuery } from 'api/admin/employees/employees.api';
+import { IEmployee } from 'types/entities';
 import { getRusRole } from '../Employees.helper';
-import { IEmployeeData } from '../types/types';
 import styles from './styles.module.scss';
 
-interface IEmployeeTableRow extends IEmployeeData {
+interface IEmployeeTableRow extends IEmployee {
   handleDelete: (arg0: string, arg1: string) => void;
   isScrolled: boolean;
 }
@@ -63,15 +63,15 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const handleSubmit = async () => {
     const formData = new FormData();
 
-    const employeeData: IEmployeeData = {
+    const employeeData: IEmployee = {
       id: id,
       date_of_birth: dateOfBirth,
       job_title: getRusRole(rolesAll?.find((el) => el.id === role)?.role_name || ''),
       phone: phoneNumber,
       email: emailData,
       email_password: emailPassword,
-      start_of_internship: startOfInternship || null,
-      start_of_work: startOfWork || null,
+      start_of_internship: startOfInternship,
+      start_of_work: startOfWork,
       login: loginCRM,
       //@ts-ignore
       roles: [rolesAll?.find((el) => el.id === role)]

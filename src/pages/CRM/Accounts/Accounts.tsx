@@ -16,7 +16,7 @@ const options: Options[] = [
 export const Accounts = () => {
   const { role } = useAppSelector(employeesSelectors.employees);
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
-  const [isFull, setIsFull] = useState<string>('true');
+  const [isFull, setIsFull] = useState<string>('false');
   const { data, isFetching } = useGetAllAccountsQuery(isFull);
   return (
     <div className={styles.accounts}>

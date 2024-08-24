@@ -1,4 +1,4 @@
-import { IUserInfoRes } from './employees';
+import { IEmployee } from './employees';
 import { ICustomer } from './kanban';
 
 export interface ICreateLeadParams {
@@ -59,7 +59,7 @@ export interface ICreateReminderParams {
   updated_at: string;
 }
 
-export interface IResponsible_Employee extends IUserInfoRes {
+export interface IResponsible_Employee extends IEmployee {
   date_of_birth: string;
   email_password: string;
   middle_name: string;

@@ -6,20 +6,24 @@ import { ContractModal } from './ContractModal';
 import { PaymentRow } from './PaymentRow';
 import styles from './styles.module.scss';
 
-// type PaymentDetails = Omit<PaymentRowProps, 'accordionTitle'>;
-
 interface ITableRowProps extends IAccountData {}
 
 export const TableRow: FC<ITableRowProps> = ({
   contractNumber,
+  bookingNumber,
   gross,
   net,
   commission,
+  destination,
   tourDates,
-  tourInvoice,
+  tourOperator,
+  tourInvoiceSom,
+  tourInvoiceUSD,
+  tourInvoiceEUR,
   whoCreated,
   paymentDetails,
-  paymentStatus
+  paymentStatus,
+  customer
 }) => {
   const contractNumberRef = useRef(null);
   const [contractOpen, setContractOpen] = useState<boolean>(false);
@@ -38,7 +42,7 @@ export const TableRow: FC<ITableRowProps> = ({
             {contractNumber || 'null'}
           </span>
         </td>
-        <td className={styles.item}>{'данных нет'}</td>
+        <td className={styles.item}>{bookingNumber || 'null'}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
           <span
             className={cn({
@@ -53,10 +57,12 @@ export const TableRow: FC<ITableRowProps> = ({
         <td className={styles.item}>{gross || 'null'}</td>
         <td className={styles.item}>{net || 'null'}</td>
         <td className={styles.item}>{commission || 'null'}</td>
-        <td className={styles.item}>{'данных нет'}</td>
+        <td className={styles.item}>{destination || 'null'}</td>
         <td className={styles.item}>{tourDates || 'null'}</td>
-        <td className={styles.item}>{'данных нет'}</td>
-        <td className={styles.item}>{tourInvoice || 'null'}</td>
+        <td className={styles.item}>{tourOperator || 'null'}</td>
+        <td className={styles.item}>{tourInvoiceSom || 'null'}</td>
+        <td className={styles.item}>{tourInvoiceUSD || 'null'}</td>
+        <td className={styles.item}>{tourInvoiceEUR || 'null'}</td>
         <td className={styles.item}>{whoCreated || 'null'}</td>
       </tr>
       <tr className={styles.accordionRow}>
@@ -71,7 +77,13 @@ export const TableRow: FC<ITableRowProps> = ({
         </td>
       </tr>
       <DropdownModal targetRef={contractNumberRef} isOpen={contractOpen} onClose={() => setContractOpen(false)}>
-        <ContractModal name={'Данных нет'} phone={'Данных нет'} city={'данных нет'} source={'данных нет'} dateOfBirth={'данных нет'} />
+        <ContractModal
+          name={customer?.fullname}
+          phone={customer?.phone}
+          city={customer?.city}
+          source={customer?.source}
+          dateOfBirth={customer?.date_of_birth}
+        />
       </DropdownModal>
     </>
   );

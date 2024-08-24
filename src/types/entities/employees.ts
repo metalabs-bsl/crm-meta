@@ -30,26 +30,9 @@ interface IAvatar {
   updated_at: string;
 }
 
-export interface IUserInfoRes {
-  id: string;
-  created_at: string;
-  email: string;
-  end_of_internship: null;
-  first_name: string;
-  login: string;
-  phone: string;
-  roles: IRole[];
-  second_name: string;
-  start_of_internship: null;
-  status: number;
-  updated_at: string;
-  job_title: string;
+export interface IEmployee {
   avatar: null | IAvatar;
   background: BG_TYPES;
-}
-
-export interface IEmployee {
-  background: string;
   created_at: string;
   date_of_birth: string;
   email: string;
@@ -81,15 +64,4 @@ export interface IEmployee {
     id: string;
     original_name: string;
   };
-}
-
-export interface iAddEmployee {
-  id: string;
-  first_name: string;
-  second_name: string;
-  status: string;
-  phone: string;
-  email: string;
-  contract_id: string;
-  passport_id: string;
 }

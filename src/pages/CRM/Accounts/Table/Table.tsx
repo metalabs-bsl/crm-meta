@@ -10,12 +10,6 @@ interface ITableProps {
 }
 
 export const Table: FC<ITableProps> = ({ data }) => {
-  // const [selectedRows, setSelectedRows] = useState<number[]>([]);
-
-  // const handleSelectRow = useCallback((index: number) => {
-  //   setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
-  // }, []);
-
   console.log(data);
 
   return (
@@ -30,7 +24,7 @@ export const Table: FC<ITableProps> = ({ data }) => {
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className={styles.tbody}>
           {data.map((row, index) => (
             <TableRow key={index} {...row} />
           ))}

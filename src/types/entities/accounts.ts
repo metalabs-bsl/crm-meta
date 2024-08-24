@@ -1,3 +1,5 @@
+import { ICustomer } from './kanban';
+
 export interface IPaymentDetailsData {
   id: string;
   name: string;
@@ -17,21 +19,23 @@ export interface IPaymentDetailsData {
   tourAmount: string;
   rate: string;
   isPaid: boolean;
+  paymentTOType: number; // 1 - сом, 2 - доллар, 3 - евро
 }
 
 export interface IAccountData {
   contractNumber: string;
-  // bookingNumber: string;
+  bookingNumber: string;
   gross: string;
   net: string;
-  // rate: string;
   commission: string;
-  // paymentMethod: string;
   paymentStatus: string;
-  // destination: string;
+  destination: string;
   tourDates: string;
-  // tourOperator: string;
-  tourInvoice: string;
+  tourOperator: string;
+  tourInvoiceSom: string;
+  tourInvoiceUSD: string;
+  tourInvoiceEUR: string;
   whoCreated: string;
+  customer: ICustomer;
   paymentDetails: IPaymentDetailsData[];
 }

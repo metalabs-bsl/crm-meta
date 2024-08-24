@@ -2,8 +2,10 @@
 
 .mainRow {
   background-color: $not-paid-row;
-  border-top: 1px solid $silver;
   height: 58px;
+  &:not(:first-child) {
+    border-top: 1px solid $silver;
+  }
 }
 .checkedRow {
   background-color: $white;
@@ -48,9 +50,10 @@
 .accordion {
   width: 100%;
   flex-grow: 1;
-  padding: 4px 0;
+  padding: 5px 0;
   background-color: $seaSalt;
   display: inline-block;
+  border-radius: 0;
   & > div {
     justify-content: start;
     align-items: normal;

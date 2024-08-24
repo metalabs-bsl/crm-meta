@@ -1,4 +1,4 @@
-import { IEmployee, IResResponsible, IRole, IUserInfoRes } from 'types/entities';
+import { IEmployee, IResResponsible, IRole } from 'types/entities';
 
 export module IGetResponsibleEmployees {
   export type Response = IResResponsible;
@@ -6,7 +6,7 @@ export module IGetResponsibleEmployees {
 }
 
 export module IGetUserInfo {
-  export type Response = IUserInfoRes;
+  export type Response = IEmployee;
   export type Params = void;
 }
 

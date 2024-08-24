@@ -12,15 +12,15 @@ import styles from './styles.module.scss';
 
 const currencyOptions: Options[] = [
   {
-    value: 'сом',
+    value: 1,
     label: 'сом'
   },
   {
-    value: 'доллар',
+    value: 2,
     label: 'доллар'
   },
   {
-    value: 'евро',
+    value: 3,
     label: 'евро'
   }
 ];
@@ -39,12 +39,14 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
   rate,
   isPaid,
   invoice,
-  receipt
+  receipt,
+  paymentTOType
 }) => {
   const notify = useNotify();
   const [updateInvoice] = useUpdateInvoiceMutation();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
+  const [localPaymentTOType, setLocalPaymentTOType] = useState<number>(paymentTOType || 1);
   const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor?.split('T')[0]);
   const [localTourAmount, setLocalTourAmount] = useState<string>(tourAmount || '');
   const [receiptLocal, setReceiptLocal] = useState<{ id: string; original_name: string } | null>(receipt);
@@ -69,7 +71,8 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
       id: id,
       paymentDateSupervisor: localPaymentDateSupervisor,
       tourAmount: localTourAmount,
-      isPaid: localIsPaid
+      isPaid: localIsPaid,
+      paymentTOType: localPaymentTOType
     };
 
     formData.append('invoiceInfo', JSON.stringify(updatedData));
@@ -111,7 +114,7 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
             <td className={styles.item}>
               <input
                 type='date'
-                className={styles.datepicker}
+                className={styles.inp}
                 disabled={!isEdit}
                 value={localPaymentDateSupervisor}
                 onChange={(e) => setLocalPaymentDateSupervisor(e.target.value)}
@@ -148,7 +151,12 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
               />
             </td>
             <td className={styles.item}>
-              <Select options={currencyOptions} />
+              <Select
+                options={currencyOptions}
+                disabled={!isEdit}
+                value={localPaymentTOType}
+                onChange={(e) => setLocalPaymentTOType(Number(e.target.value))}
+              />
             </td>
             <td className={cn(styles.item, styles.checkboxWrapper)}>
               <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={!isEdit} onChange={handleCheckboxChange} />

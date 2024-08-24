@@ -36,7 +36,15 @@ export const mainRowHeaders = [
     classNames: ['title']
   },
   {
-    title: 'оплата ТО',
+    title: 'оплата ТО, сом',
+    classNames: ['title']
+  },
+  {
+    title: 'оплата ТО, доллар',
+    classNames: ['title']
+  },
+  {
+    title: 'оплата ТО, евро',
     classNames: ['title']
   },
   {
