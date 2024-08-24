@@ -1,72 +1,57 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Button, Loading, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
+import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
+import { useGetMailCountsOfTabsQuery, useLazyGetMailQuery } from 'api/admin/mail/mail.api';
 import MessageModal from './MessageModal/MessageModal';
-import { IMailData } from './types/mailsData';
-import { mailTabs as initialMailTabs, mockData } from './Mail.helper';
 import { MessageTable } from './MessageTable';
 import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
 const columns = ['отправитель', 'сообщение', 'дата'];
+enum TABS_VALUES {
+  INBOX = 'inbox',
+  UNREAD = 'unread',
+  SENT = 'sent'
+}
 
 export const Mail: FC = () => {
-  const [data, setData] = useState<IMailData[]>([]);
-  const [filteredData, setFilteredData] = useState<IMailData[]>([]);
-  const [activeTab, setActiveTab] = useState<string>(initialMailTabs[0].type);
-  const [mailTabs, setMailTabs] = useState(initialMailTabs);
-
+  const [activeTab, setActiveTab] = useState<string>(TABS_VALUES.INBOX);
+  const [searchValue, setSearchValue] = useState<string>('');
   const [isModalActive, setModalActive] = useState<boolean>(false);
 
-  const handleModalOpen = () => {
-    setModalActive(true);
-    console.log('show modal');
-  };
+  const [getMail, { data: mailData, isFetching: isMailFetching }] = useLazyGetMailQuery();
+
+  const { data: tabsData } = useGetMailCountsOfTabsQuery();
 
   useEffect(() => {
-    console.log(mockData);
-    setData(mockData);
-  }, []);
+    getMail({ type: activeTab, search: searchValue });
+  }, [activeTab, getMail, searchValue]);
 
-  useEffect(() => {
-    let filtered;
-    switch (activeTab) {
-      case 'inbox':
-        filtered = data.filter((mail) => mail.sender !== 'You');
-        break;
-      case 'unread':
-        filtered = data.filter((mail) => mail.unread && mail.sender !== 'You');
-        break;
-      case 'sent':
-        filtered = data.filter((mail) => mail.sender === 'You');
-        break;
-      default:
-        filtered = data;
-    }
-    setFilteredData(filtered);
-  }, [activeTab, data]);
-
-  useEffect(() => {
-    const inboxCount = data.filter((mail) => mail.sender !== 'You').length;
-    const unreadCount = data.filter((mail) => mail.unread && mail.sender !== 'You').length;
-    const sentCount = data.filter((mail) => mail.sender === 'You').length;
-
-    setMailTabs((prevTabs) =>
-      prevTabs.map((tab) => {
-        switch (tab.type) {
-          case 'inbox':
-            return { ...tab, badgeCount: inboxCount };
-          case 'unread':
-            return { ...tab, badgeCount: unreadCount };
-          case 'sent':
-            return { ...tab, badgeCount: sentCount };
-          default:
-            return tab;
-        }
-      })
-    );
-  }, [data]);
+  const buildTabsData = useMemo<ITabsItem[]>(() => {
+    if (!tabsData) return [];
+    return [
+      {
+        title: 'Входящие',
+        type: TABS_VALUES.INBOX,
+        badgeCount: tabsData.inboxCount,
+        hasBadge: tabsData.inboxCount > 0
+      },
+      {
+        title: 'Непрочитанные',
+        type: TABS_VALUES.UNREAD,
+        badgeCount: tabsData.unreadCount,
+        hasBadge: tabsData.unreadCount > 0
+      },
+      {
+        title: 'Отправленные',
+        type: TABS_VALUES.SENT,
+        badgeCount: tabsData.sentCount,
+        hasBadge: tabsData.sentCount > 0
+      }
+    ];
+  }, [tabsData]);
 
   return (
     <Loading>
@@ -74,12 +59,12 @@ export const Mail: FC = () => {
         <div className={styles.headBlock}>
           <div className={styles.titleBlock}>
             <h1>Почта</h1>
-            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} onClick={handleModalOpen} />
+            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} onClick={() => setModalActive(true)} />
           </div>
-          <SearchInput placeholder='Поиск' />
+          <SearchInput placeholder='Поиск' onValueChange={setSearchValue} />
         </div>
         <Tabs
-          tabItems={mailTabs}
+          tabItems={buildTabsData}
           isActiveTab={activeTab}
           setIsActiveTab={setActiveTab}
           className={styles.tabs}
@@ -87,11 +72,11 @@ export const Mail: FC = () => {
           activeTabClassName={styles.activeTab}
         />
         <div className={styles.tableWrapper}>
-          <MessageTable data={filteredData} columns={columns} />
+          <MessageTable data={mailData} columns={columns} isLoading={isMailFetching} />
         </div>
       </div>
 
-      {isModalActive && <MessageModal setModalActive={setModalActive} />}
+      {isModalActive && <MessageModal isModalActive={isModalActive} setModalActive={setModalActive} />}
     </Loading>
   );
 };

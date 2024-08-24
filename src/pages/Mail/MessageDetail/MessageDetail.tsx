@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button, Icon, Loading } from 'common/ui';
 import { DeleteModal } from 'common/components';
-import { mockData, userMailData } from '../Mail.helper';
-import { IMailChainData, IMailData } from '../types/mailsData';
+import { useNotify, useRedirect } from 'common/hooks';
+import { useLazyGetSingleMailQuery, useSetReadMessageMutation } from 'api/admin/mail/mail.api';
 import { AnswerForm } from './AnswerForm';
 import { MessageCard } from './MessageCard';
 import styles from './styles.module.scss';
@@ -11,28 +11,36 @@ import styles from './styles.module.scss';
 import { BUTTON_TYPES } from 'types/enums';
 
 export const MessageDetail = () => {
-  const navigate = useNavigate();
+  const redirect = useRedirect();
   const { id } = useParams();
-  const [data, setData] = useState<{ mailChain: IMailChainData[]; theme: string }>({ mailChain: [], theme: '' });
+  const notify = useNotify();
   const [showAnswerForm, setShowAnswerForm] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const [getSingleDialog, { data, isFetching }] = useLazyGetSingleMailQuery();
+  const [setReadMessage, { isLoading: isReadLoading }] = useSetReadMessageMutation();
 
-  const findMailChainAndThemeById = useCallback(
-    (data: IMailData[]): { mailChain: IMailChainData[]; theme: string } => {
-      const foundMail = data.find((el) => String(el.id) === id);
-      return { mailChain: foundMail ? foundMail.mailChain : [], theme: foundMail?.theme || '' };
-    },
-    [id]
-  );
+  useEffect(() => {
+    id && getSingleDialog(id);
+  }, [getSingleDialog, id]);
+
+  useEffect(() => {
+    data && !data?.hasBeenRead && setReadMessage({ id: data?.id, hasBeenRead: true });
+  }, [data, data?.hasBeenRead, data?.id, , setReadMessage]);
 
   const handleGoBack = () => {
-    navigate(-1);
+    redirect.move({ number: -1 });
   };
 
   const handleClickUnread = () => {
-    alert(`Цепочка писем c темой ${data.theme}`);
-    handleGoBack();
+    if (data) {
+      setReadMessage({ id: data?.id, hasBeenRead: false })
+        .unwrap()
+        .then(() => {
+          notify('Отмечено как непрочитанное');
+          handleGoBack();
+        });
+    }
   };
 
   const handleClickDelete = () => {
@@ -40,14 +48,10 @@ export const MessageDetail = () => {
   };
 
   const handleDelete = () => {
-    alert(`Цепочка писем с темой ${data.theme} удалена`);
+    alert(`Цепочка писем с темой ${data?.subject} удалена`);
     setShowDeleteModal(false);
     handleGoBack();
   };
-
-  useEffect(() => {
-    setData(findMailChainAndThemeById(mockData));
-  }, [findMailChainAndThemeById]);
 
   useEffect(() => {
     if (showAnswerForm) {
@@ -56,16 +60,21 @@ export const MessageDetail = () => {
   }, [showAnswerForm]);
 
   return (
-    <Loading>
+    <Loading isSpin={isFetching || isReadLoading}>
       <div className={styles.message}>
         <div className={styles.messageHead}>
           <Icon className={styles.back} type='go-back' onClick={handleGoBack} />
-          <h1>{data.theme}</h1>
+          <h1>{data?.subject}</h1>
           <div className={styles.btnWrapper}>
             <div className={styles.btnInner} onClick={handleClickUnread}>
-              <Icon className={`${styles.btn} ${styles.btnCancel}`} type='sms-gray' />
-              <span className={`${styles.btnText} ${styles.cancel}`}>Отметить как непрочитанное</span>
+              <Icon className={`${styles.btn} ${styles.btnCancel}`} type='forward' />
+              <span className={`${styles.btnText} ${styles.delete}`}>Переслать</span>
             </div>
+            <div className={styles.btnInner} onClick={handleClickUnread}>
+              <Icon className={`${styles.btn} ${styles.btnCancel}`} type='sms-gray' />
+              <span className={`${styles.btnText} ${styles.delete}`}>Отметить как непрочитанное</span>
+            </div>
+
             <div className={styles.btnInner} onClick={handleClickDelete}>
               <Icon className={`${styles.btn} ${styles.btnDelete}`} type='trash-gray' />
               <span className={`${styles.btnText} ${styles.delete}`}>Удалить</span>
@@ -73,11 +82,19 @@ export const MessageDetail = () => {
           </div>
         </div>
         <div className={styles.messageBody}>
-          {data.mailChain.map((el, idx) => (
-            <MessageCard {...el} key={idx} />
-          ))}
+          {data?.employee && (
+            <MessageCard
+              data={{
+                name: data?.employee.second_name + data?.employee.first_name + data?.employee.middle_name,
+                email: data.employee.email,
+                image: `${process.env.REACT_APP_BASE_URL}/${data.employee.avatar.path}`,
+                text: data.text,
+                date: data.created_at
+              }}
+            />
+          )}
           {showAnswerForm ? (
-            <AnswerForm user={userMailData} setShowAnswerForm={setShowAnswerForm} />
+            <AnswerForm setShowAnswerForm={setShowAnswerForm} />
           ) : (
             <div className={styles.answerBtn}>
               <Button text={'ответить'} styleType={BUTTON_TYPES.YELLOW} onClick={() => setShowAnswerForm(true)} />
@@ -89,7 +106,7 @@ export const MessageDetail = () => {
       <DeleteModal
         isOpen={showDeleteModal}
         onCancel={() => setShowDeleteModal(false)}
-        text={`Вы действительно хотите удалить цепочку писем с темой ${data.theme}`}
+        text={`Вы действительно хотите удалить это письмо с темой ${data?.subject}`}
         onDelete={handleDelete}
       />
     </Loading>

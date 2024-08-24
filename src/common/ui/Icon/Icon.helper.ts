@@ -13,6 +13,7 @@ import deleteIcon from '../../assets/icons/deleteIcon.svg';
 import doneSvg from '../../assets/icons/done-svg.svg';
 import download from '../../assets/icons/download-icon.svg';
 import edit from '../../assets/icons/edit.svg';
+import forward from '../../assets/icons/forward.svg';
 import goBackArrow from '../../assets/icons/goBackArrow.svg';
 import arrowDown from '../../assets/icons/header/arrow-down.svg';
 import arrowUp from '../../assets/icons/header/arrow-up.svg';
@@ -112,5 +113,6 @@ export const icons: IIcons = {
   ['search-black']: searchBlackIcon,
   ['calc-open']: calcOpen,
   ['calc-close']: calcClose,
-  ['check']: check
+  ['check']: check,
+  ['forward']: forward
 };

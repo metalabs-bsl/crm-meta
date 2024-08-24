@@ -1,0 +1,66 @@
+@import '../../styles/variables.scss';
+
+:global {
+  .quill {
+    .ql-disabled {
+      cursor: not-allowed;
+      p {
+        color: $gray;
+      }
+    }
+    .ql-snow.ql-toolbar {
+      border: 2px solid $seaSalt;
+
+      .ql-formats,
+      .ql-expanded {
+        border: 1px solid rgba($gray-btn-bg-hover, 0.1);
+        background-color: $seaSalt;
+        border-radius: 4px;
+        .ql-picker,
+        .ql-stroke {
+          color: $gray-btn-bg-hover;
+          stroke: $gray-btn-bg-hover;
+        }
+        & button:hover {
+          color: $violet-round;
+          .ql-stroke {
+            stroke: $violet-round;
+          }
+        }
+        .ql-picker-label:hover,
+        .ql-picker-item:hover,
+        .ql-active {
+          color: $violet-round;
+          .ql-stroke {
+            stroke: $violet-round;
+          }
+        }
+      }
+      .ql-picker-options {
+        background: $white;
+        border: 1px solid rgba($gray-btn-bg-hover, 0.5);
+        border-radius: 4px;
+        margin-top: 5px;
+      }
+    }
+    .ql-snow.ql-container {
+      background: $seaSalt;
+      min-height: 170px;
+      border: 2px solid $seaSalt;
+      border-radius: 0 0 5px 5px;
+      border-top: none;
+      .ql-editor {
+        padding: 10px 16px;
+        p {
+          font-size: 16px;
+        }
+      }
+      .ql-editor.ql-blank::before {
+        font-weight: 400;
+        font-size: 16px;
+        font-style: normal;
+        color: $gray;
+      }
+    }
+  }
+}

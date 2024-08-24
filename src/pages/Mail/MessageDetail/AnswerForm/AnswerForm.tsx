@@ -1,24 +1,19 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { Button } from 'common/ui';
+import { useAppSelector } from 'common/hooks';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import styles from './styles.module.scss';
 
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { BUTTON_TYPES } from 'types/enums';
 
-interface IUserData {
-  image: string;
-  name: string;
-  email: string;
-}
-
 interface IProps {
-  user: IUserData;
   setShowAnswerForm: (arg0: boolean) => void;
 }
 
-export const AnswerForm: FC<IProps> = ({ user, setShowAnswerForm }) => {
+export const AnswerForm: FC<IProps> = ({ setShowAnswerForm }) => {
   const [content, setContent] = useState<string>('');
-
+  const { userInfo } = useAppSelector(employeesSelectors.employees);
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value);
   };
@@ -32,13 +27,17 @@ export const AnswerForm: FC<IProps> = ({ user, setShowAnswerForm }) => {
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <div className={styles.imgWrapper}>
-          <img src={user.image} alt='user image' />
+          <img src={`${process.env.REACT_APP_BASE_URL}/${userInfo?.avatar?.path}`} alt='user image' />
         </div>
         <div className={styles.content}>
           <div className={styles.heading}>
             <div className={styles.about}>
-              <span className={styles.name}>{user.name}</span>
-              <span className={styles.email}>{user.email}</span>
+              <div className={styles.fullName}>
+                <span className={styles.name}>{userInfo?.second_name}</span>
+                <span className={styles.name}>{userInfo?.first_name}</span>
+                <span className={styles.name}>{userInfo?.middle_name}</span>
+              </div>
+              <span className={styles.email}>{userInfo?.email}</span>
             </div>
           </div>
           <ReactTextareaAutosize

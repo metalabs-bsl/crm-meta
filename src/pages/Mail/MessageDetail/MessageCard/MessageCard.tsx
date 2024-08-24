@@ -3,7 +3,14 @@ import { formatDateToString } from 'pages/Mail/Mail.helper';
 import { IMailChainData } from 'pages/Mail/types/mailsData';
 import styles from './styes.module.scss';
 
-export const MessageCard: FC<IMailChainData> = ({ image, name, email, date, text, reply }) => {
+import { sanitize } from 'dompurify';
+
+interface IProps {
+  data: IMailChainData;
+}
+
+export const MessageCard: FC<IProps> = ({ data }) => {
+  const { image, name, email, date, text, reply } = data;
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
@@ -20,7 +27,7 @@ export const MessageCard: FC<IMailChainData> = ({ image, name, email, date, text
               <span>{formatDateToString(date)}</span>
             </div>
           </div>
-          <p className={styles.contentText}>{text}</p>
+          <p className={styles.contentText} dangerouslySetInnerHTML={{ __html: sanitize(text) }} />
           {reply && (
             <div className={styles.reply}>
               <div className={styles.imgWrapper}>

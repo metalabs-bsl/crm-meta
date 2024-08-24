@@ -47,9 +47,11 @@ export interface IUserInfoRes {
   job_title: string;
   avatar: null | IAvatar;
   background: BG_TYPES;
+  middle_name: string;
 }
 
 export interface IEmployee {
+  avatar: IAvatar;
   background: string;
   created_at: string;
   date_of_birth: string;
