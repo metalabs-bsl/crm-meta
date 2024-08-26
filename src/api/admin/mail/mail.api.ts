@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { getBaseQuery } from 'common/helpers';
-import { IMailGet, IMailSingleGet, IMailTabsCounts, ISetReadMessage } from 'types/requests/admin/mail.api';
+import { IForwardMessage, IMailGet, IMailSingleGet, IMailTabsCounts, ISetPinMessage, ISetReadMessage } from 'types/requests/admin/mail.api';
 
 export const mailApi = createApi({
   reducerPath: 'mailApi',
@@ -33,12 +33,25 @@ export const mailApi = createApi({
       invalidatesTags: ['Mail', 'Counts']
     }),
     setReadMessage: mutation<ISetReadMessage.Response, ISetReadMessage.Params>({
-      query: (body) => ({
+      query: ({ id, hasBeenRead }) => ({
         method: 'PATCH',
-        url: `/employees/mail/read?id=${body.id}&hasBeenRead=${body.hasBeenRead}`,
-        body
+        url: `/employees/mail/read?id=${id}&hasBeenRead=${hasBeenRead}`
       }),
-      invalidatesTags: ['Counts']
+      invalidatesTags: ['Counts', 'Mail']
+    }),
+    setPinMessage: mutation<ISetPinMessage.Response, ISetPinMessage.Params>({
+      query: ({ id, isPinned }) => ({
+        method: 'PATCH',
+        url: `/employees/mail/pin?id=${id}&pin=${isPinned}`
+      }),
+      invalidatesTags: ['Counts', 'Mail']
+    }),
+    forwardMessage: mutation<IForwardMessage.Response, IForwardMessage.Params>({
+      query: ({ mail_id, mail_to }) => ({
+        method: 'POST',
+        url: `/employees/mail/reply?mail_id=${mail_id}&mail_to=${mail_to}`
+      }),
+      invalidatesTags: ['Counts', 'Mail']
     })
   })
 });
@@ -49,5 +62,7 @@ export const {
   useGetSignQuery,
   useSendMailMutation,
   useGetMailCountsOfTabsQuery,
-  useSetReadMessageMutation
+  useSetReadMessageMutation,
+  useSetPinMessageMutation,
+  useForwardMessageMutation
 } = mailApi;

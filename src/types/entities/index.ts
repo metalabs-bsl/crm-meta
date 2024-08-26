@@ -30,5 +30,14 @@ export type {
   IUpdateLeadParams
 } from './leads';
 export type { ILoginParams, ILoginRes } from './login';
-export type { IMail, IMailCounts, IMailParams, ISendMail, ISetReadMessageParams } from './mail';
+export type {
+  IAttachment,
+  IForwardMessageParams,
+  IMail,
+  IMailCounts,
+  IMailParams,
+  ISendMail,
+  ISetPinMessageParams,
+  ISetReadMessageParams
+} from './mail';
 export type { IResWorkTimeInfo } from './workTime';

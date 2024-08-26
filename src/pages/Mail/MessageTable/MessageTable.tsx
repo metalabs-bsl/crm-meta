@@ -1,12 +1,11 @@
 import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { Button, Checkbox, Loading } from 'common/ui';
-import { DeleteModal } from 'common/components';
 import { dateFormat } from 'common/helpers';
-import { useRedirect } from 'common/hooks';
+import { useNotify, useRedirect } from 'common/hooks';
+import { useSetPinMessageMutation, useSetReadMessageMutation } from 'api/admin/mail/mail.api';
 import { IMail } from 'types/entities';
 import { extractInfo } from '../Mail.helper';
-// import { getSelectedMessageIds } from '../Mail.helper';
 import styles from './styles.module.scss';
 
 import { sanitize } from 'dompurify';
@@ -19,72 +18,46 @@ interface IProps {
 }
 
 export const MessageTable: FC<IProps> = ({ columns, data, isLoading = false }) => {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const notify = useNotify();
+  const [selectedRow, setSelectedRow] = useState<IMail | null>(null);
   const redirectTo = useRedirect();
-
-  const handleSelectAll = useCallback(() => {
-    setSelectAll((prev) => !prev);
-    data && setSelectedRows(() => (!selectAll ? data.map((_, index) => index) : []));
-  }, [selectAll, data]);
-
-  const handleSelectRow = useCallback((index: number) => {
-    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
+  const [setReadMessage, { isLoading: isReadLoading }] = useSetReadMessageMutation();
+  const [setPinMessage, { isLoading: isPinLoading }] = useSetPinMessageMutation();
+  const handleSelectRow = useCallback((row: IMail) => {
+    setSelectedRow((prev) => (prev?.id === row.id ? null : row));
   }, []);
-
-  // const handlePinAll = () => {
-  //   const idsToPin = getSelectedMessageIds(selectedRows, messages);
-  //   console.log('Закрепить все ID:', idsToPin);
-  //   // Здесь можно добавить логику для закрепления всех выбранных
-  // };
-
-  // const handleUnpinAll = () => {
-  //   const idsToUnpin = getSelectedMessageIds(selectedRows, messages);
-  //   console.log('Открепить все ID:', idsToUnpin);
-  //   // Здесь можно добавить логику для открепления всех выбранных
-  // };
-
-  // const markAsUnread = () => {
-  //   const idsToUnread = getSelectedMessageIds(selectedRows, messages);
-  //   console.log('Отметить как непрочитанное ID:', idsToUnread);
-  //   // Здесь можно добавить логику для пометки как непрочитанные
-  // };
-
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
 
   const handleClickMessage = (dialog: IMail) => {
     const id = dialog.id.toString();
     redirectTo.mailDetail({ id });
   };
 
-  // const handleResend = () => {
-  //   const idsToResend = getSelectedMessageIds(selectedRows, messages);
-  //   console.log('Переслать сообщения с ID:', idsToResend);
-  //   // Здесь можно добавить логику для пересылки сообщений
-  // };
+  const toggleReadMessage = (row: IMail) => {
+    setReadMessage({ id: row?.id, hasBeenRead: !row.hasBeenRead })
+      .unwrap()
+      .then(() => {
+        notify(`отмечено как ${row.hasBeenRead ? 'не' : ''}прочитанное`);
+        setSelectedRow(null);
+      });
+  };
 
-  // const handleDelete = () => {
-  //   const idsToDelete = getSelectedMessageIds(selectedRows, messages);
-  //   console.log('Удалить сообщения с ID:', idsToDelete);
-  //   // Здесь можно добавить логику для удаления сообщений
-  //   handleModalClose();
-  // };
+  const togglePinMessage = (row: IMail) => {
+    setPinMessage({ id: row?.id, isPinned: !row.isPinned })
+      .unwrap()
+      .then(() => {
+        notify(row.isPinned ? 'откреплено' : 'закреплено');
+        setSelectedRow(null);
+      });
+  };
 
   return (
-    <Loading isSpin={isLoading}>
+    <Loading isSpin={isLoading || isReadLoading || isPinLoading}>
       <div className={styles.table_wrapper}>
         <table className={styles.table}>
           <thead className={styles.thead}>
             <tr className={styles.headTr}>
               <th>
-                <Checkbox className={styles.checkbox} checked={selectAll} onChange={handleSelectAll} />
+                <Checkbox className={styles.checkboxNotEllowed} disabled />
               </th>
               {columns.map((col, index) => (
                 <th key={index}>{col}</th>
@@ -95,9 +68,9 @@ export const MessageTable: FC<IProps> = ({ columns, data, isLoading = false }) =
             </tr>
           </thead>
           <tbody className={styles.tbody}>
-            {data?.map((message, index) => {
+            {data?.map((message) => {
               const formatDate = dateFormat(message.created_at);
-              const sender = extractInfo(message.from);
+              const sender = extractInfo(columns.includes('отправитель') ? message.from : message.to);
               return (
                 <tr
                   key={message.id}
@@ -107,7 +80,11 @@ export const MessageTable: FC<IProps> = ({ columns, data, isLoading = false }) =
                   }}
                 >
                   <td onClick={(e) => e.stopPropagation()}>
-                    <Checkbox className={styles.checkbox} checked={selectedRows.includes(index)} onChange={() => handleSelectRow(index)} />
+                    <Checkbox
+                      className={styles.checkbox}
+                      checked={selectedRow?.id === message.id}
+                      onChange={() => handleSelectRow(message)}
+                    />
                   </td>
                   <td>{sender}</td>
                   <td>
@@ -121,15 +98,20 @@ export const MessageTable: FC<IProps> = ({ columns, data, isLoading = false }) =
             })}
           </tbody>
         </table>
-        {selectedRows.length !== 0 && (
+        {selectedRow !== null && (
           <div className={styles.btns_wrapper}>
-            <Button styleType={BUTTON_TYPES.GREEN} text='открепить все' />
-            <Button styleType={BUTTON_TYPES.GREEN} text='закрепить все' />
-            <Button styleType={BUTTON_TYPES.LINK_GRAY} text='отметить как прочитанное' />
-            <Button styleType={BUTTON_TYPES.LINK_GRAY} text='удалить' onClick={handleModalOpen} />
+            <Button
+              onClick={() => togglePinMessage(selectedRow)}
+              styleType={BUTTON_TYPES.GREEN}
+              text={`${selectedRow.isPinned ? 'открепить' : 'закрепить'}`}
+            />
+            <Button
+              onClick={() => toggleReadMessage(selectedRow)}
+              styleType={BUTTON_TYPES.LINK_GRAY}
+              text={`отметить как ${selectedRow.hasBeenRead ? 'не' : ''}прочитанное`}
+            />
           </div>
         )}
-        <DeleteModal isOpen={isModalOpen} onCancel={handleModalClose} text={'Вы уверены, что хотите удалить выбранные письма?'} />
       </div>
     </Loading>
   );

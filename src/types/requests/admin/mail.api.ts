@@ -1,4 +1,4 @@
-import { IMail, IMailCounts, IMailParams, ISetReadMessageParams } from 'types/entities';
+import { IForwardMessageParams, IMail, IMailCounts, IMailParams, ISetPinMessageParams, ISetReadMessageParams } from 'types/entities';
 
 export module IMailGet {
   export type Response = IMail[];
@@ -18,4 +18,14 @@ export module IMailTabsCounts {
 export module ISetReadMessage {
   export type Response = void;
   export type Params = ISetReadMessageParams;
+}
+
+export module ISetPinMessage {
+  export type Response = void;
+  export type Params = ISetPinMessageParams;
+}
+
+export module IForwardMessage {
+  export type Response = void;
+  export type Params = IForwardMessageParams;
 }

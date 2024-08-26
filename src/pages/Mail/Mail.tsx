@@ -9,7 +9,6 @@ import styles from './styles.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 
-const columns = ['отправитель', 'сообщение', 'дата'];
 enum TABS_VALUES {
   INBOX = 'inbox',
   UNREAD = 'unread',
@@ -52,6 +51,13 @@ export const Mail: FC = () => {
       }
     ];
   }, [tabsData]);
+
+  const columns = useMemo(() => {
+    if (activeTab === TABS_VALUES.SENT) {
+      return ['получатель', 'сообщение', 'дата'];
+    }
+    return ['отправитель', 'сообщение', 'дата'];
+  }, [activeTab]);
 
   return (
     <Loading>

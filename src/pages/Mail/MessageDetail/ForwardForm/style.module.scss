@@ -1,0 +1,31 @@
+@import '../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    label {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray;
+    }
+    .inp_wrapper {
+      background-color: $seaSalt;
+      border-radius: 5px;
+      input {
+        padding-left: 15px;
+        color: $gray-btn-bg-hover;
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+  }
+  button {
+    width: min-content;
+    font-size: 14px;
+  }
+}

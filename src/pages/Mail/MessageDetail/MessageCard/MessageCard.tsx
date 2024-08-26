@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { formatDateToString } from 'pages/Mail/Mail.helper';
 import { IMailChainData } from 'pages/Mail/types/mailsData';
+import { IAttachment } from 'types/entities';
 import styles from './styes.module.scss';
 
 import { sanitize } from 'dompurify';
@@ -10,7 +11,15 @@ interface IProps {
 }
 
 export const MessageCard: FC<IProps> = ({ data }) => {
-  const { image, name, email, date, text, reply } = data;
+  const { image, name, email, date, text, reply, attachments } = data;
+
+  const formatURl = (fileData: IAttachment) => {
+    const byteArray = new Uint8Array(fileData.content.data);
+    const blob = new Blob([byteArray], { type: fileData.contentType });
+    const url = URL.createObjectURL(blob);
+    return url;
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
@@ -28,6 +37,14 @@ export const MessageCard: FC<IProps> = ({ data }) => {
             </div>
           </div>
           <p className={styles.contentText} dangerouslySetInnerHTML={{ __html: sanitize(text) }} />
+          {attachments?.map((file, index) => {
+            const fileUrl = formatURl(file);
+            return (
+              <a key={index} href={fileUrl} target='_blank' rel='noreferrer'>
+                {file.filename}
+              </a>
+            );
+          })}
           {reply && (
             <div className={styles.reply}>
               <div className={styles.imgWrapper}>
