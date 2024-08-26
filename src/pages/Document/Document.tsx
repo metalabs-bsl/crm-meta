@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Button, FilePicker, Loading, SearchInput } from 'common/ui';
+import { useState } from 'react';
+import { Button, Loading, SearchInput } from 'common/ui';
 import { Modal, Tabs } from 'common/components';
+import { DocumentForm } from './DocumentForm/DocumentForm';
 import { DocumentTable } from './DocumentTable/DocumentTable';
 import { OriginalTable } from './OriginalTable';
 import styles from './styles.module.scss';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
 
 export interface DocumentData {
@@ -174,42 +174,25 @@ const tabItems = [
   { type: 'tab2', title: 'Оригинальные' }
 ];
 
-interface FormValues {
-  documentNumber: string;
-  file: File;
-}
-
 export const Document = () => {
   const [activeTab, setActiveTab] = useState(tabItems[0].type);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [file, setFile] = useState<File>(); // eslint-disable-line @typescript-eslint/no-unused-vars
-  const [inputWrapper, setInputWrapper] = useState(false);
-
-  const handleModalOpen = (): void => {
-    setIsModalOpen(true);
-    setInputWrapper(activeTab === 'tab1');
-  };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm<FormValues>();
-
-  const onSubmit: SubmitHandler<FormValues> = () => {
-    //обновляем форму после отправки
-    reset();
-    handleModalClose();
+  type TabComponents = {
+    [key in (typeof tabItems)[number]['type']]: React.ReactNode;
   };
 
-  useEffect(() => {
-    isModalOpen && register('documentNumber', { required: false });
-  }, [isModalOpen, register]);
+  const getTableComponent = (tab: (typeof tabItems)[number]['type']): React.ReactNode => {
+    const components: TabComponents = {
+      tab1: <DocumentTable data={data} />,
+      tab2: <OriginalTable originalData={originalData} />
+    };
+    return components[tab];
+  };
 
   return (
     <Loading>
@@ -217,7 +200,7 @@ export const Document = () => {
         <div className={styles.headBlock}>
           <div className={styles.titleBlock}>
             <h1>Документы</h1>
-            <Button text='загрузить документ' styleType={BUTTON_TYPES.YELLOW} onClick={handleModalOpen} />
+            <Button text='загрузить документ' styleType={BUTTON_TYPES.YELLOW} onClick={() => setIsModalOpen(true)} />
           </div>
           <SearchInput placeholder='Поиск' />
         </div>
@@ -229,34 +212,9 @@ export const Document = () => {
           tabClassName={styles.customTab}
           activeTabClassName={styles.customActiveTab}
         />
-        <div className={styles.tableWrapper}>
-          {activeTab === 'tab1' && <DocumentTable data={data} />}
-          {activeTab === 'tab2' && <OriginalTable originalData={originalData} />}
-        </div>
+        <div className={styles.tableWrapper}>{getTableComponent(activeTab)}</div>
         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-          <div className={styles.modalInner}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className={styles.filePickerWrapper}>
-                <FilePicker
-                  onChange={(file) => {
-                    if (file) {
-                      setFile(file); // Обновляем состояние с массивом файлов
-                    }
-                  }}
-                />
-              </div>
-              {inputWrapper && (
-                <div className={styles.inputWrapper} style={{ display: 'flex' }}>
-                  <label htmlFor='documentNumber'>Номер договора:</label>
-                  <input id='documentNumber' {...register('documentNumber', { required: 'Это поле обязательно' })} />
-                  {errors.documentNumber && <span>{errors.documentNumber.message}</span>}
-                </div>
-              )}
-              <div className={styles.readyBtnWrapper}>
-                <Button className={styles.readyBtn} styleType={BUTTON_TYPES.GREEN} text='Готово' type='submit' />
-              </div>
-            </form>
-          </div>
+          <DocumentForm onClose={handleModalClose} activeTab={activeTab} />
         </Modal>
       </div>
     </Loading>

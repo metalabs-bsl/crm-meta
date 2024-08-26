@@ -1,3 +1,5 @@
+import { IAttachment } from 'types/entities';
+
 export interface IMailChainData {
   image: string;
   name: string;
@@ -5,6 +7,7 @@ export interface IMailChainData {
   date: string;
   text: string;
   reply?: IMailChainData;
+  attachments: IAttachment[];
 }
 
 export interface IMailData {

@@ -13,3 +13,4 @@ export { Radio } from './Radio';
 export { SearchInput } from './SearchInput';
 export { Select } from './Select';
 export { StartEndPeriodPicker } from './StartEndPeriodPicker';
+export { TextEditor } from './TextEditor';

@@ -58,4 +58,5 @@ export type IIconType =
   | 'search-black'
   | 'calc-open'
   | 'check'
-  | 'calc-close';
+  | 'calc-close'
+  | 'forward';
