@@ -1,7 +1,8 @@
 import { appSettingsApi } from './appSettings/appSettings.api';
+import { accountsApi } from './accounts/accounts.api';
 import { calendarApi } from './calendar/calendar.api';
 import { currenciesApi } from './currencies/currencies.api';
-import { employessApi } from './employees/employees.api';
+import { employeesApi } from './employees/employees.api';
 import { historyApi } from './history/history.api';
 import { kanbanApi } from './kanban/kanban.api';
 import { leadsMainApi } from './leads/leads.api';
@@ -15,13 +16,14 @@ export const adminApiReducers = {
   [currenciesApi.reducerPath]: currenciesApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
   [leadsMainApi.reducerPath]: leadsMainApi.reducer,
-  [employessApi.reducerPath]: employessApi.reducer,
+  [employeesApi.reducerPath]: employeesApi.reducer,
   [workTime.reducerPath]: workTime.reducer,
   [kanbanApi.reducerPath]: kanbanApi.reducer,
   [appSettingsApi.reducerPath]: appSettingsApi.reducer,
   [historyApi.reducerPath]: historyApi.reducer,
   [calendarApi.reducerPath]: calendarApi.reducer,
-  [mailApi.reducerPath]: mailApi.reducer
+  [mailApi.reducerPath]: mailApi.reducer,
+  [accountsApi.reducerPath]: accountsApi.reducer
 };
 
 export const adminApiMiddlewares = [
@@ -29,7 +31,8 @@ export const adminApiMiddlewares = [
   currenciesApi.middleware,
   loginApi.middleware,
   leadsMainApi.middleware,
-  employessApi.middleware,
+  employeesApi.middleware,
+  accountsApi.middleware,
   workTime.middleware,
   kanbanApi.middleware,
   appSettingsApi.middleware,
