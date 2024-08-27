@@ -13,7 +13,7 @@
   box-shadow: 0 -2px 5px $black-box-shadow;
   border-radius: 0 0 10px 10px;
   border-top: 1px solid $silver;
-
+  z-index: 1000;
   .btn {
     font-size: 16px;
     line-height: 1.3em;

@@ -10,6 +10,14 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  .refresh {
+    display: flex;
+    justify-content: space-between;
+    button {
+      font-size: 18px;
+      height: min-content;
+    }
+  }
   .headBlock {
     gap: 50px;
     display: flex;

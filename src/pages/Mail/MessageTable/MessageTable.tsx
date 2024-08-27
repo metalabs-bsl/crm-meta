@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import cn from 'classnames';
-import { Button, Checkbox, Loading } from 'common/ui';
+import { Button, Checkbox, Empty, Loading } from 'common/ui';
 import { dateFormat } from 'common/helpers';
 import { useNotify, useRedirect } from 'common/hooks';
 import { useSetPinMessageMutation, useSetReadMessageMutation } from 'api/admin/mail/mail.api';
@@ -53,51 +53,55 @@ export const MessageTable: FC<IProps> = ({ columns, data, isLoading = false }) =
   return (
     <Loading isSpin={isLoading || isReadLoading || isPinLoading}>
       <div className={styles.table_wrapper}>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr className={styles.headTr}>
-              <th>
-                <Checkbox className={styles.checkboxNotEllowed} disabled />
-              </th>
-              {columns.map((col, index) => (
-                <th key={index}>{col}</th>
-              ))}
-              <td className={styles.markerBox}>
-                <span className={styles.marker}></span>
-              </td>
-            </tr>
-          </thead>
-          <tbody className={styles.tbody}>
-            {data?.map((message) => {
-              const formatDate = dateFormat(message.created_at);
-              const sender = extractInfo(columns.includes('отправитель') ? message.from : message.to);
-              return (
-                <tr
-                  key={message.id}
-                  className={cn({ [styles.unread]: !message.hasBeenRead })}
-                  onClick={() => {
-                    handleClickMessage(message);
-                  }}
-                >
-                  <td onClick={(e) => e.stopPropagation()}>
-                    <Checkbox
-                      className={styles.checkbox}
-                      checked={selectedRow?.id === message.id}
-                      onChange={() => handleSelectRow(message)}
-                    />
-                  </td>
-                  <td>{sender}</td>
-                  <td>
-                    <span className={styles.subject}>{message.subject}, </span>
-                    <span dangerouslySetInnerHTML={{ __html: sanitize(message.text) }} />
-                  </td>
-                  <td>{formatDate}</td>
-                  {message.isPinned && <span className={styles.marker}></span>}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {!!data?.length ? (
+          <table className={styles.table}>
+            <thead className={styles.thead}>
+              <tr className={styles.headTr}>
+                <th>
+                  <Checkbox className={styles.checkboxNotEllowed} disabled />
+                </th>
+                {columns.map((col, index) => (
+                  <th key={index}>{col}</th>
+                ))}
+                <td className={styles.markerBox}>
+                  <span className={styles.marker}></span>
+                </td>
+              </tr>
+            </thead>
+            <tbody className={styles.tbody}>
+              {data?.map((message) => {
+                const formatDate = dateFormat(message.created_at);
+                const sender = extractInfo(columns.includes('отправитель') ? message.from : message.to);
+                return (
+                  <tr
+                    key={message.id}
+                    className={cn({ [styles.unread]: !message.hasBeenRead })}
+                    onClick={() => {
+                      handleClickMessage(message);
+                    }}
+                  >
+                    <td onClick={(e) => e.stopPropagation()}>
+                      <Checkbox
+                        className={styles.checkbox}
+                        checked={selectedRow?.id === message.id}
+                        onChange={() => handleSelectRow(message)}
+                      />
+                    </td>
+                    <td>{sender}</td>
+                    <td>
+                      <span className={styles.subject}>{message.subject}, </span>
+                      <span dangerouslySetInnerHTML={{ __html: sanitize(message.text) }} />
+                    </td>
+                    <td>{formatDate}</td>
+                    {message.isPinned && <span className={styles.marker}></span>}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <Empty />
+        )}
         {selectedRow !== null && (
           <div className={styles.btns_wrapper}>
             <Button

@@ -86,12 +86,12 @@ export const MessageDetail = () => {
           {data?.employee && (
             <MessageCard
               data={{
-                attachments: data.attachments,
+                attachments: data?.attachments,
                 name: data?.employee.second_name + data?.employee.first_name + data?.employee.middle_name,
-                email: data.employee.email,
-                image: `${process.env.REACT_APP_BASE_URL}/${data.employee.avatar.path}`,
-                text: data.text,
-                date: data.created_at
+                email: data?.employee.email,
+                image: `${process.env.REACT_APP_BASE_URL}/${data?.employee?.avatar?.path}`,
+                text: data?.text,
+                date: data?.created_at
               }}
             />
           )}

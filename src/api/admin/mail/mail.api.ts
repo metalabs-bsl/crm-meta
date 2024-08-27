@@ -15,6 +15,14 @@ export const mailApi = createApi({
       query: (params) => `/employees/mail/all?type=${params.type}&search=${params.search}`,
       providesTags: ['Mail']
     }),
+    refreshMail: mutation<void, void>({
+      query: (body) => ({
+        method: 'POST',
+        url: `/employees/mail/refresh`,
+        body
+      }),
+      invalidatesTags: ['Mail', 'Counts']
+    }),
     getSingleMail: query<IMailSingleGet.Response, IMailSingleGet.Params>({
       query: (id) => `/employees/mail/single/${id}`,
       providesTags: ['Single']
@@ -64,5 +72,6 @@ export const {
   useGetMailCountsOfTabsQuery,
   useSetReadMessageMutation,
   useSetPinMessageMutation,
-  useForwardMessageMutation
+  useForwardMessageMutation,
+  useRefreshMailMutation
 } = mailApi;
