@@ -1,64 +1,26 @@
-import { FC, useState } from 'react';
-import { Checkbox, Icon } from 'common/ui';
-import { DeleteModal } from 'common/components';
-import { useNotify } from 'common/hooks';
-import { MESSAGE } from 'common/constants';
+import { FC } from 'react';
+import { Checkbox } from 'common/ui';
+import { IDocument } from 'types/entities';
 import styles from './styles.module.scss';
 
-interface IFile {
-  id: string;
-  name: string;
-  title: string;
-  file: string;
-}
-
 interface IProps {
-  index: number;
-  data: IFile;
+  data: IDocument;
   isSelected: boolean;
-  onSelectRow: (index: number) => void;
+  onSelectRow: (doc: IDocument) => void;
 }
 
-export const DocumentTableRow: FC<IProps> = ({ index, data, isSelected, onSelectRow }) => {
-  const notification = useNotify();
-  const [delOpen, setDelOpen] = useState<boolean>(false);
-  const { id, name, title, file } = data;
-
-  const [fileDropDown, setFileDropDown] = useState(false);
-
-  const handleCLickFileDropDown = () => {
-    setFileDropDown((prev) => !prev);
-  };
-  const cancelDelete = () => {
-    setDelOpen(false);
-  };
-
-  const deleteDocument = () => {
-    notification(MESSAGE.DELETED);
-    setDelOpen(false);
-  };
+export const DocumentTableRow: FC<IProps> = ({ data, isSelected, onSelectRow }) => {
+  const { contract_number, name } = data;
 
   return (
     <div className={styles.bodyTr}>
       <div className={styles.rowCheckbox}>
-        <Checkbox checked={isSelected} onChange={() => onSelectRow(index)} />
+        <Checkbox checked={isSelected} onChange={() => onSelectRow(data)} />
       </div>
-      <div className={`${styles.bodyTd} ${styles.id}`}>{id}</div>
-      <div className={`${styles.bodyTd} ${styles.name}`}>{name}</div>
-      <div className={`${styles.bodyTd} ${styles.naming}`}>{title}</div>
-      <div className={`${styles.dropDown} ${styles.bodyTd} ${styles.format}`}>
-        <span className={`${styles.btn} ${fileDropDown ? styles.activeBtn : ''}`} onClick={handleCLickFileDropDown}>
-          pdf
-          <Icon className={`${styles.arrow} ${fileDropDown ? styles.arrowActive : ''}`} type={'arrow-down'} alt='arrow' />
-        </span>
-        <div className={`${styles.content} ${fileDropDown ? styles.contentActive : ''}`}>
-          <p className={styles.fileType}>{file}</p>
-          <p className={styles.fileType}>{file}</p>
-          <p className={styles.fileType}>{file}</p>
-          <p className={styles.fileType}>{file}</p>
-        </div>
+      <div className={styles.content}>
+        <div className={`${styles.bodyTd} ${styles.id}`}>{contract_number}</div>
+        <div className={`${styles.bodyTd} ${styles.name}`}>{name}</div>
       </div>
-      <DeleteModal text={`Вы точно хотите удалить "${title}"`} isOpen={delOpen} onCancel={cancelDelete} onDelete={deleteDocument} />
     </div>
   );
 };

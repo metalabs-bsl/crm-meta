@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { Button, Loading, SearchInput } from 'common/ui';
+import { Button, SearchInput } from 'common/ui';
 import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
-import { useGetMailCountsOfTabsQuery, useLazyGetMailQuery } from 'api/admin/mail/mail.api';
+import { useGetMailCountsOfTabsQuery, useLazyGetMailQuery, useRefreshMailMutation } from 'api/admin/mail/mail.api';
 import MessageModal from './MessageModal/MessageModal';
 import { MessageTable } from './MessageTable';
 import styles from './styles.module.scss';
@@ -21,7 +21,7 @@ export const Mail: FC = () => {
   const [isModalActive, setModalActive] = useState<boolean>(false);
 
   const [getMail, { data: mailData, isFetching: isMailFetching }] = useLazyGetMailQuery();
-
+  const [refreshMail, { isLoading: isRefreshLoading }] = useRefreshMailMutation();
   const { data: tabsData } = useGetMailCountsOfTabsQuery();
 
   useEffect(() => {
@@ -60,15 +60,15 @@ export const Mail: FC = () => {
   }, [activeTab]);
 
   return (
-    <Loading>
-      <div className={styles.mail}>
-        <div className={styles.headBlock}>
-          <div className={styles.titleBlock}>
-            <h1>Почта</h1>
-            <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} onClick={() => setModalActive(true)} />
-          </div>
-          <SearchInput placeholder='Поиск' onValueChange={setSearchValue} />
+    <div className={styles.mail}>
+      <div className={styles.headBlock}>
+        <div className={styles.titleBlock}>
+          <h1>Почта</h1>
+          <Button text='написать сообщение' styleType={BUTTON_TYPES.YELLOW} onClick={() => setModalActive(true)} />
         </div>
+        <SearchInput placeholder='Поиск' onValueChange={setSearchValue} />
+      </div>
+      <div className={styles.refresh}>
         <Tabs
           tabItems={buildTabsData}
           isActiveTab={activeTab}
@@ -77,12 +77,12 @@ export const Mail: FC = () => {
           tabClassName={styles.tab}
           activeTabClassName={styles.activeTab}
         />
-        <div className={styles.tableWrapper}>
-          <MessageTable data={mailData} columns={columns} isLoading={isMailFetching} />
-        </div>
+        <Button text='обновить' styleType={BUTTON_TYPES.YELLOW} onClick={() => refreshMail()} />
       </div>
-
+      <div className={styles.tableWrapper}>
+        <MessageTable data={mailData} columns={columns} isLoading={isMailFetching || isRefreshLoading} />
+      </div>
       {isModalActive && <MessageModal isModalActive={isModalActive} setModalActive={setModalActive} />}
-    </Loading>
+    </div>
   );
 };

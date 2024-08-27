@@ -1,60 +1,70 @@
 import { FC, useCallback, useState } from 'react';
-import { Checkbox } from 'common/ui';
+import { Checkbox, Empty, Loading } from 'common/ui';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useDeleteDocMutation, useLazyDownloadFileQuery } from 'api/admin/document/document.api';
+import { IDocument } from 'types/entities';
 import { DownloadDelete } from '../DownloadDelete';
 import { OriginalTableRow } from './OriginalTableRow';
 import styles from './styles.module.scss';
 
-interface OriginalRowData {
-  title: string;
-  format: string;
-}
-
 interface OriginalTableProps {
-  originalData: OriginalRowData[];
+  originalData?: IDocument[];
 }
 
 export const OriginalTable: FC<OriginalTableProps> = ({ originalData }) => {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const handleSelectAll = useCallback(() => {
-    setSelectAll((prev) => !prev);
-    setSelectedRows(() => (!selectAll ? originalData.map((_, index) => index) : []));
-  }, [selectAll, originalData]);
-
-  const handleSelectRow = useCallback((index: number) => {
-    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
+  const notify = useNotify();
+  const [selectedRow, setSelectedRow] = useState<IDocument | null>(null);
+  const [downloadDocumentFile, { isLoading: isDownloadLoading }] = useLazyDownloadFileQuery();
+  const [deleteDocument, { isLoading: isDeleteLoading }] = useDeleteDocMutation();
+  const handleSelectRow = useCallback((document: IDocument) => {
+    setSelectedRow((prev) => (prev?.id === document.id ? null : document));
   }, []);
 
   const handleDelete = () => {
-    console.log('Удалить', selectedRows);
+    if (selectedRow) {
+      deleteDocument(selectedRow?.id)
+        .unwrap()
+        .then(() => {
+          setSelectedRow(null);
+          notify(MESSAGE.DELETED, 'success');
+        });
+    }
   };
 
   const handleDownload = () => {
-    console.log('Скачать', selectedRows);
+    if (selectedRow) {
+      downloadDocumentFile({ id: selectedRow.files.id, original_name: selectedRow.files.original_name })
+        .unwrap()
+        .then(() => {
+          setSelectedRow(null);
+          notify(MESSAGE.DOWNLOAD, 'success');
+        });
+    }
   };
 
   return (
     <div className={styles.original}>
-      <div className={styles.originalHead}>
-        <div className={`${styles.originalTitle} ${styles.checkbox}`}>
-          <Checkbox checked={selectAll} onChange={handleSelectAll} />
-        </div>
-        <div className={`${styles.originalTitle} ${styles.naming}`}>название договора</div>
-        <div className={`${styles.originalTitle} ${styles.format}`}>формат</div>
-      </div>
-      <div className={styles.originalBody}>
-        {originalData.map((el, index) => (
-          <OriginalTableRow
-            key={index}
-            index={index}
-            originalData={el}
-            isSelected={selectedRows.includes(index)}
-            onSelectRow={handleSelectRow}
-          />
-        ))}
-      </div>
-      {selectedRows.length > 0 && <DownloadDelete onDelete={handleDelete} onDownload={handleDownload} />}
+      <Loading isSpin={isDeleteLoading || isDownloadLoading}>
+        {!!originalData?.length ? (
+          <>
+            <div className={styles.originalHead}>
+              <div className={`${styles.originalTitle} ${styles.checkbox}`}>
+                <Checkbox disabled />
+              </div>
+              <div className={`${styles.originalTitle} ${styles.naming}`}>название договора</div>
+            </div>
+            <div className={styles.originalBody}>
+              {originalData?.map((el, index) => (
+                <OriginalTableRow key={index} originalData={el} isSelected={selectedRow?.id === el.id} onSelectRow={handleSelectRow} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <Empty />
+        )}
+        {selectedRow && <DownloadDelete onDelete={handleDelete} onDownload={handleDownload} />}
+      </Loading>
     </div>
   );
 };
