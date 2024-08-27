@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
-import { MESSAGE, paymentOptions, servicesOptions } from 'common/constants';
+import { MESSAGE, paymentOptions } from 'common/constants';
 import { useSetAdditionalPaymentMutation } from 'api/admin/leads/endpoints/calculator';
 import { useGetPaymentCurrencyQuery } from 'api/admin/paymentCurrency/paymentCurrency.api';
 import { Options } from 'types/common';
@@ -13,7 +13,7 @@ import styles from './style.module.scss';
 import { useForm } from 'react-hook-form';
 
 interface IProps {
-  title: string;
+  title?: string;
   calcId?: string;
   formProps: IAdditionalPayment;
 }
@@ -21,7 +21,6 @@ interface IProps {
 export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
   const [isEditUpsell, setIsEditUpsell] = useState<boolean>(false);
   const isEditable = !isEditUpsell;
-  const serviceTitle = servicesOptions.find((i) => i.value === title);
   const { register, getValues, setValue } = useForm<IAdditionalPayment>();
   const [postPayment] = useSetAdditionalPaymentMutation();
   const { data } = useGetPaymentCurrencyQuery();
@@ -79,7 +78,7 @@ export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
 
   return (
     <Accordion
-      title={`Доп продажа - ${serviceTitle?.label}`}
+      title={`Доп продажа - ${title}`}
       onEditAction={() => setIsEditUpsell(!isEditUpsell)}
       isEdit={isEditUpsell}
       onSaveAction={onSubmit}

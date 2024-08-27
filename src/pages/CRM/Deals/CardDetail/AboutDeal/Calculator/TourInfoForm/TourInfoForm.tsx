@@ -4,12 +4,12 @@ import cn from 'classnames';
 import { DatePicker, Input, Loading, MultipleSelect, Select } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { useNotify } from 'common/hooks';
-import { MESSAGE, servicesOptions } from 'common/constants';
+import { MESSAGE } from 'common/constants';
 import { useSetTourDataMutation } from 'api/admin/leads/endpoints/calculator';
 import { Options } from 'types/common';
 import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
-import { brandOptions, categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
+import { categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
 
 import { useForm } from 'react-hook-form';
@@ -17,9 +17,11 @@ import { useForm } from 'react-hook-form';
 interface IProps {
   formProps?: ITourData;
   calcId?: string;
+  servicesOptions: Options[];
+  brandOptions: Options[];
 }
 
-export const TourInfoForm: FC<IProps> = ({ calcId, formProps }) => {
+export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, brandOptions }) => {
   const notify = useNotify();
   const [postTourData, { isLoading }] = useSetTourDataMutation();
   const passengersRef = useRef(null);
@@ -59,14 +61,15 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps }) => {
         setPassengerCounts({ adults: formProps.adult_passengers, children: formProps.child_passengers });
       });
 
-      setServises(servicesOptions.filter((option) => formProps?.services?.includes(option.value as string)));
+      const servicesIds = formProps.services.map((service) => String(service.id)); // Convert to array of strings
+      servicesOptions && setServises(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
     }
-  }, [formProps, setValue]);
+  }, [formProps, servicesOptions, setValue]);
 
   const onSubmit = () => {
     if (calcId) {
       const data = getValues();
-      const updatedServises = servises.map((i) => i.value as string);
+      const updatedServises = servises.map((i) => ({ id: String(i.value) }));
       const sendingData: ITourData = {
         ...data,
         services: updatedServises,
@@ -106,15 +109,17 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps }) => {
                 type='number'
               />
             </div>
-            <div className={styles.item_block}>
-              <label>Бренд</label>
-              <Select
-                {...register('brand', { required: 'обязательное поле' })}
-                options={brandOptions}
-                className={styles.select}
-                disabled={isEditable}
-              />
-            </div>
+            {brandOptions && (
+              <div className={styles.item_block}>
+                <label>Бренд</label>
+                <Select
+                  {...register('brand', { required: 'обязательное поле' })}
+                  options={brandOptions}
+                  className={styles.select}
+                  disabled={isEditable}
+                />
+              </div>
+            )}
             <div className={styles.item_block}>
               <label>Отель</label>
               <Input
@@ -184,19 +189,21 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps }) => {
                 disabled={isEditable}
               />
             </div>
-            <div className={styles.item_block}>
-              <label>Услуга</label>
-              <MultipleSelect
-                openSelect={openSelect}
-                setOpenSelect={setOpenSelect}
-                selectId='services'
-                onChange={setServises}
-                options={servicesOptions}
-                disabled={isEditable}
-                placeholder='Не выбрано'
-                defaultValue={servises}
-              />
-            </div>
+            {servicesOptions && (
+              <div className={styles.item_block}>
+                <label>Услуга</label>
+                <MultipleSelect
+                  openSelect={openSelect}
+                  setOpenSelect={setOpenSelect}
+                  selectId='services'
+                  onChange={setServises}
+                  options={servicesOptions}
+                  disabled={isEditable}
+                  placeholder='Не выбрано'
+                  defaultValue={servises}
+                />
+              </div>
+            )}
           </div>
         </form>
       </Loading>

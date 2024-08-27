@@ -16,7 +16,16 @@ interface IProps extends ILeadRow {
   stages: IStageData[];
 }
 
-export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column, stages, order, responsible_employee }) => {
+export const TableRowData: FC<IProps> = ({
+  id,
+  lead_name,
+  customer,
+  lead_column,
+  stages,
+  order,
+  responsible_employee,
+  comment_or_reminder
+}) => {
   const profileRef = useRef(null);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [editedLeadName, setEditedLeadName] = useState<string>(lead_name);
@@ -175,7 +184,10 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
             <div>No stage data</div>
           )}
         </td>
-        <td style={{ maxWidth: '280px' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus voluptatem sunt dolor.</td>
+        <td style={{ maxWidth: '280px' }}>
+          {comment_or_reminder ? (comment_or_reminder?.type === 'reminder' ? 'Дело: ' : 'Комментарий: ') : 'Нет данных'}{' '}
+          {comment_or_reminder?.text}
+        </td>
         <td>{order}</td>
         <td>
           {role !== ROLES.MANAGER && (

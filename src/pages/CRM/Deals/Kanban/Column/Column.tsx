@@ -147,7 +147,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
           )}
         </div>
       </div>
-      {isSaleColumn && <span className={styles.totalSum}>200.000$</span>}
+      {/* {isSaleColumn && <span className={styles.totalSum}>200.000$</span>} */}
       {canDrag && isLeadCreatable && (
         <div className={styles.createBtn} onClick={onOpen}>
           <Icon type='plus-icon' alt='plus' />

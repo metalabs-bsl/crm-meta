@@ -23,6 +23,7 @@ export type {
   IResPaymentCurrency,
   IResSearch,
   IResSource,
+  IServise,
   ISetAdditionalPaymentRes,
   ITourData,
   IUpdateContract,

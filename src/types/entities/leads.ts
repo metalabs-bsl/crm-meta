@@ -161,6 +161,9 @@ export interface ISetAdditionalPaymentRes extends Omit<ICalcPayment, 'course_TO'
   comment: string;
 }
 
+export interface IdWithKey {
+  id: string;
+}
 export interface ITourData {
   booking_number: string;
   departure_city: string;
@@ -171,7 +174,7 @@ export interface ITourData {
   hotel: string;
   adult_passengers: number;
   child_passengers: number;
-  services: string[];
+  services: IdWithKey[];
   tour_category: string;
   id?: string;
   calculator: {
@@ -270,4 +273,9 @@ export interface IInvoice {
   invoice_text: string;
   title: string;
   updated_at: string;
+}
+
+export interface IServise {
+  id: string;
+  name: string;
 }

@@ -5,7 +5,12 @@ import { Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useChoicePaymentToggleMutation, useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
+import {
+  useChoicePaymentToggleMutation,
+  useGetBrandsQuery,
+  useGetServisesQuery,
+  useUpdateLeadCalcPaidStatusMutation
+} from 'api/admin/leads/endpoints/calculator';
 import { Options } from 'types/common';
 import { ICalculator, IResCalc, IUpdateContract } from 'types/entities/leads';
 import { PaymentsDetails } from './PaymentDetailsFrom/PaymentsDetails';
@@ -38,6 +43,8 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
   const notify = useNotify();
   const [updatePaidStatus, { isLoading }] = useUpdateLeadCalcPaidStatusMutation();
   const [choicePaymentToggle] = useChoicePaymentToggleMutation();
+  const { data: servicesOptions } = useGetServisesQuery();
+  const { data: brandOptions } = useGetBrandsQuery();
 
   const tabItems: ITabsItem[] = [
     {
@@ -128,7 +135,9 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
           isFullPayment={data?.is_full_payment}
           paymentsList={data?.paymentData}
         />
-        <TourInfoForm formProps={data?.tourData[0]} calcId={data?.id} />
+        {servicesOptions && brandOptions && (
+          <TourInfoForm formProps={data?.tourData[0]} calcId={data?.id} servicesOptions={servicesOptions} brandOptions={brandOptions} />
+        )}
         {data?.additionalPayments?.map((item, index) => <UpsellForm calcId={data?.id} title={item.name} formProps={item} key={index} />)}
       </div>
     </Loading>

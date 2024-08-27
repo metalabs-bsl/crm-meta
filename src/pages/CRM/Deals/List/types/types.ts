@@ -1,3 +1,5 @@
+import { IComment_or_Reminder } from 'types/entities/kanban';
+
 export interface ICustomerData {
   fullname: string;
   birthday: string;
@@ -8,9 +10,9 @@ export interface ICustomerData {
 
 export interface ILeadRow {
   order: number;
-  // responsible_employee: string;
   id: string;
   dealStage: string;
+  comment_or_reminder: IComment_or_Reminder;
   lead_name: string;
   customer: ICustomerData;
   lead_column: { id: string };

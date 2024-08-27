@@ -34,7 +34,7 @@ const ListTable: FC<TableProps> = ({ data }) => {
                     <th className={styles.table_titles}>наименование</th>
                     <th className={styles.table_titles}>клиент</th>
                     <th className={styles.table_titles}>стадия сделки</th>
-                    <th className={styles.table_titles}>дела</th>
+                    <th className={styles.table_titles}>Комментарий или дело</th>
                     <th className={styles.table_titles}>сумма/валюта</th>
                     {role !== ROLES.MANAGER && <th className={styles.table_titles}>ответственный</th>}
                     {isManagement && <th className={styles.table_titles}>Удаление</th>}
