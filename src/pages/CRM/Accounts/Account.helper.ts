@@ -1,5 +1,3 @@
-import { TableRowData } from './types/tableRowData';
-
 export const mainRowHeaders = [
   {
     title: 'номер договора',
@@ -22,15 +20,7 @@ export const mainRowHeaders = [
     classNames: ['title']
   },
   {
-    title: 'курс',
-    classNames: ['title']
-  },
-  {
     title: 'комиссия',
-    classNames: ['title']
-  },
-  {
-    title: 'способ оплаты',
     classNames: ['title']
   },
   {
@@ -46,7 +36,15 @@ export const mainRowHeaders = [
     classNames: ['title']
   },
   {
-    title: 'оплата ТО',
+    title: 'оплата ТО, сом',
+    classNames: ['title']
+  },
+  {
+    title: 'оплата ТО, доллар',
+    classNames: ['title']
+  },
+  {
+    title: 'оплата ТО, евро',
     classNames: ['title']
   },
   {
@@ -80,6 +78,10 @@ export const paymentRowHeaders = [
     classNames: ['title']
   },
   {
+    title: 'курс',
+    classNames: ['title']
+  },
+  {
     title: 'квитанция от ТО',
     classNames: ['title']
   },
@@ -88,15 +90,11 @@ export const paymentRowHeaders = [
     classNames: ['title']
   },
   {
+    title: 'валюта',
+    classNames: ['title']
+  },
+  {
     title: 'оплачено',
     classNames: ['title']
   }
 ];
-
-export const indexToBookingNumberForDeleteModal = (selectedArr: number[], dataArr: TableRowData[]) => {
-  if (selectedArr.length === 1) {
-    return `Вы уверены, что хотите удалить счёт c номером договора: ${dataArr[selectedArr[0]].bookingNumber}?`;
-  } else {
-    return `Вы уверены, что хотите удалить счета c номерами договоров: ${selectedArr.map((idx) => dataArr[idx].bookingNumber).join(', ')}?`;
-  }
-};

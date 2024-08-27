@@ -4,7 +4,7 @@ import { Loading, SearchInput } from 'common/ui';
 import { DeleteModal, Modal } from 'common/components';
 import { useNotify, useSearch } from 'common/hooks';
 import { useDeleteEmployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
-import { IEmployeeData } from './types/types';
+import { IEmployee } from 'types/entities';
 import { AddEmployees } from './AddEmployess';
 import { columns } from './Employees.helper';
 import { EmployeeTableRow } from './EmployeeTableRow';
@@ -14,7 +14,7 @@ export const Employees = () => {
   const { data: tableData = [], isFetching } = useGetAllEmployeesQuery();
   const [deleteEmployee, { isLoading }] = useDeleteEmployeeMutation();
   const [searchText, setSearchText] = useState<string>('');
-  const filteredData = useSearch<IEmployeeData>(tableData, searchText);
+  const filteredData = useSearch<IEmployee>(tableData, searchText);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
   const [employeeIdToDelete, setEmployeeIdToDelete] = useState<string | null>(null);
@@ -74,13 +74,13 @@ export const Employees = () => {
           <SearchInput placeholder='Поиск' onValueChange={setSearchText} />
         </div>
       </div>
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} ref={tableContainerRef}>
         <Modal isOpen={showAddEmployeeForm} onClose={() => setShowAddEmployeeForm(false)} className={styles.modal}>
           {showAddEmployeeForm && <AddEmployees setShowAddEmployee={setShowAddEmployeeForm} />}
         </Modal>
 
-        <div className={styles.tableContainer} ref={tableContainerRef}>
-          <div className={styles.table}>
+        <div className={styles.tableContainer}>
+          <div className={cn(styles.table, styles.tableHeaderWrapper)}>
             <div className={styles.tableHeader}>
               <div className={cn(styles.headerItem, { [styles.scrolled]: isScrolled })}>действия</div>
               {columns.map((title) => (
@@ -89,6 +89,8 @@ export const Employees = () => {
                 </div>
               ))}
             </div>
+          </div>
+          <div className={styles.table}>
             {filteredData.map((employee) => (
               <EmployeeTableRow {...employee} key={employee.id} handleDelete={handleDeleteClick} isScrolled={isScrolled} />
             ))}
