@@ -6,6 +6,7 @@ import { useCreateEmployeeMutation, useGetEmployeeRolesQuery } from 'api/admin/e
 import { getRusRole } from '../Employees.helper';
 import styles from './style.module.scss';
 
+import PhoneInput from 'react-phone-input-2';
 import { BG_TYPES } from 'types/enums';
 
 interface IProps {
@@ -137,12 +138,14 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
             </div>
             <div className={styles.field}>
               <label>Номер телефона</label>
-              <input
-                type='tel'
+              <PhoneInput
+                country={'kg'}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder='+996 (xxx) xxx-xxx'
-                className={styles.input}
+                onChange={setPhone}
+                enableSearch
+                containerClass={styles.phone_container}
+                buttonClass={styles.select_btn}
+                placeholder={undefined}
               />
             </div>
             <div className={styles.field}>

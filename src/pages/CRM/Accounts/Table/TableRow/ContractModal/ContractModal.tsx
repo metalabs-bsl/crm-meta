@@ -19,7 +19,7 @@ export const ContractModal: FC<IContractModalProps> = ({ name, phone, city, sour
         </ul>
         <ul>
           <li className={styles.contractTitleNumber}>Номер телефона</li>
-          <li className={styles.contractPhone}>{phone}</li>
+          <li className={styles.contractPhone}>+{phone}</li>
         </ul>
         <ul>
           <li className={styles.contractTitleNumber}>Город проживания</li>

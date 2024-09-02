@@ -37,6 +37,43 @@
       opacity: 1;
     }
   }
+  .phone_container {
+    height: 30px;
+    input {
+      width: 100%;
+      height: 100%;
+      background-color: $seaSalt;
+      border-radius: 5px;
+      border: none;
+      color: $gray-btn-bg-hover;
+      &:disabled {
+        background-color: white !important;
+        opacity: 0.3;
+      }
+    }
+
+    .disabled_btn {
+      cursor: not-allowed;
+    }
+    .disabled_btn > div {
+      background-color: $seaSalt;
+      background-color: white !important;
+      opacity: 0.3;
+      &:hover {
+        background: $seaSalt;
+      }
+    }
+    .select_btn {
+      border: none;
+      background-color: $seaSalt;
+    }
+    .select_btn > div {
+      background-color: $seaSalt;
+      &:hover {
+        background: $seaSalt;
+      }
+    }
+  }
 }
 
 .select:disabled {

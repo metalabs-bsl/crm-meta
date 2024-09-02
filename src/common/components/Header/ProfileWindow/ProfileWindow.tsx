@@ -51,7 +51,7 @@ export const ProfileWindow: FC<IProps> = ({ onClose }) => {
         </li>
         <li>
           <span className={styles.label}>Номер телефона</span>
-          <span className={styles.number}>{userInfo?.phone}</span>
+          <span className={styles.number}>+{userInfo?.phone}</span>
         </li>
         <li>
           <span className={styles.label}>Дата начала работы</span>
