@@ -8,7 +8,6 @@ export { Icon } from './Icon';
 export { Input } from './Input';
 export { Loading } from './Loading';
 export { MultipleSelect } from './MultipleSelect';
-export { PhoneInput } from './PhoneInput';
 export { Radio } from './Radio';
 export { SearchInput } from './SearchInput';
 export { Select } from './Select';

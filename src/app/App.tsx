@@ -10,6 +10,7 @@ import { useLazyGetUserInfoQuery } from 'api/admin/employees/employees.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { loginSelectors } from 'api/admin/login/login.selectors';
 import { adminPath } from 'types/routes';
+import 'react-phone-input-2/lib/style.css';
 import styles from './styles.module.scss';
 
 import { initializeSocket } from 'socket';

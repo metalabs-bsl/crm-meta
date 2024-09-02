@@ -8,6 +8,8 @@ import { IEmployee } from 'types/entities';
 import { getRusRole } from '../Employees.helper';
 import styles from './styles.module.scss';
 
+import PhoneInput from 'react-phone-input-2';
+
 interface IEmployeeTableRow extends IEmployee {
   handleDelete: (arg0: string, arg1: string) => void;
   isScrolled: boolean;
@@ -149,12 +151,15 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
         </select>
       </div>
       <div className={styles.item}>
-        <input
-          className={styles.input}
+        <PhoneInput
           disabled={!isEdit}
+          country={'kg'}
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          type='phone'
+          onChange={setPhoneNumber}
+          enableSearch
+          containerClass={styles.phone_container}
+          buttonClass={cn(styles.select_btn, { [styles.disabled_btn]: !isEdit })}
+          placeholder={undefined}
         />
       </div>
       <div className={styles.item}>

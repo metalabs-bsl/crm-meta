@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
-import { Button, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
+import { Button, Icon, Input, Loading, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
@@ -10,7 +10,8 @@ import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import styles from './styles.module.scss';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
 import { BUTTON_TYPES } from 'types/enums';
 
 interface IProps {
@@ -25,8 +26,7 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
     formState: { errors },
     reset,
     setValue,
-    setError,
-    clearErrors
+    control
   } = useForm<ICreateLeadParams>();
 
   const { isNewDeal, column_id } = useAppSelector(sidebarSelectors.sidebar);
@@ -52,11 +52,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   }, [isNewDeal]);
 
   const onsubmit: SubmitHandler<ICreateLeadParams> = (data) => {
-    if (!data.customer_phone || data.customer_phone.replace(/[^\d]/g, '').length < 12) {
-      setError('customer_phone', { type: 'manual', message: 'Phone number must have at least 9 digits' });
-      return;
-    }
-
     if (formProps) {
       updateLead({ body: data, id: search.substring(1) })
         .unwrap()
@@ -73,18 +68,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           setIsEdit(false);
           reset();
         });
-    }
-  };
-
-  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const cleanedValue = value.replace(/[^\d]/g, '');
-
-    if (cleanedValue.length >= 12) {
-      setValue('customer_phone', cleanedValue, { shouldValidate: true });
-      clearErrors('customer_phone');
-    } else {
-      setValue('customer_phone', cleanedValue);
     }
   };
 
@@ -126,12 +109,24 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           <div className={styles.inpBlock}>
             <div className={styles.inpBlock}>
               <label>Номер телефона</label>
-              <PhoneInput
-                {...register('customer_phone', { required: 'Номер телефона обязателен' })}
-                className={styles.inp}
-                onChange={handlePhoneChange}
-                initialValue={formProps?.customer_phone}
+              <Controller
                 disabled={!isEdit}
+                name='customer_phone'
+                control={control}
+                rules={{ required: 'Phone number is required' }}
+                render={({ field: { onChange, value } }) => (
+                  <div>
+                    <PhoneInput
+                      disabled={!isEdit}
+                      country={'kg'}
+                      value={value}
+                      onChange={onChange}
+                      enableSearch
+                      containerClass={styles.phone_container}
+                      buttonClass={cn(styles.select_btn, { [styles.disabled_btn]: !isEdit })}
+                    />
+                  </div>
+                )}
               />
               {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
             </div>

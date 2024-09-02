@@ -9,6 +9,8 @@
 
   .days_grid {
     border-top: 1px solid $silver;
+    overflow-y: scroll;
+    height: calc(100vh - 240px);
   }
 
   .week_day,

@@ -22,7 +22,7 @@ export const BirthDayModal: FC<IProps> = ({ isOpen = false, onCancel, data }) =>
             День рождения {data?.type === 1 ? 'сотрудника' : 'клиента'} <br /> <span className={styles.name}>{data?.name}</span>
           </p>
           <p className={styles.phone_wrapper}>
-            номер телефона: <span className={styles.phone}>{data?.phone}</span>
+            номер телефона: <span className={styles.phone}>+{data?.phone}</span>
           </p>
         </div>
       </div>
