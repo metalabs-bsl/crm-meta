@@ -1,7 +1,7 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker, Icon, Input, Loading, Select } from 'common/ui';
-import { Accordion } from 'common/components';
+import { Accordion, Modal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE, paymentOptions } from 'common/constants';
 import { useCreatePaymentMutation } from 'api/admin/leads/endpoints/calculator';
@@ -11,6 +11,7 @@ import { ICalcPayment, ICreatePaymentParams } from 'types/entities/leads';
 import styles from './styles.module.scss';
 
 import { useForm } from 'react-hook-form';
+import { BUTTON_TYPES } from 'types/enums';
 
 interface IProps {
   isActiveTab: string;
@@ -38,6 +39,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
 }) => {
   const notify = useNotify();
   const { data } = useGetPaymentCurrencyQuery();
+  const [isAddPaumentModal, setIsAddPaumentModal] = useState<boolean>(false);
 
   const paymentCurrencyOptions = useMemo<Options[]>(() => {
     return (
@@ -60,7 +62,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       setValue('exchange_rate', formProps.exchange_rate);
       setValue('commission', formProps.commission);
       setValue('course_TO', formProps.course_TO);
-      setValue('client_due_date', dayjs(formProps.client_due_date).format('YYYY-MM-DDTHH:mm'));
+      setValue('client_due_date', dayjs(formProps.client_due_date).format('YYYY-MM-DD'));
       setValue('currency', formProps.currency);
     }
   }, [formProps, setValue]);
@@ -177,6 +179,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                     className={styles.datepicker}
                     disabled={!isEdit}
                     defaultValue={dayjs().format('YYYY-MM-DDTHH:mm')}
+                    datePicketType='date'
                   />
                 </div>
               </div>
@@ -196,7 +199,23 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         </Loading>
       </Accordion>
       {isActiveTab !== 'full' && paymentAccordions.length < 5 && index === paymentAccordions.length - 1 && (
-        <Icon type='plus-gray' className={styles.plusIcon} onClick={handleAddPaymentAccordion} />
+        <Icon type='plus-gray' className={styles.plusIcon} onClick={() => setIsAddPaumentModal(true)} />
+      )}
+      {isAddPaumentModal && (
+        <Modal
+          isOpen={isAddPaumentModal}
+          leftBtnText={'Добавить'}
+          leftBtnStyle={BUTTON_TYPES.YELLOW}
+          leftBtnAction={() => {
+            handleAddPaymentAccordion();
+            setIsAddPaumentModal(false);
+          }}
+          rightBtnText='Отменить'
+          rightBtnStyle={BUTTON_TYPES.CANCEL}
+          rightBtnAction={() => setIsAddPaumentModal(false)}
+        >
+          <p className={styles.addPaymentModalText}>Добавить новую часть оплаты?</p>
+        </Modal>
       )}
     </>
   );

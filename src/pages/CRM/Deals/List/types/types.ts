@@ -23,6 +23,7 @@ export interface ILeadRow {
     phone: string;
     id: string;
   };
+  created_at: string;
 }
 
 export interface IStageData {

@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Icon, Select } from 'common/ui';
 import { ClientWindow, DeleteModal, DropdownModal } from 'common/components';
+import { dateFormat } from 'common/helpers';
 import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
@@ -24,7 +25,8 @@ export const TableRowData: FC<IProps> = ({
   stages,
   order,
   responsible_employee,
-  comment_or_reminder
+  comment_or_reminder,
+  created_at
 }) => {
   const profileRef = useRef(null);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
@@ -43,8 +45,9 @@ export const TableRowData: FC<IProps> = ({
   const notify = useNotify();
   const redirect = useRedirect();
   const dispatch = useAppDispatch();
-
+  const updatedDate = dateFormat(created_at);
   const { role } = useAppSelector(employeesSelectors.employees);
+  const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
 
   useEffect(() => {
     if (stages && lead_column) {
@@ -184,6 +187,7 @@ export const TableRowData: FC<IProps> = ({
             <div>No stage data</div>
           )}
         </td>
+        <td>{updatedDate}</td>
         <td style={{ maxWidth: '280px' }}>
           {comment_or_reminder ? (comment_or_reminder?.type === 'reminder' ? 'Дело: ' : 'Комментарий: ') : 'Нет данных'}{' '}
           {comment_or_reminder?.text}
@@ -202,7 +206,12 @@ export const TableRowData: FC<IProps> = ({
             </div>
           )}
         </td>
-        <td className={styles.deleteIcon}>{role === ROLES.DIRECTOR && <Icon type='delete' onClick={() => setShowDeleteModal(true)} />}</td>
+        {isManagement && (
+          <td className={styles.deleteIcon}>
+            {' '}
+            <Icon type='delete' onClick={() => setShowDeleteModal(true)} />
+          </td>
+        )}
       </tr>
       <DropdownModal targetRef={profileRef} isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
         <ClientWindow
