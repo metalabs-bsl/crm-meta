@@ -31,12 +31,13 @@ const ListTable: FC<TableProps> = ({ data }) => {
               <table className={styles.table}>
                 <thead className={styles.table_header}>
                   <tr className={styles.table_header_titles}>
-                    <th className={styles.table_titles}>наименование</th>
-                    <th className={styles.table_titles}>клиент</th>
-                    <th className={styles.table_titles}>стадия сделки</th>
+                    <th className={styles.table_titles}>Наименование</th>
+                    <th className={styles.table_titles}>Клиент</th>
+                    <th className={styles.table_titles}>Стадия сделки</th>
+                    <th className={styles.table_titles}>Дата создания</th>
                     <th className={styles.table_titles}>Комментарий или дело</th>
-                    <th className={styles.table_titles}>сумма/валюта</th>
-                    {role !== ROLES.MANAGER && <th className={styles.table_titles}>ответственный</th>}
+                    <th className={styles.table_titles}>Сумма/Валюта</th>
+                    {role !== ROLES.MANAGER && <th className={styles.table_titles}>Ответственный</th>}
                     {isManagement && <th className={styles.table_titles}>Удаление</th>}
                   </tr>
                 </thead>

@@ -71,10 +71,11 @@
       width: 29px;
       height: 29px;
       background-color: $seaSalt;
-      border: none;
+      border: 2px solid $not-paid;
     }
     &:checked + span {
       background-color: $seaSalt;
+      border: 2px solid $salat-round;
       &:after {
         color: black;
         border: 2px solid $gray-btn-bg-hover;
@@ -89,6 +90,7 @@
     }
     &:disabled + span {
       cursor: not-allowed;
+      border: 2px solid $silver;
     }
   }
 }

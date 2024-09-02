@@ -1,5 +1,6 @@
 import { FC, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
+import { Empty } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { IAccountData } from 'types/entities/accounts';
 import { ContractModal } from './ContractModal';
@@ -69,9 +70,7 @@ export const TableRow: FC<ITableRowProps> = ({
         <td colSpan={14} className={styles.accordionContainer}>
           <Accordion className={styles.accordion} title='Информация об оплате'>
             <div className={styles.expandedContent}>
-              {paymentDetails.map((details) => (
-                <PaymentRow {...details} key={details.id} />
-              ))}
+              {!!paymentDetails.length ? paymentDetails.map((details) => <PaymentRow {...details} key={details.id} />) : <Empty />}
             </div>
           </Accordion>
         </td>

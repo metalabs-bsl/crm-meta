@@ -55,6 +55,7 @@ export const DocumentForm: FC<DocumentFormProps> = ({ onClose, activeTab }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.filePickerWrapper}>
           <FilePicker
+            accept={activeTab === 'tab1' ? '.doc, .docx' : '*'}
             onChange={(file) => {
               if (file) {
                 setFile(file);

@@ -40,7 +40,9 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof IUpdateContract];
-        if ((key === 'booking_date' || key === 'customer_passportDateGiven' || key === 'customer_DOB') && typeof value === 'string') {
+        if ((key === 'customer_passportDateGiven' || key === 'customer_DOB') && typeof value === 'string') {
+          setValue(key as keyof IUpdateContract, dayjs(value).format('YYYY-MM-DD'));
+        } else if (key === 'booking_date' && typeof value === 'string') {
           setValue(key as keyof IUpdateContract, dayjs(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof IUpdateContract, formProps[key as keyof IUpdateContract]);
@@ -168,6 +170,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 {...register('customer_passportDateGiven', { required: 'обязательное поле' })}
                 className={styles.datepicker}
                 disabled={isEditable}
+                datePicketType='date'
               />
             </div>
             <div className={styles.item_block}>
@@ -206,6 +209,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 {...register('customer_DOB', { required: 'Дата рождения клиента обязательна' })}
                 disabled={isEditable}
                 className={styles.datepicker}
+                datePicketType='date'
               />
             </div>
           </div>
