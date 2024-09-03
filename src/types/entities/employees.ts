@@ -45,6 +45,7 @@ export interface IEmployee {
   middle_name: string;
   password: string;
   phone: string;
+  personal_phone: string;
   refreshToken: string;
   roles: IRole[];
   second_name: string;

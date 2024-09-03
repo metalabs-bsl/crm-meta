@@ -50,7 +50,7 @@
 
 .table {
   display: grid;
-  grid-template-columns: 90px repeat(13, minmax(190px, 1fr));
+  grid-template-columns: 90px repeat(14, minmax(190px, 1fr));
   border-collapse: collapse;
   min-width: 2040px;
 }

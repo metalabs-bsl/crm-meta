@@ -22,6 +22,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   middle_name,
   date_of_birth,
   phone,
+  personal_phone,
   roles,
   email,
   email_password,
@@ -42,6 +43,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth?.split('T')[0]);
   const [role, setRole] = useState<string>(roles[0].id);
   const [phoneNumber, setPhoneNumber] = useState<string>(phone || '');
+  const [personalPhone, setPersonalPhone] = useState<string>(personal_phone || '');
   const [emailData, setEmailData] = useState<string>(email || '');
   const [emailPassword, setEmailPassword] = useState<string>(email_password || '');
   const [startOfInternship, setStartOfInternship] = useState<string>(start_of_internship?.split('T')[0] || '');
@@ -70,6 +72,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       date_of_birth: dateOfBirth,
       job_title: getRusRole(rolesAll?.find((el) => el.id === role)?.role_name || ''),
       phone: phoneNumber,
+      personal_phone: personalPhone,
       email: emailData,
       email_password: emailPassword,
       start_of_internship: startOfInternship,
@@ -163,6 +166,18 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
         />
       </div>
       <div className={styles.item}>
+        <PhoneInput
+          disabled={!isEdit}
+          country={'kg'}
+          value={personalPhone}
+          onChange={setPersonalPhone}
+          enableSearch
+          containerClass={styles.phone_container}
+          buttonClass={cn(styles.select_btn, { [styles.disabled_btn]: !isEdit })}
+          placeholder={undefined}
+        />
+      </div>
+      <div className={styles.item}>
         <input className={styles.input} disabled={!isEdit} value={emailData} type='email' onChange={(e) => setEmailData(e.target.value)} />
       </div>
       <div className={styles.item}>
@@ -196,13 +211,17 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
         <input className={styles.input} disabled={!isEdit} value={loginCRM} type='text' onChange={(e) => setLoginCRM(e.target.value)} />
       </div>
       <div className={styles.item}>
-        <input
-          className={styles.input}
-          disabled={!isEdit}
-          value={passwordCRM}
-          type='text'
-          onChange={(e) => setPasswordCRM(e.target.value)}
-        />
+        {isEdit ? (
+          <input
+            className={styles.input}
+            disabled={!isEdit}
+            value={passwordCRM}
+            type='text'
+            onChange={(e) => setPasswordCRM(e.target.value)}
+          />
+        ) : (
+          <span>Скрыто</span>
+        )}
       </div>
 
       <div className={cn(styles.item, styles.fileItem)}>

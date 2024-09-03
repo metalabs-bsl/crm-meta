@@ -22,6 +22,7 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
   const [dateOfBirth, setDateOfBirth] = useState<string>('');
   const [role, setRole] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
+  const [personal_phone, setPersonal_phone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [emailPassword, setEmailPassword] = useState<string>('');
   const [startInternship, setStartInternship] = useState<string>('');
@@ -48,6 +49,7 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
       email_password: emailPassword,
       middle_name: middleName,
       phone: phone,
+      personal_phone: personal_phone,
       start_of_internship: startInternship,
       end_of_internship: null,
       start_of_work: startWork,
@@ -137,7 +139,7 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
               </select>
             </div>
             <div className={styles.field}>
-              <label>Номер телефона</label>
+              <label>Рабочий телефон</label>
               <PhoneInput
                 country={'kg'}
                 value={phone}
@@ -156,6 +158,18 @@ export const AddEmployees: FC<IProps> = ({ setShowAddEmployee }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder='Введите почту'
                 className={styles.input}
+              />
+            </div>
+            <div className={styles.field}>
+              <label>Личный телефон</label>
+              <PhoneInput
+                country={'kg'}
+                value={personal_phone}
+                onChange={setPersonal_phone}
+                enableSearch
+                containerClass={styles.phone_container}
+                buttonClass={styles.select_btn}
+                placeholder={undefined}
               />
             </div>
             <div className={styles.field}>
