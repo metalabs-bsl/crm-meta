@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import utc from 'dayjs/plugin/utc';
 import cn from 'classnames';
 import { Button, Icon, Loading } from 'common/ui';
 import { Modal } from 'common/components/Modal';
@@ -16,7 +17,7 @@ import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
 extend(duration);
-
+extend(utc);
 export const StartWindow = () => {
   const notify = useNotify();
   const { data, isFetching } = useGetWorkTimeInfoQuery();
