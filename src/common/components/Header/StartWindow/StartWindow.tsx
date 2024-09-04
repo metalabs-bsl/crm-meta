@@ -3,6 +3,7 @@ import dayjs, { extend } from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import cn from 'classnames';
 import { Button, Icon, Loading } from 'common/ui';
+import { Modal } from 'common/components/Modal';
 import { useNotify } from 'common/hooks';
 import {
   useEndMutation,
@@ -25,21 +26,21 @@ export const StartWindow = () => {
   const [end] = useEndMutation();
   const [pause] = usePauseMutation();
   const [unpause] = useUnPauseMutation();
-  const [currentWorkTime, setCurrentWorkTime] = useState('00:00');
-  const [pauseTime, setPauseTime] = useState('00:00');
+  const [currentWorkTime, setCurrentWorkTime] = useState<string>('00:00:00');
+  const [pauseTime, setPauseTime] = useState<string>('00:00:00');
   const [isOneHourPause, setIsOneHourPause] = useState<boolean>(false);
+  const [isStopModal, setIsStopModal] = useState<boolean>(false);
 
   // этот useEffect отвечает за окрашивание таймера в красный если будет больше часа
   useEffect(() => {
-    const redPauseTime = '00:59';
-
+    const redPauseTime = '00:59:59';
     const time1Obj = dayjs(`2024-01-01T${pauseTime}`);
     const time2Obj = dayjs(`2024-01-01T${redPauseTime}`);
 
     setIsOneHourPause(time1Obj.isAfter(time2Obj));
   }, [notify, pauseTime]);
 
-  // этот useEffect отвечает за сопостаяление текущего этапа сценария
+  // этот useEffect отвечает за сопоставление текущего этапа сценария
   useEffect(() => {
     if (data && !isFetching) {
       setIsStart(!!data.work_day_started);
@@ -47,43 +48,25 @@ export const StartWindow = () => {
     }
   }, [data, isFetching]);
 
-  // useEffect(() => {
-  //   if (!isLoading && data && isTimeOut) {
-  //     console.log('разок');
-
-  //     const now = dayjs();
-  //     let start = dayjs(data.work_day_started).add(3, 'hour');
-
-  //     if (data.break_ended) {
-  //       const breakDuration = dayjs.duration(dayjs(data.break_ended).diff(dayjs(data.break_started)));
-  //       start = start.add(breakDuration);
-  //     }
-
-  //     const workDuration = dayjs.duration(now.diff(start));
-  //     const hours = String(workDuration.hours()).padStart(2, '0');
-  //     const minutes = String(workDuration.minutes()).padStart(2, '0');
-  //     setCurrentWorkTime(`${hours}:${minutes}`);
-  //   }
-  // }, [data, isLoading, isTimeOut]);
-
   // этот useEffect отвечает за обновление рабочего времени
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval> | null = null;
-    if (isStart && data?.work_day_started && (!isTimeOut || data.break_ended)) {
+    if (isStart && data?.work_day_started) {
       const updateCurrentWorkTime = () => {
-        const now = dayjs();
-        let start = dayjs(data.work_day_started).add(3, 'hour');
-        if (data.break_ended) {
-          const breakDuration = dayjs.duration(dayjs(data.break_ended).diff(dayjs(data.break_started)));
-          start = start.add(breakDuration);
-        }
+        const now = dayjs().utc(true);
+        const start = dayjs(data.work_day_started);
+        // if (data.break_ended) {
+        //   const breakDuration = dayjs.duration(dayjs(data.break_ended).diff(dayjs(data.break_started)));
+        //   start = start.add(breakDuration);
+        // }
         const workDuration = dayjs.duration(now.diff(start));
         const hours = String(workDuration.hours()).padStart(2, '0');
         const minutes = String(workDuration.minutes()).padStart(2, '0');
-        setCurrentWorkTime(`${hours}:${minutes}`);
+        const seconds = String(workDuration.seconds()).padStart(2, '0');
+        setCurrentWorkTime(`${hours}:${minutes}:${seconds}`);
       };
       updateCurrentWorkTime();
-      intervalId = setInterval(updateCurrentWorkTime, 60000);
+      intervalId = setInterval(updateCurrentWorkTime, 1000);
     }
     return () => {
       if (intervalId) clearInterval(intervalId);
@@ -95,15 +78,16 @@ export const StartWindow = () => {
     let intervalId: ReturnType<typeof setInterval> | null = null;
     if (data?.break_started && isTimeOut && !data.break_ended) {
       const updateCurrentPauseTime = () => {
-        const now = dayjs();
-        const start = dayjs(data.break_started).add(3, 'hour');
+        const now = dayjs().utc(true);
+        const start = dayjs(data.break_started);
         const workDuration = dayjs.duration(now.diff(start));
         const hours = String(workDuration.hours()).padStart(2, '0');
         const minutes = String(workDuration.minutes()).padStart(2, '0');
-        setPauseTime(`${hours}:${minutes}`);
+        const seconds = String(workDuration.seconds()).padStart(2, '0');
+        setPauseTime(`${hours}:${minutes}:${seconds}`);
       };
       updateCurrentPauseTime();
-      intervalId = setInterval(updateCurrentPauseTime, 60000);
+      intervalId = setInterval(updateCurrentPauseTime, 1000);
     }
     return () => {
       if (intervalId) clearInterval(intervalId);
@@ -123,7 +107,8 @@ export const StartWindow = () => {
         .unwrap()
         .then(() => {
           setIsStart(false);
-          setCurrentWorkTime('00:00');
+          setCurrentWorkTime('00:00:00');
+          onCloseStopModal();
         });
   };
 
@@ -147,12 +132,20 @@ export const StartWindow = () => {
         .catch((e) => notify(e.data.message, 'error'));
   };
 
+  const onCloseStopModal = () => {
+    setIsStopModal(false);
+  };
+
+  const onOpenStopModal = () => {
+    setIsStopModal(true);
+  };
+
   return (
     <Loading isSpin={isFetching}>
       <div className={styles.timeContent}>
         <div className={styles.startBlock}>
           {isStart ? (
-            <Button text='завершить' styleType={BUTTON_TYPES.RED} onClick={onStop} />
+            <Button text='завершить' styleType={BUTTON_TYPES.RED} onClick={onOpenStopModal} />
           ) : (
             <Button text='старт рабочего дня' styleType={BUTTON_TYPES.GREEN} onClick={onStart} />
           )}
@@ -178,6 +171,20 @@ export const StartWindow = () => {
               />
             )}
           </div>
+        )}
+        {isStopModal && (
+          <Modal
+            isOpen={isStopModal}
+            leftBtnText='завершить'
+            leftBtnStyle={BUTTON_TYPES.YELLOW}
+            leftBtnAction={onStop}
+            rightBtnText='отменить'
+            rightBtnStyle={BUTTON_TYPES.GRAY}
+            rightBtnAction={onCloseStopModal}
+            onClose={onCloseStopModal}
+          >
+            <p className={styles.stopModalText}>Вы уверены завершить рабочую смену?</p>
+          </Modal>
         )}
       </div>
     </Loading>
