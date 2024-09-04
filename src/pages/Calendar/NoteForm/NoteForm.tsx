@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Button, DatePicker, Icon, Input, Loading, MultipleSelect } from 'common/ui';
 import { DeleteModal } from 'common/components';
 import { useNotify } from 'common/hooks';
@@ -12,6 +13,8 @@ import styles from './style.module.scss';
 
 import { useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
+
+extend(utc);
 
 const selectOptions: Options[] = [
   { label: 'Во время начала', value: 2 },
@@ -56,7 +59,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof Note];
         if (key === 'date' && typeof value === 'string') {
-          setValue(key as keyof Note, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof Note, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof Note, formProps[key as keyof Note]);
         }

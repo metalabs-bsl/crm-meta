@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { DatePicker, Icon, Input, Loading, Select } from 'common/ui';
 import { Accordion, Modal } from 'common/components';
 import { useNotify } from 'common/hooks';
@@ -12,6 +13,8 @@ import styles from './styles.module.scss';
 
 import { useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
+
+extend(utc);
 
 interface IProps {
   isActiveTab: string;
@@ -62,7 +65,12 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       setValue('exchange_rate', formProps.exchange_rate);
       setValue('commission', formProps.commission);
       setValue('course_TO', formProps.course_TO);
-      setValue('client_due_date', dayjs(formProps.client_due_date).format('YYYY-MM-DD'));
+
+      const formattedDate = dayjs.utc(formProps.client_due_date).isValid()
+        ? dayjs.utc(formProps.client_due_date).format('YYYY-MM-DD')
+        : dayjs().format('YYYY-MM-DD');
+
+      setValue('client_due_date', formattedDate);
       setValue('currency', formProps.currency);
     }
   }, [formProps, setValue]);
@@ -178,7 +186,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                     {...register('client_due_date', { required: 'обязательное поле' })}
                     className={styles.datepicker}
                     disabled={!isEdit}
-                    defaultValue={dayjs().format('YYYY-MM-DDTHH:mm')}
+                    defaultValue={dayjs().format('YYYY-MM-DD')}
                     datePicketType='date'
                   />
                 </div>
