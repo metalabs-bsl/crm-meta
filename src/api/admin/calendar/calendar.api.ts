@@ -9,7 +9,8 @@ export const calendarApi = createApi({
   endpoints: ({ query, mutation }) => ({
     getCalendarData: query<IGetCalendar.Response, IGetCalendar.Params>({
       query: () => `/callendar`,
-      providesTags: ['Calendar']
+      providesTags: ['Calendar'],
+      keepUnusedDataFor: 0
     }),
     createNote: mutation<ICreateNote.Response, ICreateNote.Params>({
       query: (body) => ({
