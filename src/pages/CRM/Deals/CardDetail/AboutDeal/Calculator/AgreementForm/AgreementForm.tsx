@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { DatePicker, FilePicker, Input, Loading, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
@@ -15,6 +16,8 @@ import { IUpdateContract } from 'types/entities';
 import styles from './style.module.scss';
 
 import { useForm } from 'react-hook-form';
+
+extend(utc);
 
 interface IProps {
   customerId: string;
@@ -41,9 +44,9 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof IUpdateContract];
         if ((key === 'customer_passportDateGiven' || key === 'customer_DOB') && typeof value === 'string') {
-          setValue(key as keyof IUpdateContract, dayjs(value).format('YYYY-MM-DD'));
+          setValue(key as keyof IUpdateContract, dayjs.utc(value).format('YYYY-MM-DD'));
         } else if (key === 'booking_date' && typeof value === 'string') {
-          setValue(key as keyof IUpdateContract, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof IUpdateContract, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof IUpdateContract, formProps[key as keyof IUpdateContract]);
         }

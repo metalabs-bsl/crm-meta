@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
@@ -11,6 +12,8 @@ import { IAdditionalPayment } from 'types/entities/leads';
 import styles from './style.module.scss';
 
 import { useForm } from 'react-hook-form';
+
+extend(utc);
 
 interface IProps {
   title?: string;
@@ -40,7 +43,7 @@ export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof IAdditionalPayment];
         if (key === 'client_due_date' && typeof value === 'string') {
-          setValue(key as keyof IAdditionalPayment, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof IAdditionalPayment, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof IAdditionalPayment, formProps[key as keyof IAdditionalPayment]);
         }

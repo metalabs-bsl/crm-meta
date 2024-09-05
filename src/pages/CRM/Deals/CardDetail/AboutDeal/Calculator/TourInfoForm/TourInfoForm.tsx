@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import cn from 'classnames';
 import { DatePicker, Input, Loading, MultipleSelect, Select } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
@@ -13,6 +14,8 @@ import { categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper'
 import styles from './styles.module.scss';
 
 import { useForm } from 'react-hook-form';
+
+extend(utc);
 
 interface IProps {
   formProps?: ITourData;
@@ -54,7 +57,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof ITourData];
         if ((key === 'departure_date' || key === 'arrival_date') && typeof value === 'string') {
-          setValue(key as keyof ITourData, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof ITourData, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof ITourData, formProps[key as keyof ITourData]);
         }
