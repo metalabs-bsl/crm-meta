@@ -1,6 +1,6 @@
 import { TableRow } from 'pages/CRM/Deals/List/types/types';
 import { setConnected } from 'api/admin/kanban/kanban.slice';
-import { setKanbanAllBoard, setKanbanBoard } from 'api/admin/kanban/kanban.ws';
+import { setKanbanAllBoard, setKanbanBoard, setOnlineList } from 'api/admin/kanban/kanban.ws';
 import { setListBoard, setListBoardAll } from 'api/admin/list/list.slice';
 import { IColumn } from 'types/entities';
 
@@ -71,6 +71,10 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
 
     socket?.on('boardListAll', (message: TableRow) => {
       dispatch(setListBoardAll(message));
+    });
+
+    socket?.on('online', (message) => {
+      dispatch(setOnlineList(message));
     });
   } else {
     console.error('Access token is not available, cannot initialize socket.');

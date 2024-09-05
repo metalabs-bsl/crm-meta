@@ -13,6 +13,7 @@ import PhoneInput from 'react-phone-input-2';
 interface IEmployeeTableRow extends IEmployee {
   handleDelete: (arg0: string, arg1: string) => void;
   isScrolled: boolean;
+  online: boolean;
 }
 
 export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
@@ -33,11 +34,13 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   passport_front,
   passport_back,
   handleDelete,
-  isScrolled
+  isScrolled,
+  online
 }) => {
   const notify = useNotify();
   const { data: rolesAll } = useGetEmployeeRolesQuery();
   const [createEmployee] = useCreateEmployeeMutation();
+  console.log('online', online);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth?.split('T')[0]);

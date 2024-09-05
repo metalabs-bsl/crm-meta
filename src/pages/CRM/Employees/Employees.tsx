@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Loading, SearchInput } from 'common/ui';
 import { DeleteModal, Modal } from 'common/components';
-import { useNotify, useSearch } from 'common/hooks';
+import { useAppSelector, useNotify, useSearch } from 'common/hooks';
 import { useDeleteEmployeeMutation, useGetAllEmployeesQuery } from 'api/admin/employees/employees.api';
+import { kanbanSelectors } from 'api/admin/kanban/kanban.selectors';
 import { IEmployee } from 'types/entities';
 import { AddEmployees } from './AddEmployess';
 import { columns } from './Employees.helper';
@@ -22,6 +23,7 @@ export const Employees = () => {
   const notify = useNotify();
   const [isScrolled, setIsScrolled] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
+  const { online } = useAppSelector(kanbanSelectors.kanban);
 
   useEffect(() => {
     const tableContainer = tableContainerRef.current;
@@ -39,6 +41,16 @@ export const Employees = () => {
     setEmployeeFioToDelete(fio);
     setShowDeleteModal(true);
   };
+
+  const dataWithOnline = useMemo(() => {
+    return filteredData.map((employee) => {
+      const isOnline = online.some((online) => online.id === employee.id);
+      return {
+        ...employee,
+        online: isOnline
+      };
+    });
+  }, [filteredData, online]);
 
   const handleConfirmDelete = async () => {
     if (employeeIdToDelete !== null) {
@@ -91,7 +103,7 @@ export const Employees = () => {
             </div>
           </div>
           <div className={styles.table}>
-            {filteredData.map((employee) => (
+            {dataWithOnline.map((employee) => (
               <EmployeeTableRow {...employee} key={employee.id} handleDelete={handleDeleteClick} isScrolled={isScrolled} />
             ))}
           </div>
