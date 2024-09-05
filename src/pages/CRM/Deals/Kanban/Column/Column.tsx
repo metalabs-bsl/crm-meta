@@ -161,7 +161,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>
         <ColumnForm
           onSendSubmit={isEditing ? onColumnUpdate : onCreateColumn}
-          formProps={isEditing ? { name: column_name, color, status: 100 } : undefined}
+          formProps={isEditing ? { name: column_name, color, status } : undefined}
           onCancel={onCloseColumnModal}
         />
       </Modal>

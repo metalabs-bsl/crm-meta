@@ -1,13 +1,19 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import cn from 'classnames';
-import { Button, Input } from 'common/ui';
+import { Button, Input, Select } from 'common/ui';
+import { Options } from 'types/common';
 import { IColumnInfo } from 'types/entities';
 import styles from './style.module.scss';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { BUTTON_TYPES } from 'types/enums';
 
 const colors = ['transparent', '#bbed21', '#0ff85e', '#068d34', '#13edfb', '#c214de', '#ff1694', '#f21212', '#242423'];
+
+const colTypes: Options[] = [
+  { label: 'Удачная', value: 1 },
+  { label: 'Неудачная', value: 7 }
+];
 
 interface IProps {
   formProps?: IColumnInfo;
@@ -20,49 +26,52 @@ export const ColumnForm: FC<IProps> = ({ formProps, onCancel, onSendSubmit }) =>
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors }
   } = useForm<IColumnInfo>({
     defaultValues: {
-      name: formProps?.name ?? '',
-      color: formProps?.color ?? colors[0]
+      color: colors[0],
+      status: colTypes[0].value as number
     }
   });
-
-  const [activeColor, setActiveColor] = useState<string>(formProps?.color ?? colors[0]);
-
-  useEffect(() => {
-    setValue('color', activeColor);
-  }, [activeColor, setValue]);
 
   useEffect(() => {
     if (formProps) {
       setValue('name', formProps.name);
-      setActiveColor(formProps.color);
+      setValue('color', formProps.color);
+      setValue('status', formProps.status);
     }
   }, [formProps, setValue]);
 
   const onSubmit = (data: IColumnInfo) => {
-    const createData = { ...data, status: activeColor === '#f21212' ? 7 : 1 };
-    onSendSubmit(createData);
+    console.log(data);
+    onSendSubmit(data);
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.blocks}>
         <label>Выберите цвет</label>
-        <div className={styles.colors}>
-          {colors.map((color, index) => (
-            <div
-              onClick={() => setActiveColor(color)}
-              key={index}
-              className={cn(styles.roundIcon, {
-                [styles.active]: color === activeColor,
-                [styles.without]: color === 'transparent'
-              })}
-              style={{ background: color }}
-            />
-          ))}
-        </div>
+        <Controller
+          name='color'
+          control={control}
+          rules={{ required: 'Phone number is required' }}
+          render={({ field: { onChange, value } }) => (
+            <div className={styles.colors}>
+              {colors.map((color, index) => (
+                <div
+                  onClick={() => onChange(color)}
+                  key={index}
+                  className={cn(styles.roundIcon, {
+                    [styles.active]: color === value,
+                    [styles.without]: color === 'transparent'
+                  })}
+                  style={{ background: color }}
+                />
+              ))}
+            </div>
+          )}
+        />
       </div>
       <div className={styles.blocks}>
         <label>Название доски</label>
@@ -73,6 +82,19 @@ export const ColumnForm: FC<IProps> = ({ formProps, onCancel, onSendSubmit }) =>
           {...register('name', { required: 'Название доски обязательно' })}
         />
         {errors.name && <span className={styles.errorMessage}>{errors.name.message}</span>}
+      </div>
+      <div className={styles.blocks}>
+        <label>Тип колонки</label>
+        <Controller
+          name='status'
+          control={control}
+          rules={{ required: 'Phone number is required' }}
+          render={({ field: { onChange, value } }) => (
+            <Select options={colTypes} className={styles.select} value={value} onChange={(e) => onChange(Number(e.target.value))} />
+          )}
+        />
+
+        {errors.status && <span className={styles.errorMessage}>{errors.status.message}</span>}
       </div>
       <div className={styles.modalBtnWrapper}>
         <Button text='сохранить' styleType={BUTTON_TYPES.YELLOW} type='submit' />
