@@ -1,9 +1,12 @@
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
-export const dateFormatWithHour = (date: string) => {
-  return dayjs(date).format('DD.MM.YYYY, HH:mm');
+extend(utc);
+
+export const dateFormatWithHour = (date: string, format: string = 'DD.MM.YYYY, HH:mm') => {
+  return dayjs(date).utc(true).format(format);
 };
 
-export const dateFormat = (date: string) => {
-  return dayjs(date).format('DD.MM.YYYY');
+export const dateFormat = (date: string, format: string = 'DD.MM.YYYY') => {
+  return dayjs(date).utc(true).format(format);
 };

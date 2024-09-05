@@ -68,7 +68,7 @@ export type AccountsDetail = Account;
 
 // ------------------------------------------------------------
 
-export type Deals_Type = 'deals-create' | 'deals-status' | 'deals-responsible' | 'deals-sail' | 'deals-loss' | 'deals-calc';
+export type Deals_Type = 'deals-create' | 'deals-status' | 'deals-responsible' | 'deals-sail' | 'deals-loss' | 'deals-calc' | 'deals-read';
 
 export interface Deals_Create {
   detailType: Deals_Type;
@@ -94,7 +94,11 @@ export interface Deals_Calc {
   };
 }
 
-export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Calc;
+export interface Deals_Read {
+  detailType: Deals_Type;
+}
+
+export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Calc | Deals_Read;
 
 //-------------------------------------------------------------
 export type IDetail = EditDetail | TodoDetail | Account | DealsDetail;

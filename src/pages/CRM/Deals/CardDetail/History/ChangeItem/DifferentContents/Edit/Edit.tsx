@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
+import { dateFormatWithHour, isDateString } from 'common/helpers';
 import { Change, Edit_Naming, Edit_Other, Edit_Status, IDetail } from 'types/entities';
 import styles from './styles.module.scss';
 
@@ -78,16 +79,21 @@ export const Edit: FC<IProps> = ({ data }) => {
           <span className={styles.employee}>{employee}</span>
         </div>
         <div className={styles.bottom_other}>
-          {detail.items.map((item, index) => (
-            <div key={index} className={styles.different}>
-              <span className={styles.title}>{item.title}</span>
-              <div className={styles.bottom}>
-                <span className={styles.blocks}>{item.prev}</span>
-                <Icon type='arrow-left' />
-                <span className={styles.blocks}>{item.current}</span>
+          {detail.items.map((item, index) => {
+            const prevValue = isDateString(item.prev) ? dateFormatWithHour(item.prev) : item.prev;
+            const currentValue = isDateString(item.current) ? dateFormatWithHour(item.current) : item.current;
+
+            return (
+              <div key={index} className={styles.different}>
+                <span className={styles.title}>{item.title}</span>
+                <div className={styles.bottom}>
+                  <span className={styles.blocks}>{prevValue}</span>
+                  <Icon type='arrow-left' />
+                  <span className={styles.blocks}>{currentValue}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
