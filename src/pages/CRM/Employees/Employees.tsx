@@ -94,6 +94,7 @@ export const Employees = () => {
         <div className={styles.tableContainer}>
           <div className={cn(styles.table, styles.tableHeaderWrapper)}>
             <div className={styles.tableHeader}>
+              <div className={styles.headerItem}>статус</div>
               <div className={cn(styles.headerItem, { [styles.scrolled]: isScrolled })}>действия</div>
               {columns.map((title) => (
                 <div key={title} className={styles.headerItem}>
