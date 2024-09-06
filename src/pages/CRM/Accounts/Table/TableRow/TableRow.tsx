@@ -40,10 +40,10 @@ export const TableRow: FC<ITableRowProps> = ({
             onMouseLeave={() => setContractOpen(false)}
             ref={contractNumberRef}
           >
-            {contractNumber || 'null'}
+            {contractNumber || '-'}
           </span>
         </td>
-        <td className={styles.item}>{bookingNumber || 'null'}</td>
+        <td className={styles.item}>{bookingNumber || '-'}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
           <span
             className={cn({
@@ -52,19 +52,19 @@ export const TableRow: FC<ITableRowProps> = ({
               [styles.partial]: paymentStatus === 'Частично'
             })}
           >
-            {paymentStatus || 'null'}
+            {paymentStatus || '-'}
           </span>
         </td>
-        <td className={styles.item}>{gross || 'null'}</td>
-        <td className={styles.item}>{net || 'null'}</td>
-        <td className={styles.item}>{commission || 'null'}</td>
-        <td className={styles.item}>{destination || 'null'}</td>
-        <td className={styles.item}>{tourDates || 'null'}</td>
-        <td className={styles.item}>{tourOperator || 'null'}</td>
-        <td className={styles.item}>{tourInvoiceSom || 'null'}</td>
-        <td className={styles.item}>{tourInvoiceUSD || 'null'}</td>
-        <td className={styles.item}>{tourInvoiceEUR || 'null'}</td>
-        <td className={styles.item}>{whoCreated || 'null'}</td>
+        <td className={styles.item}>{gross || '-'}</td>
+        <td className={styles.item}>{net || '-'}</td>
+        <td className={styles.item}>{commission || '-'}</td>
+        <td className={styles.item}>{destination || '-'}</td>
+        <td className={styles.item}>{tourDates || '-'}</td>
+        <td className={styles.item}>{tourOperator || '-'}</td>
+        <td className={styles.item}>{tourInvoiceSom || '-'}</td>
+        <td className={styles.item}>{tourInvoiceUSD || '-'}</td>
+        <td className={styles.item}>{tourInvoiceEUR || '-'}</td>
+        <td className={styles.item}>{whoCreated || '-'}</td>
       </tr>
       <tr className={styles.accordionRow}>
         <td colSpan={14} className={styles.accordionContainer}>

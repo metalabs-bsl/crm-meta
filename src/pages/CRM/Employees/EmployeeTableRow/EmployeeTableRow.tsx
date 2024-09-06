@@ -40,8 +40,6 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const notify = useNotify();
   const { data: rolesAll } = useGetEmployeeRolesQuery();
   const [createEmployee] = useCreateEmployeeMutation();
-  console.log('online', online);
-
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dateOfBirth, setDateOfBirth] = useState<string>(date_of_birth?.split('T')[0]);
   const [role, setRole] = useState<string>(roles[0].id);
@@ -116,6 +114,14 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
 
   return (
     <div className={styles.tableRow}>
+      <div className={cn(styles.item, styles.status)}>
+        <span
+          className={cn({
+            [styles.online]: online,
+            [styles.offline]: !online
+          })}
+        ></span>
+      </div>
       <div className={cn(styles.item, styles.buttons, { [styles.scrolled]: isScrolled })}>
         {!isEdit ? (
           <>
