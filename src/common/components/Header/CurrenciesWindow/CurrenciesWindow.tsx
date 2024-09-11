@@ -16,12 +16,12 @@ export const CurrenciesWindow = () => {
     {
       icon: 'usd',
       title: 'USD',
-      items: [data?.buyEUR, data?.buyUSD]
+      items: [data?.buyUSD, data?.sellUSD]
     },
     {
       icon: 'eur',
       title: 'EUR',
-      items: [data?.sellEUR, data?.sellUSD]
+      items: [data?.buyEUR, data?.sellEUR]
     }
   ];
 
