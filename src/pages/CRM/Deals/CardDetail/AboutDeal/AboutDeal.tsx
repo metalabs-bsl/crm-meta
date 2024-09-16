@@ -35,6 +35,8 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
   const [getCalc, { data, isFetching }] = useLazyGetLeadCalcQuery();
   const { search } = useLocation();
 
+  console.log(data);
+
   useEffect(() => {
     if (search) {
       const leadId = search.substring(1);
@@ -86,7 +88,7 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
   return (
     <Loading isSpin={isFetching}>
       <div className={styles.aboutDeal}>
-        {!isCalculatorTab && <DealsForm formProps={formData} colStatus={colStatus} />}
+        {!isCalculatorTab && <DealsForm formProps={formData} colStatus={colStatus} dateCreated={data?.created_at} />}
         <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
           <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
             {isCalculatorTab && (

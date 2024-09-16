@@ -1,8 +1,10 @@
 import { FC, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import { Empty } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
 import { IAccountData } from 'types/entities/accounts';
+import { formatDate } from '../../Account.helper';
 import { ContractModal } from './ContractModal';
 import { PaymentRow } from './PaymentRow';
 import styles from './styles.module.scss';
@@ -26,9 +28,14 @@ export const TableRow: FC<ITableRowProps> = ({
   paymentStatus,
   customer
 }) => {
+  const navigate = useNavigate();
   const contractNumberRef = useRef(null);
   const [contractOpen, setContractOpen] = useState<boolean>(false);
   const allChecked = useMemo(() => paymentDetails.every((payment) => payment.isPaid), [paymentDetails]);
+
+  const onContractCLick = () => {
+    navigate(`/crm/transactions?97b93969-e512-423e-af27-05ede9c89640`);
+  };
 
   return (
     <>
@@ -38,6 +45,7 @@ export const TableRow: FC<ITableRowProps> = ({
             className={styles.contractNumber}
             onMouseEnter={() => setContractOpen(true)}
             onMouseLeave={() => setContractOpen(false)}
+            onClick={onContractCLick}
             ref={contractNumberRef}
           >
             {contractNumber || '-'}
@@ -59,7 +67,7 @@ export const TableRow: FC<ITableRowProps> = ({
         <td className={styles.item}>{net || '-'}</td>
         <td className={styles.item}>{commission || '-'}</td>
         <td className={styles.item}>{destination || '-'}</td>
-        <td className={styles.item}>{tourDates || '-'}</td>
+        <td className={cn(styles.item, styles.item_date)}>{formatDate(tourDates) || '-'}</td>
         <td className={styles.item}>{tourOperator || '-'}</td>
         <td className={styles.item}>{tourInvoiceSom || '-'}</td>
         <td className={styles.item}>{tourInvoiceUSD || '-'}</td>
@@ -77,13 +85,14 @@ export const TableRow: FC<ITableRowProps> = ({
       </tr>
       <DropdownModal targetRef={contractNumberRef} isOpen={contractOpen} onClose={() => setContractOpen(false)}>
         <ContractModal
-          name={customer?.fullname}
-          phone={customer?.phone}
-          city={customer?.city}
-          source={customer?.source}
-          dateOfBirth={customer?.date_of_birth}
+          name={customer?.fullname || '-'}
+          phone={customer?.phone || '-'}
+          city={customer?.city || '-'}
+          source={customer?.source || '-'}
+          dateOfBirth={customer?.date_of_birth?.split('T')[0].split('-').reverse().join('.') || '-'}
         />
       </DropdownModal>
+      <tr className={styles.marginRow}></tr>
     </>
   );
 };

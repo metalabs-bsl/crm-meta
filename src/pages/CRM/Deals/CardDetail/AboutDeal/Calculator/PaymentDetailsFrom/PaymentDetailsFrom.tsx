@@ -53,9 +53,27 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     );
   }, [data]);
 
-  const { register, getValues, setValue } = useForm<ICalcPayment>();
+  const { register, getValues, setValue, watch } = useForm<ICalcPayment>();
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
   const updatedTitle = index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title;
+
+  const brutto = watch('brutto');
+  const course_TO = watch('course_TO');
+  const netto = watch('netto');
+
+  useEffect(() => {
+    if (brutto && course_TO) {
+      const calculatedValue = Number(brutto) * Number(course_TO);
+      setValue('exchange_rate', Number(calculatedValue.toFixed(2)));
+    }
+  }, [brutto, course_TO, setValue]);
+
+  useEffect(() => {
+    if (brutto && netto) {
+      const calculatedValue = Number(brutto) - Number(netto);
+      setValue('commission', Number(calculatedValue.toFixed(2)));
+    }
+  }, [brutto, netto, setValue]);
 
   useEffect(() => {
     if (formProps) {

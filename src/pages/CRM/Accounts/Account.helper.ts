@@ -54,6 +54,10 @@ export const mainRowHeaders = [
 ];
 export const paymentRowHeaders = [
   {
+    title: 'оплачено',
+    classNames: ['title']
+  },
+  {
     title: 'СО клиента',
     classNames: ['title']
   },
@@ -92,9 +96,10 @@ export const paymentRowHeaders = [
   {
     title: 'валюта',
     classNames: ['title']
-  },
-  {
-    title: 'оплачено',
-    classNames: ['title']
   }
 ];
+
+export const formatDate = (date: string) => {
+  const formatDate = [date.slice(0, 10).split('-').reverse().join('.'), date.slice(11).split('-').reverse().join('.')];
+  return `${formatDate[0]}- ${formatDate[1]}`;
+};

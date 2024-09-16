@@ -22,6 +22,7 @@ export const employeesSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addMatcher(employeesApi.endpoints.getUserInfo.matchFulfilled, (state, { payload }) => {
+      console.log(payload);
       state.bgType = payload.background;
       state.userInfo = payload;
       state.role = payload.roles[0].role_name;

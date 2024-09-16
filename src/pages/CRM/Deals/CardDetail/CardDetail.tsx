@@ -43,6 +43,7 @@ export const CardDetail = () => {
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       const { responsible_employee, customer, lead_column, lead_name, source } = data;
       const updatedData = {
         responsible_employee_id: responsible_employee.id,

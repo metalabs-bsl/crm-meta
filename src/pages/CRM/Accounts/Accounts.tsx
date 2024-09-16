@@ -18,6 +18,7 @@ export const Accounts = () => {
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
   const [isFull, setIsFull] = useState<string>('false');
   const { data, isFetching } = useGetAllAccountsQuery(isFull);
+  console.log(data);
   return (
     <div className={styles.accounts}>
       <div className={styles.headBlock}>

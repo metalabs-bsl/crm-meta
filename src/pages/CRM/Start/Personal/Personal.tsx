@@ -49,8 +49,10 @@ const employee: IEmployeeInfo = {
 };
 
 export const Personal: FC = () => {
-  const [startDate, setStartDate] = useState<string>('2024-06-01T00:00');
-  const [endDate, setEndDate] = useState<string>('2024-06-30T00:00');
+  const [startDate, setStartDate] = useState<string>('2024-06-01');
+  // при отправке запроса добавлять T00:00
+  const [endDate, setEndDate] = useState<string>('2024-06-30');
+  // при отправке запроса добавлять T23:59
 
   return (
     <div className={styles.content}>

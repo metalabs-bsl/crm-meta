@@ -17,9 +17,10 @@ import { BUTTON_TYPES } from 'types/enums';
 interface IProps {
   formProps?: ICreateLeadParams;
   colStatus?: number;
+  dateCreated?: string;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
+export const DealsForm: FC<IProps> = ({ formProps, colStatus, dateCreated }) => {
   const {
     register,
     handleSubmit,
@@ -159,12 +160,16 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={!isEdit && !isResponseEmployeeEditable}
+                disabled={!isEdit || !isResponseEmployeeEditable}
                 className={styles.select}
               />
               {errors.responsible_employee_id && <span className={styles.error}>{errors.responsible_employee_id.message}</span>}
             </div>
           )}
+          <div className={styles.inpBlock}>
+            <label>Дата создания</label>
+            <span className={cn(styles.inp, styles.dateCreated)}>{dateCreated?.split('T')[0].split('-').reverse().join('.') || '-'}</span>
+          </div>
         </div>
       </Loading>
     </form>

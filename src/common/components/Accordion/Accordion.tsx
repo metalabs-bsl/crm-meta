@@ -12,10 +12,11 @@ interface AccordionProps {
   onEditAction?: () => void;
   className?: string;
   onSaveAction?: () => void;
+  isOpenDefault?: boolean;
 }
 
-export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAction, isEdit, className, onSaveAction }) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const Accordion: React.FC<AccordionProps> = ({ title, children, onEditAction, isEdit, className, onSaveAction, isOpenDefault }) => {
+  const [isOpen, setIsOpen] = useState(isOpenDefault || false);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);

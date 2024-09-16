@@ -57,6 +57,10 @@
       background-color: $white;
       opacity: 1;
     }
+    &_tourAmount {
+      border: 1px solid $gray-btn-bg-hover;
+      width: 100px;
+    }
   }
   & .select {
     color: $gray-btn-bg-hover;
@@ -98,7 +102,7 @@
 .checkboxWrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding-left: 28px;
 }
 
 .file {

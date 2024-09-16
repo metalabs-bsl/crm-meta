@@ -44,7 +44,7 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
 }) => {
   const notify = useNotify();
   const [updateInvoice] = useUpdateInvoiceMutation();
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(true);
   const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
   const [localPaymentTOType, setLocalPaymentTOType] = useState<number>(paymentTOType || 1);
   const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor?.split('T')[0]);
@@ -96,7 +96,14 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
   };
 
   return (
-    <Accordion title={name} className={styles.accordion} isEdit={isEdit} onEditAction={handleEdit} onSaveAction={handleSave}>
+    <Accordion
+      title={name}
+      className={styles.accordion}
+      isEdit={isEdit}
+      onEditAction={handleEdit}
+      onSaveAction={handleSave}
+      isOpenDefault={true}
+    >
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
@@ -109,6 +116,9 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
         </thead>
         <tbody>
           <tr>
+            <td className={cn(styles.item, styles.checkboxWrapper)}>
+              <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={!isEdit} onChange={handleCheckboxChange} />
+            </td>
             <td className={styles.item}>{paymentDateClient || 'null'}</td>
             <td className={styles.item}>{comment || 'null'}</td>
             <td className={styles.item}>
@@ -144,7 +154,7 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
             </td>
             <td className={styles.item}>
               <input
-                className={styles.inp}
+                className={cn(styles.inp, styles.inp_tourAmount)}
                 disabled={!isEdit}
                 value={localTourAmount}
                 onChange={(e) => setLocalTourAmount(e.target.value)}
@@ -157,9 +167,6 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
                 value={localPaymentTOType}
                 onChange={(e) => setLocalPaymentTOType(Number(e.target.value))}
               />
-            </td>
-            <td className={cn(styles.item, styles.checkboxWrapper)}>
-              <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={!isEdit} onChange={handleCheckboxChange} />
             </td>
           </tr>
         </tbody>

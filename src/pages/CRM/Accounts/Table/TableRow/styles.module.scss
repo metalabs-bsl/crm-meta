@@ -18,6 +18,9 @@
   color: $gray-btn-bg-hover;
   text-align: start;
   white-space: nowrap;
+  &_date {
+    white-space: wrap;
+  }
 }
 
 .contractNumber {
@@ -64,4 +67,9 @@
       display: none;
     }
   }
+}
+
+.marginRow:not(:last-child) {
+  height: 20px;
+  background-color: transparent;
 }

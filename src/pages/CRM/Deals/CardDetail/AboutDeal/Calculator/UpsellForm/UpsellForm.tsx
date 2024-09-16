@@ -24,10 +24,28 @@ interface IProps {
 export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
   const [isEditUpsell, setIsEditUpsell] = useState<boolean>(false);
   const isEditable = !isEditUpsell;
-  const { register, getValues, setValue } = useForm<IAdditionalPayment>();
+  const { register, getValues, setValue, watch } = useForm<IAdditionalPayment>();
   const [postPayment] = useSetAdditionalPaymentMutation();
   const { data } = useGetPaymentCurrencyQuery();
   const notify = useNotify();
+
+  const brutto = watch('brutto');
+  const course_TO = watch('course_TO');
+  const netto = watch('netto');
+
+  useEffect(() => {
+    if (brutto && course_TO) {
+      const calculatedValue = Number(brutto) * Number(course_TO);
+      setValue('exchange_rate', Number(calculatedValue.toFixed(2)));
+    }
+  }, [brutto, course_TO, setValue]);
+
+  useEffect(() => {
+    if (brutto && netto) {
+      const calculatedValue = Number(brutto) - Number(netto);
+      setValue('commission', Number(calculatedValue.toFixed(2)));
+    }
+  }, [brutto, netto, setValue]);
 
   const paymentCurrencyOptions = useMemo<Options[]>(() => {
     return (
