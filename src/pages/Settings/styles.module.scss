@@ -165,7 +165,7 @@
     list-style: none;
     border-radius: 10px;
     overflow: hidden;
-    max-height: 350px;
+    max-height: 400px;
     overflow-y: auto;
   }
 
@@ -177,14 +177,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 
     &:not(:last-child) {
       border-bottom: 1px solid $gray-btn;
     }
-  }
-
-  .conversion {
-    position: relative;
 
     &::after {
       content: '';
@@ -195,6 +192,9 @@
       right: 90px;
       background-color: $gray-btn;
     }
+  }
+
+  .conversion {
   }
 
   .conversionPercent {
