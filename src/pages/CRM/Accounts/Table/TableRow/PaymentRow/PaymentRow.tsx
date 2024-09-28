@@ -81,9 +81,9 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
       formData.append(`receipt`, receiptLocalFile);
     }
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
 
     try {
       await updateInvoice(formData).unwrap();

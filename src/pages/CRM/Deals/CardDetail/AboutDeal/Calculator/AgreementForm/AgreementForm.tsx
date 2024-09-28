@@ -31,7 +31,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
   const [uploadBack, { isLoading: isBackLoading }] = useUploadBackPassportMutation();
   const [uploadFront, { isLoading: isFrontLoading }] = useUploadFrontPassportMutation();
   const [deleteFile, { isLoading: isDeleteLoading, isSuccess }] = useDeleteFileMutation();
-  const [isEditAgreement, setIsEditAgreement] = useState<boolean>(false);
+  const [isEditAgreement, setIsEditAgreement] = useState<boolean>(true);
   const [frontOfPassport, setFrontOfPassport] = useState<File | null>(null);
   const [backOfPassport, setBackOfPassport] = useState<File | null>(null);
   const [deletedFront, setDeletedFront] = useState<boolean>(false);
@@ -45,12 +45,20 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
         const value = formProps[key as keyof IUpdateContract];
         if ((key === 'customer_passportDateGiven' || key === 'customer_DOB') && typeof value === 'string') {
           setValue(key as keyof IUpdateContract, dayjs.utc(value).format('YYYY-MM-DD'));
-        } else if (key === 'booking_date' && typeof value === 'string') {
-          setValue(key as keyof IUpdateContract, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
+        } else if (key === 'booking_date') {
+          if (typeof value === 'string' && value) {
+            setValue(key as keyof IUpdateContract, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
+          } else {
+            // Set the current date and time if booking_date is empty
+            setValue(key as keyof IUpdateContract, dayjs.utc().add(6, 'hour').format('YYYY-MM-DDTHH:mm'));
+          }
         } else {
           setValue(key as keyof IUpdateContract, formProps[key as keyof IUpdateContract]);
         }
       });
+    } else {
+      // Set initial value if formProps is null
+      setValue('booking_date', dayjs.utc().format('YYYY-MM-DDTHH:mm'));
     }
   }, [formProps, setValue]);
 
@@ -95,7 +103,13 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
   };
 
   return (
-    <Accordion title='Договор' onEditAction={() => setIsEditAgreement(!isEditAgreement)} isEdit={isEditAgreement} onSaveAction={onSubmit}>
+    <Accordion
+      title='Договор'
+      onEditAction={() => setIsEditAgreement(!isEditAgreement)}
+      isEdit={isEditAgreement}
+      onSaveAction={onSubmit}
+      isOpenDefault={true}
+    >
       <Loading isSpin={isLoading || isBackLoading || isFrontLoading || isDeleteLoading}>
         <form className={styles.form}>
           <div className={styles.blocks}>

@@ -128,6 +128,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         onEditAction={() => handleEditPaymentAccordion(index)}
         isEdit={isEdit}
         onSaveAction={() => onSubmit()}
+        isOpenDefault={true}
       >
         <Loading isSpin={isLoading}>
           <form className={styles.form}>

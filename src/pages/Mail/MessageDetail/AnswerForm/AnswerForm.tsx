@@ -19,7 +19,6 @@ export const AnswerForm: FC<IProps> = ({ setShowAnswerForm }) => {
   };
 
   const handleSend = () => {
-    console.log(content);
     setShowAnswerForm(false);
   };
 

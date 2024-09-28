@@ -29,7 +29,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
   const [postTourData, { isLoading }] = useSetTourDataMutation();
   const passengersRef = useRef(null);
   const [isOpenPassengersModal, setIsOpenPassengersModal] = useState<boolean>(false);
-  const [isEditTourInfo, setIsEditTourInfo] = useState<boolean>(false);
+  const [isEditTourInfo, setIsEditTourInfo] = useState<boolean>(true);
   const [openSelect, setOpenSelect] = useState<string | null>(null);
   const [passengerCounts, setPassengerCounts] = useState<PassengerCounts>({
     adults: 0,
@@ -98,6 +98,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       onEditAction={() => setIsEditTourInfo(!isEditTourInfo)}
       isEdit={isEditTourInfo}
       onSaveAction={onSubmit}
+      isOpenDefault={true}
     >
       <Loading isSpin={isLoading}>
         <form className={styles.form}>

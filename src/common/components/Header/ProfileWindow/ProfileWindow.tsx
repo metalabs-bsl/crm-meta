@@ -21,7 +21,6 @@ export const ProfileWindow: FC<IProps> = ({ onClose }) => {
   if (!userInfo) {
     return null;
   }
-  const updated = dateFormat(userInfo?.created_at);
 
   const onLogout = () => {
     handleLogout()
@@ -40,22 +39,22 @@ export const ProfileWindow: FC<IProps> = ({ onClose }) => {
           <div className={styles.textWrapper}>
             <span className={styles.label}>ФИО</span>
             <span className={styles.name}>
-              {userInfo?.first_name} {userInfo?.second_name}
+              {userInfo?.first_name || '-'} {userInfo?.second_name || '-'}
             </span>
           </div>
           <AvatarUpload file={userInfo.avatar?.path} />
         </li>
         <li>
           <span className={styles.label}>Почта</span>
-          <span className={styles.email}>{userInfo?.email}</span>
+          <span className={styles.email}>{userInfo?.email || '-'}</span>
         </li>
         <li>
           <span className={styles.label}>Номер телефона</span>
-          <span className={styles.number}>+{userInfo?.phone}</span>
+          <span className={styles.number}>+{userInfo?.phone || '-'}</span>
         </li>
         <li>
           <span className={styles.label}>Дата начала работы</span>
-          <span className={styles.number}>{updated}</span>
+          <span className={styles.number}>{dateFormat(userInfo?.start_of_work) || '-'}</span>
         </li>
       </ul>
       <div className={styles.btnBlock}>

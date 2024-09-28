@@ -12,6 +12,7 @@ import styles from './styles.module.scss';
 interface ITableRowProps extends IAccountData {}
 
 export const TableRow: FC<ITableRowProps> = ({
+  id,
   contractNumber,
   bookingNumber,
   gross,
@@ -34,7 +35,7 @@ export const TableRow: FC<ITableRowProps> = ({
   const allChecked = useMemo(() => paymentDetails.every((payment) => payment.isPaid), [paymentDetails]);
 
   const onContractCLick = () => {
-    navigate(`/crm/transactions?97b93969-e512-423e-af27-05ede9c89640`);
+    navigate(`/crm/transactions?${id}`);
   };
 
   return (

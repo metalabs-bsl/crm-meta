@@ -35,8 +35,6 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
   const [getCalc, { data, isFetching }] = useLazyGetLeadCalcQuery();
   const { search } = useLocation();
 
-  console.log(data);
-
   useEffect(() => {
     if (search) {
       const leadId = search.substring(1);

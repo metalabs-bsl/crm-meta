@@ -44,7 +44,6 @@ export const ColumnForm: FC<IProps> = ({ formProps, onCancel, onSendSubmit }) =>
   }, [formProps, setValue]);
 
   const onSubmit = (data: IColumnInfo) => {
-    console.log(data);
     onSendSubmit(data);
   };
 

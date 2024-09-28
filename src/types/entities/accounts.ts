@@ -23,6 +23,7 @@ export interface IPaymentDetailsData {
 }
 
 export interface IAccountData {
+  id: string;
   contractNumber: string;
   bookingNumber: string;
   gross: string;

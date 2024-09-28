@@ -11,7 +11,6 @@ interface ITableProps {
 }
 
 export const Table: FC<ITableProps> = ({ data }) => {
-  console.log(data);
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
@@ -25,11 +24,13 @@ export const Table: FC<ITableProps> = ({ data }) => {
           </tr>
         </thead>
         <tbody className={styles.tbody}>
-          {data.length ? (
+          {[].length ? (
             data.map((row, index) => <TableRow key={index} {...row} />)
           ) : (
-            <tr style={{ background: 'red' }}>
-              <Empty />
+            <tr>
+              <td colSpan={13}>
+                <Empty />
+              </td>
             </tr>
           )}
         </tbody>

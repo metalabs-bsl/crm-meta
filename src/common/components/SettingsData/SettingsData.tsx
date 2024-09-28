@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Icon } from 'common/ui';
 import styles from './Settings.module.scss';
 
@@ -25,11 +25,6 @@ export const SettingsData = ({ type }: SettingsDataProps) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [originalValue, setOriginalValue] = useState(value);
-
-  useEffect(() => {
-    // Выводим в консоль текущее значение и состояние переключателя для соответствующего направления
-    console.log(`${type}: ${value}%, Переключатель: ${switchState ? 'Включен' : 'Выключен'}`);
-  }, [value, switchState, type]); // Каждый раз, когда значения меняются, срабатывает этот эффект
 
   const handleBlur = () => {
     if (isEditing) {

@@ -5,6 +5,7 @@ import { Button, Icon, Input, Loading, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
@@ -20,7 +21,7 @@ interface IProps {
   dateCreated?: string;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, colStatus, dateCreated }) => {
+export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
   const {
     register,
     handleSubmit,
@@ -33,12 +34,14 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus, dateCreated }) => 
   const { isNewDeal, column_id } = useAppSelector(sidebarSelectors.sidebar);
   const [isEdit, setIsEdit] = useState<boolean>(isNewDeal);
   const { data: responsibleOptions, isFetching: isResponsibleFetching } = useGetResponsibleEmployeesQuery();
+  const { userInfo } = useAppSelector(employeesSelectors.employees);
   const { data: sourceOptions, isFetching: isSourceFetching } = useGetSourseLeadQuery();
   const [createDeal, { isLoading: isCreateLoading }] = useCreateLeadMutation();
   const [updateLead, { isLoading: isUpdateLoading }] = useUpdateLeadMutation();
   const notify = useNotify();
   const { search } = useLocation();
-  const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
+  // const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
+  console.log(responsibleOptions);
 
   useEffect(() => {
     if (formProps) {
@@ -160,8 +163,9 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus, dateCreated }) => 
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={!isEdit || !isResponseEmployeeEditable}
+                disabled={!isEdit}
                 className={styles.select}
+                defaultValue={userInfo?.id}
               />
               {errors.responsible_employee_id && <span className={styles.error}>{errors.responsible_employee_id.message}</span>}
             </div>

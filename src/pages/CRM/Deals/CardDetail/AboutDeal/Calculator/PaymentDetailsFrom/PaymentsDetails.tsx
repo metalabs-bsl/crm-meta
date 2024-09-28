@@ -15,7 +15,7 @@ const ordinalTitles = ['Первая оплата', 'Вторая оплата',
 const defaultPayment = [
   {
     title: 'Данные об оплате',
-    isEdit: false
+    isEdit: true
   }
 ];
 
