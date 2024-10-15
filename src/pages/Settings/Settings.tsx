@@ -9,10 +9,6 @@ type MockDataType = {
   isEditing: boolean;
 };
 
-// const mockData = {
-//   conversionPercent: 100 // например, 25%
-// };
-
 export const Settings = () => {
   // Состояние для блока "Бренды"
   const [brandData, setBrandData] = useState<MockDataType[]>([
@@ -31,7 +27,6 @@ export const Settings = () => {
   const brandInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
   const serviceInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
 
-  // Обработчики для блока "Бренды"
   const handleBrandEdit = (id: number) => {
     setBrandData((prevData) =>
       prevData.map((item) => ({
@@ -62,7 +57,6 @@ export const Settings = () => {
     setBrandData((prevData) => [...prevData, { id: newId, value: '', isEditing: true }]);
   };
 
-  // Обработчики для блока "Услуги"
   const handleServiceEdit = (id: number) => {
     setServiceData((prevData) =>
       prevData.map((item) => ({
@@ -94,20 +88,37 @@ export const Settings = () => {
   };
 
   useEffect(() => {
-    // Фокус на поле ввода, если оно находится в режиме редактирования для брендов
     brandData.forEach((item) => {
       if (item.isEditing && brandInputRefs.current[item.id]) {
         brandInputRefs.current[item.id]?.focus();
       }
     });
 
-    // Фокус на поле ввода, если оно находится в режиме редактирования для услуг
     serviceData.forEach((item) => {
       if (item.isEditing && serviceInputRefs.current[item.id]) {
         serviceInputRefs.current[item.id]?.focus();
       }
     });
   }, [brandData, serviceData]);
+
+  // Состояние для значений из SettingsData
+  const [formData, setFormData] = useState({
+    Conversion: { value: 100, secondValue: undefined },
+    Bonuses: { value: 100, secondValue: undefined },
+    Profit: { value: 100, secondValue: undefined },
+    PAX: { value: 100, secondValue: undefined },
+    AdditionalBonuses: { value: 40, secondValue: undefined },
+    CrmManagement: { value: 20, secondValue: undefined }
+  });
+
+  const handleDataChange = (type: keyof typeof formData, data: { value: number; secondValue?: number }) => {
+    setFormData((prev) => ({
+      ...prev,
+      [type]: data
+    }));
+  };
+
+  console.log(formData);
 
   return (
     <Loading>
@@ -217,7 +228,12 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.conversionTitle}`}>Конверсия</h4>
                   <p className={`${styles.startInnerText} ${styles.conversionText}`}>Вы можете менять процент в конверсии KPI</p>
                 </div>
-                <SettingsData type='Conversion' />
+                <SettingsData
+                  secondInput={true}
+                  type='Conversion'
+                  isProcent={true}
+                  onSave={(data) => handleDataChange('Conversion', data)}
+                />
               </li>
 
               <li className={`${styles.startBlock} ${styles.bonuses}`}>
@@ -225,39 +241,39 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.bonusesTitle}`}>Бонусы</h4>
                   <p className={`${styles.startInnerText} ${styles.bonusesText}`}>Вы можете менять проценты бонусов сотрудника</p>
                 </div>
-                <SettingsData type='Bonuses' />
+                <SettingsData secondInput={false} type='Bonuses' onSave={(data) => handleDataChange('Bonuses', data)} />
               </li>
 
               <li className={`${styles.startBlock} ${styles.profit}`}>
                 <div>
                   <h4 className={`${styles.startInnerTitle} ${styles.profitTitle}`}>Прибыль</h4>
-                  <p className={`${styles.startInnerText} ${styles.profitText}`}>Вы можете выключить - включить Прибыль, чтобы что-то...</p>
+                  <p className={`${styles.startInnerText} ${styles.profitText}`}>Вы можете включать и отключать показатели прибыли</p>
                 </div>
-                <SettingsData type='Profit' />
+                <SettingsData secondInput={true} type='Profit' isProcent={false} onSave={(data) => handleDataChange('Profit', data)} />
               </li>
 
               <li className={`${styles.startBlock} ${styles.pax}`}>
                 <div>
                   <h4 className={`${styles.startInnerTitle} ${styles.paxTitle}`}>PAX</h4>
-                  <p className={`${styles.startInnerText} ${styles.paxText}`}>Вы можете выключить - включить PAX, чтобы что-то...</p>
+                  <p className={`${styles.startInnerText} ${styles.paxText}`}>Вы можете включать и отключать показатели PAX</p>
                 </div>
-                <SettingsData type='PAX' />
+                <SettingsData secondInput={true} type='PAX' isProcent={false} onSave={(data) => handleDataChange('PAX', data)} />
               </li>
 
-              <li className={`${styles.startBlock} ${styles.pax}`}>
+              <li className={`${styles.startBlock} ${styles.additionalBonuses}`}>
                 <div>
-                  <h4 className={`${styles.startInnerTitle} ${styles.paxTitle}`}>Дополнительные бонусы</h4>
-                  <p className={`${styles.startInnerText} ${styles.paxText}`}>Вы можете выключить - включить PAX, чтобы что-то...</p>
+                  <h4 className={`${styles.startInnerTitle} ${styles.additionalBonusesTitle}`}>Дополнительные бонусы</h4>
+                  <p className={`${styles.startInnerText} ${styles.additionalBonusesText}`}>Измените дополнительные бонусы</p>
                 </div>
-                <SettingsData type='AdditionalBonuses' />
+                <SettingsData secondInput={false} type='AdditionalBonuses' onSave={(data) => handleDataChange('AdditionalBonuses', data)} />
               </li>
 
-              <li className={`${styles.startBlock} ${styles.pax}`}>
+              <li className={`${styles.startBlock} ${styles.crmManagement}`}>
                 <div>
-                  <h4 className={`${styles.startInnerTitle} ${styles.paxTitle}`}>Ведение crm</h4>
-                  <p className={`${styles.startInnerText} ${styles.paxText}`}>Вы можете выключить - включить PAX, чтобы что-то...</p>
+                  <h4 className={`${styles.startInnerTitle} ${styles.crmManagementTitle}`}>Ведение CRM</h4>
+                  <p className={`${styles.startInnerText} ${styles.crmManagementText}`}>Управляйте CRM-процессами</p>
                 </div>
-                <SettingsData type='CrmManagement' />
+                <SettingsData secondInput={false} type='CrmManagement' onSave={(data) => handleDataChange('CrmManagement', data)} />
               </li>
             </ul>
           </div>
