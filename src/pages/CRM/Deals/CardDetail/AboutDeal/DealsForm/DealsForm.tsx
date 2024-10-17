@@ -41,7 +41,6 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
   const notify = useNotify();
   const { search } = useLocation();
   // const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
-  console.log(responsibleOptions);
 
   useEffect(() => {
     if (formProps) {

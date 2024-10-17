@@ -4,10 +4,10 @@ import { SummaryItem } from './SummaryItem';
 import styles from './styles.module.scss';
 
 interface StartSummaryProps {
-  totalDeals: number;
-  processedDeals: number;
-  soldDeals: number;
-  conversion: string;
+  totalDeals?: number;
+  processedDeals?: number;
+  soldDeals?: number;
+  conversion?: number;
 }
 
 export const StartSummary: FC<StartSummaryProps> = ({ totalDeals, processedDeals, soldDeals, conversion }) => {

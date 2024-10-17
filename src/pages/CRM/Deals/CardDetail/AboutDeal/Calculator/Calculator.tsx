@@ -104,7 +104,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
 
   return (
     <Loading isSpin={isLoading}>
-      <div className={styles.calculator}>
+      <div className={cn(styles.calculator, { [styles.isDisabled]: calcData?.is_closed })}>
         {data && <AgreementForm formProps={contractFormProps} customerId={data?.contracts[0].customer.id} />}
         <div className={styles.tab_block}>
           <Tabs

@@ -45,3 +45,7 @@
     }
   }
 }
+
+.isDisabled > div {
+  pointer-events: none;
+}

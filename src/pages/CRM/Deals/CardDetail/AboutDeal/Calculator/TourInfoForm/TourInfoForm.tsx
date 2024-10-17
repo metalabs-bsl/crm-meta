@@ -83,6 +83,15 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           id: calcId
         }
       };
+      if (sendingData.arrival_date === '') {
+        delete sendingData.arrival_date;
+      }
+
+      if (sendingData.departure_date === '') {
+        delete sendingData.departure_date;
+      }
+      console.log(data);
+      console.log(sendingData);
       postTourData(sendingData)
         .unwrap()
         .then(() => {

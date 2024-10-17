@@ -169,8 +169,8 @@ export interface ITourData {
   departure_city: string;
   arrival_city: string;
   brand: string;
-  departure_date: string;
-  arrival_date: string;
+  departure_date?: string;
+  arrival_date?: string;
   hotel: string;
   adult_passengers: number;
   child_passengers: number;
