@@ -65,18 +65,18 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
     if (data) {
       return {
         id: data.contracts[0].id,
-        contract_number: data?.contracts[0].contract_number,
-        booking_date: data?.contracts[0].booking_date,
-        customer_passport: data?.contracts[0].customer.passport,
-        customer_inn: data?.contracts[0].customer.inn,
-        customer_address: data?.contracts[0].customer.address,
-        customer_DOB: data?.contracts[0].customer.date_of_birth,
-        customer_fullname: data?.contracts[0].customer.fullname,
-        responsible_id: data?.contracts[0].responsible.id,
-        customer_passportDateGiven: data?.contracts[0].customer.datePassportGiven,
-        customer_issuingAuthority: data?.contracts[0].customer.issuingAuthority,
-        passport_back: data?.contracts[0].customer.passport_back,
-        passport_front: data?.contracts[0].customer.passport_front
+        contract_number: data?.contracts[0]?.contract_number,
+        booking_date: data?.contracts[0]?.booking_date,
+        customer_passport: data?.contracts[0]?.customer?.passport,
+        customer_inn: data?.contracts[0]?.customer?.inn,
+        customer_address: data?.contracts[0]?.customer?.address,
+        customer_DOB: data?.contracts[0]?.customer?.date_of_birth,
+        customer_fullname: data?.contracts[0]?.customer?.fullname,
+        responsible_id: data?.contracts[0]?.responsible?.id,
+        customer_passportDateGiven: data?.contracts[0]?.customer?.datePassportGiven,
+        customer_issuingAuthority: data?.contracts[0]?.customer?.issuingAuthority,
+        passport_back: data?.contracts[0]?.customer?.passport_back,
+        passport_front: data?.contracts[0]?.customer?.passport_front
       };
     }
     return null;
