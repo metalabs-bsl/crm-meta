@@ -13,7 +13,7 @@ export const ContractsTable: FC<ContractsTableProps> = ({ contracts }) => {
     <table className={styles.table}>
       <thead className={styles.head}>
         <tr>
-          {contractRowHeaders.map((el, idx) => (
+          {contractRowHeaders?.map((el, idx) => (
             <th className={styles.title} key={idx}>
               {el}
             </th>
@@ -21,7 +21,7 @@ export const ContractsTable: FC<ContractsTableProps> = ({ contracts }) => {
         </tr>
       </thead>
       <tbody className={styles.body}>
-        {contracts.map((contract, idx) => (
+        {contracts?.map((contract, idx) => (
           <tr className={cn(styles.row, { [styles.row_paid]: contract.isPaid })} key={idx}>
             <td className={styles.item}>{contract.contractNumber}</td>
             <td className={styles.item}>{contract.brutto}</td>

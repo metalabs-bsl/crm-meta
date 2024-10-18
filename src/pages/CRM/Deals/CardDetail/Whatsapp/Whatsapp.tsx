@@ -1,27 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import { Icon } from 'common/ui';
+import { useGetMessagesMutation } from 'api/admin/messages/messages.api';
+import { IMessageResponse } from 'types/entities/messages';
 import { chatMock as allChatMock } from './WhatsAppHelper/WhatsAppHelper';
 import styles from './styles.module.scss';
 
-interface ChatMock {
-  id: number;
-  isSender: boolean;
-  message: string;
-  timestamp: string;
-}
-
 const BATCH_SIZE = 10;
 
-export const WhatsApp = () => {
-  const [chatData, setChatData] = useState<ChatMock[]>([]);
+export const WhatsApp: FC<{ customer_phone: string }> = ({ customer_phone }) => {
+  const [chatData, setChatData] = useState<IMessageResponse[]>([]);
+  const [chatMessages] = useGetMessagesMutation();
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   // || для обновления данных чата
   // \/
   useEffect(() => {
-    const start = Math.max(allChatMock.length - visibleCount, 0);
-    setChatData(allChatMock.slice(start));
+    console.log(customer_phone);
+    chatMessages(customer_phone)
+      .unwrap()
+      .then((msgs) => {
+        setChatData(msgs);
+      });
   }, [visibleCount]);
 
   // || для отслеживания прокрутки
@@ -63,8 +63,10 @@ export const WhatsApp = () => {
         <div ref={chatContainerRef} className={styles.chat}>
           {chatData.map((chat) => (
             <div key={chat.id} className={chat.isSender ? styles.left : styles.right}>
-              <p className={styles.message}>{chat.message}</p>
-              <span className={styles.timestamp}>{chat.timestamp}</span>
+              <p className={styles?.message}>{chat?.message}</p>
+              <span className={styles?.timestamp}>
+                {chat?.timestamp.split('T')[0].split('-').reverse().join('-') + ' ' + chat?.timestamp.split('T')[1].split('.')[0]}
+              </span>
             </div>
           ))}
           <div ref={chatEndRef} />

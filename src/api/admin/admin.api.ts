@@ -9,7 +9,9 @@ import { kanbanApi } from './kanban/kanban.api';
 import { leadsMainApi } from './leads/leads.api';
 import { loginApi } from './login/login.api';
 import { mailApi } from './mail/mail.api';
+import { messagesApi } from './messages/messages.api';
 import { paymentCurrencyApi } from './paymentCurrency/paymentCurrency.api';
+import { startApi } from './start/start.api';
 import { workTime } from './workTime/workTime.api';
 
 export const adminApiReducers = {
@@ -25,7 +27,9 @@ export const adminApiReducers = {
   [calendarApi.reducerPath]: calendarApi.reducer,
   [mailApi.reducerPath]: mailApi.reducer,
   [documentApi.reducerPath]: documentApi.reducer,
-  [accountsApi.reducerPath]: accountsApi.reducer
+  [accountsApi.reducerPath]: accountsApi.reducer,
+  [messagesApi.reducerPath]: messagesApi.reducer,
+  [startApi.reducerPath]: startApi.reducer
 };
 
 export const adminApiMiddlewares = [
@@ -41,5 +45,7 @@ export const adminApiMiddlewares = [
   historyApi.middleware,
   calendarApi.middleware,
   mailApi.middleware,
-  documentApi.middleware
+  documentApi.middleware,
+  messagesApi.middleware,
+  startApi.middleware
 ];
