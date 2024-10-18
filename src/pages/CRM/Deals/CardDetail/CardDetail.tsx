@@ -78,7 +78,7 @@ export const CardDetail = () => {
         />
       ),
       [tabItems[1]?.type]: <History />,
-      [tabItems[2]?.type]: <WhatsApp />
+      [tabItems[2]?.type]: <WhatsApp customer_phone={data?.customer?.phone || ''} />
     };
     return components[type];
   };
