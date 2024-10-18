@@ -11,17 +11,17 @@ import styles from './styles.module.scss';
 const selectOptions: Options[] = [
   {
     label: 'Мои сделки',
-    value: 'personal'
+    value: 'my'
   },
   {
     label: 'Общие сделки',
-    value: 'general'
+    value: 'all'
   }
 ];
 
 export const Start: FC = () => {
   const { role } = useAppSelector(employeesSelectors.employees);
-  const [content, setContent] = useState<Options['value']>('personal');
+  const [content, setContent] = useState<Options['value']>('my');
   const isSeleсtAccess = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -40,8 +40,8 @@ export const Start: FC = () => {
         </div>
       </div>
       <div className={styles.bodyBlock}>
-        {content === 'personal' && <Personal />}
-        {content === 'general' && <General />}
+        {content === 'my' && <Personal />}
+        {content === 'all' && <General />}
       </div>
     </div>
   );
