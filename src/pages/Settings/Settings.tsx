@@ -1,33 +1,48 @@
 import { useEffect, useRef, useState } from 'react';
 import { Icon, Loading } from 'common/ui';
 import { SettingsData } from 'common/components/SettingsData/SettingsData';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import {
+  useCreateSettingsCalculatorBrandMutation,
+  useCreateSettingsCalculatorProductMutation,
+  useDeleteSettingsCalculatorBrandMutation,
+  useDeleteSettingsCalculatorProductMutation,
+  useGetSettingsCalculatorBrandQuery,
+  useGetSettingsCalculatorProductQuery
+  // useUpdateSettingsCalculatorBrandMutation
+} from 'api/admin/appSettings/appSettings.api';
+import { ISettingsCalculatorBrandData } from 'types/entities';
 import styles from './styles.module.scss';
 
-type MockDataType = {
-  id: number;
-  value: string;
-  isEditing: boolean;
-};
-
 export const Settings = () => {
-  // Состояние для блока "Бренды"
-  const [brandData, setBrandData] = useState<MockDataType[]>([
-    { id: 1, value: 'Бренд 1', isEditing: false },
-    { id: 2, value: 'Бренд 2', isEditing: false },
-    { id: 3, value: 'Бренд 3', isEditing: false }
-  ]);
+  const notify = useNotify();
+  const { data: brandFetchData } = useGetSettingsCalculatorBrandQuery();
+  const [createSettingsCalculatorBrand] = useCreateSettingsCalculatorBrandMutation();
+  // const [updateSettingsCalculatorBrand] = useUpdateSettingsCalculatorBrandMutation();
+  const [deleteSettingsCalculatorBrand] = useDeleteSettingsCalculatorBrandMutation();
+  const { data: serviceFetchData } = useGetSettingsCalculatorProductQuery();
+  const [createSettingsCalculatorProduct] = useCreateSettingsCalculatorProductMutation();
+  const [deleteSettingsCalculatorProduct] = useDeleteSettingsCalculatorProductMutation();
+  const [brandData, setBrandData] = useState<ISettingsCalculatorBrandData[]>(brandFetchData || []);
+  const [serviceData, setServiceData] = useState<ISettingsCalculatorBrandData[]>(serviceFetchData || []);
 
-  // Состояние для блока "Услуги"
-  const [serviceData, setServiceData] = useState<MockDataType[]>([
-    { id: 1, value: 'Услуга 1', isEditing: false },
-    { id: 2, value: 'Услуга 2', isEditing: false },
-    { id: 3, value: 'Услуга 3', isEditing: false }
-  ]);
+  const brandInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const serviceInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
-  const brandInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
-  const serviceInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
+  useEffect(() => {
+    if (brandFetchData) {
+      setBrandData(brandFetchData);
+    }
+  }, [brandFetchData]);
 
-  const handleBrandEdit = (id: number) => {
+  useEffect(() => {
+    if (serviceFetchData) {
+      setServiceData(serviceFetchData);
+    }
+  }, [serviceFetchData]);
+
+  const handleBrandEdit = (id: string) => {
     setBrandData((prevData) =>
       prevData.map((item) => ({
         ...item,
@@ -36,28 +51,41 @@ export const Settings = () => {
     );
   };
 
-  const handleBrandSave = (id: number) => {
+  const handleBrandSave = (id: string) => {
+    const newItemValue = brandData.find((el) => el.id === id)?.name;
+    console.log(newItemValue);
+    createSettingsCalculatorBrand(newItemValue || '')
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.SUCCESS, 'success');
+      })
+      .catch(() => {
+        notify(MESSAGE.ERROR, 'error');
+      });
+  };
+
+  const handleBrandDelete = (id: string) => {
+    deleteSettingsCalculatorBrand(id)
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.DELETED, 'success');
+      });
+  };
+
+  const handleBrandCancel = (id: string) => {
     setBrandData((prevData) => prevData.map((item) => (item.id === id ? { ...item, isEditing: false } : item)));
   };
 
-  const handleBrandDelete = (id: number) => {
-    setBrandData((prevData) => prevData.filter((item) => item.id !== id));
-  };
-
-  const handleBrandCancel = (id: number) => {
-    setBrandData((prevData) => prevData.map((item) => (item.id === id ? { ...item, isEditing: false } : item)));
-  };
-
-  const handleBrandChange = (id: number, newValue: string) => {
-    setBrandData((prevData) => prevData.map((item) => (item.id === id ? { ...item, value: newValue } : item)));
+  const handleBrandChange = (id: string, newValue: string) => {
+    setBrandData((prevData) => prevData.map((item) => (item.id === id ? { ...item, name: newValue } : item)));
   };
 
   const addNewBrandField = () => {
-    const newId = Math.max(...brandData.map((item) => item.id), 0) + 1;
-    setBrandData((prevData) => [...prevData, { id: newId, value: '', isEditing: true }]);
+    const newId = '2128506';
+    setBrandData((prevData) => [...prevData, { id: newId, name: '', isEditing: true }]);
   };
 
-  const handleServiceEdit = (id: number) => {
+  const handleServiceEdit = (id: string) => {
     setServiceData((prevData) =>
       prevData.map((item) => ({
         ...item,
@@ -66,25 +94,37 @@ export const Settings = () => {
     );
   };
 
-  const handleServiceSave = (id: number) => {
+  const handleServiceSave = (id: string) => {
+    const newItemValue = serviceData.find((el) => el.id === id)?.name;
+    createSettingsCalculatorProduct(newItemValue || '')
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.SUCCESS, 'success');
+      })
+      .catch(() => {
+        notify(MESSAGE.ERROR, 'error');
+      });
+  };
+
+  const handleServiceDelete = (id: string) => {
+    deleteSettingsCalculatorProduct(id)
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.DELETED, 'success');
+      });
+  };
+
+  const handleServiceCancel = (id: string) => {
     setServiceData((prevData) => prevData.map((item) => (item.id === id ? { ...item, isEditing: false } : item)));
   };
 
-  const handleServiceDelete = (id: number) => {
-    setServiceData((prevData) => prevData.filter((item) => item.id !== id));
-  };
-
-  const handleServiceCancel = (id: number) => {
-    setServiceData((prevData) => prevData.map((item) => (item.id === id ? { ...item, isEditing: false } : item)));
-  };
-
-  const handleServiceChange = (id: number, newValue: string) => {
-    setServiceData((prevData) => prevData.map((item) => (item.id === id ? { ...item, value: newValue } : item)));
+  const handleServiceChange = (id: string, newValue: string) => {
+    setServiceData((prevData) => prevData.map((item) => (item.id === id ? { ...item, name: newValue } : item)));
   };
 
   const addNewServiceField = () => {
-    const newId = Math.max(...serviceData.map((item) => item.id), 0) + 1;
-    setServiceData((prevData) => [...prevData, { id: newId, value: '', isEditing: true }]);
+    const newId = '2128506';
+    setServiceData((prevData) => [...prevData, { id: newId, name: '', isEditing: true }]);
   };
 
   useEffect(() => {
@@ -118,7 +158,7 @@ export const Settings = () => {
     }));
   };
 
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <Loading>
@@ -139,7 +179,7 @@ export const Settings = () => {
                       <input
                         className={styles.input}
                         type='text'
-                        value={item.value}
+                        value={item.name}
                         ref={(el) => (brandInputRefs.current[item.id] = el)}
                         onChange={(e) => handleBrandChange(item.id, e.target.value)}
                         readOnly={!item.isEditing}
@@ -184,7 +224,7 @@ export const Settings = () => {
                       <input
                         className={styles.input}
                         type='text'
-                        value={item.value}
+                        value={item.name}
                         ref={(el) => (serviceInputRefs.current[item.id] = el)}
                         onChange={(e) => handleServiceChange(item.id, e.target.value)}
                         readOnly={!item.isEditing}

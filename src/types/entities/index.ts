@@ -1,5 +1,5 @@
 export type { IAccountData, IUnpaidInvoicesCountData } from './accounts';
-export type { IResAppSettings, IUpdateAppSettings } from './appSettings';
+export type { IResAppSettings, ISettingsCalculatorBrandData, IUpdateAppSettings } from './appSettings';
 export type { Birthday, ICalendarDataRes, Note } from './calendar';
 export type { IResCurrenciesLast } from './currencies';
 export type { ICreateDocumentParams, IDocument, IGetDocumentParams } from './document';
