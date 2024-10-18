@@ -22,7 +22,7 @@ const selectOptions: Options[] = [
 export const Start: FC = () => {
   const { role } = useAppSelector(employeesSelectors.employees);
   const [content, setContent] = useState<Options['value']>('personal');
-  const isSeletAccess = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
+  const isSeleсtAccess = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setContent(e.target.value as Options['value']);
@@ -35,7 +35,7 @@ export const Start: FC = () => {
           <h1>Старт</h1>
         </div>
         <div className={styles.inputsWrapper}>
-          {isSeletAccess && <Select options={selectOptions} className={styles.select} value={content} onChange={handleSelect} />}
+          {isSeleсtAccess && <Select options={selectOptions} className={styles.select} value={content} onChange={handleSelect} />}
           <SearchInput placeholder='Поиск' />
         </div>
       </div>

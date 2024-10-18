@@ -104,12 +104,17 @@ export const CardDetail = () => {
         <div className={styles.head}>
           <div className={styles.head_left}>
             {isTitleEdit ? (
-              <Input
-                className={styles.editInp}
-                defaultValue={data?.lead_name}
-                onChange={(e) => setEditedTitle(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
-              />
+              <>
+                <Input
+                  className={styles.editInp}
+                  defaultValue={data?.lead_name}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
+                />
+                <span>
+                  <Icon type='check' onClick={() => onSaveTitleEdit()} />
+                </span>
+              </>
             ) : (
               <>
                 <div className={styles.card_title}>{editedTitle}</div>

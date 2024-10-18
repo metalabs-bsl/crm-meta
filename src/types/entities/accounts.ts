@@ -40,3 +40,7 @@ export interface IAccountData {
   customer: ICustomer;
   paymentDetails: IPaymentDetailsData[];
 }
+
+export interface IUnpaidInvoicesCountData {
+  count: number;
+}
