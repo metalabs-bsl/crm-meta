@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon } from 'common/ui';
 import styles from './Settings.module.scss';
 
@@ -11,26 +11,28 @@ const initialValues = {
   CrmManagement: 20
 };
 
-// Определяем тип ключей объекта initialValues
 type SettingsType = keyof typeof initialValues;
 
 interface SettingsDataProps {
-  type: SettingsType; // указываем тип параметра type
+  type: SettingsType;
+  isProcent?: boolean;
+  secondInput: boolean;
+  onSave: (data: { value: number; secondValue?: number }) => void; // Добавляем callback для передачи значений
 }
 
-export const SettingsData = ({ type }: SettingsDataProps) => {
+export const SettingsData = ({ type, isProcent, secondInput, onSave }: SettingsDataProps) => {
   const [value, setValue] = useState(initialValues[type]);
+  const [secondValue, setSecondValue] = useState<number | undefined>(undefined); // Для второго инпута
   const [isEditing, setIsEditing] = useState(false);
   const [switchState, setSwitchState] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [originalValue, setOriginalValue] = useState(value);
 
-  const handleBlur = () => {
-    if (isEditing) {
-      saveChanges();
-    }
-  };
+  // Добавляем useEffect для сохранения значений при изменении
+  useEffect(() => {
+    onSave({ value, secondValue }); // Передаем оба значения, если secondInput существует
+  }, [value, secondValue]);
 
   const handleClickSwitchBtn = () => {
     setSwitchState((prev) => !prev);
@@ -42,13 +44,14 @@ export const SettingsData = ({ type }: SettingsDataProps) => {
 
   const cancelChanges = () => {
     setValue(originalValue);
+    setSecondValue(undefined); // Сбрасываем значение второго инпута, если оно есть
     setIsEditing(false);
   };
 
   const startEdit = () => {
     setOriginalValue(value);
     setIsEditing(true);
-    inputRef.current?.focus(); // Устанавливаем фокус на поле ввода
+    inputRef.current?.focus();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,18 +61,30 @@ export const SettingsData = ({ type }: SettingsDataProps) => {
     }
   };
 
+  const handleSecondInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = Number(e.target.value);
+    if (!isNaN(newValue)) {
+      setSecondValue(newValue);
+    }
+  };
+
   return (
     <div className={styles.bonusesInner}>
+      {secondInput && (
+        <div className={styles.bonusesPercent}>
+          <input
+            ref={inputRef}
+            className={styles.bonusesInput}
+            type='text'
+            value={secondValue ?? ''}
+            onChange={handleSecondInputChange}
+            readOnly={!isEditing}
+          />
+          {isProcent ? <span>%</span> : <></>}
+        </div>
+      )}
       <div className={styles.bonusesPercent}>
-        <input
-          ref={inputRef}
-          className={styles.bonusesInput}
-          type='text'
-          value={value}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          readOnly={!isEditing}
-        />
+        <input ref={inputRef} className={styles.bonusesInput} type='text' value={value} onChange={handleChange} readOnly={!isEditing} />
         <span>%</span>
       </div>
       {isEditing ? (
