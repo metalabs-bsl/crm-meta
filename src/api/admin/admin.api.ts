@@ -11,6 +11,7 @@ import { loginApi } from './login/login.api';
 import { mailApi } from './mail/mail.api';
 import { messagesApi } from './messages/messages.api';
 import { paymentCurrencyApi } from './paymentCurrency/paymentCurrency.api';
+import { startApi } from './start/start.api';
 import { workTime } from './workTime/workTime.api';
 
 export const adminApiReducers = {
@@ -27,7 +28,8 @@ export const adminApiReducers = {
   [mailApi.reducerPath]: mailApi.reducer,
   [documentApi.reducerPath]: documentApi.reducer,
   [accountsApi.reducerPath]: accountsApi.reducer,
-  [messagesApi.reducerPath]: messagesApi.reducer
+  [messagesApi.reducerPath]: messagesApi.reducer,
+  [startApi.reducerPath]: startApi.reducer
 };
 
 export const adminApiMiddlewares = [
@@ -44,5 +46,6 @@ export const adminApiMiddlewares = [
   calendarApi.middleware,
   mailApi.middleware,
   documentApi.middleware,
-  messagesApi.middleware
+  messagesApi.middleware,
+  startApi.middleware
 ];
