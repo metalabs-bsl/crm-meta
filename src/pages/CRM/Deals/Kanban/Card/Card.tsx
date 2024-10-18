@@ -101,7 +101,7 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
       )}
       {responsibleOpen && (
         <DropdownModal targetRef={responsibleRef} isOpen={responsibleOpen} onClose={() => setResponsibleOpen(false)}>
-          <ResponsibleWindow data={{ firstName: responsible_employee.first_name, lastName: responsible_employee.second_name }} />
+          <ResponsibleWindow data={{ firstName: responsible_employee?.first_name, lastName: responsible_employee?.second_name }} />
         </DropdownModal>
       )}
       {clientOpen && (

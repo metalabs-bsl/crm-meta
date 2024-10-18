@@ -174,6 +174,7 @@ export interface ITourData {
   hotel: string;
   adult_passengers: number;
   child_passengers: number;
+  child_passengers_older: number;
   services: IdWithKey[];
   tour_category: string;
   id?: string;
@@ -193,6 +194,7 @@ export interface ICalcCustomer extends ICustomer {
   address: string;
   issuingAuthority: string;
   datePassportGiven: string;
+  datePassportEnds: string;
   passport_back: IPassportResponse[];
   passport_front: IPassportResponse[];
 }
@@ -221,6 +223,7 @@ export interface IUpdateContract {
   customer_fullname?: string;
   responsible_id?: string;
   customer_passportDateGiven?: string;
+  customer_passportDateEnds?: string;
   customer_issuingAuthority?: string;
   passport_back: IPassportResponse[];
   passport_front: IPassportResponse[];

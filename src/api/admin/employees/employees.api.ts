@@ -18,8 +18,8 @@ export const employeesApi = createApi({
       query: () => `/employees/all`,
       transformResponse: (data: IGetResponsibleEmployees.Response) => {
         return data.map((employee) => ({
-          label: `${employee.first_name} ${employee.second_name}`,
-          value: employee.id
+          label: `${employee?.first_name} ${employee?.second_name}`,
+          value: employee?.id
         }));
       }
     }),

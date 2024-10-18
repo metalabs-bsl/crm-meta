@@ -33,7 +33,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
   const [openSelect, setOpenSelect] = useState<string | null>(null);
   const [passengerCounts, setPassengerCounts] = useState<PassengerCounts>({
     adults: 0,
-    children: 0
+    children: 0,
+    children_old: 0
   });
   const isEditable = !isEditTourInfo;
   const { register, getValues, setValue } = useForm<ITourData>({
@@ -61,7 +62,11 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         } else {
           setValue(key as keyof ITourData, formProps[key as keyof ITourData]);
         }
-        setPassengerCounts({ adults: formProps.adult_passengers, children: formProps.child_passengers });
+        setPassengerCounts({
+          adults: formProps.adult_passengers,
+          children: formProps.child_passengers,
+          children_old: formProps.child_passengers_older
+        });
       });
 
       const servicesIds = formProps.services.map((service) => String(service.id)); // Convert to array of strings
@@ -78,6 +83,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         services: updatedServises,
         adult_passengers: passengerCounts.adults,
         child_passengers: passengerCounts.children,
+        child_passengers_older: passengerCounts.children_old,
         id: formProps?.id,
         calculator: {
           id: calcId

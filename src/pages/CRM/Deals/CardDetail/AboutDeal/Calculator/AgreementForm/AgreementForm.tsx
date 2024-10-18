@@ -43,7 +43,10 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof IUpdateContract];
-        if ((key === 'customer_passportDateGiven' || key === 'customer_DOB') && typeof value === 'string') {
+        if (
+          (key === 'customer_passportDateGiven' || key === 'customer_DOB' || key === 'customer_passportDateEnds') &&
+          typeof value === 'string'
+        ) {
           setValue(key as keyof IUpdateContract, dayjs.utc(value).format('YYYY-MM-DD'));
         } else if (key === 'booking_date') {
           if (typeof value === 'string' && value) {
@@ -152,6 +155,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 disabled={isEditable}
               />
             </div>
+            <div className={styles.item_block} style={{ height: '70px', display: 'inline-block' }}></div>
             <div className={styles.item_block}>
               <label>Передняя сторона паспорта</label>
               <FilePicker
@@ -182,9 +186,18 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
               />
             </div>
             <div className={styles.item_block}>
-              <label>Дата выдачи</label>
+              <label>Дата выдачи паспорта</label>
               <DatePicker
                 {...register('customer_passportDateGiven', { required: 'обязательное поле' })}
+                className={styles.datepicker}
+                disabled={isEditable}
+                datePicketType='date'
+              />
+            </div>
+            <div className={styles.item_block}>
+              <label>Дата окончания паспорта</label>
+              <DatePicker
+                {...register('customer_passportDateEnds', { required: 'обязательное поле' })}
                 className={styles.datepicker}
                 disabled={isEditable}
                 datePicketType='date'

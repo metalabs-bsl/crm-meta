@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import cn from 'classnames';
 import { Empty } from 'common/ui';
 import { IAccountData } from 'types/entities/accounts';
@@ -24,7 +24,7 @@ export const Table: FC<ITableProps> = ({ data }) => {
           </tr>
         </thead>
         <tbody className={styles.tbody}>
-          {[].length ? (
+          {data.length ? (
             data.map((row, index) => <TableRow key={index} {...row} />)
           ) : (
             <tr>

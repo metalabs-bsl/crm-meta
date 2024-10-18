@@ -1,4 +1,4 @@
-import { FC, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import { Empty } from 'common/ui';
@@ -37,6 +37,10 @@ export const TableRow: FC<ITableRowProps> = ({
   const onContractCLick = () => {
     navigate(`/crm/transactions?${id}`);
   };
+
+  useEffect(() => {
+    console.log('YOPTA');
+  }, []);
 
   return (
     <>
@@ -90,7 +94,7 @@ export const TableRow: FC<ITableRowProps> = ({
           phone={customer?.phone || '-'}
           city={customer?.city || '-'}
           source={customer?.source || '-'}
-          dateOfBirth={customer?.date_of_birth?.split('T')[0].split('-').reverse().join('.') || '-'}
+          dateOfBirth={customer?.date_of_birth ? customer.date_of_birth.split('T')[0].split('-').reverse().join('.') : '-'}
         />
       </DropdownModal>
       <tr className={styles.marginRow}></tr>
