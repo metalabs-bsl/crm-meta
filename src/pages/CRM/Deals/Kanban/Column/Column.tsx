@@ -1,11 +1,17 @@
 import React, { useRef, useState } from 'react';
+import dayjs from 'dayjs';
 import cn from 'classnames';
-import { Icon } from 'common/ui';
+import { Icon, StartEndPeriodPicker } from 'common/ui';
 import { DeleteModal, DropdownModal, FilterByDate, Modal } from 'common/components';
 import { useAppDispatch, useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
-import { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation } from 'api/admin/kanban/kanban.api';
+import {
+  useCreateColumnMutation,
+  useDeleteColumnMutation,
+  useGetTotalBruttoSumQuery,
+  useUpdateColumnMutation
+} from 'api/admin/kanban/kanban.api';
 import { setChangeOpenEdgeModal, setColumnId, setIsNewDeal } from 'api/admin/sidebar/sidebar.slice';
 import { IColumn, IColumnInfo } from 'types/entities';
 import { ROLES } from 'types/roles';
@@ -28,6 +34,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openFilterModal, setOpenFilterModal] = useState<boolean>(false);
+  const [openPeriodModal, setOpenPeriodModal] = useState<boolean>(false);
+  const [startDateTotalBrutto, setStartDateTotalBrutto] = useState<string>(dayjs().startOf('month').format('YYYY-MM-DD'));
+  const [endDateTotalBrutto, setEndDateTotalBrutto] = useState<string>(dayjs().endOf('month').format('YYYY-MM-DD'));
   const filterRef = useRef(null);
   const { role } = useAppSelector(employeesSelectors.employees);
   const isManagement = role === ROLES.SENIOR_MANAGER || role === ROLES.DIRECTOR;
@@ -35,6 +44,7 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
   const isEditableColumn = isManagement && (status === 1 || status === 7);
   const isDelitableColumn = leads_count === 0 && isEditableColumn;
   const isLeadCreatable = status === 1 || status === 2 || status === 3 || status === 4 || status === 5;
+  const { data: totalBruttoSum } = useGetTotalBruttoSumQuery({ startDate: startDateTotalBrutto, endDate: endDateTotalBrutto });
   const [createColumn] = useCreateColumnMutation();
   const [deleteColumn] = useDeleteColumnMutation();
   const [updateColumn] = useUpdateColumnMutation();
@@ -80,6 +90,13 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
 
   const onCloseDeleteModal = () => {
     setOpenDeleteModal(false);
+  };
+
+  const onOpenPeriodModal = () => {
+    setOpenPeriodModal(true);
+  };
+  const onClosePeriodModal = () => {
+    setOpenPeriodModal(false);
   };
 
   const onClickFilterModal = () => {
@@ -147,7 +164,21 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
           )}
         </div>
       </div>
-      {/* {isSaleColumn && <span className={styles.totalSum}>200.000$</span>} */}
+      {isSaleColumn && (
+        <span className={styles.totalSum} onClick={onOpenPeriodModal}>
+          {totalBruttoSum} сом <Icon type='calendar' alt='calendar' />
+        </span>
+      )}
+      {isSaleColumn && (
+        <Modal isOpen={openPeriodModal} onClose={onClosePeriodModal}>
+          <StartEndPeriodPicker
+            startValue={startDateTotalBrutto}
+            endValue={endDateTotalBrutto}
+            onChangeStart={setStartDateTotalBrutto}
+            onChangeEnd={setEndDateTotalBrutto}
+          />
+        </Modal>
+      )}
       {canDrag && isLeadCreatable && (
         <div className={styles.createBtn} onClick={onOpen}>
           <Icon type='plus-icon' alt='plus' />

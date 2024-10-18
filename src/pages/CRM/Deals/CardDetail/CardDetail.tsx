@@ -36,7 +36,7 @@ export const CardDetail = () => {
   const { isNewDeal } = useAppSelector(sidebarSelectors.sidebar);
   const [getLeadDetail, { isFetching, data }] = useLazyGetLeadQuery();
   const [updateLead, { isLoading }] = useUpdateLeadMutation();
-  const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
+  const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0]?.type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>('Наименование');
   const [formData, setFormData] = useState<ICreateLeadParams>();
@@ -45,47 +45,47 @@ export const CardDetail = () => {
     if (data) {
       const { responsible_employee, customer, lead_column, lead_name, source } = data;
       const updatedData = {
-        responsible_employee_id: responsible_employee.id,
+        responsible_employee_id: responsible_employee?.id,
         lead_name,
-        customer_name: customer.fullname,
-        customer_phone: customer.phone,
-        customer_id: customer.id,
-        city: customer.city,
-        source_id: source.id,
-        column_id: lead_column.id
+        customer_name: customer?.fullname,
+        customer_phone: customer?.phone,
+        customer_id: customer?.id,
+        city: customer?.city,
+        source_id: source?.id,
+        column_id: lead_column?.id
       };
       setFormData(updatedData);
-      setEditedTitle(data.lead_name);
+      setEditedTitle(data?.lead_name);
     }
   }, [data]);
 
   useEffect(() => {
     if (search) {
-      const leadId = search.substring(1);
+      const leadId = search?.substring(1);
       getLeadDetail(leadId);
     }
   }, [getLeadDetail, search]);
 
   const getComponent = (type: string) => {
     const components = {
-      [tabItems[0].type]: (
+      [tabItems[0]?.type]: (
         <AboutDeal
-          colStatus={data?.lead_column.status}
+          colStatus={data?.lead_column?.status}
           formData={formData}
           reminders={data?.reminders}
           comments={data?.comments}
           calcData={data?.calculator[0]}
         />
       ),
-      [tabItems[1].type]: <History />,
-      [tabItems[2].type]: <WhatsApp />
+      [tabItems[1]?.type]: <History />,
+      [tabItems[2]?.type]: <WhatsApp />
     };
     return components[type];
   };
 
   const onSaveTitleEdit = () => {
     if (data && formData) {
-      updateLead({ id: data.id, body: { ...formData, lead_name: editedTitle } });
+      updateLead({ id: data?.id, body: { ...formData, lead_name: editedTitle } });
       setIsTitleEdit(false);
     }
   };
@@ -104,12 +104,17 @@ export const CardDetail = () => {
         <div className={styles.head}>
           <div className={styles.head_left}>
             {isTitleEdit ? (
-              <Input
-                className={styles.editInp}
-                defaultValue={data?.lead_name}
-                onChange={(e) => setEditedTitle(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
-              />
+              <>
+                <Input
+                  className={styles.editInp}
+                  defaultValue={data?.lead_name}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
+                />
+                <span>
+                  <Icon type='check' onClick={() => onSaveTitleEdit()} />
+                </span>
+              </>
             ) : (
               <>
                 <div className={styles.card_title}>{editedTitle}</div>
@@ -121,7 +126,7 @@ export const CardDetail = () => {
           <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
         </div>
         <div>
-          <Progress currentStage={data?.lead_column.id} lead_id={data?.id} />
+          <Progress currentStage={data?.lead_column?.id} lead_id={data?.id} />
         </div>
         <div className={styles.content}>{getComponent(isActiveTab)}</div>
       </div>

@@ -3,11 +3,16 @@ import dealsIcon from '../../../common/assets/images/deals.svg';
 import processedIcon from '../../../common/assets/images/processed.svg';
 import soldIcon from '../../../common/assets/images/sold.svg';
 
-export const getSummaryData = (totalDeals: number, processedDeals: number, soldDeals: number, conversion: string) => [
-  { icon: dealsIcon, title: 'всего сделок', value: totalDeals.toString() },
-  { icon: processedIcon, title: 'обработано сделок', value: processedDeals.toString() },
-  { icon: soldIcon, title: 'продано сделок', value: soldDeals.toString() },
-  { icon: conversionIcon, title: 'конверсия', value: conversion }
+export const getSummaryData = (
+  totalDeals: number | undefined,
+  processedDeals: number | undefined,
+  soldDeals: number | undefined,
+  conversion: number | undefined
+) => [
+  { icon: dealsIcon, title: 'всего сделок', value: totalDeals !== undefined ? totalDeals.toString() : '-' },
+  { icon: processedIcon, title: 'обработано сделок', value: processedDeals !== undefined ? processedDeals.toString() : '-' },
+  { icon: soldIcon, title: 'продано сделок', value: soldDeals !== undefined ? soldDeals.toString() : '-' },
+  { icon: conversionIcon, title: 'конверсия', value: conversion !== undefined ? conversion.toString() : '-' }
 ];
 
 export const employeeRowHeaders = [

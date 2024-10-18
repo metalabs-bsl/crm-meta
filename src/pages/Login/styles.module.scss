@@ -11,13 +11,16 @@
     min-height: 500px;
     border-radius: 10px;
     display: flex;
-    background-color: $seaSalt;
+    align-items: center;
+    background-color: $white;
     .logoBlock {
       min-width: 366px;
-      min-height: 100%;
+      min-height: 500px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 10px 0 0 10px;
+      background-color: $seaSalt;
       .logo {
         width: 253px;
       }

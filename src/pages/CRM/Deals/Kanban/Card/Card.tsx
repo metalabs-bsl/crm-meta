@@ -83,10 +83,10 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
           <span className={styles.count}>{count_of_reminders}</span>
         </div>
         <span onMouseEnter={() => setResponsibleOpen(true)} onMouseLeave={() => setResponsibleOpen(false)} ref={responsibleRef}>
-          {responsible_employee.avatar_id ? (
+          {responsible_employee?.avatar_id ? (
             <img
               className={styles.user_img}
-              src={`${process.env.REACT_APP_BASE_URL}/files/download/${responsible_employee.avatar_id}`}
+              src={`${process.env.REACT_APP_BASE_URL}/files/download/${responsible_employee?.avatar_id}`}
               alt='user'
             />
           ) : (

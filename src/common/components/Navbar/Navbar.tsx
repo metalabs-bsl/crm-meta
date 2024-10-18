@@ -12,9 +12,10 @@ import { NAVBAR_PAGES } from 'types/enums';
 interface IProps {
   navbarItems: INavbar;
   page: NAVBAR_PAGES;
+  accountsBadge?: number;
 }
 
-export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
+export const Navbar: FC<IProps> = ({ navbarItems, page, accountsBadge }) => {
   const redirectTo = useRedirect();
   const { pathname } = useLocation();
   const { role } = useAppSelector(employeesSelectors.employees);
@@ -37,7 +38,7 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
               className={cn({ [styles.activeChapter]: pathname.includes(item.chapter) })}
               onClick={() => onNavigate(item.chapter)}
             >
-              {item.chapter === 'accounts' ? <Badge count={1}>{item.title}</Badge> : item.title}
+              {item.chapter === 'accounts' ? <Badge count={accountsBadge || 0}>{item.title}</Badge> : item.title}
             </li>
           );
         })}

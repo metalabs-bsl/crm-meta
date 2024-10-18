@@ -1,3 +1,4 @@
+export type { IAccountData, IUnpaidInvoicesCountData } from './accounts';
 export type { IResAppSettings, IUpdateAppSettings } from './appSettings';
 export type { Birthday, ICalendarDataRes, Note } from './calendar';
 export type { IResCurrenciesLast } from './currencies';
@@ -42,4 +43,5 @@ export type {
   ISetPinMessageParams,
   ISetReadMessageParams
 } from './mail';
+export type { IStartSummary } from './start';
 export type { IResWorkTimeInfo } from './workTime';
