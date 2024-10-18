@@ -76,6 +76,8 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
     socket?.on('online', (message) => {
       dispatch(setOnlineList(message));
     });
+
+    
   } else {
     console.error('Access token is not available, cannot initialize socket.');
   }
