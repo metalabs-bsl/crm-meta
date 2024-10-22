@@ -48,7 +48,7 @@ export const mainRoutes: IRoute[] = [
   {
     path: paths.settings,
     label: labels.settings,
-    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
+    roles: [ROLES.DIRECTOR, ROLES.SENIOR_MANAGER],
     element: <Settings />
   },
   {
