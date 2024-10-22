@@ -1,55 +1,91 @@
-import { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Icon } from 'common/ui';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useUpdateAppSettingsMutation } from 'api/admin/appSettings/appSettings.api';
 import styles from './Settings.module.scss';
 
-const initialValues = {
-  Conversion: 100,
-  Bonuses: 100,
-  Profit: 100,
-  PAX: 100,
-  AdditionalBonuses: 40,
-  CrmManagement: 20
-};
-
-type SettingsType = keyof typeof initialValues;
-
 interface SettingsDataProps {
-  type: SettingsType;
-  isProcent?: boolean;
-  secondInput: boolean;
-  onSave: (data: { value: number; secondValue?: number }) => void; // Добавляем callback для передачи значений
+  percentName: string;
+  percentValue?: number;
+  countName?: string;
+  countValue?: number;
+  toggleName: string;
+  toggleValue?: boolean;
 }
 
-export const SettingsData = ({ type, isProcent, secondInput, onSave }: SettingsDataProps) => {
-  const [value, setValue] = useState(initialValues[type]);
-  const [secondValue, setSecondValue] = useState<number | undefined>(undefined); // Для второго инпута
-  const [isEditing, setIsEditing] = useState(false);
-  const [switchState, setSwitchState] = useState(false);
+export const SettingsData: FC<SettingsDataProps> = ({ percentName, percentValue, countName, countValue, toggleName, toggleValue }) => {
+  const notify = useNotify();
+  const [updateAppSettings] = useUpdateAppSettingsMutation();
+  const [value, setValue] = useState(percentValue ?? 0);
+  const [secondValue, setSecondValue] = useState<number>(countValue ?? 0);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [switchState, setSwitchState] = useState<boolean>(toggleValue ?? false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const [originalValue, setOriginalValue] = useState(value);
 
-  // Добавляем useEffect для сохранения значений при изменении
   useEffect(() => {
-    onSave({ value, secondValue }); // Передаем оба значения, если secondInput существует
-  }, [value, secondValue]);
+    if (percentValue !== undefined) {
+      setValue(percentValue);
+    }
+  }, [percentValue]);
+
+  useEffect(() => {
+    if (countValue !== undefined) {
+      setSecondValue(countValue);
+    }
+  }, [countValue]);
+
+  useEffect(() => {
+    if (toggleValue !== undefined) {
+      setSwitchState(toggleValue);
+    }
+  }, [toggleValue]);
 
   const handleClickSwitchBtn = () => {
-    setSwitchState((prev) => !prev);
+    const newSwitchState = !switchState;
+    setSwitchState(newSwitchState);
+
+    const dataToSave = {
+      [toggleName]: newSwitchState
+    };
+
+    updateAppSettings(dataToSave)
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.UPDATED, 'success');
+      })
+      .catch(() => {
+        notify(MESSAGE.ERROR, 'error');
+      });
   };
 
   const saveChanges = () => {
     setIsEditing(false);
+
+    const dataToSave = {
+      [percentName]: value
+    };
+
+    if (countName) {
+      dataToSave[countName] = secondValue;
+    }
+
+    updateAppSettings(dataToSave)
+      .unwrap()
+      .then(() => {
+        notify(MESSAGE.UPDATED, 'success');
+      })
+      .catch(() => {
+        notify(MESSAGE.ERROR, 'error');
+      });
   };
 
   const cancelChanges = () => {
-    setValue(originalValue);
-    setSecondValue(undefined); // Сбрасываем значение второго инпута, если оно есть
     setIsEditing(false);
   };
 
   const startEdit = () => {
-    setOriginalValue(value);
     setIsEditing(true);
     inputRef.current?.focus();
   };
@@ -70,17 +106,9 @@ export const SettingsData = ({ type, isProcent, secondInput, onSave }: SettingsD
 
   return (
     <div className={styles.bonusesInner}>
-      {secondInput && (
+      {countValue !== undefined && (
         <div className={styles.bonusesPercent}>
-          <input
-            ref={inputRef}
-            className={styles.bonusesInput}
-            type='text'
-            value={secondValue ?? ''}
-            onChange={handleSecondInputChange}
-            readOnly={!isEditing}
-          />
-          {isProcent ? <span>%</span> : <></>}
+          <input className={styles.bonusesInput} type='text' value={secondValue} onChange={handleSecondInputChange} readOnly={!isEditing} />
         </div>
       )}
       <div className={styles.bonusesPercent}>

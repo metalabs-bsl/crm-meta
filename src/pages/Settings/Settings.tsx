@@ -8,20 +8,24 @@ import {
   useCreateSettingsCalculatorProductMutation,
   useDeleteSettingsCalculatorBrandMutation,
   useDeleteSettingsCalculatorProductMutation,
+  useGetAppSettingsQuery,
   useGetSettingsCalculatorBrandQuery,
-  useGetSettingsCalculatorProductQuery
-  // useUpdateSettingsCalculatorBrandMutation
+  useGetSettingsCalculatorProductQuery,
+  useUpdateSettingsCalculatorBrandMutation,
+  useUpdateSettingsCalculatorProductMutation
 } from 'api/admin/appSettings/appSettings.api';
 import { ISettingsCalculatorBrandData } from 'types/entities';
 import styles from './styles.module.scss';
 
 export const Settings = () => {
   const notify = useNotify();
+  const { data: settingsData } = useGetAppSettingsQuery();
   const { data: brandFetchData } = useGetSettingsCalculatorBrandQuery();
   const [createSettingsCalculatorBrand] = useCreateSettingsCalculatorBrandMutation();
-  // const [updateSettingsCalculatorBrand] = useUpdateSettingsCalculatorBrandMutation();
+  const [updateSettingsCalculatorBrand] = useUpdateSettingsCalculatorBrandMutation();
   const [deleteSettingsCalculatorBrand] = useDeleteSettingsCalculatorBrandMutation();
   const { data: serviceFetchData } = useGetSettingsCalculatorProductQuery();
+  const [updateSettingsCalculatorProduct] = useUpdateSettingsCalculatorProductMutation();
   const [createSettingsCalculatorProduct] = useCreateSettingsCalculatorProductMutation();
   const [deleteSettingsCalculatorProduct] = useDeleteSettingsCalculatorProductMutation();
   const [brandData, setBrandData] = useState<ISettingsCalculatorBrandData[]>(brandFetchData || []);
@@ -53,15 +57,25 @@ export const Settings = () => {
 
   const handleBrandSave = (id: string) => {
     const newItemValue = brandData.find((el) => el.id === id)?.name;
-    console.log(newItemValue);
-    createSettingsCalculatorBrand(newItemValue || '')
-      .unwrap()
-      .then(() => {
-        notify(MESSAGE.SUCCESS, 'success');
-      })
-      .catch(() => {
-        notify(MESSAGE.ERROR, 'error');
-      });
+    if (id === 'newElement') {
+      createSettingsCalculatorBrand(newItemValue ?? '')
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.SUCCESS, 'success');
+        })
+        .catch(() => {
+          notify(MESSAGE.ERROR, 'error');
+        });
+    } else {
+      updateSettingsCalculatorBrand({ id, name: newItemValue ?? '' })
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.SUCCESS, 'success');
+        })
+        .catch(() => {
+          notify(MESSAGE.ERROR, 'error');
+        });
+    }
   };
 
   const handleBrandDelete = (id: string) => {
@@ -81,7 +95,7 @@ export const Settings = () => {
   };
 
   const addNewBrandField = () => {
-    const newId = '2128506';
+    const newId = 'newElement';
     setBrandData((prevData) => [...prevData, { id: newId, name: '', isEditing: true }]);
   };
 
@@ -96,14 +110,25 @@ export const Settings = () => {
 
   const handleServiceSave = (id: string) => {
     const newItemValue = serviceData.find((el) => el.id === id)?.name;
-    createSettingsCalculatorProduct(newItemValue || '')
-      .unwrap()
-      .then(() => {
-        notify(MESSAGE.SUCCESS, 'success');
-      })
-      .catch(() => {
-        notify(MESSAGE.ERROR, 'error');
-      });
+    if (id === 'newElement') {
+      createSettingsCalculatorProduct(newItemValue || '')
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.SUCCESS, 'success');
+        })
+        .catch(() => {
+          notify(MESSAGE.ERROR, 'error');
+        });
+    } else {
+      updateSettingsCalculatorProduct({ id, name: newItemValue ?? '' })
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.SUCCESS, 'success');
+        })
+        .catch(() => {
+          notify(MESSAGE.ERROR, 'error');
+        });
+    }
   };
 
   const handleServiceDelete = (id: string) => {
@@ -123,7 +148,7 @@ export const Settings = () => {
   };
 
   const addNewServiceField = () => {
-    const newId = '2128506';
+    const newId = 'newElement';
     setServiceData((prevData) => [...prevData, { id: newId, name: '', isEditing: true }]);
   };
 
@@ -140,25 +165,6 @@ export const Settings = () => {
       }
     });
   }, [brandData, serviceData]);
-
-  // Состояние для значений из SettingsData
-  const [formData, setFormData] = useState({
-    Conversion: { value: 100, secondValue: undefined },
-    Bonuses: { value: 100, secondValue: undefined },
-    Profit: { value: 100, secondValue: undefined },
-    PAX: { value: 100, secondValue: undefined },
-    AdditionalBonuses: { value: 40, secondValue: undefined },
-    CrmManagement: { value: 20, secondValue: undefined }
-  });
-
-  const handleDataChange = (type: keyof typeof formData, data: { value: number; secondValue?: number }) => {
-    setFormData((prev) => ({
-      ...prev,
-      [type]: data
-    }));
-  };
-
-  // console.log(formData);
 
   return (
     <Loading>
@@ -269,10 +275,12 @@ export const Settings = () => {
                   <p className={`${styles.startInnerText} ${styles.conversionText}`}>Вы можете менять процент в конверсии KPI</p>
                 </div>
                 <SettingsData
-                  secondInput={true}
-                  type='Conversion'
-                  isProcent={true}
-                  onSave={(data) => handleDataChange('Conversion', data)}
+                  percentName={'conversionPercentage'}
+                  percentValue={settingsData?.conversionPercentage}
+                  countName={'conversionCount'}
+                  countValue={settingsData?.conversionCount}
+                  toggleName={'conversionEnabled'}
+                  toggleValue={settingsData?.conversionEnabled}
                 />
               </li>
 
@@ -281,7 +289,12 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.bonusesTitle}`}>Бонусы</h4>
                   <p className={`${styles.startInnerText} ${styles.bonusesText}`}>Вы можете менять проценты бонусов сотрудника</p>
                 </div>
-                <SettingsData secondInput={false} type='Bonuses' onSave={(data) => handleDataChange('Bonuses', data)} />
+                <SettingsData
+                  percentName={'bonusPercentage'}
+                  percentValue={settingsData?.bonusPercentage}
+                  toggleName={'bonusEnabled'}
+                  toggleValue={settingsData?.bonusEnabled}
+                />
               </li>
 
               <li className={`${styles.startBlock} ${styles.profit}`}>
@@ -289,7 +302,14 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.profitTitle}`}>Прибыль</h4>
                   <p className={`${styles.startInnerText} ${styles.profitText}`}>Вы можете включать и отключать показатели прибыли</p>
                 </div>
-                <SettingsData secondInput={true} type='Profit' isProcent={false} onSave={(data) => handleDataChange('Profit', data)} />
+                <SettingsData
+                  percentName={'profitPercentage'}
+                  percentValue={settingsData?.profitPercentage}
+                  countName={'profitCount'}
+                  countValue={settingsData?.profitCount}
+                  toggleName={'profitEnabled'}
+                  toggleValue={settingsData?.profitEnabled}
+                />
               </li>
 
               <li className={`${styles.startBlock} ${styles.pax}`}>
@@ -297,7 +317,14 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.paxTitle}`}>PAX</h4>
                   <p className={`${styles.startInnerText} ${styles.paxText}`}>Вы можете включать и отключать показатели PAX</p>
                 </div>
-                <SettingsData secondInput={true} type='PAX' isProcent={false} onSave={(data) => handleDataChange('PAX', data)} />
+                <SettingsData
+                  percentName={'paxPercentage'}
+                  percentValue={settingsData?.paxPercentage}
+                  countName={'paxCount'}
+                  countValue={settingsData?.paxCount}
+                  toggleName={'paxEnabled'}
+                  toggleValue={settingsData?.paxEnabled}
+                />
               </li>
 
               <li className={`${styles.startBlock} ${styles.additionalBonuses}`}>
@@ -305,7 +332,12 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.additionalBonusesTitle}`}>Дополнительные бонусы</h4>
                   <p className={`${styles.startInnerText} ${styles.additionalBonusesText}`}>Измените дополнительные бонусы</p>
                 </div>
-                <SettingsData secondInput={false} type='AdditionalBonuses' onSave={(data) => handleDataChange('AdditionalBonuses', data)} />
+                <SettingsData
+                  percentName={'additionalBonusPercentage'}
+                  percentValue={settingsData?.additionalBonusPercentage}
+                  toggleName={'additionalBonusEnabled'}
+                  toggleValue={settingsData?.additionalBonusEnabled}
+                />
               </li>
 
               <li className={`${styles.startBlock} ${styles.crmManagement}`}>
@@ -313,7 +345,12 @@ export const Settings = () => {
                   <h4 className={`${styles.startInnerTitle} ${styles.crmManagementTitle}`}>Ведение CRM</h4>
                   <p className={`${styles.startInnerText} ${styles.crmManagementText}`}>Управляйте CRM-процессами</p>
                 </div>
-                <SettingsData secondInput={false} type='CrmManagement' onSave={(data) => handleDataChange('CrmManagement', data)} />
+                <SettingsData
+                  percentName={'crmManagementPercentage'}
+                  percentValue={settingsData?.crmManagementPercentage}
+                  toggleName={'crmManagementEnabled'}
+                  toggleValue={settingsData?.crmManagementEnabled}
+                />
               </li>
             </ul>
           </div>

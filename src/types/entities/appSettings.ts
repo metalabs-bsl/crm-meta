@@ -31,7 +31,22 @@ export interface IResAppSettings {
 }
 
 export interface IUpdateAppSettings {
-  is_calculator_open: boolean;
+  is_calculator_open?: boolean;
+  conversionPercentage?: number;
+  conversionEnabled?: boolean;
+  conversionCount?: number;
+  bonusPercentage?: number;
+  bonusEnabled?: boolean;
+  profitPercentage?: number;
+  profitEnabled?: boolean;
+  profitCount?: number;
+  paxPercentage?: number;
+  paxEnabled?: boolean;
+  paxCount?: number;
+  additionalBonusPercentage?: number;
+  additionalBonusEnabled?: boolean;
+  crmManagementPercentage?: number;
+  crmManagementEnabled?: boolean;
 }
 
 export interface ISettingsCalculatorBrandData {
