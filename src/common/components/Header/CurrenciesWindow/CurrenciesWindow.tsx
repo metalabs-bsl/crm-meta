@@ -16,12 +16,14 @@ export const CurrenciesWindow = () => {
     {
       icon: 'usd',
       title: 'USD',
-      items: [data?.buyUSD, data?.sellUSD]
+      // @ts-ignore
+      items: [data?.buyUSD.d.join('.').slice(0, 5), data?.sellUSD.d.join('.').slice(0, 5)]
     },
     {
       icon: 'eur',
       title: 'EUR',
-      items: [data?.buyEUR, data?.sellEUR]
+      // @ts-ignore
+      items: [data?.buyEUR.d.join('.').slice(0, 5), data?.sellEUR.d.join('.').slice(0, 5)]
     }
   ];
 
