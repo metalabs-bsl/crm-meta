@@ -184,7 +184,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 ref={passengersRef}
                 onClick={onClickPassengersItem}
               >
-                {passengerCounts.adults} взрослых (12+), {passengerCounts.children} ребенок (0 - 11)
+                {passengerCounts.adults} взрослых (12+), {passengerCounts.children} ребенок (3 - 11)
               </div>
               <DropdownModal targetRef={passengersRef} isOpen={isOpenPassengersModal} onClose={onClosePassengersModal}>
                 <PassengersCount passengerCounts={passengerCounts} setPassengerCounts={setPassengerCounts} />

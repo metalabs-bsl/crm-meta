@@ -74,6 +74,8 @@ export const StartWindow = () => {
     };
   }, [isStart, data, isTimeOut]);
 
+  const [notificationPlayed, setNotificationPlayed] = useState(false);
+
   // этот useEffect отвечает за обновление времени перерыва
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval> | null = null;
@@ -86,6 +88,14 @@ export const StartWindow = () => {
         const minutes = String(workDuration.minutes()).padStart(2, '0');
         const seconds = String(workDuration.seconds()).padStart(2, '0');
         setPauseTime(`${hours}:${minutes}:${seconds}`);
+
+        const breakEndTime = start.add(1, 'hour');
+        const remainingDuration = dayjs.duration(breakEndTime.diff(now));
+
+        if (remainingDuration.asMinutes() <= 15 && !notificationPlayed) {
+          new Audio('/notification.mp3').play();
+          setNotificationPlayed(true);
+        }
       };
       updateCurrentPauseTime();
       intervalId = setInterval(updateCurrentPauseTime, 1000);

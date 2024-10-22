@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { checkActivePath } from 'common/helpers';
-import { useRedirect } from 'common/hooks';
+import { useAppSelector, useRedirect } from 'common/hooks';
 import { crmChapters, reportChapters } from 'common/constants';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { IIconType } from 'types/common';
 import { adminPath } from 'types/routes';
 import styles from '../styles.module.scss';
@@ -12,6 +13,12 @@ import styles from '../styles.module.scss';
 const Chapters: FC = () => {
   const { pathname } = useLocation();
   const redirect = useRedirect();
+  const { role } = useAppSelector(employeesSelectors.employees);
+
+  useEffect(() => {
+    console.log(role);
+  }, []);
+
   const chapters = [
     {
       title: 'CRM',
@@ -53,15 +60,22 @@ const Chapters: FC = () => {
 
   return (
     <ul className={styles.chapter}>
-      {chapters.map((i, index) => {
-        const isActive = checkActivePath(pathname, i.path);
-        return (
-          <li key={index} onClick={i.action} className={cn({ [styles.active]: isActive })}>
-            <Icon type={(isActive ? i.icon + '-dark' : i.icon) as IIconType} alt={i.icon} />
-            <p>{i.title}</p>
-          </li>
-        );
-      })}
+      {chapters
+        .filter((chapter) => {
+          return !(
+            (chapter.title === 'Настройки' && (role === 'Manager' || role === 'Intern')) ||
+            (chapter.title === 'Отчеты' && (role === 'Manager' || role === 'Intern'))
+          );
+        })
+        .map((i, index) => {
+          const isActive = checkActivePath(pathname, i.path);
+          return (
+            <li key={index} onClick={i.action} className={cn({ [styles.active]: isActive })}>
+              <Icon type={(isActive ? i.icon + '-dark' : i.icon) as IIconType} alt={i.icon} />
+              <p>{i.title}</p>
+            </li>
+          );
+        })}
     </ul>
   );
 };
