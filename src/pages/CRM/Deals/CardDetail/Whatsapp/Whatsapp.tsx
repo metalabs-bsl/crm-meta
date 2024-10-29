@@ -13,6 +13,7 @@ export const WhatsApp: FC<{ customer_phone: string }> = ({ customer_phone }) => 
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isUserScrollingUp, setIsUserScrollingUp] = useState<boolean>(false);
   // || для обновления данных чата
   // \/
   useEffect(() => {
@@ -52,10 +53,11 @@ export const WhatsApp: FC<{ customer_phone: string }> = ({ customer_phone }) => 
   // || для автоскролла вниз
   // \/
   useEffect(() => {
-    if (chatEndRef.current) {
+    if (chatEndRef.current && !isUserScrollingUp) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      setIsUserScrollingUp(true);
     }
-  }, [chatData]);
+  }, [chatData, isUserScrollingUp]);
 
   return (
     <div className={styles.whatsapp}>
