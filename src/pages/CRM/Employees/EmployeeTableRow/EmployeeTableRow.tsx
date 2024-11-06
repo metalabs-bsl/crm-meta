@@ -54,6 +54,9 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const [contractLocal, setContractLocal] = useState<{ id: string; original_name: string } | undefined>(contract);
   const [passportFrontLocal, setPassportFrontLocal] = useState<{ id: string; original_name: string } | undefined>(passport_front);
   const [passportBackLocal, setPassportBackLocal] = useState<{ id: string; original_name: string } | undefined>(passport_back);
+  const [name, setName] = useState<string>(first_name || '');
+  const [secondName, setSecondName] = useState<string>(second_name || '');
+  const [middleName, setMiddleName] = useState<string>(middle_name || '');
 
   const [contractLocalFile, setContractLocalFile] = useState<File | null>(null);
   const [frontPassportLocalFile, setFrontPassportLocalFile] = useState<File | null>(null);
@@ -79,6 +82,9 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       start_of_internship: startOfInternship,
       start_of_work: startOfWork,
       login: loginCRM,
+      first_name: name,
+      second_name: secondName,
+      middle_name: middleName,
       //@ts-ignore
       roles: [rolesAll?.find((el) => el.id === role)]
     };
@@ -143,7 +149,16 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
           </>
         )}
       </div>
-      <div className={styles.item}>{`${second_name} ${first_name} ${middle_name}`}</div>
+      {/* <div className={styles.item}>{`${second_name} ${first_name} ${middle_name}`}</div> */}
+      <div className={styles.item}>
+        <input className={styles.input} disabled={!isEdit} value={secondName} type='text' onChange={(e) => setSecondName(e.target.value)} />
+      </div>
+      <div className={styles.item}>
+        <input className={styles.input} disabled={!isEdit} value={name} type='text' onChange={(e) => setName(e.target.value)} />
+      </div>
+      <div className={styles.item}>
+        <input className={styles.input} disabled={!isEdit} value={middleName} type='text' onChange={(e) => setMiddleName(e.target.value)} />
+      </div>
       <div className={styles.item}>
         <input
           type='date'
