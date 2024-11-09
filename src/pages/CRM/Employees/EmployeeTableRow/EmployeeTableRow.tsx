@@ -1,9 +1,10 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { FilePicker, Icon } from 'common/ui';
+import { FilePicker, Icon, Loading } from 'common/ui';
+import { DropdownModal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useCreateEmployeeMutation, useGetEmployeeRolesQuery } from 'api/admin/employees/employees.api';
+import { useCreateEmployeeMutation, useGetEmployeeRolesQuery, useGetQRCodeQuery } from 'api/admin/employees/employees.api';
 import { IEmployee } from 'types/entities';
 import { getRusRole } from '../Employees.helper';
 import styles from './styles.module.scss';
@@ -23,6 +24,7 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   middle_name,
   date_of_birth,
   phone,
+  whatsapp_status,
   personal_phone,
   roles,
   email,
@@ -57,6 +59,19 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
   const [name, setName] = useState<string>(first_name || '');
   const [secondName, setSecondName] = useState<string>(second_name || '');
   const [middleName, setMiddleName] = useState<string>(middle_name || '');
+
+  const whatsappStatusRef = useRef(null);
+  const [whatsappStatusOpen, setWhatsAppStatusOpen] = useState<boolean>(false);
+  const {
+    data: qrCode,
+    refetch,
+    isFetching
+  } = useGetQRCodeQuery(
+    { phone: phone.replace('+', '') },
+    {
+      skip: !whatsappStatusOpen
+    }
+  );
 
   const [contractLocalFile, setContractLocalFile] = useState<File | null>(null);
   const [frontPassportLocalFile, setFrontPassportLocalFile] = useState<File | null>(null);
@@ -117,6 +132,23 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
       setBackPassportLocalFile(null);
     }
   };
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timer | null = null;
+
+    if (whatsappStatusOpen) {
+      refetch();
+      intervalId = setInterval(() => {
+        refetch();
+      }, 20000);
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [whatsappStatusOpen, refetch]);
 
   return (
     <div className={styles.tableRow}>
@@ -188,6 +220,11 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
           buttonClass={cn(styles.select_btn, { [styles.disabled_btn]: !isEdit })}
           placeholder={undefined}
         />
+      </div>
+      <div className={cn(styles.item)}>
+        <span onMouseEnter={() => setWhatsAppStatusOpen(true)} onMouseLeave={() => setWhatsAppStatusOpen(false)} ref={whatsappStatusRef}>
+          {whatsapp_status ? ' Подключен' : 'Не подключен'}
+        </span>
       </div>
       <div className={styles.item}>
         <PhoneInput
@@ -286,6 +323,13 @@ export const EmployeeTableRow: FC<IEmployeeTableRow> = ({
           <FilePicker className={styles.fileInput} onChange={setBackPassportLocalFile} disabled={!isEdit} />
         )}
       </div>
+      <DropdownModal targetRef={whatsappStatusRef} isOpen={whatsappStatusOpen} onClose={() => setWhatsAppStatusOpen(false)}>
+        <Loading isSpin={isFetching}>
+          <div className={styles.qrCodeImage}>
+            <img src={qrCode?.qr_url} alt='QR Code' />
+          </div>
+        </Loading>
+      </DropdownModal>
     </div>
   );
 };

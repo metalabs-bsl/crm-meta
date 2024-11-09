@@ -70,6 +70,12 @@ export const employeesApi = createApi({
     }),
     getEmployeeRoles: query<IGetEmployeeRoles.Response, IGetEmployeeRoles.Params>({
       query: () => `/roles`
+    }),
+    getQRCode: query<{ qr_url: string }, { phone: string }>({
+      query: ({ phone }) => ({
+        url: `http://45.82.14.191:8089/whatsapp-account/qr`,
+        params: { phone }
+      })
     })
   })
 });
@@ -84,5 +90,6 @@ export const {
   useCreateEmployeeMutation,
   useDeleteEmployeeMutation,
   useUpdateEmployeeInfoMutation,
-  useGetEmployeeRolesQuery
+  useGetEmployeeRolesQuery,
+  useGetQRCodeQuery
 } = employeesApi;

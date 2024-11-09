@@ -12,6 +12,10 @@
   background-color: $white;
   padding-right: 9px;
   border-bottom: 1px solid $silver;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: $table-column-color;
   &:first-child {
     left: 0;
     z-index: 10;
