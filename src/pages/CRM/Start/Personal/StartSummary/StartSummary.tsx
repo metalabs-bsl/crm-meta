@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useGetAppSettingsQuery } from 'api/admin/appSettings/appSettings.api';
 import { getSummaryData } from '../../Start.helper';
 import { SummaryItem } from './SummaryItem';
@@ -13,7 +13,7 @@ interface StartSummaryProps {
 }
 
 export const StartSummary: FC<StartSummaryProps> = ({ totalDeals, processedDeals, soldDeals, conversion }) => {
-  const summary = getSummaryData(totalDeals, processedDeals, soldDeals, conversion);
+  // const summary = getSummaryData(totalDeals, processedDeals, soldDeals, conversion);
   const { data } = useGetAppSettingsQuery();
   const [summaryData, setSummaryData] = useState<
     {
@@ -22,6 +22,12 @@ export const StartSummary: FC<StartSummaryProps> = ({ totalDeals, processedDeals
       value: string;
     }[]
   >([]);
+
+  const summary = useMemo(
+    () => getSummaryData(totalDeals, processedDeals, soldDeals, conversion),
+    [totalDeals, processedDeals, soldDeals, conversion]
+  );
+
   useEffect(() => {
     if (data) {
       const newSummaryData: {

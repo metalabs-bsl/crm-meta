@@ -11,6 +11,8 @@ import { columns } from './Employees.helper';
 import { EmployeeTableRow } from './EmployeeTableRow';
 import styles from './style.module.scss';
 
+import { connectWhatsAppSocket, disconnectWhatsAppSocket, registerWhatsAppMessageHandler } from 'socket';
+
 export const Employees = () => {
   const { data: tableData = [], isFetching } = useGetAllEmployeesQuery();
   const [deleteEmployee, { isLoading }] = useDeleteEmployeeMutation();
@@ -35,6 +37,15 @@ export const Employees = () => {
       return () => tableContainer.removeEventListener('scroll', handleScroll);
     }
   }, []);
+
+  useEffect(() => {
+    connectWhatsAppSocket();
+    registerWhatsAppMessageHandler((message) => {
+      console.log(message);
+      notify(message, 'success');
+    });
+    return () => disconnectWhatsAppSocket();
+  }, [notify]);
 
   const handleDeleteClick = (employeeId: string, fio: string) => {
     setEmployeeIdToDelete(employeeId);

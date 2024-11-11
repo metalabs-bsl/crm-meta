@@ -8,7 +8,10 @@ import { AppDispatch, RootState } from 'api';
 import { io, Socket } from 'socket.io-client';
 
 const SOCKET_URL = process.env.REACT_APP_WS_BASE_URL || '';
+const WHATSAPP_SOCKET_URL = process.env.REACT_APP_WHATSAPP_WS_BASE_URL || '';
 let socket: Socket | null = null;
+let whatsappSocket: Socket | null = null;
+let whatsappMessageCallback: ((message: string) => void) | null = null;
 
 export const connectSocket = (accessToken: string | null) => {
   if (!socket && accessToken) {
@@ -31,6 +34,39 @@ export const connectSocket = (accessToken: string | null) => {
 
     socket.connect();
   }
+};
+
+export const connectWhatsAppSocket = () => {
+  if (!whatsappSocket) {
+    whatsappSocket = io(WHATSAPP_SOCKET_URL, {
+      autoConnect: true
+    });
+
+    whatsappSocket.on('connect', () => {
+      console.log('Connected to WhatsApp WebSocket server');
+    });
+
+    whatsappSocket.on('disconnect', () => {
+      console.log('Disconnected from WhatsApp WebSocket server');
+    });
+
+    whatsappSocket.on('whatsapp', (message: string) => {
+      if (whatsappMessageCallback) {
+        whatsappMessageCallback(message);
+      }
+    });
+  }
+};
+
+export const disconnectWhatsAppSocket = () => {
+  if (whatsappSocket?.connected) {
+    whatsappSocket.disconnect();
+    whatsappSocket = null;
+  }
+};
+
+export const registerWhatsAppMessageHandler = (callback: (message: string) => void) => {
+  whatsappMessageCallback = callback;
 };
 
 export const disconnectSocket = () => {
