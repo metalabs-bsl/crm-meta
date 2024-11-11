@@ -45,6 +45,7 @@ export interface IEmployee {
   middle_name: string;
   password: string;
   phone: string;
+  whatsapp_status: boolean;
   personal_phone: string;
   refreshToken: string;
   roles: IRole[];

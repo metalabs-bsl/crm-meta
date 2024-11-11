@@ -50,9 +50,9 @@
 
 .table {
   display: grid;
-  grid-template-columns: 50px 90px repeat(16, minmax(190px, 1fr));
+  grid-template-columns: 50px 90px repeat(17, minmax(190px, 1fr));
   border-collapse: collapse;
-  min-width: 2090px;
+  min-width: 2900px;
 }
 
 .tableHeaderWrapper {
