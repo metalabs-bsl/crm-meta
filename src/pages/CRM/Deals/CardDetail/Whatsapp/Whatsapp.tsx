@@ -7,8 +7,13 @@ import styles from './styles.module.scss';
 
 const BATCH_SIZE = 10;
 
-export const WhatsApp: FC<{ customer_phone: string }> = ({ customer_phone }) => {
-  const [chatData, setChatData] = useState<IMessageResponse[]>([]);
+interface WhatsAppProps {
+  customer_phone: string;
+  initialChatData?: IMessageResponse[];
+}
+
+export const WhatsApp: FC<WhatsAppProps> = ({ customer_phone, initialChatData = [] }) => {
+  const [chatData, setChatData] = useState<IMessageResponse[]>(initialChatData);
   const [chatMessages] = useGetMessagesMutation();
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
@@ -49,6 +54,10 @@ export const WhatsApp: FC<{ customer_phone: string }> = ({ customer_phone }) => 
       };
     }
   }, [chatData]);
+
+  useEffect(() => {
+    setChatData(initialChatData);
+  }, [initialChatData]);
 
   // || для автоскролла вниз
   // \/

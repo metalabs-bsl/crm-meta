@@ -75,6 +75,7 @@ export const CardDetail = () => {
           reminders={data?.reminders}
           comments={data?.comments}
           calcData={data?.calculator[0]}
+          customerPhone={data?.customer?.phone}
         />
       ),
       [tabItems[1]?.type]: <History />,

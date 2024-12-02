@@ -71,3 +71,27 @@
     height: 386px;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .chat {
+    padding: 15px;
+    .left,
+    .right {
+      padding: 10px 15px;
+      .message {
+        font-size: 12px;
+      }
+      .timestamp {
+        font-size: 8px;
+      }
+    }
+  }
+  .noMsg {
+    padding: 10px;
+    gap: 10px;
+    
+    & svg {
+      height: 300px;
+    }
+  }
+}
