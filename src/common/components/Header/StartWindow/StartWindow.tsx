@@ -31,7 +31,7 @@ export const StartWindow = () => {
   const [pauseTime, setPauseTime] = useState<string>('00:00:00');
   const [isOneHourPause, setIsOneHourPause] = useState<boolean>(false);
   const [isStopModal, setIsStopModal] = useState<boolean>(false);
-
+  const sound = new Audio('/notification.mp3')
   // этот useEffect отвечает за окрашивание таймера в красный если будет больше часа
   useEffect(() => {
     const redPauseTime = '00:59:59';
@@ -106,6 +106,7 @@ export const StartWindow = () => {
   }, [isStart, data, isTimeOut, pauseTime, notify]);
 
   const onStart = () => {
+    // sound.play()
     start()
       .unwrap()
       .then(() => setIsStart(true))
@@ -113,6 +114,7 @@ export const StartWindow = () => {
   };
 
   const onStop = () => {
+    // sound.play()
     data &&
       end(data.id)
         .unwrap()
