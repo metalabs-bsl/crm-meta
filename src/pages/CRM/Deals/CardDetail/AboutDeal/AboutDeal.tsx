@@ -24,11 +24,12 @@ interface IProps {
   formData?: ICreateLeadParams;
   reminders?: ICreateReminderParams[];
   comments?: IComment[];
+  customerPhone?: string;
   calcData?: ICalculator;
   colStatus?: number;
 }
 
-export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData, colStatus }) => {
+export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData, colStatus, customerPhone }) => {
   const notify = useNotify();
   const [updateCalcAccess, { isLoading }] = useUpdateLeadCalcAccessMutation();
   const { role } = useAppSelector(employeesSelectors.employees);
@@ -66,7 +67,7 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
 
   const getActiveComponent = () => {
     const component = {
-      [TAB_COMPONENTS.TODO]: <Todo reminders={reminders} comments={comments} />,
+      [TAB_COMPONENTS.TODO]: <Todo reminders={reminders} comments={comments} customerPhone={customerPhone}/>,
       [TAB_COMPONENTS.ACCOUNT]: <Accounts />,
       [TAB_COMPONENTS.CALCULATOR]: <Calculator calcData={calcData} data={data} />
     };
