@@ -6,7 +6,7 @@ export const ExpensesTableRow: FC<ITableData> = ({ creationDate, list, total }) 
   return (
     <div className={styles.card}>
       <div className={`${styles.cardColumn} ${styles.cardData}`}>
-        <p className={styles.cardText}>{creationDate}</p>
+        <p className={styles.cardText}>{creationDate.split('T')[0]}</p>
       </div>
       <div className={`${styles.cardColumn} ${styles.cardNaming}`}>
         {list.map((el, idx) => (
