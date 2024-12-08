@@ -15,21 +15,21 @@ interface IProps {
   customerPhone?: string;
 }
 
-export const Todo: FC<IProps> = ({ reminders, comments, customerPhone}) => {
-  const [chatData, setChatData] = useState<IMessageResponse[]>([]); 
+export const Todo: FC<IProps> = ({ reminders, comments, customerPhone }) => {
+  const [chatData, setChatData] = useState<IMessageResponse[]>([]);
   const [chatMessages] = useGetMessagesMutation();
-  const [isLoading, setIsLoading] = useState<boolean>(true); 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (customerPhone) {
       chatMessages(customerPhone)
         .unwrap()
         .then((msgs) => {
-          setChatData(msgs); 
+          setChatData(msgs);
           setIsLoading(false);
         })
         .catch((err) => {
-          setIsLoading(false); 
+          setIsLoading(false);
         });
     }
   }, [customerPhone, chatMessages]);
@@ -84,7 +84,7 @@ export const Todo: FC<IProps> = ({ reminders, comments, customerPhone}) => {
         );
       })}
       <div className={styles.chatContainer}>
-      {isLoading ? (
+        {isLoading ? (
           <p className={styles.emptyText}>Загрузка чата...</p>
         ) : (
           <WhatsApp customer_phone={customerPhone || ''} initialChatData={chatData} />
