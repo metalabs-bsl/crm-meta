@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
+import { WhatsApp } from '../../Whatsapp';
 import { Icon } from 'common/ui';
+import { useGetMessagesMutation } from 'api/admin/messages/messages.api';
 import { IComment, ICreateReminderParams } from 'types/entities';
+import { IMessageResponse } from 'types/entities/messages';
 import { CreateForm } from './CreateContentForm';
 import { CommentItem, TodoItem } from './GroupItem';
 import { IDataBlock } from './Todo.helper';
-import { WhatsApp } from '../../Whatsapp';
 import styles from './style.module.scss';
-import { IMessageResponse } from 'types/entities/messages';
-import { useGetMessagesMutation } from 'api/admin/messages/messages.api';
 
 interface IProps {
   reminders?: ICreateReminderParams[];
@@ -28,7 +28,7 @@ export const Todo: FC<IProps> = ({ reminders, comments, customerPhone }) => {
           setChatData(msgs);
           setIsLoading(false);
         })
-        .catch((err) => {
+        .catch(() => {
           setIsLoading(false);
         });
     }
