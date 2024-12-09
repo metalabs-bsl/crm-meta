@@ -103,6 +103,11 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
     setPaymentForms([...paymentForms, newPaymentForm]);
   };
 
+  const handleDeletePaymentAccordion = (index: number) => {
+    setPaymentAccordions(paymentAccordions.filter((_, i) => i !== index));
+    setPaymentForms(paymentForms.filter((_, i) => i !== index));
+  };
+
   useEffect(() => {
     if (isActiveTab === 'full') {
       setPaymentAccordions(defaultPayment);
@@ -122,6 +127,7 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
           handleAddPaymentAccordion={handleAddPaymentAccordion}
           handleEditPaymentAccordion={handleEditPaymentAccordion}
           paymentAccordions={paymentAccordions}
+          handleDeletePaymentAccordion={handleDeletePaymentAccordion}
         />
       ))}
     </>

@@ -17,6 +17,9 @@ export interface ISidebarState {
   isOpenEdgeModal: boolean;
   isNewDeal: boolean;
   column_id: string;
+  delete_id?: string;
+  name?: string;
+  idUser?: string | number;
 }
 
 export type ISidebarAction = PayloadAction<boolean>;
