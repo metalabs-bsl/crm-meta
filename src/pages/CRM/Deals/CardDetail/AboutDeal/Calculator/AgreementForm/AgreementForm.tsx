@@ -123,7 +123,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
-                type='number'
+                type='text'
               />
             </div>
             <div className={styles.more_items_block}>
