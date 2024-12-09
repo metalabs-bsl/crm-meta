@@ -23,6 +23,7 @@ interface IProps {
   title: string;
   handleAddPaymentAccordion: () => void;
   handleEditPaymentAccordion: (index: number) => void;
+  handleDeletePaymentAccordion?: (index: number) => void;
   isEdit: boolean;
   paymentAccordions: {
     title: string;
@@ -38,11 +39,13 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   handleAddPaymentAccordion,
   handleEditPaymentAccordion,
   isEdit,
-  paymentAccordions
+  paymentAccordions,
+  handleDeletePaymentAccordion
 }) => {
   const notify = useNotify();
   const { data } = useGetPaymentCurrencyQuery();
   const [isAddPaumentModal, setIsAddPaumentModal] = useState<boolean>(false);
+  const [saveStatusTrueorFalse, setSaveStatusTrueorFalse] = useState<boolean>(false);
 
   const paymentCurrencyOptions = useMemo<Options[]>(() => {
     return (
@@ -113,12 +116,29 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     createPayment(createPaymentDto)
       .unwrap()
       .then(() => {
+        setSaveStatusTrueorFalse(true);
         notify(MESSAGE.UPDATED, 'success');
         handleEditPaymentAccordion(index);
       })
       .catch(() => {
         notify(MESSAGE.ERROR, 'error');
       });
+  };
+
+  const isNotEmpty = (value: any) => {
+    return value !== null && value !== undefined && value !== '' && value !== 0;
+  };
+
+  const checkingFormForNull = () => {
+    const data = getValues();
+    const allFieldsValid = Object.values(data).every(isNotEmpty);
+    if (allFieldsValid && saveStatusTrueorFalse) {
+      handleAddPaymentAccordion();
+      setIsAddPaumentModal(true);
+    } else {
+      console.log(data);
+      notify(MESSAGE.WARNING, 'warning');
+    }
   };
 
   return (
@@ -129,6 +149,8 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         isEdit={isEdit}
         onSaveAction={() => onSubmit()}
         isOpenDefault={true}
+        deleteIconState={updatedTitle === 'Данные об оплате' ? false : updatedTitle === 'Первая оплата' ? false : true}
+        handleDeletePaymentAccordion={() => handleDeletePaymentAccordion(index)}
       >
         <Loading isSpin={isLoading}>
           <form className={styles.form}>
@@ -138,7 +160,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                   <label>Брутто</label>
                   <Input
                     {...register('brutto', { required: 'обязательное поле' })}
-                    placeholder='Не заполнено'
+                    placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
                     type='number'
@@ -148,7 +170,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                   <label>Нетто</label>
                   <Input
                     {...register('netto', { required: 'обязательное поле' })}
-                    placeholder='Не заполнено'
+                    placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
                     type='number'
@@ -170,7 +192,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <label>Валюта (сом)</label>
                 <Input
                   {...register('exchange_rate', { required: 'обязательное поле' })}
-                  placeholder='Не заполнено'
+                  placeholder='0'
                   className={styles.inp_wrapper}
                   disabled={!isEdit}
                   type='number'
@@ -180,7 +202,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <label>Комиссия</label>
                 <Input
                   {...register('commission', { required: 'обязательное поле' })}
-                  placeholder='Не заполнено'
+                  placeholder='0'
                   className={styles.inp_wrapper}
                   disabled={!isEdit}
                   type='number'
@@ -193,7 +215,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                   <label>Курс ТО</label>
                   <Input
                     {...register('course_TO', { required: 'обязательное поле' })}
-                    placeholder='Не заполнено'
+                    placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
                     type='number'
@@ -226,7 +248,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         </Loading>
       </Accordion>
       {isActiveTab !== 'full' && paymentAccordions.length < 5 && index === paymentAccordions.length - 1 && (
-        <Icon type='plus-gray' className={styles.plusIcon} onClick={() => setIsAddPaumentModal(true)} />
+        <Icon type='plus-gray' className={styles.plusIcon} onClick={() => checkingFormForNull()} />
       )}
       {isAddPaumentModal && (
         <Modal
