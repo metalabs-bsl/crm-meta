@@ -28,7 +28,7 @@ export const Expenses: FC = () => {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('http://localhost:8087/expenses');
+      const response = await fetch(process.env.REACT_APP_BASE_URL + '/expenses');
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.statusText}`);
       }

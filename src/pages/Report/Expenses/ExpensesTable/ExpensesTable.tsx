@@ -69,7 +69,7 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
       }));
 
       // Post to the backend
-      const response = await fetch('http://localhost:8087/expenses', {
+      const response = await fetch(process.env.REACT_APP_BASE_URL + '/expenses', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
 
   const deleteExpense = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:8087/expenses/${id}`, {
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/expenses/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
