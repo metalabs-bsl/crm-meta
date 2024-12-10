@@ -123,7 +123,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       });
   };
 
-  const isNotEmpty = (value: any) => {
+  const isNotEmpty = (value: unknown) => {
     return value !== null && value !== undefined && value !== '' && value !== 0;
   };
 
@@ -138,7 +138,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   };
 
   const deletePaymentAccordion = () => {
-    handleDeletePaymentAccordion(index);
+    handleDeletePaymentAccordion?.(index);
   };
 
   return (

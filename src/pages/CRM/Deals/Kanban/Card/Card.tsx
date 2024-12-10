@@ -1,16 +1,17 @@
-import { FC, useRef, useState, MouseEvent } from 'react';
+import { FC, MouseEvent, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Icon } from 'common/ui';
 import { ClientWindow, DeleteModal, DropdownModal, Modal, ResponsibleWindow } from 'common/components';
 import { dateFormat } from 'common/helpers';
 import { useAppDispatch, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
+import { useDeleteLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { setChangeOpenEdgeModal, setIdUser } from 'api/admin/sidebar/sidebar.slice';
 import { Task } from 'types/entities';
 import { TodoCreateForm } from './TodoCreateForm';
 import styles from './style.module.scss';
+
 import { DragSourceMonitor, useDrag } from 'react-dnd';
-import { useDeleteLeadMutation } from 'api/admin/leads/endpoints/lead';
 
 interface CardProps {
   data: Task;
@@ -44,7 +45,7 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
     setOpenTodoModal(false);
   };
 
-  const openDeleteModal = (e: MouseEvent<HTMLButtonElement>) => {
+  const openDeleteModal = (e: MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
     setShowDeleteModal(true);
   };

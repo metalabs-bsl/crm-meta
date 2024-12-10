@@ -19,7 +19,7 @@ export interface ISidebarState {
   column_id: string;
   delete_id?: string;
   name?: string;
-  idUser?: string | number;
+  idUser?: string;
 }
 
 export type ISidebarAction = PayloadAction<boolean>;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Button, Icon } from 'common/ui';
+import { DeleteModal } from '../DeleteModal';
 import styles from './style.module.scss';
 
 import { BUTTON_TYPES } from 'types/enums';
-import { DeleteModal } from '../DeleteModal';
 
 interface AccordionProps {
   title?: string;
@@ -15,7 +15,7 @@ interface AccordionProps {
   onSaveAction?: () => void;
   isOpenDefault?: boolean;
   deleteIconState?: boolean;
-  handleDeletePaymentAccordion?: (index: number) => void;
+  handleDeletePaymentAccordion?: () => void;
 }
 
 export const Accordion: React.FC<AccordionProps> = ({
@@ -49,7 +49,7 @@ export const Accordion: React.FC<AccordionProps> = ({
 
   const handleConfirmDelete = () => {
     openCloseDeleteModal();
-    handleDeletePaymentAccordion();
+    handleDeletePaymentAccordion?.();
   };
 
   return (
