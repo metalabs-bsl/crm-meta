@@ -7,14 +7,14 @@ import { DeleteModal, Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
 import { useAppDispatch, useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useLazyGetLeadQuery, useUpdateLeadMutation, useDeleteLeadMutation } from 'api/admin/leads/endpoints/lead';
+import { useDeleteLeadMutation, useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
+import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
 import { ICreateLeadParams } from 'types/entities';
 import { AboutDeal } from './AboutDeal';
 import { History } from './History';
 import { Progress } from './Progress';
 import styles from './style.module.scss';
-import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
 
 const tabItems: ITabsItem[] = [
   {
@@ -35,7 +35,7 @@ export const CardDetail = () => {
   const notify = useNotify();
   const { search } = useLocation();
   const dispatch = useAppDispatch();
-  const { isNewDeal, delete_id, name, idUser } = useAppSelector(sidebarSelectors.sidebar);
+  const { isNewDeal, name, idUser } = useAppSelector(sidebarSelectors.sidebar);
   const [getLeadDetail, { isFetching, data }] = useLazyGetLeadQuery();
   const [updateLead, { isLoading }] = useUpdateLeadMutation();
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0]?.type);
@@ -45,8 +45,6 @@ export const CardDetail = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const [deleteLead] = useDeleteLeadMutation();
-
-  console.log(idUser);
 
   useEffect(() => {
     if (data) {
@@ -111,6 +109,9 @@ export const CardDetail = () => {
   };
 
   const handleConfirmDelete = async () => {
+    if (!idUser) {
+      return;
+    }
     deleteLead(idUser)
       .unwrap()
       .then(() => {
