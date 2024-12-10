@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
+import { WhatsApp } from '../../Whatsapp';
 import { Icon } from 'common/ui';
+import { useGetMessagesMutation } from 'api/admin/messages/messages.api';
 import { IComment, ICreateReminderParams } from 'types/entities';
+import { IMessageResponse } from 'types/entities/messages';
 import { CreateForm } from './CreateContentForm';
 import { CommentItem, TodoItem } from './GroupItem';
 import { IDataBlock } from './Todo.helper';
-import { WhatsApp } from '../../Whatsapp';
 import styles from './style.module.scss';
-import { IMessageResponse } from 'types/entities/messages';
-import { useGetMessagesMutation } from 'api/admin/messages/messages.api';
 
 interface IProps {
   reminders?: ICreateReminderParams[];
@@ -15,21 +15,18 @@ interface IProps {
   customerPhone?: string;
 }
 
-export const Todo: FC<IProps> = ({ reminders, comments, customerPhone}) => {
-  const [chatData, setChatData] = useState<IMessageResponse[]>([]); 
+export const Todo: FC<IProps> = ({ reminders, comments, customerPhone }) => {
+  const [chatData, setChatData] = useState<IMessageResponse[]>([]);
   const [chatMessages] = useGetMessagesMutation();
-  const [isLoading, setIsLoading] = useState<boolean>(true); 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (customerPhone) {
       chatMessages(customerPhone)
         .unwrap()
         .then((msgs) => {
-          setChatData(msgs); 
+          setChatData(msgs);
           setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false); 
         });
     }
   }, [customerPhone, chatMessages]);
@@ -84,7 +81,7 @@ export const Todo: FC<IProps> = ({ reminders, comments, customerPhone}) => {
         );
       })}
       <div className={styles.chatContainer}>
-      {isLoading ? (
+        {isLoading ? (
           <p className={styles.emptyText}>Загрузка чата...</p>
         ) : (
           <WhatsApp customer_phone={customerPhone || ''} initialChatData={chatData} />

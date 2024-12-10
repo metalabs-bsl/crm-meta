@@ -31,7 +31,7 @@ export const StartWindow = () => {
   const [pauseTime, setPauseTime] = useState<string>('00:00:00');
   const [isOneHourPause, setIsOneHourPause] = useState<boolean>(false);
   const [isStopModal, setIsStopModal] = useState<boolean>(false);
-  const sound = new Audio('/notification.mp3')
+
   // этот useEffect отвечает за окрашивание таймера в красный если будет больше часа
   useEffect(() => {
     const redPauseTime = '00:59:59';
@@ -92,7 +92,7 @@ export const StartWindow = () => {
         const breakEndTime = start.add(1, 'hour');
         const remainingDuration = dayjs.duration(breakEndTime.diff(now));
 
-        if (remainingDuration.asMinutes() <= 15 && !notificationPlayed) {
+        if (remainingDuration.asMinutes() <= 59 && !notificationPlayed) {
           new Audio('/notification.mp3').play();
           setNotificationPlayed(true);
         }
@@ -103,10 +103,9 @@ export const StartWindow = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [isStart, data, isTimeOut, pauseTime, notify]);
+  }, [notificationPlayed, data, isTimeOut, pauseTime, notify]);
 
   const onStart = () => {
-    // sound.play()
     start()
       .unwrap()
       .then(() => setIsStart(true))
@@ -114,7 +113,6 @@ export const StartWindow = () => {
   };
 
   const onStop = () => {
-    // sound.play()
     data &&
       end(data.id)
         .unwrap()
@@ -199,7 +197,7 @@ export const StartWindow = () => {
             <p className={styles.stopModalText}>Вы уверены завершить рабочую смену?</p>
           </Modal>
         )}
-      </div>
+      </div>  
     </Loading>
   );
 };

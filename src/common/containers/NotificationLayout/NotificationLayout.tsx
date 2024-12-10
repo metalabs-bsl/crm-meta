@@ -1,6 +1,8 @@
-import { FC, ReactNode, useState } from 'react';
-import { BirthDayModal, BreakModal, GreetingsModal } from 'common/components';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { BirthDayModal, BreakModal, GreetingsModal, Modal } from 'common/components';
 import { NoteModal } from 'common/components/NoteModal';
+import { useAppSelector } from 'common/hooks';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { birthdayData, noteData } from './NotificationLayout.helper';
 
 import { NOTIFICATION_COMPONENTS } from 'types/enums';
@@ -13,38 +15,38 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
   const notificationType = NOTIFICATION_COMPONENTS.BREAK;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [prevModal, setPrevModal] = useState<boolean>(false);
-  // const [isPreved, setIsPreved] = useState<boolean>(false);
+  const [isPreved, setIsPreved] = useState<boolean>(false);
 
-  // const { userInfo } = useAppSelector(employeesSelectors.employees);
+  const { userInfo } = useAppSelector(employeesSelectors.employees);
 
   const closeNotificationModal = () => {
     setIsModalOpen(false);
-    // setIsPreved(false);
+    setIsPreved(false);
   };
 
-  // const openNotificationModal = () => {
-  //   setIsModalOpen(true);
-  //   const audio = new Audio('/notification.mp3');
-  //   audio.play().catch((error) => {
-  //     console.error('Audio playback failed:', error);
-  //   });
-  // };
+  const openNotificationModal = () => {
+    setIsModalOpen(false);
+    // const audio = new Audio('/notification.mp3');
+    // audio.play().catch((error) => {
+    //   console.error('Audio playback failed:', error);
+    // });
+  };
 
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     setPrevModal(true);
-  //   }
-  // }, [userInfo]);
+  useEffect(() => {
+    if (userInfo) {
+      setPrevModal(true);
+    }
+  }, [userInfo]);
 
-  // useEffect(() => {
-  //   if (userInfo && isPreved) {
-  //     openNotificationModal();
-  //   }
-  // }, [isPreved, userInfo]);
+  useEffect(() => {
+    if (userInfo && isPreved) {
+      openNotificationModal();
+    }
+  }, [isPreved, userInfo]);
 
   const closePrevModal = () => {
     setPrevModal(false);
-    // setIsPreved(true);
+    setIsPreved(true);
   };
 
   const getNotificationComponents = (type: NOTIFICATION_COMPONENTS) => {
@@ -60,12 +62,12 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     <div>
       {children}
       {getNotificationComponents(notificationType)}
-      {/* <Modal isOpen={prevModal} onClose={closePrevModal}>
+      <Modal isOpen={prevModal} onClose={closePrevModal}>
         <p style={{ textAlign: 'center', fontSize: '25px' }}>
           С возвращением <br />
           {userInfo?.first_name} {userInfo?.second_name}
         </p>
-      </Modal> */}
+      </Modal>
       {prevModal && <GreetingsModal isOpen={prevModal} onCancel={closePrevModal} />}
     </div>
   );
