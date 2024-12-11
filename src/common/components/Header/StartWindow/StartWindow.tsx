@@ -93,7 +93,7 @@ export const StartWindow = () => {
         const remainingDuration = dayjs.duration(breakEndTime.diff(now));
 
         if (remainingDuration.asMinutes() <= 59 && !notificationPlayed) {
-          new Audio('/notification.mp3').play();
+          // new Audio('/notification.mp3').play();
           setNotificationPlayed(true);
         }
       };
@@ -197,7 +197,7 @@ export const StartWindow = () => {
             <p className={styles.stopModalText}>Вы уверены завершить рабочую смену?</p>
           </Modal>
         )}
-      </div>  
+      </div>
     </Loading>
   );
 };
