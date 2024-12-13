@@ -59,7 +59,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof Note];
         if (key === 'date' && typeof value === 'string') {
-          setValue(key as keyof Note, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof Note, dayjs(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof Note, formProps[key as keyof Note]);
         }
@@ -87,17 +87,27 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
 
   const onSubmit = () => {
     const data = getValues();
+    const utcDate = dayjs(data.date).utc().format();
+
     const updatedReminders = reminders.map((i) => i.value as number);
     const updatedEmployees = employees.map((i) => i.value as string);
+
+    const payload = {
+      ...data,
+      date: utcDate,
+      reminderTypes: updatedReminders,
+      employees: updatedEmployees,
+    };
+
     if (!formProps) {
-      createNote({ ...data, reminderTypes: updatedReminders, employees: updatedEmployees })
+      createNote(payload)
         .unwrap()
         .then(() => {
           notify(MESSAGE.CREATED, 'success');
           onCloseModal && onCloseModal();
         });
     } else {
-      updateNote({ ...data, reminderTypes: updatedReminders, employees: updatedEmployees })
+      updateNote(payload)
         .unwrap()
         .then(() => {
           onCancelEditProcess();
@@ -169,7 +179,11 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
           </div>
           <div className={styles.item}>
             <label>Дата и время </label>
-            <DatePicker {...register('date', { required: 'Поле обязательно' })} disabled={disabled} defaultValue={formProps?.date} />
+            <DatePicker
+            {...register('date', { required: 'Поле обязательно' })}
+            disabled={disabled}
+            defaultValue={formProps ? dayjs.utc(formProps.date).local().format('YYYY-MM-DDTHH:mm') : undefined}
+            />
             {errors.date && <span className={styles.error}>{errors.date.message}</span>}
           </div>
           <div className={styles.item}>
