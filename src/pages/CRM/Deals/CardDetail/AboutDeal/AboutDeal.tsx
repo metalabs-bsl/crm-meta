@@ -67,7 +67,7 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
 
   const getActiveComponent = () => {
     const component = {
-      [TAB_COMPONENTS.TODO]: <Todo reminders={reminders} comments={comments} customerPhone={customerPhone}/>,
+      [TAB_COMPONENTS.TODO]: <Todo reminders={reminders} comments={comments} customerPhone={customerPhone} />,
       [TAB_COMPONENTS.ACCOUNT]: <Accounts />,
       [TAB_COMPONENTS.CALCULATOR]: <Calculator calcData={calcData} data={data} />
     };

@@ -103,7 +103,7 @@ export const StartWindow = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [isStart, data, isTimeOut, pauseTime, notify]);
+  }, [notificationPlayed, isStart, data, isTimeOut, pauseTime, notify]);
 
   const onStart = () => {
     start()

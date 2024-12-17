@@ -2,10 +2,11 @@ import { TableRow } from 'pages/CRM/Deals/List/types/types';
 import { setConnected } from 'api/admin/kanban/kanban.slice';
 import { setKanbanAllBoard, setKanbanBoard, setOnlineList } from 'api/admin/kanban/kanban.ws';
 import { setListBoard, setListBoardAll } from 'api/admin/list/list.slice';
-import { IColumn } from 'types/entities';
+import { Birthday, IColumn, Note } from 'types/entities';
 
 import { AppDispatch, RootState } from 'api';
 import { io, Socket } from 'socket.io-client';
+import { setCalendarBirthdays, setCalendarNotes } from 'api/admin/calendar/calendar.ws';
 
 const SOCKET_URL = process.env.REACT_APP_WS_BASE_URL || '';
 const WHATSAPP_SOCKET_URL = process.env.REACT_APP_WHATSAPP_WS_BASE_URL || '';
@@ -76,7 +77,7 @@ export const disconnectSocket = () => {
   }
 };
 
-export const sendMessage = (event: string, data: IColumn[]) => {
+export const sendMessage = <T>(event: string, data: T) => {
   if (socket?.connected) {
     socket.emit(event, data);
   } else {
@@ -111,6 +112,14 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
 
     socket?.on('online', (message) => {
       dispatch(setOnlineList(message));
+    });
+
+    socket?.on('noteReminder', (message: Note[]) => {
+      dispatch(setCalendarNotes(message));
+    });
+
+    socket?.on('birthdayNotification', (message: Birthday[]) => {
+      dispatch(setCalendarBirthdays(message));
     });
   } else {
     console.error('Access token is not available, cannot initialize socket.');
