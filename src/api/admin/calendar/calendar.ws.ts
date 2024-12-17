@@ -1,5 +1,5 @@
-import { Note, Birthday } from 'types/entities';
-import { setNotes, setBirthdays, setLoading } from './calendar.slice';
+import { Birthday, Note } from 'types/entities';
+import { setBirthdays, setLoading, setNotes } from './calendar.slice';
 
 import { AppDispatch } from 'api';
 import { sendMessage } from 'socket';
@@ -21,7 +21,7 @@ export const sendNotesUpdate = (notes: Note[]) => (dispatch: AppDispatch) => {
 };
 
 export const sendBirthdaysUpdate = (birthdays: Birthday[]) => (dispatch: AppDispatch) => {
-    sendMessage('updateBirthdays', birthdays);
-    dispatch(setBirthdays(birthdays));
-    dispatch(setLoading(false));
-  };
+  sendMessage('updateBirthdays', birthdays);
+  dispatch(setBirthdays(birthdays));
+  dispatch(setLoading(false));
+};

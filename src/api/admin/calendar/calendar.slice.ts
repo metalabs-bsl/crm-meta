@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Note, Birthday } from 'types/entities';
+import { Birthday, Note } from 'types/entities';
 import { loginApi } from '../login/login.api';
 
 import { disconnectSocket } from 'socket';

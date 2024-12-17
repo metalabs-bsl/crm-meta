@@ -1,3 +1,4 @@
+// import { calendarSlice } from './calendar/calendar.slice';
 import { employeesSlice } from './employees/employess.slice';
 import { kanbanSlice } from './kanban/kanban.slice';
 import { listSlice } from './list/list.slice';
@@ -9,5 +10,6 @@ export const adminSlices = {
   [loginSlice.name]: loginSlice.reducer,
   [employeesSlice.name]: employeesSlice.reducer,
   [kanbanSlice.name]: kanbanSlice.reducer,
-  [listSlice.name]: listSlice.reducer
+  [listSlice.name]: listSlice.reducer,
+  // [calendarSlice.name]: calendarSlice.reducer
 };

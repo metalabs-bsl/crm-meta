@@ -1,4 +1,5 @@
 import { TableRow } from 'pages/CRM/Deals/List/types/types';
+import { setCalendarBirthdays, setCalendarNotes } from 'api/admin/calendar/calendar.ws';
 import { setConnected } from 'api/admin/kanban/kanban.slice';
 import { setKanbanAllBoard, setKanbanBoard, setOnlineList } from 'api/admin/kanban/kanban.ws';
 import { setListBoard, setListBoardAll } from 'api/admin/list/list.slice';
@@ -6,7 +7,6 @@ import { Birthday, IColumn, Note } from 'types/entities';
 
 import { AppDispatch, RootState } from 'api';
 import { io, Socket } from 'socket.io-client';
-import { setCalendarBirthdays, setCalendarNotes } from 'api/admin/calendar/calendar.ws';
 
 const SOCKET_URL = process.env.REACT_APP_WS_BASE_URL || '';
 const WHATSAPP_SOCKET_URL = process.env.REACT_APP_WHATSAPP_WS_BASE_URL || '';
