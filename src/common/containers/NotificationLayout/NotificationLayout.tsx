@@ -49,9 +49,9 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     7: 120, // За 2 часа
     8: 1440, // За день
     9: 2880, // За 2 дня
-    10: 10080, // За неделю
+    10: 10080 // За неделю
   } as const;
-  
+
   const getReminderOffset = (reminderType: number): number => {
     return offsets[reminderType as keyof typeof offsets] || 0;
   };
@@ -69,18 +69,18 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
         const reminderMinutes = getReminderOffset(note.reminderTypes[0]);
         const reminderTime = eventTime.subtract(reminderMinutes, 'minute'); // Рассчитываем время напоминания
         const now = dayjs(); // Текущее локальное время
-  
-        console.log("Event Time (Local):", eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        console.log("Reminder Time (Local):", reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        console.log("Now:", now.format('YYYY-MM-DD HH:mm:ss Z'));
+
+        console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
+        console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
+        console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
         if (reminderTime.isSame(now, 'minute')) {
-          console.log('vot modalka')
-            new Audio('/notification.mp3').play();
-            setNoteData(note);
-            openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
+          console.log('vot modalka');
+          new Audio('/notification.mp3').play();
+          setNoteData(note);
+          openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
         }
       });
-      console.log(calendarData)
+      console.log(calendarData);
       const today = dayjs().startOf('day').format('MM-DD');
       const birthdayToday = calendarData.birthdays.find((birthday) => dayjs(birthday.date).utc().startOf('day').format('MM-DD') === today);
       if (birthdayToday) {

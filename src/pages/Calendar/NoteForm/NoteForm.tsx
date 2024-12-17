@@ -96,7 +96,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
       ...data,
       date: utcDate,
       reminderTypes: updatedReminders,
-      employees: updatedEmployees,
+      employees: updatedEmployees
     };
 
     if (!formProps) {
@@ -180,9 +180,9 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
           <div className={styles.item}>
             <label>Дата и время </label>
             <DatePicker
-            {...register('date', { required: 'Поле обязательно' })}
-            disabled={disabled}
-            defaultValue={formProps ? dayjs.utc(formProps.date).local().format('YYYY-MM-DDTHH:mm') : undefined}
+              {...register('date', { required: 'Поле обязательно' })}
+              disabled={disabled}
+              defaultValue={formProps ? dayjs.utc(formProps.date).local().format('YYYY-MM-DDTHH:mm') : undefined}
             />
             {errors.date && <span className={styles.error}>{errors.date.message}</span>}
           </div>
