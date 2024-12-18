@@ -165,21 +165,21 @@ export interface IdWithKey {
   id: string;
 }
 export interface ITourData {
-  booking_number: string;
-  departure_city: string;
-  arrival_city: string;
-  brand: string;
+  booking_number?: string;
+  departure_city?: string;
+  arrival_city?: string;
+  brand?: string;
   departure_date?: string;
   arrival_date?: string;
-  hotel: string;
-  adult_passengers: number;
-  child_passengers: number;
-  child_passengers_older: number;
-  services: IdWithKey[];
-  tour_category: string;
+  hotel?: string;
+  adult_passengers?: number;
+  child_passengers?: number;
+  child_passengers_older?: number;
+  services?: IdWithKey[];
+  tour_category?: string;
   id?: string;
-  calculator: {
-    id: string;
+  calculator?: {
+    id?: string;
   };
 }
 

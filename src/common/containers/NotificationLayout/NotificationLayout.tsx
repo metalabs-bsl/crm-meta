@@ -1,14 +1,17 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { BirthDayModal, BreakModal, GreetingsModal, Modal } from 'common/components';
+import { setPrevModalShown, setIsPreved, setBirthdayModalShown, setNoteModalShown, setIsModalOpen } from 'api/admin/modal/modals.slice';
 import { NoteModal } from 'common/components/NoteModal';
-import { useAppSelector } from 'common/hooks';
+import { useAppDispatch, useAppSelector } from 'common/hooks';
 import { useGetCalendarDataQuery } from 'api/admin/calendar/calendar.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useGetWorkTimeInfoQuery } from 'api/admin/workTime/workTime.api';
 import { Birthday, Note } from 'types/entities';
-
 import { NOTIFICATION_COMPONENTS } from 'types/enums';
+import { LeadFlyModal } from 'common/components/LeadFlyModal';
+import { leadFlyData } from './NotificationLayout.helper';
+import { modalSelectors } from 'api/admin/modal/modal.selectors';
 
 interface IProps {
   children: ReactNode;
@@ -17,27 +20,29 @@ interface IProps {
 export const NotificationLayout: FC<IProps> = ({ children }) => {
   const { data: workTimeData } = useGetWorkTimeInfoQuery();
   const { data: calendarData } = useGetCalendarDataQuery();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [prevModal, setPrevModal] = useState<boolean>(false);
-  const [isPreved, setIsPreved] = useState<boolean>(false);
   const [activeNotification, setActiveNotification] = useState<NOTIFICATION_COMPONENTS | null>(null);
   const [isBreakNotified, setIsBreakNotified] = useState<boolean>(false);
   const [birthdayData, setBirthdayData] = useState<Birthday | undefined>(undefined);
   const [noteData, setNoteData] = useState<Note | undefined>(undefined);
+  const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(employeesSelectors.employees);
+  const { prevModalShown, isPreved, noteModalShown, birthdayModalShown, isModalOpen } = useAppSelector(modalSelectors.modal);
+
 
   const closeNotificationModal = () => {
-    setIsModalOpen(false);
+    dispatch(setIsModalOpen(false));
     setActiveNotification(null);
-    setIsPreved(false);
+    dispatch(setIsPreved(false));
+    dispatch(setBirthdayModalShown(false));
+    dispatch(setNoteModalShown(false));
     if (activeNotification === NOTIFICATION_COMPONENTS.BREAK) {
-      setIsBreakNotified(true);
+      setIsBreakNotified(true)
     }
   };
 
   const openNotificationModal = (type: NOTIFICATION_COMPONENTS) => {
     setActiveNotification(type);
-    setIsModalOpen(true);
+    dispatch(setIsModalOpen(true));
   };
 
   const offsets = {
@@ -58,9 +63,9 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
 
   useEffect(() => {
     if (userInfo) {
-      setPrevModal(true);
+      dispatch(setPrevModalShown(true));
     }
-  }, [userInfo]);
+  }, [userInfo, dispatch]);
 
   useEffect(() => {
     if (calendarData) {
@@ -70,38 +75,40 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
         const reminderTime = eventTime.subtract(reminderMinutes, 'minute'); // Рассчитываем время напоминания
         const now = dayjs(); // Текущее локальное время
 
-        console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
+        // console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
+        // console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
+        // console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
         if (reminderTime.isSame(now, 'minute')) {
           console.log('vot modalka');
           new Audio('/notification.mp3').play();
           setNoteData(note);
+          dispatch(setNoteModalShown(true));
           openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
         }
       });
       console.log(calendarData);
       const today = dayjs().startOf('day').format('MM-DD');
       const birthdayToday = calendarData.birthdays.find((birthday) => dayjs(birthday.date).utc().startOf('day').format('MM-DD') === today);
-      if (birthdayToday) {
+      if (birthdayToday && !birthdayModalShown) {
         setTimeout(() => {
           new Audio('/notification.mp3').play();
           setBirthdayData(birthdayToday);
+          dispatch(setBirthdayModalShown(true));
           openNotificationModal(NOTIFICATION_COMPONENTS.BIRTHDAY);
         }, 5000);
       }
     }
-  }, [calendarData]);
+  }, [calendarData, birthdayModalShown, noteModalShown, dispatch]);
 
   useEffect(() => {
     if (userInfo && isPreved) {
-      openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
+      openNotificationModal(NOTIFICATION_COMPONENTS.LEADFLY);
     }
   }, [isPreved, userInfo]);
 
   const closePrevModal = () => {
-    setPrevModal(false);
-    setIsPreved(false);
+    dispatch(setPrevModalShown(false));
+    dispatch(setIsPreved(false));
   };
 
   useEffect(() => {
@@ -131,7 +138,8 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     const modals: Record<NOTIFICATION_COMPONENTS, ReactNode> = {
       [NOTIFICATION_COMPONENTS.BIRTHDAY]: <BirthDayModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={birthdayData} />,
       [NOTIFICATION_COMPONENTS.NOTE]: <NoteModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={noteData!} />,
-      [NOTIFICATION_COMPONENTS.BREAK]: <BreakModal isOpen={isBreakNotified} onCancel={closeNotificationModal} />
+      [NOTIFICATION_COMPONENTS.BREAK]: <BreakModal isOpen={isBreakNotified} onCancel={closeNotificationModal} />,
+      [NOTIFICATION_COMPONENTS.LEADFLY]: <LeadFlyModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={leadFlyData} />
     };
     return activeNotification ? modals[activeNotification] : null;
   };
@@ -140,13 +148,13 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     <div>
       {children}
       {getNotificationComponents()}
-      <Modal isOpen={prevModal} onClose={closePrevModal}>
+      <Modal isOpen={prevModalShown} onClose={closePrevModal}>
         <p style={{ textAlign: 'center', fontSize: '25px' }}>
           С возвращением <br />
           {userInfo?.first_name} {userInfo?.second_name}
         </p>
       </Modal>
-      {prevModal && <GreetingsModal isOpen={prevModal} onCancel={closePrevModal} />}
+      {prevModalShown && <GreetingsModal isOpen={prevModalShown} onCancel={closePrevModal} />}
     </div>
   );
 };
