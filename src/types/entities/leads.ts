@@ -177,7 +177,7 @@ export interface ITourData {
   child_passengers_older: number;
   services: IdWithKey[];
   tour_category: string;
-  id: string;
+  id?: string;
   calculator: {
     id: string;
   };
