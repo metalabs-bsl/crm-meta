@@ -53,6 +53,60 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     if (!isEditable) setIsOpenPassengersModal(!isOpenPassengersModal);
   };
 
+  const [departureCity, setDepartureCity] = useState('');
+  const [arrivalCity, setArrivalCity] = useState('');
+  const [departureSuggestions, setDepartureSuggestions] = useState<string[]>([]);
+  const [arrivalSuggestions, setArrivalSuggestions] = useState<string[]>([]);
+
+  const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
+    try {
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
+      const data = await response.json();
+      console.log(await data);
+      setSuggestions(data);
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+    }
+  };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (departureCity) {
+        fetchCities(departureCity, setDepartureSuggestions);
+      }
+    }, 300);
+
+    if (departureCity === '') {
+      setDepartureSuggestions([]);
+    }
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [departureCity]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (arrivalCity) {
+        fetchCities(arrivalCity, setArrivalSuggestions);
+      }
+    }, 300);
+
+    if (arrivalCity === '') {
+      setArrivalSuggestions([]);
+    }
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [arrivalCity]);
+
+  const handleSuggestionClick = (suggestion: string, type: 'departure' | 'arrival') => {
+    if (type === 'arrival') {
+      setValue('arrival_city', suggestion);
+      setArrivalSuggestions([]);
+    } else {
+      setValue('departure_city', suggestion);
+      setDepartureSuggestions([]);
+    }
+  };
+
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
@@ -167,7 +221,15 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
+                onChange={(e) => setDepartureCity(e.target.value)}
               />
+              <div className={styles.suggestions}>
+                {departureSuggestions.map((city, index) => (
+                  <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
+                    {city}
+                  </div>
+                ))}
+              </div>
             </div>
             <div className={styles.item_block}>
               <label>Город прилета</label>
@@ -176,7 +238,15 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
+                onChange={(e) => setArrivalCity(e.target.value)}
               />
+              <div className={styles.suggestions}>
+                {arrivalSuggestions.map((city, index) => (
+                  <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
+                    {city}
+                  </div>
+                ))}
+              </div>
             </div>
             <div className={styles.item_block}>
               <label>Количество пассажиров</label>

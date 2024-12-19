@@ -41,6 +41,18 @@
           }
         }
       }
+      .suggestions {
+        width: 100%;
+        color: $gray;
+        div {
+          cursor: pointer;
+          padding: 5px 3px;
+          transition: color 0.3s ease;
+          &:hover {
+            color: black;
+          }
+        }
+      }
 
       .select {
         height: 46px;

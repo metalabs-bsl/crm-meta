@@ -1,6 +1,6 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Button, DatePicker, Icon } from 'common/ui';
-import { calculateTotalForNewItem, getCurrentDate } from '../Expenses.helper';
+import { Dispatch, FC, SetStateAction, useMemo, useState } from 'react';
+import { Button, Icon } from 'common/ui';
+import { calculateTotalForNewItem } from '../Expenses.helper';
 import { IListItem, ITableData } from '../types/ITableData';
 import { ExpensesTableRow } from './ExpensesTableRow';
 import { NewExpenseRow } from './NewExpenseRow';
@@ -13,13 +13,25 @@ interface ExpensesTableProps {
   setAddNew: (arg0: boolean) => void;
   tableData: ITableData[];
   setTableData: Dispatch<SetStateAction<ITableData[]>>;
+  fetchExpenses: () => Promise<void>;
 }
 
-export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, tableData, setTableData }) => {
+export const getCurrentDateInBishkek = (): string => {
+  const bishkekTime = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Bishkek',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
+  return bishkekTime; // Format: YYYY-MM-DD
+};
+
+export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, tableData, setTableData, fetchExpenses }) => {
   const [newExpenseData, setNewExpenseData] = useState<ITableData>({
-    creationDate: getCurrentDate(),
+    creationDate: getCurrentDateInBishkek(), // Customized to Bishkek time
     list: [
       {
+        id: '1',
         name: '',
         quantity: 0,
         price: 0
@@ -27,6 +39,11 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
     ],
     total: 0
   });
+
+  const sortedTableData = useMemo(() => {
+    // Sort table data by creationDate in descending order
+    return [...tableData].sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+  }, [tableData]);
 
   const handleInputChange = (index: number, field: keyof IListItem, value: string | number) => {
     const updatedList = newExpenseData.list.map((item, idx) => (idx === index ? { ...item, [field]: value } : item));
@@ -37,13 +54,55 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
   const addNewRow = () => {
     setNewExpenseData({
       ...newExpenseData,
-      list: [...newExpenseData.list, { name: '', quantity: 0, price: 0 }]
+      list: [...newExpenseData.list, { id: '', name: '', quantity: 0, price: 0 }]
     });
   };
 
-  const addNewExpense = () => {
-    setTableData((prev) => [newExpenseData, ...prev]);
-    setAddNew(false);
+  const addNewExpense = async () => {
+    try {
+      // Prepare the data for the backend
+      const expensePayload = newExpenseData.list.map((item) => ({
+        expense_date: newExpenseData.creationDate, // Only the date part
+        title: item.name,
+        expense_quantity: item.quantity,
+        expense_price: item.price
+      }));
+
+      // Post to the backend
+      const response = await fetch(process.env.REACT_APP_BASE_URL + '/expenses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(expensePayload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save expense: ${response.statusText}`);
+      }
+
+      // Update table data
+      setTableData((prev) => [newExpenseData, ...prev]);
+      setAddNew(false);
+
+      fetchExpenses();
+    } catch (error) {
+      console.error('Error saving expense:', error);
+    }
+  };
+
+  const deleteExpense = async (id: string) => {
+    try {
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/expenses/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to delete expense: ${response.statusText}`);
+      }
+      await fetchExpenses(); // Refetch expenses after deletion
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+    }
   };
 
   return (
@@ -61,20 +120,14 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
         <li className={`${styles.headBlocks} ${styles.price}`}>
           <p className={styles.headText}>Стоимость</p>
         </li>
+        <li className={`${styles.headBlocks} ${styles.delete}`}>
+          <p className={styles.headText}></p>
+        </li>
       </ul>
       {addNew && (
         <div className={styles.edit}>
           <div className={styles.editWrapper}>
-            <div className={`${styles.editColumn} ${styles.editDate}`}>
-              <DatePicker
-                value={newExpenseData.creationDate}
-                onChange={(e) =>
-                  setNewExpenseData((prev) => {
-                    return { ...prev, creationDate: e.target.value };
-                  })
-                }
-              />
-            </div>
+            <div className={`${styles.editColumn} ${styles.editDate}`}>{newExpenseData.creationDate}</div>
             <div className={styles.inputsWrapper}>
               {newExpenseData.list.map((el, idx) => (
                 <div className={styles.inputsInner} key={idx}>
@@ -94,8 +147,8 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
       )}
 
       <div className={styles.body}>
-        {tableData.map((el, idx) => (
-          <ExpensesTableRow {...el} key={idx} />
+        {sortedTableData.map((el, idx) => (
+          <ExpensesTableRow {...el} key={idx} expense={el} deleteExpense={deleteExpense} />
         ))}
       </div>
     </div>

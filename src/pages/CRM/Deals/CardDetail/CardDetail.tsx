@@ -3,12 +3,13 @@ import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import { WhatsApp } from './Whatsapp';
 import { Icon, Input, Loading } from 'common/ui';
-import { Tabs } from 'common/components';
+import { DeleteModal, Tabs } from 'common/components';
 import { ITabsItem } from 'common/components/Tabs/Tabs.helper';
-import { useAppSelector, useNotify } from 'common/hooks';
+import { useAppDispatch, useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
-import { useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
+import { useDeleteLeadMutation, useLazyGetLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
+import { setChangeOpenEdgeModal } from 'api/admin/sidebar/sidebar.slice';
 import { ICreateLeadParams } from 'types/entities';
 import { AboutDeal } from './AboutDeal';
 import { History } from './History';
@@ -33,13 +34,17 @@ const tabItems: ITabsItem[] = [
 export const CardDetail = () => {
   const notify = useNotify();
   const { search } = useLocation();
-  const { isNewDeal } = useAppSelector(sidebarSelectors.sidebar);
+  const dispatch = useAppDispatch();
+  const { isNewDeal, name, idUser } = useAppSelector(sidebarSelectors.sidebar);
   const [getLeadDetail, { isFetching, data }] = useLazyGetLeadQuery();
   const [updateLead, { isLoading }] = useUpdateLeadMutation();
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0]?.type);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>('Наименование');
   const [formData, setFormData] = useState<ICreateLeadParams>();
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+
+  const [deleteLead] = useDeleteLeadMutation();
 
   useEffect(() => {
     if (data) {
@@ -99,38 +104,73 @@ export const CardDetail = () => {
       .catch(() => notify(MESSAGE.ERROR, 'error'));
   };
 
+  const openDeleteModal = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!idUser) {
+      return;
+    }
+    deleteLead(idUser)
+      .unwrap()
+      .then(() => {
+        notify('Lead deleted successfully', 'success');
+      })
+      .catch(() => {
+        notify('Error deleting lead', 'error');
+      })
+      .finally(() => {
+        setShowDeleteModal(false);
+        dispatch(setChangeOpenEdgeModal(false));
+      });
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+  };
+
   return (
-    <Loading isSpin={isFetching || isLoading}>
-      <div className={cn(styles.cardDetail, { [styles.isNewDeal]: isNewDeal })}>
-        <div className={styles.head}>
-          <div className={styles.head_left}>
-            {isTitleEdit ? (
-              <>
-                <Input
-                  className={styles.editInp}
-                  defaultValue={data?.lead_name}
-                  onChange={(e) => setEditedTitle(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
-                />
-                <span>
-                  <Icon type='check' onClick={() => onSaveTitleEdit()} />
-                </span>
-              </>
-            ) : (
-              <>
-                <div className={styles.card_title}>{editedTitle}</div>
-                <Icon type='edit' onClick={() => setIsTitleEdit(true)} />
-                <Icon type='link' onClick={onLinkCopy} />
-              </>
-            )}
+    <>
+      <Loading isSpin={isFetching || isLoading}>
+        <div className={cn(styles.cardDetail, { [styles.isNewDeal]: isNewDeal })}>
+          <div className={styles.head}>
+            <div className={styles.head_left}>
+              {isTitleEdit ? (
+                <>
+                  <Input
+                    className={styles.editInp}
+                    defaultValue={data?.lead_name}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && onSaveTitleEdit()}
+                  />
+                  <span>
+                    <Icon type='check' onClick={() => onSaveTitleEdit()} />
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div className={styles.card_title}>{editedTitle}</div>
+                  <Icon type='edit' onClick={() => setIsTitleEdit(true)} />
+                  <Icon type='link' onClick={onLinkCopy} />
+                  <Icon type='delete' onClick={openDeleteModal} />
+                </>
+              )}
+            </div>
+            <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
           </div>
-          <Tabs tabItems={tabItems} isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
+          <div>
+            <Progress currentStage={data?.lead_column?.id} lead_id={data?.id} />
+          </div>
+          <div className={styles.content}>{getComponent(isActiveTab)}</div>
         </div>
-        <div>
-          <Progress currentStage={data?.lead_column?.id} lead_id={data?.id} />
-        </div>
-        <div className={styles.content}>{getComponent(isActiveTab)}</div>
-      </div>
-    </Loading>
+      </Loading>
+      <DeleteModal
+        text={`Вы уверены, что хотите удалить ${name}`}
+        isOpen={showDeleteModal}
+        onDelete={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
+    </>
   );
 };

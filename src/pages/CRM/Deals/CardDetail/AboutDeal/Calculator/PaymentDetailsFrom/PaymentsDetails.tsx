@@ -40,7 +40,6 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
         currency: payment?.currency
       }));
       setPaymentForms(initialPaymentForms);
-
       const initialPaymentAccordions = initialPaymentForms.map((_, index) => ({
         title: ordinalTitles[index] || `Оплата ${index + 1}`,
         isEdit: false
@@ -103,6 +102,14 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
     setPaymentForms([...paymentForms, newPaymentForm]);
   };
 
+  const handleDeletePaymentAccordion = (index: number) => {
+    const updatedAccordions = paymentAccordions.filter((_, i) => i !== index);
+    const updatedForms = paymentForms.filter((_, i) => i !== index);
+
+    setPaymentAccordions(updatedAccordions);
+    setPaymentForms(updatedForms);
+  };
+
   useEffect(() => {
     if (isActiveTab === 'full') {
       setPaymentAccordions(defaultPayment);
@@ -117,11 +124,12 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
           formProps={payment}
           key={idx}
           index={idx}
-          title={ordinalTitles[idx]}
+          title={paymentAccordions[idx]?.title || ''}
           isEdit={paymentAccordions[idx]?.isEdit}
           handleAddPaymentAccordion={handleAddPaymentAccordion}
           handleEditPaymentAccordion={handleEditPaymentAccordion}
           paymentAccordions={paymentAccordions}
+          handleDeletePaymentAccordion={handleDeletePaymentAccordion}
         />
       ))}
     </>

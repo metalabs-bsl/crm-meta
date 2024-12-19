@@ -23,6 +23,7 @@ interface IProps {
   title: string;
   handleAddPaymentAccordion: () => void;
   handleEditPaymentAccordion: (index: number) => void;
+  handleDeletePaymentAccordion?: (index: number) => void;
   isEdit: boolean;
   paymentAccordions: {
     title: string;
@@ -38,11 +39,13 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   handleAddPaymentAccordion,
   handleEditPaymentAccordion,
   isEdit,
-  paymentAccordions
+  paymentAccordions,
+  handleDeletePaymentAccordion
 }) => {
   const notify = useNotify();
   const { data } = useGetPaymentCurrencyQuery();
   const [isAddPaumentModal, setIsAddPaumentModal] = useState<boolean>(false);
+  const [saveStatusTrueorFalse, setSaveStatusTrueorFalse] = useState<boolean>(false);
 
   const paymentCurrencyOptions = useMemo<Options[]>(() => {
     return (
@@ -77,21 +80,19 @@ export const PaymentDetailsFrom: FC<IProps> = ({
 
   useEffect(() => {
     if (formProps) {
-      setValue('brutto', formProps.brutto);
-      setValue('netto', formProps.netto);
-      setValue('payment_method', formProps.payment_method);
-      setValue('exchange_rate', formProps.exchange_rate);
-      setValue('commission', formProps.commission);
-      setValue('course_TO', formProps.course_TO);
-
+      if (formProps.brutto !== watch('brutto')) setValue('brutto', formProps.brutto);
+      if (formProps.netto !== watch('netto')) setValue('netto', formProps.netto);
+      if (formProps.payment_method !== watch('payment_method')) setValue('payment_method', formProps.payment_method);
+      if (formProps.exchange_rate !== watch('exchange_rate')) setValue('exchange_rate', formProps.exchange_rate);
+      if (formProps.commission !== watch('commission')) setValue('commission', formProps.commission);
+      if (formProps.course_TO !== watch('course_TO')) setValue('course_TO', formProps.course_TO);
       const formattedDate = dayjs.utc(formProps.client_due_date).isValid()
         ? dayjs.utc(formProps.client_due_date).format('YYYY-MM-DD')
         : dayjs().format('YYYY-MM-DD');
-
-      setValue('client_due_date', formattedDate);
-      setValue('currency', formProps.currency);
+      if (formProps.client_due_date !== watch('client_due_date')) setValue('client_due_date', formattedDate);
+      if (formProps.currency !== watch('currency')) setValue('currency', formProps.currency);
     }
-  }, [formProps, setValue]);
+  }, [formProps, setValue, watch]);
 
   useEffect(() => {
     if (!formProps?.currency) setValue('currency', paymentCurrencyOptions[0]?.value as string);
@@ -113,12 +114,31 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     createPayment(createPaymentDto)
       .unwrap()
       .then(() => {
+        setSaveStatusTrueorFalse(true);
         notify(MESSAGE.UPDATED, 'success');
         handleEditPaymentAccordion(index);
       })
       .catch(() => {
         notify(MESSAGE.ERROR, 'error');
       });
+  };
+
+  const isNotEmpty = (value: unknown) => {
+    return value !== null && value !== undefined && value !== '' && value !== 0;
+  };
+
+  const checkingFormForNull = () => {
+    const data = getValues();
+    const allFieldsValid = Object.values(data).every(isNotEmpty);
+    if (allFieldsValid && saveStatusTrueorFalse) {
+      setIsAddPaumentModal(true);
+    } else {
+      notify(MESSAGE.WARNING, 'warning');
+    }
+  };
+
+  const deletePaymentAccordion = () => {
+    handleDeletePaymentAccordion?.(index);
   };
 
   return (
@@ -129,6 +149,8 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         isEdit={isEdit}
         onSaveAction={() => onSubmit()}
         isOpenDefault={true}
+        deleteIconState={updatedTitle === 'Данные об оплате' ? false : updatedTitle === 'Первая оплата' ? false : true}
+        handleDeletePaymentAccordion={deletePaymentAccordion}
       >
         <Loading isSpin={isLoading}>
           <form className={styles.form}>
@@ -138,7 +160,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                   <label>Брутто</label>
                   <Input
                     {...register('brutto', { required: 'обязательное поле' })}
-                    placeholder='Не заполнено'
+                    placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
                     type='number'
@@ -148,7 +170,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                   <label>Нетто</label>
                   <Input
                     {...register('netto', { required: 'обязательное поле' })}
-                    placeholder='Не заполнено'
+                    placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
                     type='number'
@@ -170,7 +192,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <label>Валюта (сом)</label>
                 <Input
                   {...register('exchange_rate', { required: 'обязательное поле' })}
-                  placeholder='Не заполнено'
+                  placeholder='0'
                   className={styles.inp_wrapper}
                   disabled={!isEdit}
                   type='number'
@@ -180,7 +202,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <label>Комиссия</label>
                 <Input
                   {...register('commission', { required: 'обязательное поле' })}
-                  placeholder='Не заполнено'
+                  placeholder='0'
                   className={styles.inp_wrapper}
                   disabled={!isEdit}
                   type='number'
@@ -193,7 +215,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                   <label>Курс ТО</label>
                   <Input
                     {...register('course_TO', { required: 'обязательное поле' })}
-                    placeholder='Не заполнено'
+                    placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
                     type='number'
@@ -226,7 +248,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         </Loading>
       </Accordion>
       {isActiveTab !== 'full' && paymentAccordions.length < 5 && index === paymentAccordions.length - 1 && (
-        <Icon type='plus-gray' className={styles.plusIcon} onClick={() => setIsAddPaumentModal(true)} />
+        <Icon type='plus-gray' className={styles.plusIcon} onClick={() => checkingFormForNull()} />
       )}
       {isAddPaumentModal && (
         <Modal
@@ -240,6 +262,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
           rightBtnText='Отменить'
           rightBtnStyle={BUTTON_TYPES.CANCEL}
           rightBtnAction={() => setIsAddPaumentModal(false)}
+          onClose={() => setIsAddPaumentModal(false)}
         >
           <p className={styles.addPaymentModalText}>Добавить новую часть оплаты?</p>
         </Modal>
