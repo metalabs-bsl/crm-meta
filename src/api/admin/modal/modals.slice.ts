@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ModalsState {
   isModalOpen: boolean;
@@ -12,11 +12,11 @@ const initialState: ModalsState = {
   isModalOpen: false,
   prevModalShown: false,
   isPreved: false,
-  birthdayModalShown: false, 
+  birthdayModalShown: false,
   noteModalShown: false
 };
 
- export const modalSlice = createSlice({
+export const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
@@ -27,13 +27,13 @@ const initialState: ModalsState = {
       state.prevModalShown = action.payload;
     },
     setIsPreved(state, action: PayloadAction<boolean>) {
-        state.isPreved = action.payload
+      state.isPreved = action.payload;
     },
     setBirthdayModalShown(state, action: PayloadAction<boolean>) {
-      state.birthdayModalShown = action.payload; 
+      state.birthdayModalShown = action.payload;
     },
     setNoteModalShown(state, action: PayloadAction<boolean>) {
-      state.birthdayModalShown = action.payload; 
+      state.birthdayModalShown = action.payload;
     }
   }
 });

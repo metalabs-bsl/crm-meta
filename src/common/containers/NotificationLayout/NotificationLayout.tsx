@@ -1,17 +1,18 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { BirthDayModal, BreakModal, GreetingsModal, Modal } from 'common/components';
-import { setPrevModalShown, setIsPreved, setBirthdayModalShown, setNoteModalShown, setIsModalOpen } from 'api/admin/modal/modals.slice';
+// import { LeadFlyModal } from 'common/components/LeadFlyModal';
 import { NoteModal } from 'common/components/NoteModal';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
 import { useGetCalendarDataQuery } from 'api/admin/calendar/calendar.api';
 import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { modalSelectors } from 'api/admin/modal/modal.selectors';
+import { setBirthdayModalShown, setIsModalOpen, setIsPreved, setNoteModalShown, setPrevModalShown } from 'api/admin/modal/modals.slice';
 import { useGetWorkTimeInfoQuery } from 'api/admin/workTime/workTime.api';
 import { Birthday, Note } from 'types/entities';
+
+// import { leadFlyData } from './NotificationLayout.helper';
 import { NOTIFICATION_COMPONENTS } from 'types/enums';
-import { LeadFlyModal } from 'common/components/LeadFlyModal';
-import { leadFlyData } from './NotificationLayout.helper';
-import { modalSelectors } from 'api/admin/modal/modal.selectors';
 
 interface IProps {
   children: ReactNode;
@@ -28,7 +29,6 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
   const { userInfo } = useAppSelector(employeesSelectors.employees);
   const { prevModalShown, isPreved, noteModalShown, birthdayModalShown, isModalOpen } = useAppSelector(modalSelectors.modal);
 
-
   const closeNotificationModal = () => {
     dispatch(setIsModalOpen(false));
     setActiveNotification(null);
@@ -36,7 +36,7 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     dispatch(setBirthdayModalShown(true));
     dispatch(setNoteModalShown(true));
     if (activeNotification === NOTIFICATION_COMPONENTS.BREAK) {
-      setIsBreakNotified(true)
+      setIsBreakNotified(true);
     }
   };
 
@@ -102,7 +102,7 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
 
   useEffect(() => {
     if (userInfo && isPreved) {
-      openNotificationModal(NOTIFICATION_COMPONENTS.LEADFLY);
+      openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
     }
   }, [isPreved, userInfo]);
 
@@ -133,13 +133,13 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [workTimeData, isBreakNotified]);
+  }, [openNotificationModal, workTimeData, isBreakNotified]);
   const getNotificationComponents = () => {
     const modals: Record<NOTIFICATION_COMPONENTS, ReactNode> = {
       [NOTIFICATION_COMPONENTS.BIRTHDAY]: <BirthDayModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={birthdayData} />,
       [NOTIFICATION_COMPONENTS.NOTE]: <NoteModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={noteData!} />,
-      [NOTIFICATION_COMPONENTS.BREAK]: <BreakModal isOpen={isBreakNotified} onCancel={closeNotificationModal} />,
-      [NOTIFICATION_COMPONENTS.LEADFLY]: <LeadFlyModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={leadFlyData} />
+      [NOTIFICATION_COMPONENTS.BREAK]: <BreakModal isOpen={isBreakNotified} onCancel={closeNotificationModal} />
+      // [NOTIFICATION_COMPONENTS.LEADFLY]: <LeadFlyModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={leadFlyData} />
     };
     return activeNotification ? modals[activeNotification] : null;
   };

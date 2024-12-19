@@ -1,1 +1,1 @@
-export { LeadFlyModal } from './LeadFlyModal'
+export { LeadFlyModal } from './LeadFlyModal';

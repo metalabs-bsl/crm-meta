@@ -72,7 +72,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const servicesIds = formProps.services.map((service) => String(service.id)); // Convert to array of strings
       servicesOptions && setServises(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
     }
-    console.log(formProps)
+    console.log(formProps);
   }, [formProps, servicesOptions, setValue]);
 
   const onSubmit = () => {
