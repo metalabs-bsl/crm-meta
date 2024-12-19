@@ -41,4 +41,3 @@ export const calendarSlice = createSlice({
 
 export const { setNotes, setBirthdays, setLoading } = calendarSlice.actions;
 
-export const calendarReducer = calendarSlice.reducer;

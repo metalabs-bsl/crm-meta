@@ -3,7 +3,7 @@ import { getBaseQuery } from 'common/helpers';
 import { ICreateNote, IGetCalendar } from 'types/requests/admin/calendar.api';
 
 export const calendarApi = createApi({
-  reducerPath: 'calendar',
+  reducerPath: 'calendarApi',
   baseQuery: getBaseQuery(),
   tagTypes: ['Calendar'],
   endpoints: ({ query, mutation }) => ({

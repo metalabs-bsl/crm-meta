@@ -4,6 +4,8 @@ import { kanbanSlice } from './kanban/kanban.slice';
 import { listSlice } from './list/list.slice';
 import { loginSlice } from './login/login.slice';
 import { sidebarSlice } from './sidebar/sidebar.slice';
+import { modalSlice } from './modal/modal.slice';
+import { calendarSlice } from './calendar/calendar.slice';
 
 export const adminSlices = {
   [sidebarSlice.name]: sidebarSlice.reducer,
@@ -11,5 +13,6 @@ export const adminSlices = {
   [employeesSlice.name]: employeesSlice.reducer,
   [kanbanSlice.name]: kanbanSlice.reducer,
   [listSlice.name]: listSlice.reducer,
-  // [calendarSlice.name]: calendarSlice.reducer
+  [modalSlice.name]: modalSlice.reducer,
+  [calendarSlice.name]: calendarSlice.reducer
 };

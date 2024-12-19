@@ -10,3 +10,6 @@ export const dateFormatWithHour = (date: string, format: string = 'DD.MM.YYYY, H
 export const dateFormat = (date: string, format: string = 'DD.MM.YYYY') => {
   return dayjs(date).utc(true).format(format);
 };
+
+// export const today = dayjs().startOf('day').format('MM-DD');
+// export const birthdayToday = birthdays.find((birthday) => dayjs(birthday.date).utc().startOf('day').format('MM-DD') === today);

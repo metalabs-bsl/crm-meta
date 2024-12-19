@@ -1,5 +1,6 @@
 export enum NOTIFICATION_COMPONENTS {
   BIRTHDAY = 'birthday',
   NOTE = 'note',
-  BREAK = 'break'
+  BREAK = 'break',
+  LEADFLY = 'leadfly'
 }
