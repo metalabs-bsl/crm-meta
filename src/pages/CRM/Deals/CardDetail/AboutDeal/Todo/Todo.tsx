@@ -27,9 +27,6 @@ export const Todo: FC<IProps> = ({ reminders, comments, customerPhone }) => {
         .then((msgs) => {
           setChatData(msgs);
           setIsLoading(false);
-        })
-        .catch(() => {
-          setIsLoading(false);
         });
     }
   }, [customerPhone, chatMessages]);
