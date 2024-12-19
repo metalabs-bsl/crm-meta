@@ -92,8 +92,8 @@ export const StartWindow = () => {
         const breakEndTime = start.add(1, 'hour');
         const remainingDuration = dayjs.duration(breakEndTime.diff(now));
 
-        if (remainingDuration.asMinutes() <= 15 && !notificationPlayed) {
-          new Audio('/notification.mp3').play();
+        if (remainingDuration.asMinutes() <= 59 && !notificationPlayed) {
+          // new Audio('/notification.mp3').play();
           setNotificationPlayed(true);
         }
       };
@@ -103,7 +103,7 @@ export const StartWindow = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [isStart, data, isTimeOut, pauseTime, notify]);
+  }, [notificationPlayed, data, isTimeOut, pauseTime, notify]);
 
   const onStart = () => {
     start()

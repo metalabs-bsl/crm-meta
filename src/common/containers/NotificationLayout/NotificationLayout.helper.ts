@@ -16,3 +16,12 @@ export const noteData: Note = {
 };
 
 export const breakData = '5 минут';
+
+// export const leadFlyData: ICreateLeadParams & ITourData = {
+//   lead_name: 'махарматылла',
+//   customer_phone: '996556889977',
+//   departure_city: 'ош базар',
+//   departure_date: '18.12.2024',
+//   arrival_city: 'человекстан',
+//   arrival_date: '19.12.2024'
+// };
