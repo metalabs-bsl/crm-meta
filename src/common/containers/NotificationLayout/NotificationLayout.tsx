@@ -120,7 +120,7 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
         const start = dayjs(workTimeData.break_started);
         const breakEndTime = start.add(1, 'hour');
         const remainingDuration = dayjs.duration(breakEndTime.diff(now));
-        if (remainingDuration.asMinutes() <= 59 && !isBreakNotified) {
+        if (remainingDuration.asMinutes() <= 15 && !isBreakNotified) {
           console.log('Triggering break notification');
           openNotificationModal(NOTIFICATION_COMPONENTS.BREAK);
           setIsBreakNotified(true);
