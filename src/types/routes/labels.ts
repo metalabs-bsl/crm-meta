@@ -3,6 +3,7 @@ export const adminLabels = {
   notFound: 'Страница не найдена',
   login: 'Cтраница входа',
   calendar: 'Cтраница Календарь',
+  birthdaysToday: 'Страница Дни рождения сегодня',
   settings: 'Cтраница Настройки',
   document: 'Cтраница Документы',
   mail: 'Cтраница Почта',

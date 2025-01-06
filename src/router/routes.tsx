@@ -13,6 +13,7 @@ const Document = lazy(() => import('../pages/Document'));
 const Mail = lazy(() => import('../pages/Mail'));
 const MessageDetail = lazy(() => import('../pages/Mail/MessageDetail'));
 const Report = lazy(() => import('../pages/Report'));
+const BirthdaysToday = lazy(() => import('../pages/Calendar/DaysGrid/BirthdaysToday'));
 
 export const mainRoutes: IRoute[] = [
   {
@@ -44,6 +45,12 @@ export const mainRoutes: IRoute[] = [
     label: labels.calendar,
     roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
     element: <Calendar />
+  },
+  {
+    path: paths.birthdaysToday,
+    label: labels.birthdaysToday,
+    roles: [ROLES.DIRECTOR, ROLES.INTERN, ROLES.MANAGER, ROLES.SENIOR_MANAGER],
+    element: <BirthdaysToday />
   },
   {
     path: paths.settings,

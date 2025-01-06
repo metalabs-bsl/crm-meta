@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import dayjs, { Dayjs, extend } from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import utc from 'dayjs/plugin/utc';
@@ -25,6 +26,7 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
   const [noteOpen, setNoteOpen] = useState<boolean>(false);
   const [currentBirthday, setCurrentBirthday] = useState<Birthday | null>(null);
   const [birthdayOpen, setBirthdayOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const today = dayjs().utc();
   const startOfMonth = currentMonth.startOf('month').utc();
@@ -71,6 +73,10 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
     });
   };
 
+  const showAllBirthdays = (birthdaysForDay: Birthday[]) => {
+    navigate('birthday-today', { state: birthdaysForDay });
+  };
+
   return (
     <div className={styles.calendar_grid}>
       <div className={styles.week_days}>
@@ -86,28 +92,37 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
             <div>{day}</div>
           </div>
         ))}
-        {days.map((day) => (
-          <div
-            key={day.toISOString()}
-            className={cn(styles.day, {
-              [styles.today]: day.isSame(today, 'day')
-            })}
-          >
-            <div className={styles.round}>{day.format('D')}</div>
-            <div className={styles.events_wrapper}>
-              {getNotesForDay(day).map((note, index) => (
-                <div key={index} className={styles.note} onClick={() => onNoteClick(note)}>
-                  {note.title}
-                </div>
-              ))}
-              {getBirthdaysForDay(day).map((birthday, index) => (
-                <div key={index} className={styles.birthday} onClick={() => onBirthdayClick(birthday)}>
-                  <Icon type='birthday' /> {birthday.name}
-                </div>
-              ))}
+        {days.map((day) => {
+          const birthdaysForDay = getBirthdaysForDay(day);
+          const showMore = birthdaysForDay.length > 3;
+          return (
+            <div
+              key={day.toISOString()}
+              className={cn(styles.day, {
+                [styles.today]: day.isSame(today, 'day')
+              })}
+            >
+              <div className={styles.round}>{day.format('D')}</div>
+              <div className={styles.events_wrapper}>
+                {getNotesForDay(day).map((note, index) => (
+                  <div key={index} className={styles.note} onClick={() => onNoteClick(note)}>
+                    {note.title}
+                  </div>
+                ))}
+                {birthdaysForDay.slice(0, 3).map((birthday, index) => (
+                  <div key={index} className={styles.birthday} onClick={() => onBirthdayClick(birthday)}>
+                    <Icon type='birthday' /> {birthday.name}
+                  </div>
+                ))}
+                {showMore && (
+                  <div className={styles.show_more} onClick={() => showAllBirthdays(birthdaysForDay)}>
+                    Показать все
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {nextMonthDays.map((day, i) => (
           <div key={`next-${i}`} className={cn(styles.day, styles.prev_next_month)}>
             <div>{day}</div>
