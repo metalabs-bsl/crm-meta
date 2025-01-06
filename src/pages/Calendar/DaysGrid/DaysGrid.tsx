@@ -86,7 +86,10 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
             <div>{day}</div>
           </div>
         ))}
-        {days.map((day) => (
+        {days.map((day) => {
+          const birthdaysForDay = getBirthdaysForDay(day);
+          const showMore = birthdaysForDay.length > 3
+          return (
           <div
             key={day.toISOString()}
             className={cn(styles.day, {
@@ -100,14 +103,19 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
                   {note.title}
                 </div>
               ))}
-              {getBirthdaysForDay(day).map((birthday, index) => (
+              {birthdaysForDay.slice(0, 3).map((birthday, index) => (
                 <div key={index} className={styles.birthday} onClick={() => onBirthdayClick(birthday)}>
                   <Icon type='birthday' /> {birthday.name}
                 </div>
               ))}
+              {showMore && (
+                <div className={styles.show_more}>
+                Показать все
+                </div>
+              )}
             </div>
           </div>
-        ))}
+        )})}
         {nextMonthDays.map((day, i) => (
           <div key={`next-${i}`} className={cn(styles.day, styles.prev_next_month)}>
             <div>{day}</div>
