@@ -17,6 +17,11 @@
       width: 20%;
       min-width: min-content;
     }
+    .error {
+      font-weight: 400;
+      font-size: 14px;
+      color: red;
+    }
 
     .item_block {
       display: flex;

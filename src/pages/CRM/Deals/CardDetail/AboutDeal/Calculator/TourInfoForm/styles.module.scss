@@ -17,7 +17,11 @@
       width: 20%;
       min-width: min-content;
     }
-
+    .error {
+      font-weight: 400px;
+      font-size: 14px;
+      color: red
+    }
     .item_block {
       display: flex;
       flex-direction: column;

@@ -37,7 +37,13 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     children_old: 0
   });
   const isEditable = !isEditTourInfo;
-  const { register, getValues, setValue } = useForm<ITourData>({
+  const {
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ITourData>({
     defaultValues: {
       brand: brandOptions[0].value as string,
       tour_category: categoryTourTimeOptions[0].value as string
@@ -129,7 +135,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     console.log(formProps);
   }, [formProps, servicesOptions, setValue]);
 
-  const onSubmit = () => {
+  const onSubmit = handleSubmit(() => {
     if (calcId) {
       const data = getValues();
       const updatedServises = servises.map((i) => ({ id: String(i.value) }));
@@ -160,7 +166,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           setIsEditTourInfo(!isEditTourInfo);
         });
     }
-  };
+  });
 
   return (
     <Accordion
@@ -176,7 +182,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             <div className={styles.item_block}>
               <label>Номер брони в СТ</label>
               <Input
-                {...register('booking_number', { required: 'обязательное поле' })}
+                // {...register('booking_number', { required: 'обязательное поле' })}
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -192,6 +198,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                   className={styles.select}
                   disabled={isEditable}
                 />
+                {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}
             <div className={styles.item_block}>
@@ -202,6 +209,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 className={styles.inp_wrapper}
                 disabled={isEditable}
               />
+              {errors.hotel && <p className={styles.error}>{errors.hotel.message}</p>}
             </div>
             <div className={styles.item_block}>
               <label>Категория срока тура</label>
@@ -211,6 +219,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 className={styles.select}
                 disabled={isEditable}
               />
+              {errors.tour_category && <p className={styles.error}>{errors.tour_category.message}</p>}
             </div>
           </div>
           <div className={styles.blocks}>
@@ -223,6 +232,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 disabled={isEditable}
                 onChange={(e) => setDepartureCity(e.target.value)}
               />
+              {errors.departure_city && <p className={styles.error}>{errors.departure_city.message}</p>}
+
               <div className={styles.suggestions}>
                 {departureSuggestions.map((city, index) => (
                   <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
@@ -240,6 +251,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 disabled={isEditable}
                 onChange={(e) => setArrivalCity(e.target.value)}
               />
+              {errors.arrival_city && <p className={styles.error}>{errors.arrival_city.message}</p>}
+
               <div className={styles.suggestions}>
                 {arrivalSuggestions.map((city, index) => (
                   <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
@@ -270,6 +283,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 className={styles.datepicker}
                 disabled={isEditable}
               />
+              {errors.departure_date && <p className={styles.error}>{errors.departure_date.message}</p>}
             </div>
             <div className={styles.item_block}>
               <label>Дата прилета</label>
@@ -278,6 +292,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 className={styles.datepicker}
                 disabled={isEditable}
               />
+              {errors.arrival_date && <p className={styles.error}>{errors.arrival_date.message}</p>}
             </div>
             {servicesOptions && (
               <div className={styles.item_block}>

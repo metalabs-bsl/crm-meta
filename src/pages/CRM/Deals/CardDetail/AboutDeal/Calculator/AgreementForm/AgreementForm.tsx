@@ -36,7 +36,14 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
   const [backOfPassport, setBackOfPassport] = useState<File | null>(null);
   const [deletedFront, setDeletedFront] = useState<boolean>(false);
   const [deletedBack, setDeletedBack] = useState<boolean>(false);
-  const { register, getValues, setValue } = useForm<IUpdateContract>();
+  const {
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+    setError,
+    formState: { errors }
+  } = useForm<IUpdateContract>();
   const isEditable = !isEditAgreement;
 
   useEffect(() => {
@@ -73,7 +80,18 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const onSubmit = () => {
+  const onSubmit = (data: IUpdateContract) => {
+    const hasEmptyFields = Object.entries(data).some(([value]) => !value);
+
+    if (hasEmptyFields) {
+      Object.entries(data).forEach(([key, value]) => {
+        if (!value) {
+          setError(key as keyof IUpdateContract, { message: 'Это поле обязательно' });
+        }
+      });
+      return;
+    }
+
     if (deletedFront && formProps?.passport_front[0]?.id) {
       deleteFile(formProps?.passport_front[0].id);
     }
@@ -110,7 +128,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
       title='Договор'
       onEditAction={() => setIsEditAgreement(!isEditAgreement)}
       isEdit={isEditAgreement}
-      onSaveAction={onSubmit}
+      onSaveAction={handleSubmit(onSubmit)}
       isOpenDefault={true}
     >
       <Loading isSpin={isLoading || isBackLoading || isFrontLoading || isDeleteLoading}>
@@ -135,6 +153,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                   className={styles.inp_wrapper}
                   disabled={isEditable}
                 />
+                {errors.customer_passport && <span className={styles.error}>{errors.customer_passport.message}</span>}
               </div>
               <div className={styles.item_block}>
                 <label>ИНН</label>
@@ -144,6 +163,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                   className={styles.inp_wrapper}
                   disabled={isEditable}
                 />
+                {errors.customer_inn && <span className={styles.error}>{errors.customer_inn.message}</span>}
               </div>
             </div>
             <div className={styles.item_block}>
@@ -154,6 +174,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.inp_wrapper}
                 disabled={isEditable}
               />
+              {errors.customer_address && <span className={styles.error}>{errors.customer_address.message}</span>}
             </div>
             <div className={styles.item_block} style={{ height: '70px', display: 'inline-block' }}></div>
             <div className={styles.item_block}>
@@ -175,6 +196,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.inp_wrapper}
                 disabled={isEditable}
               />
+              {errors.customer_fullname && <span className={styles.error}>{errors.customer_fullname.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Орган выдавший документ</label>
@@ -184,6 +206,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.inp_wrapper}
                 disabled={isEditable}
               />
+              {errors.customer_issuingAuthority && <span className={styles.error}>{errors.customer_issuingAuthority.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Дата выдачи паспорта</label>
@@ -193,6 +216,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 disabled={isEditable}
                 datePicketType='date'
               />
+              {errors.customer_passportDateGiven && <span className={styles.error}>{errors.customer_passportDateGiven.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Дата окончания паспорта</label>
@@ -202,6 +226,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 disabled={isEditable}
                 datePicketType='date'
               />
+              {errors.customer_passportDateEnds && <span className={styles.error}>{errors.customer_passportDateEnds.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Задняя сторона паспорта</label>
@@ -224,6 +249,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                   className={styles.inp_wrapper}
                 />
               )}
+              {errors.responsible_id && <span className={styles.error}>{errors.responsible_id.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Дата бронирования</label>
@@ -232,6 +258,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.datepicker}
                 disabled={isEditable}
               />
+              {errors.booking_date && <span className={styles.error}>{errors.booking_date.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Дата рождения клиента</label>
@@ -241,6 +268,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.datepicker}
                 datePicketType='date'
               />
+              {errors.customer_DOB && <span className={styles.error}>{errors.customer_DOB.message}</span>}
             </div>
           </div>
         </form>
