@@ -36,7 +36,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
   const [backOfPassport, setBackOfPassport] = useState<File | null>(null);
   const [deletedFront, setDeletedFront] = useState<boolean>(false);
   const [deletedBack, setDeletedBack] = useState<boolean>(false);
-  const { register, getValues, setValue } = useForm<IUpdateContract>();
+  const { register, getValues, setValue, handleSubmit, setError, formState: { errors } } = useForm<IUpdateContract>();
   const isEditable = !isEditAgreement;
 
   useEffect(() => {
@@ -73,7 +73,19 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const onSubmit = () => {
+  const onSubmit = (data: IUpdateContract) => {
+
+    const hasEmptyFields = Object.entries(data).some(([key, value]) => !value);
+
+    if (hasEmptyFields) {
+      Object.entries(data).forEach(([key, value]) => {
+        if (!value) {
+          setError(key as keyof IUpdateContract, { message: 'Это поле обязательно' });
+        }
+      });
+      return;
+    }
+
     if (deletedFront && formProps?.passport_front[0]?.id) {
       deleteFile(formProps?.passport_front[0].id);
     }
@@ -110,7 +122,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
       title='Договор'
       onEditAction={() => setIsEditAgreement(!isEditAgreement)}
       isEdit={isEditAgreement}
-      onSaveAction={onSubmit}
+      onSaveAction={handleSubmit(onSubmit)}
       isOpenDefault={true}
     >
       <Loading isSpin={isLoading || isBackLoading || isFrontLoading || isDeleteLoading}>
