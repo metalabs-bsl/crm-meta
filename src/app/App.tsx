@@ -26,8 +26,31 @@ export const App = () => {
   const [getData, { isFetching }] = useLazyGetUserInfoQuery();
   const dispatch = useAppDispatch();
 
+  const checkToken = async (token: string) => {
+    try {
+      const response = await fetch('/check', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message); // 'Токен валиден'
+      } else if (response.status === 401) {
+        // Clear state and redirect to login
+        redirect.login({});
+      }
+    } catch (error) {
+      console.error('Error validating token:', error);
+      redirect.login({});
+    }
+  };
+
   useEffect(() => {
     if (accessToken && !userInfo) {
+      checkToken(accessToken);
       getData();
     }
   }, [accessToken, getData, userInfo]);
