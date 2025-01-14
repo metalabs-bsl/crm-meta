@@ -28,7 +28,7 @@ export const App = () => {
 
   const checkToken = async (token: string) => {
     try {
-      const response = await fetch('/check', {
+      const response = await fetch(process.env.REACT_APP_BASE_URL + '/auth/check', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
