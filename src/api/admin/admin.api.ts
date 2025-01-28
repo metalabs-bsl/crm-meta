@@ -1,5 +1,6 @@
 import { appSettingsApi } from './appSettings/appSettings.api';
 import { accountsApi } from './accounts/accounts.api';
+import { calculatorApi } from './calculator/calculator.api';
 import { calendarApi } from './calendar/calendar.api';
 import { currenciesApi } from './currencies/currencies.api';
 import { documentApi } from './document/document.api';
@@ -29,7 +30,8 @@ export const adminApiReducers = {
   [documentApi.reducerPath]: documentApi.reducer,
   [accountsApi.reducerPath]: accountsApi.reducer,
   [messagesApi.reducerPath]: messagesApi.reducer,
-  [startApi.reducerPath]: startApi.reducer
+  [startApi.reducerPath]: startApi.reducer,
+  [calculatorApi.reducerPath]: calculatorApi.reducer
 };
 
 export const adminApiMiddlewares = [
@@ -47,5 +49,6 @@ export const adminApiMiddlewares = [
   mailApi.middleware,
   documentApi.middleware,
   messagesApi.middleware,
-  startApi.middleware
+  startApi.middleware,
+  calculatorApi.middleware
 ];
