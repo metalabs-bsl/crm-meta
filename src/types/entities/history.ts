@@ -98,7 +98,13 @@ export interface Deals_Read {
   detailType: Deals_Type;
 }
 
-export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Calc | Deals_Read;
+export interface Deals_Loss {
+  detailType: 'deals-loss';
+  lossText: string;
+}
+
+export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Calc | Deals_Read | Deals_Loss;
+
 
 //-------------------------------------------------------------
 export type IDetail = EditDetail | TodoDetail | Account | DealsDetail;
@@ -108,5 +114,5 @@ export interface Change {
   timestamp: string;
   status: IChangeItemStatus;
   detail?: IDetail;
-  employee: string;
+  employee?: string;
 }
