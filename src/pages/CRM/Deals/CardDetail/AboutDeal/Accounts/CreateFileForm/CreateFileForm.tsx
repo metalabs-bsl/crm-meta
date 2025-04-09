@@ -1,9 +1,9 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { Options } from 'types/pages';
 import { Button, FilePicker, Loading, Select } from 'common/ui';
 import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useCreateInvoiceMutation, useGetPaymentsForInvoicesFormQuery } from 'api/admin/leads/endpoints/invoice';
+import { Options } from 'types/common';
 import { IInvoiseSelectOptions } from 'types/entities';
 import styles from './styles.module.scss';
 

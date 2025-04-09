@@ -11,7 +11,7 @@ const isAccountDetail = (detail: IDetail): detail is Account => {
 };
 
 export const Accounts: FC<IProps> = ({ data }) => {
-  const { detail, description } = data;
+  const { detail, description, employee } = data;
 
   if (!detail || !isAccountDetail(detail)) {
     return null;
@@ -21,9 +21,12 @@ export const Accounts: FC<IProps> = ({ data }) => {
 
   return (
     <div className={styles.accounts}>
-      <span className={styles.title}>
-        Счет: <span className={cn(styles.descTitle, { [styles.isRemoving]: detailType === 'accounts-delete' })}>{description}</span>
-      </span>
+      <div className={styles.headline}>
+        <span className={styles.title}>
+          Счет: <span className={cn(styles.descTitle, { [styles.isRemoving]: detailType === 'accounts-delete' })}>{description}</span>
+        </span>
+        <span className={styles.employee}>{employee}</span>
+      </div>
       <div className={styles.middle}>
         <span className={styles.payment}>{payment}</span>
         <span className={styles.comment}>{comment}</span>

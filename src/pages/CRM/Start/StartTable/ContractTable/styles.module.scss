@@ -21,7 +21,7 @@
 .row {
   height: 54px;
   background-color: $not-paid-row;
-  border-top: .5px solid $silver;
+  border-top: 0.5px solid $silver;
   &_paid {
     background-color: $white;
   }

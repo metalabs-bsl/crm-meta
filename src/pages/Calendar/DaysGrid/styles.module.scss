@@ -9,6 +9,8 @@
 
   .days_grid {
     border-top: 1px solid $silver;
+    overflow-y: scroll;
+    height: calc(100vh - 240px);
   }
 
   .week_day,
@@ -64,6 +66,10 @@
         align-items: center;
         padding: 0 10px;
         background-color: $partial;
+      }
+      .show_more {
+        font-size: 12px;
+        cursor: pointer;
       }
     }
   }

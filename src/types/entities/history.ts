@@ -68,7 +68,7 @@ export type AccountsDetail = Account;
 
 // ------------------------------------------------------------
 
-export type Deals_Type = 'deals-create' | 'deals-status' | 'deals-responsible' | 'deals-sail' | 'deals-loss' | 'deals-calc';
+export type Deals_Type = 'deals-create' | 'deals-status' | 'deals-responsible' | 'deals-sail' | 'deals-loss' | 'deals-calc' | 'deals-read';
 
 export interface Deals_Create {
   detailType: Deals_Type;
@@ -80,15 +80,6 @@ export interface Deals_Status extends IChangeMarkWIthColor {
 
 export interface Deals_Responsible extends IChangeMark {
   detailType: Deals_Type;
-}
-
-export interface Deals_Sail {
-  detailType: Deals_Type;
-}
-
-export interface Deals_Loss {
-  detailType: Deals_Type;
-  lossText: string;
 }
 
 export interface Deals_Calc {
@@ -103,14 +94,19 @@ export interface Deals_Calc {
   };
 }
 
-export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Sail | Deals_Loss | Deals_Calc;
+export interface Deals_Read {
+  detailType: Deals_Type;
+}
+
+export type DealsDetail = Deals_Create | Deals_Status | Deals_Responsible | Deals_Calc | Deals_Read;
 
 //-------------------------------------------------------------
-export type IDetail = EditDetail | TodoDetail | Account | Deals_Create | DealsDetail;
+export type IDetail = EditDetail | TodoDetail | Account | DealsDetail;
 
 export interface Change {
   description: string;
   timestamp: string;
   status: IChangeItemStatus;
   detail?: IDetail;
+  employee: string;
 }

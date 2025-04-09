@@ -9,14 +9,14 @@ interface IProps {
 }
 
 export const PassengersCount: FC<IProps> = ({ passengerCounts, setPassengerCounts }) => {
-  const incrementCount = (key: 'adults' | 'children') => {
+  const incrementCount = (key: 'adults' | 'children' | 'children_old') => {
     setPassengerCounts((prevCounts) => ({
       ...prevCounts,
       [key]: prevCounts[key] + 1
     }));
   };
 
-  const decrementCount = (key: 'adults' | 'children') => {
+  const decrementCount = (key: 'adults' | 'children' | 'children_old') => {
     setPassengerCounts((prevCounts) => ({
       ...prevCounts,
       [key]: prevCounts[key] > 0 ? prevCounts[key] - 1 : 0

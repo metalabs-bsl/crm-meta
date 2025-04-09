@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Icon, Select } from 'common/ui';
 import { ClientWindow, DeleteModal, DropdownModal } from 'common/components';
+import { dateFormat } from 'common/helpers';
 import { useAppDispatch, useAppSelector, useNotify, useRedirect } from 'common/hooks';
 import { crmChapters } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
@@ -16,7 +17,17 @@ interface IProps extends ILeadRow {
   stages: IStageData[];
 }
 
-export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column, stages, order, responsible_employee }) => {
+export const TableRowData: FC<IProps> = ({
+  id,
+  lead_name,
+  customer,
+  lead_column,
+  stages,
+  order,
+  responsible_employee,
+  comment_or_reminder,
+  created_at
+}) => {
   const profileRef = useRef(null);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [editedLeadName, setEditedLeadName] = useState<string>(lead_name);
@@ -34,8 +45,9 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
   const notify = useNotify();
   const redirect = useRedirect();
   const dispatch = useAppDispatch();
-
+  const updatedDate = dateFormat(created_at);
   const { role } = useAppSelector(employeesSelectors.employees);
+  const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
 
   useEffect(() => {
     if (stages && lead_column) {
@@ -175,7 +187,11 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
             <div>No stage data</div>
           )}
         </td>
-        <td style={{ maxWidth: '280px' }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus voluptatem sunt dolor.</td>
+        <td>{updatedDate}</td>
+        <td style={{ maxWidth: '280px' }}>
+          {comment_or_reminder ? (comment_or_reminder?.type === 'reminder' ? 'Дело: ' : 'Комментарий: ') : 'Нет данных'}{' '}
+          {comment_or_reminder?.text}
+        </td>
         <td>{order}</td>
         <td>
           {role !== ROLES.MANAGER && (
@@ -190,7 +206,12 @@ export const TableRowData: FC<IProps> = ({ id, lead_name, customer, lead_column,
             </div>
           )}
         </td>
-        <td className={styles.deleteIcon}>{role === ROLES.DIRECTOR && <Icon type='delete' onClick={() => setShowDeleteModal(true)} />}</td>
+        {isManagement && (
+          <td className={styles.deleteIcon}>
+            {' '}
+            <Icon type='delete' onClick={() => setShowDeleteModal(true)} />
+          </td>
+        )}
       </tr>
       <DropdownModal targetRef={profileRef} isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
         <ClientWindow

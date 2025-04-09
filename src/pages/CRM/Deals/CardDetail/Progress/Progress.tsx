@@ -54,7 +54,28 @@ export const Progress: FC<IProps> = ({ currentStage, lead_id }) => {
     }
   }, [currentStage, data, visibleColumns]);
 
+  useEffect(() => {
+    const currentStageObj = data?.find((item) => item.id === currentStage);
+    if (currentStageObj && currentStageObj?.status >= 6) {
+      setVisibleColumns((prev) => [...prev.slice(0, -1), currentStageObj]);
+    } else {
+      setVisibleColumns((prev) => [
+        ...prev.slice(0, -1),
+        {
+          status: 10,
+          id: '10',
+          created_at: '',
+          updated_at: '',
+          name: 'Завершить сделку',
+          color: '#f21212',
+          order: 10
+        }
+      ]);
+    }
+  }, [currentStage, data]);
+
   const changeStage = (index: number, item: IGetColumnsRes) => {
+    console.log(index, item);
     setActiveStage(index);
     if (lead_id) {
       if (item.status === 10) {

@@ -4,6 +4,7 @@
   border-radius: 10px;
   background-color: $white;
   padding: 15px;
+  position: relative;
   &_header {
     display: flex;
     align-items: center;
@@ -39,5 +40,9 @@
   .btns_wrapper {
     display: flex;
     gap: 15px;
+  }
+  .deleteIcon {
+    position: absolute;
+    right: 15px;
   }
 }

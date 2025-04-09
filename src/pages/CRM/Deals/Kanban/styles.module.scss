@@ -1,4 +1,4 @@
-@import url("../../../../common/styles/variables.scss");
+@import '../../../../common/styles/variables.scss';
 
 .kanbanBoardWrapper {
   display: flex;
@@ -10,10 +10,6 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 .navButton {
@@ -23,7 +19,7 @@
   height: 40px;
   width: 40px;
   background-color: rgba(255, 255, 255, 0.63);
-  border-radius: 50% ;
+  border-radius: 50%;
   font-size: 32px;
   cursor: pointer;
   transition: opacity 0.3s ease;

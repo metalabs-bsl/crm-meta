@@ -14,6 +14,7 @@ import {
   IResPaymentCurrency,
   IResSearch,
   IResSource,
+  IServise,
   ISetAdditionalPaymentRes,
   ITourData,
   IUpdateContract,
@@ -129,4 +130,9 @@ export module IGetInvoices {
 export module IGetInvoicesSelectData {
   export type Response = IInvoiseSelectOptions[];
   export type Params = string;
+}
+
+export module IGetServises {
+  export type Response = IServise[];
+  export type Params = void;
 }

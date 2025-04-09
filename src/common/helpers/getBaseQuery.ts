@@ -9,6 +9,7 @@ export const getBaseQuery = () => {
       const token = (getState() as RootState).login.accessToken;
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
+        headers.set('ngrok-skip-browser-warning', 'true');
       }
       return headers;
     }

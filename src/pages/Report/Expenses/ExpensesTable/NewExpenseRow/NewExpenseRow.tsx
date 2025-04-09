@@ -15,15 +15,10 @@ export const NewExpenseRow: FC<NewExpenseRowProps> = ({ item, onChange }) => {
         <Input className={styles.editInput} placeholder='Пусто' value={item.name} onChange={(e) => onChange('name', e.target.value)} />
       </div>
       <div className={`${styles.editColumn} ${styles.editQuantity}`}>
-        <Input
-          className={styles.editInput}
-          placeholder='Пусто'
-          value={item.quantity}
-          onChange={(e) => onChange('quantity', e.target.value)}
-        />
+        <Input className={styles.editInput} placeholder='0' type='number' onChange={(e) => onChange('quantity', e.target.value)} />
       </div>
       <div className={`${styles.editColumn} ${styles.editPrice}`}>
-        <Input className={styles.editInput} placeholder='Пусто' value={item.price} onChange={(e) => onChange('price', e.target.value)} />
+        <Input className={styles.editInput} placeholder='0' type='number' onChange={(e) => onChange('price', e.target.value)} />
       </div>
     </>
   );

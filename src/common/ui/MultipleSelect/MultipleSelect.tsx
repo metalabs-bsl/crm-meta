@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Options } from 'types/pages';
+import { Options } from 'types/common';
 import { Icon } from '../Icon';
 import { Radio } from '../Radio';
 import styles from './styles.module.scss';
@@ -11,10 +11,21 @@ interface IProps {
   defaultValue?: Options[];
   disabled?: boolean;
   onChange?: (data: Options[]) => void;
+  openSelect: string | null;
+  setOpenSelect: (id: string | null) => void;
+  selectId: string;
 }
 
-export const MultipleSelect: FC<IProps> = ({ placeholder = '', options, defaultValue, disabled = false, onChange }) => {
-  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
+export const MultipleSelect: FC<IProps> = ({
+  placeholder = '',
+  options,
+  defaultValue,
+  disabled = false,
+  onChange,
+  openSelect,
+  setOpenSelect,
+  selectId
+}) => {
   const [selectedValues, setSelectedValues] = useState<Options[]>([]);
 
   useEffect(() => {
@@ -51,23 +62,30 @@ export const MultipleSelect: FC<IProps> = ({ placeholder = '', options, defaultV
 
   const onToggleVisible = () => {
     if (!disabled) {
-      setIsOptionsOpen(!isOptionsOpen);
+      if (openSelect === selectId) {
+        setOpenSelect(null);
+      } else {
+        setOpenSelect(selectId);
+      }
     }
   };
 
-  useEffect(() => {
-    if (!disabled) {
-      setIsOptionsOpen(false);
-    }
-  }, [disabled]);
+  const onClear = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setSelectedValues([]);
+    onChange && onChange([]);
+  };
 
   return (
     <div className={styles.select}>
       <div className={cn(styles.showArea, { [styles.disabled]: disabled })} onClick={onToggleVisible}>
         {selectedValues.length ? selectedValues.map((op) => op.label).join(', ') : placeholder}
-        <Icon type='arrow-up' className={cn(styles.arrow, { [styles.arrow_closed]: isOptionsOpen })} onClick={onToggleVisible} />
+        <div className={styles.arrow}>
+          {!!selectedValues.length && <Icon type='search-clear' className={styles.clea} onClick={(e) => onClear(e)} />}
+          <Icon type='arrow-up' className={cn({ [styles.arrow_closed]: openSelect !== selectId })} />
+        </div>
       </div>
-      {!disabled && isOptionsOpen && (
+      {!disabled && openSelect === selectId && (
         <div className={styles.options_area}>
           {options.map((op) => (
             <div className={styles.option} key={op.value} onClick={() => handleChange(op)}>

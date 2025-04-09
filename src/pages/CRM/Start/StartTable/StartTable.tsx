@@ -16,7 +16,7 @@ export const StartTable: FC<StartTableProps> = ({ employee }) => {
         <table className={styles.table}>
           <thead className={styles.head}>
             <tr>
-              {employeeRowHeaders.map((el, idx) => (
+              {employeeRowHeaders?.map((el, idx) => (
                 <th className={styles.title} key={idx}>
                   {el}
                 </th>
@@ -25,18 +25,18 @@ export const StartTable: FC<StartTableProps> = ({ employee }) => {
           </thead>
           <tbody className={styles.body}>
             <tr className={styles.row}>
-              <td className={styles.item}>{employee.name}</td>
-              <td className={styles.item}>{employee.bonuses}</td>
-              <td className={styles.item}>{employee.additionalBonuses}</td>
-              <td className={styles.item}>{employee.profit}</td>
-              <td className={styles.item}>{employee.applications}</td>
-              <td className={styles.item}>{employee.avgCheck}</td>
-              <td className={styles.item}>{employee.avgCommissionCheck}</td>
-              <td className={styles.item}>{employee.tourists}</td>
+              <td className={styles.item}>{employee?.name}</td>
+              <td className={styles.item}>{employee?.bonuses}</td>
+              <td className={styles.item}>{employee?.additionalBonuses}</td>
+              <td className={styles.item}>{employee?.profit}</td>
+              <td className={styles.item}>{employee?.applications}</td>
+              <td className={styles.item}>{employee?.avgCheck}</td>
+              <td className={styles.item}>{employee?.avgCommissionCheck}</td>
+              <td className={styles.item}>{employee?.tourists}</td>
             </tr>
           </tbody>
         </table>
-        <ContractsTable contracts={employee.contracts} />
+        <ContractsTable contracts={employee?.contracts} />
       </div>
     </div>
   );

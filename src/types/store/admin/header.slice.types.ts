@@ -1,12 +1,12 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { IUserInfoRes } from 'types/entities';
+import { IEmployee } from 'types/entities';
 import { UserRoleUnionType } from 'types/roles/roles';
 
 import { BG_TYPES } from 'types/enums';
 
 export interface IBgState {
   bgType: BG_TYPES;
-  userInfo: null | IUserInfoRes;
+  userInfo: null | IEmployee;
   role: UserRoleUnionType;
 }
 
@@ -17,6 +17,9 @@ export interface ISidebarState {
   isOpenEdgeModal: boolean;
   isNewDeal: boolean;
   column_id: string;
+  delete_id?: string;
+  name?: string;
+  idUser?: string;
 }
 
 export type ISidebarAction = PayloadAction<boolean>;

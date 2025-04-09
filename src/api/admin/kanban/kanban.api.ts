@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { getBaseQuery } from 'common/helpers';
-import { ICreateColumn, IGetColumns } from 'types/requests/admin/kanban.api';
+import { ICreateColumn, IGetColumns, IGetTotalBruttoSum } from 'types/requests/admin/kanban.api';
 
 export const kanbanApi = createApi({
   reducerPath: 'kanbanApi',
@@ -9,6 +9,9 @@ export const kanbanApi = createApi({
     getColumns: query<IGetColumns.Response, IGetColumns.Params>({
       query: () => `/leadsColumns`,
       keepUnusedDataFor: 0
+    }),
+    getTotalBruttoSum: query<IGetTotalBruttoSum.Response, IGetTotalBruttoSum.Params>({
+      query: ({ startDate, endDate }) => `/leads/total-brutto-sum?date_from=${startDate}T00:00&date_to=${endDate}T23:59`
     }),
     createColumn: mutation<ICreateColumn.Response, ICreateColumn.Params>({
       query: ({ body, id }) => ({
@@ -33,4 +36,5 @@ export const kanbanApi = createApi({
   })
 });
 
-export const { useCreateColumnMutation, useDeleteColumnMutation, useUpdateColumnMutation, useGetColumnsQuery } = kanbanApi;
+export const { useCreateColumnMutation, useGetTotalBruttoSumQuery, useDeleteColumnMutation, useUpdateColumnMutation, useGetColumnsQuery } =
+  kanbanApi;

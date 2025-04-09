@@ -1,4 +1,4 @@
-import { IUserInfoRes } from './employees';
+import { IEmployee } from './employees';
 import { ICustomer } from './kanban';
 
 export interface ICreateLeadParams {
@@ -59,7 +59,7 @@ export interface ICreateReminderParams {
   updated_at: string;
 }
 
-export interface IResponsible_Employee extends IUserInfoRes {
+export interface IResponsible_Employee extends IEmployee {
   date_of_birth: string;
   email_password: string;
   middle_name: string;
@@ -161,17 +161,21 @@ export interface ISetAdditionalPaymentRes extends Omit<ICalcPayment, 'course_TO'
   comment: string;
 }
 
+export interface IdWithKey {
+  id: string;
+}
 export interface ITourData {
   booking_number: string;
   departure_city: string;
   arrival_city: string;
   brand: string;
-  departure_date: string;
-  arrival_date: string;
+  departure_date?: string;
+  arrival_date?: string;
   hotel: string;
   adult_passengers: number;
   child_passengers: number;
-  services: string[];
+  child_passengers_older: number;
+  services: IdWithKey[];
   tour_category: string;
   id?: string;
   calculator: {
@@ -190,6 +194,7 @@ export interface ICalcCustomer extends ICustomer {
   address: string;
   issuingAuthority: string;
   datePassportGiven: string;
+  datePassportEnds: string;
   passport_back: IPassportResponse[];
   passport_front: IPassportResponse[];
 }
@@ -218,6 +223,7 @@ export interface IUpdateContract {
   customer_fullname?: string;
   responsible_id?: string;
   customer_passportDateGiven?: string;
+  customer_passportDateEnds?: string;
   customer_issuingAuthority?: string;
   passport_back: IPassportResponse[];
   passport_front: IPassportResponse[];
@@ -270,4 +276,9 @@ export interface IInvoice {
   invoice_text: string;
   title: string;
   updated_at: string;
+}
+
+export interface IServise {
+  id: string;
+  name: string;
 }

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IColumn } from 'types/entities';
+import { IColumn, IEmployee } from 'types/entities';
 import { loginApi } from '../login/login.api';
 
 import { disconnectSocket } from 'socket';
@@ -9,13 +9,15 @@ interface SocketState {
   board: IColumn[];
   boardAll: IColumn[];
   loading: boolean;
+  online: IEmployee[];
 }
 
 const initialState: SocketState = {
   connected: false,
   board: [],
   boardAll: [],
-  loading: false
+  loading: false,
+  online: []
 };
 
 export const kanbanSlice = createSlice({
@@ -33,6 +35,9 @@ export const kanbanSlice = createSlice({
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
+    },
+    setOnline(state, action: PayloadAction<IEmployee[]>) {
+      state.online = action.payload;
     }
   },
   extraReducers(builder) {
@@ -43,4 +48,4 @@ export const kanbanSlice = createSlice({
   }
 });
 
-export const { setConnected, setBoard, setBoardAll, setLoading } = kanbanSlice.actions;
+export const { setConnected, setBoard, setBoardAll, setLoading, setOnline } = kanbanSlice.actions;

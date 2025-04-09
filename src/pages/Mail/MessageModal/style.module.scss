@@ -2,9 +2,13 @@
 
 .wrapper {
   max-width: 750px !important;
-  height: 675px;
+  min-height: 675px;
 
   .modal_wrapper {
+    .error {
+      color: $not-paid;
+      margin-bottom: 10px;
+    }
     .header_title {
       display: flex;
       justify-content: space-between;
@@ -26,65 +30,43 @@
       }
 
       .sendBtn {
-        background: $start-btn-default;
-        padding: 5px 20px;
-        border-radius: 10px;
-        border: none;
         font-size: 16px;
-        cursor: pointer;
       }
     }
 
     .modal_content {
       margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
 
-      .modal_field_sendMessage {
-        display: flex;
-        flex-direction: column;
+      .editor {
+        margin-top: 5px;
+      }
+      label {
+        font-size: 14px;
+        color: $table-title-color;
+        margin-bottom: 5px;
+      }
 
-        label {
-          font-size: 14px;
-          color: $table-title-color;
-          margin-bottom: 5px;
-        }
+      .inp_with_icon input {
+        padding: 0;
+      }
 
-        .userIcon_input {
-          background: $input-edit-bg;
-          display: flex;
-          gap: 10px;
-          padding: 10px;
-          border-radius: 5px;
-          margin-bottom: 10px;
+      .input_sendMessage {
+        background: $input-edit-bg;
+        border-radius: 5px;
 
-          .input_sendMessage {
-            background: $input-edit-bg;
-            outline: none;
-            border: none;
-            font-size: 16px;
-            width: 100%;
-          }
+        input {
+          color: $black;
         }
       }
 
       .modal_field_message {
-        label {
-          font-size: 14px;
-          color: $table-title-color;
-          margin-bottom: 5px;
-        }
-        .input_message {
-          background: $input-edit-bg;
-          outline: none;
-          border: none;
-          font-size: 16px;
-          width: 100%;
-          padding: 10px;
-          border-radius: 5px;
-        }
-
+        display: flex;
+        flex-direction: column;
         textarea {
-          margin-top: 10px;
-          max-width: 710px;
+          width: 710px;
           max-height: 250px;
           padding: 10px;
           font-size: 16px;
@@ -92,6 +74,7 @@
           background: $input-edit-bg;
           border: $input-edit-bg 1px solid;
           outline: none;
+          resize: none;
         }
       }
 

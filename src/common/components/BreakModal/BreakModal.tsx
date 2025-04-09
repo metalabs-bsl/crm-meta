@@ -15,7 +15,7 @@ export const BreakModal: FC<IProps> = ({ isOpen = false, onCancel }) => {
         <Icon type='break' className={styles.icon} />
         <div className={styles.data}>
           <p className={styles.name_wrapper}>
-            До окончания перерыва <br /> осталось 15 минут
+            До окончания перерыва <br /> осталось менее 15 минут
           </p>
         </div>
       </div>

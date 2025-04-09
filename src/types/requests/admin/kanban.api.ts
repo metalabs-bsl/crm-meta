@@ -9,3 +9,8 @@ export module IGetColumns {
   export type Response = IGetColumnsRes[];
   export type Params = void;
 }
+
+export namespace IGetTotalBruttoSum {
+  export type Response = number;
+  export type Params = { startDate: string; endDate: string };
+}

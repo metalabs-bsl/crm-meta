@@ -4,6 +4,10 @@
   font-size: 14px;
   font-weight: 400;
   color: $gray;
+  .error {
+    color: $not-paid;
+    margin-bottom: 10px;
+  }
   &_head {
     display: flex;
     align-items: center;

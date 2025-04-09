@@ -1,84 +1,108 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Options } from 'types/pages';
-import { Checkbox, DatePicker, Input, Select } from 'common/ui';
+import { Checkbox, FilePicker, Icon, Select } from 'common/ui';
 import { Accordion } from 'common/components';
+import { useNotify } from 'common/hooks';
+import { MESSAGE, paymentOptions } from 'common/constants';
+import { useUpdateInvoiceMutation } from 'api/admin/accounts/accounts.api';
+import { Options } from 'types/common';
+import { IPaymentDetailsData } from 'types/entities/accounts';
 import { paymentRowHeaders } from '../../../Account.helper';
 import styles from './styles.module.scss';
 
-export interface PaymentRowProps {
-  paymentDateClient: string;
-  comment: string;
-  paymentDateSupervisor: string;
-  invoice: string[];
-  amount: string;
-  method: string;
-  receipt: string[];
-  tourAmount: string;
-  isPaid: boolean;
-  accordionTitle: string;
-}
-
-const payOptions: Options[] = [
-  { label: 'Наличными, сом', value: 'som' },
-  { label: 'Наличными, $', value: 'usd' },
-  { label: 'Наличными, €', value: 'eur' },
-  { label: 'Переводом', value: 'transaction' },
-  { label: 'Через банк', value: 'bank' }
+const currencyOptions: Options[] = [
+  {
+    value: 1,
+    label: 'сом'
+  },
+  {
+    value: 2,
+    label: 'доллар'
+  },
+  {
+    value: 3,
+    label: 'евро'
+  }
 ];
 
-export const PaymentRow: FC<PaymentRowProps> = ({
-  paymentDateClient,
-  comment,
-  paymentDateSupervisor,
-  // invoice,
-  amount,
-  method,
-  // receipt,
-  tourAmount,
-  isPaid,
-  accordionTitle
-}) => {
-  const [isEditPaymentInfo, setIsEditPaymentInfo] = useState<boolean>(false);
-  const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
-  const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor);
-  const [localAmount, setLocalAmount] = useState<string>(amount);
-  const [localMethod, setLocalMethod] = useState<string>(method);
-  const [localTourAmount, setLocalTourAmount] = useState<string>(tourAmount);
-  // const [invoiceFiles, setInvoiceFiles] = useState<string[]>(invoice);
-  // const [receiptFiles, setReceiptFiles] = useState<string[]>(receipt);
+export interface IPaymentRowProps extends IPaymentDetailsData {}
 
-  const isEditable = !isEditPaymentInfo;
+export const PaymentRow: FC<IPaymentRowProps> = ({
+  id,
+  name,
+  paymentDateClient,
+  paymentDateSupervisor,
+  comment,
+  amount,
+  tourAmount,
+  method,
+  rate,
+  isPaid,
+  invoice,
+  receipt,
+  paymentTOType
+}) => {
+  const notify = useNotify();
+  const [updateInvoice] = useUpdateInvoiceMutation();
+  const [isEdit, setIsEdit] = useState<boolean>(true);
+  const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
+  const [localPaymentTOType, setLocalPaymentTOType] = useState<number>(paymentTOType || 1);
+  const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor?.split('T')[0]);
+  const [localTourAmount, setLocalTourAmount] = useState<string>(tourAmount || '');
+  const [receiptLocal, setReceiptLocal] = useState<{ id: string; original_name: string } | null>(receipt);
+  const [receiptLocalFile, setReceiptLocalFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setReceiptLocal(receipt);
+  }, [receipt]);
 
   const handleEdit = useCallback(() => {
-    setIsEditPaymentInfo((prev) => !prev);
+    setIsEdit((prev) => !prev);
   }, []);
 
   const handleCheckboxChange = useCallback(() => {
     setLocalIsPaid((prev) => !prev);
   }, []);
 
-  // const handleSave = useCallback(() => {
-  //   const updatedData = {
-  //     paymentDateSupervisor: localPaymentDateSupervisor,
-  //     invoice: invoiceFiles,
-  //     amount: localAmount,
-  //     method: localMethod,
-  //     receipt: receiptFiles,
-  //     tourAmount: localTourAmount,
-  //     isPaid: localIsPaid
-  //   };
+  const handleSave = async () => {
+    const formData = new FormData();
 
-  //   console.log(updatedData);
-  // }, [localPaymentDateSupervisor, invoiceFiles, localAmount, localMethod, receiptFiles, localTourAmount, localIsPaid]);
+    const updatedData = {
+      id: id,
+      paymentDateSupervisor: localPaymentDateSupervisor,
+      tourAmount: localTourAmount,
+      isPaid: localIsPaid,
+      paymentTOType: localPaymentTOType
+    };
+
+    formData.append('invoiceInfo', JSON.stringify(updatedData));
+
+    if (receiptLocalFile) {
+      formData.append(`receipt`, receiptLocalFile);
+    }
+
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
+
+    try {
+      await updateInvoice(formData).unwrap();
+      notify(MESSAGE.SUCCESS, 'success');
+    } catch (error) {
+      notify(MESSAGE.ERROR, 'error');
+    } finally {
+      setIsEdit(false);
+    }
+  };
 
   return (
     <Accordion
-      title={accordionTitle}
+      title={name}
       className={styles.accordion}
-      isEdit={isEditPaymentInfo}
+      isEdit={isEdit}
       onEditAction={handleEdit}
-      // onSaveAction={handleSave}
+      onSaveAction={handleSave}
+      isOpenDefault={true}
     >
       <table className={styles.table}>
         <thead className={styles.thead}>
@@ -92,44 +116,57 @@ export const PaymentRow: FC<PaymentRowProps> = ({
         </thead>
         <tbody>
           <tr>
-            <td className={styles.item}>{paymentDateClient}</td>
-            <td className={styles.item}>{comment}</td>
+            <td className={cn(styles.item, styles.checkboxWrapper)}>
+              <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={!isEdit} onChange={handleCheckboxChange} />
+            </td>
+            <td className={styles.item}>{paymentDateClient || 'null'}</td>
+            <td className={styles.item}>{comment || 'null'}</td>
             <td className={styles.item}>
-              <DatePicker
-                className={styles.datepicker}
-                disabled={isEditable}
+              <input
+                type='date'
+                className={styles.inp}
+                disabled={!isEdit}
                 value={localPaymentDateSupervisor}
                 onChange={(e) => setLocalPaymentDateSupervisor(e.target.value)}
               />
             </td>
-            {/* <td className={styles.item}>
-              <MultipleFilePicker files={invoiceFiles} editable={isEditable} onFilesChange={setInvoiceFiles} />
-            </td> */}
-            <td className={styles.item}>
-              <Input className={styles.inp} disabled={isEditable} value={localAmount} onChange={(e) => setLocalAmount(e.target.value)} />
+            <td className={cn(styles.item, styles.fileItem)}>
+              <div className={styles.file}>
+                <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${invoice?.id}`} download target='_blank' rel='noreferrer'>
+                  {invoice?.original_name}
+                </a>
+              </div>
+            </td>
+            <td className={styles.item}>{amount || 'null'}</td>
+            <td className={styles.item}>{paymentOptions.find((el) => el.value === method)?.label || 'null'}</td>
+            <td className={styles.item}>{rate || 'null'}</td>
+            <td className={cn(styles.item, styles.fileItem)}>
+              {receiptLocal ? (
+                <div className={styles.file}>
+                  <a href={`${process.env.REACT_APP_BASE_URL}/files/download/${receiptLocal.id}`} download target='_blank' rel='noreferrer'>
+                    {receiptLocal.original_name}
+                  </a>
+                  {isEdit && <Icon type={'delete'} onClick={() => setReceiptLocal(null)} />}
+                </div>
+              ) : (
+                <FilePicker className={styles.fileInput} onChange={setReceiptLocalFile} disabled={!isEdit} />
+              )}
             </td>
             <td className={styles.item}>
-              <Select
-                value={localMethod}
-                options={payOptions}
-                className={styles.select}
-                disabled={isEditable}
-                onChange={(e) => setLocalMethod(e.target.value)}
-              />
-            </td>
-            {/* <td className={styles.item}>
-              <MultipleFilePicker files={receiptFiles} editable={isEditable} onFilesChange={setReceiptFiles} />
-            </td> */}
-            <td className={styles.item}>
-              <Input
-                className={styles.inp}
-                disabled={isEditable}
+              <input
+                className={cn(styles.inp, styles.inp_tourAmount)}
+                disabled={!isEdit}
                 value={localTourAmount}
                 onChange={(e) => setLocalTourAmount(e.target.value)}
               />
             </td>
-            <td className={cn(styles.item, styles.checkboxWrapper)}>
-              <Checkbox className={styles.checkboxItem} checked={localIsPaid} disabled={isEditable} onChange={handleCheckboxChange} />
+            <td className={styles.item}>
+              <Select
+                options={currencyOptions}
+                disabled={!isEdit}
+                value={localPaymentTOType}
+                onChange={(e) => setLocalPaymentTOType(Number(e.target.value))}
+              />
             </td>
           </tr>
         </tbody>

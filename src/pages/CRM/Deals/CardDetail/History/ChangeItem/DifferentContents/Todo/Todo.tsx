@@ -18,7 +18,7 @@ interface IProps {
 }
 
 export const Todo: FC<IProps> = ({ data }) => {
-  const { detail, description } = data;
+  const { detail, description, employee } = data;
 
   if (!detail) {
     return null;
@@ -29,9 +29,12 @@ export const Todo: FC<IProps> = ({ data }) => {
 
     return (
       <div className={styles.todo}>
-        <span className={styles.title}>
-          Дело: <span className={styles.titleDesc}>{description}</span>
-        </span>
+        <div className={styles.headline}>
+          <span className={styles.title}>
+            Дело: <span className={styles.titleDesc}>{description}</span>
+          </span>
+          <span className={styles.employee}>{employee}</span>
+        </div>
         <div className={styles.bottom}>
           <p className={styles.description}>{detail.comment}</p>
         </div>

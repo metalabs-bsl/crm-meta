@@ -1,6 +1,6 @@
 import { FC, forwardRef, SelectHTMLAttributes } from 'react';
 import cn from 'classnames';
-import { Options } from 'types/pages';
+import { Options } from 'types/common';
 import styles from './style.module.scss';
 
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {

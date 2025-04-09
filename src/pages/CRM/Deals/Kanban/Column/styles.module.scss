@@ -15,6 +15,9 @@
     font-weight: 500;
     font-size: 24px;
     color: $white;
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
   }
   .cardsContainer {
     width: 280px;

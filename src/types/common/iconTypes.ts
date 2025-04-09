@@ -3,6 +3,10 @@ export type IIcons = {
 };
 
 export type IIconType =
+  | 'done'
+  | 'settings'
+  | 'settings-dark'
+  | 'whatsApp-svg'
   | 'reply-arrow'
   | 'go-back'
   | 'sms-gray'
@@ -54,4 +58,5 @@ export type IIconType =
   | 'search-black'
   | 'calc-open'
   | 'check'
-  | 'calc-close';
+  | 'calc-close'
+  | 'forward';

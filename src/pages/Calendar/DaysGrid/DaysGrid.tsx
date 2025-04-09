@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import dayjs, { Dayjs, extend } from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import utc from 'dayjs/plugin/utc';
 import weekday from 'dayjs/plugin/weekday';
 import cn from 'classnames';
-import { Birthday, Note } from 'types/pages';
 import { Icon } from 'common/ui';
 import { BirthDayModal, Modal } from 'common/components';
+import { Birthday, Note } from 'types/entities';
 import { NoteForm } from '../NoteForm';
 import styles from './styles.module.scss';
 
 extend(weekday);
 extend(isoWeek);
+extend(utc);
 
 interface DaysGridProps {
   currentMonth: Dayjs;
@@ -23,9 +26,10 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
   const [noteOpen, setNoteOpen] = useState<boolean>(false);
   const [currentBirthday, setCurrentBirthday] = useState<Birthday | null>(null);
   const [birthdayOpen, setBirthdayOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  const today = dayjs();
-  const startOfMonth = currentMonth.startOf('month');
+  const today = dayjs().utc();
+  const startOfMonth = currentMonth.startOf('month').utc();
   const daysInMonth = currentMonth.daysInMonth();
   const startDay = startOfMonth.day();
 
@@ -61,17 +65,17 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
     setBirthdayOpen(false);
   };
 
-  const editNote = () => {
-    console.log('edit');
+  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).utc().isSame(day, 'day'));
+  const getBirthdaysForDay = (day: Dayjs) => {
+    return birthdays.filter((birthday) => {
+      const birthdayDate = dayjs(birthday.date).utc();
+      return birthdayDate.month() === day.month() && birthdayDate.date() === day.date();
+    });
   };
 
-  const deleteNote = () => {
-    console.log('edit');
-    onCloseFormModal();
+  const showAllBirthdays = (birthdaysForDay: Birthday[]) => {
+    navigate('birthday-today', { state: birthdaysForDay });
   };
-
-  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).isSame(day, 'day'));
-  const getBirthdaysForDay = (day: Dayjs) => birthdays.filter((birthday) => dayjs(birthday.date).isSame(day, 'day'));
 
   return (
     <div className={styles.calendar_grid}>
@@ -88,28 +92,37 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
             <div>{day}</div>
           </div>
         ))}
-        {days.map((day) => (
-          <div
-            key={day.toISOString()}
-            className={cn(styles.day, {
-              [styles.today]: day.isSame(today, 'day')
-            })}
-          >
-            <div className={styles.round}>{day.format('D')}</div>
-            <div className={styles.events_wrapper}>
-              {getNotesForDay(day).map((note, index) => (
-                <div key={index} className={styles.note} onClick={() => onNoteClick(note)}>
-                  {note.title}
-                </div>
-              ))}
-              {getBirthdaysForDay(day).map((birthday, index) => (
-                <div key={index} className={styles.birthday} onClick={() => onBirthdayClick(birthday)}>
-                  <Icon type='birthday' /> {birthday.name}
-                </div>
-              ))}
+        {days.map((day) => {
+          const birthdaysForDay = getBirthdaysForDay(day);
+          const showMore = birthdaysForDay.length > 3;
+          return (
+            <div
+              key={day.toISOString()}
+              className={cn(styles.day, {
+                [styles.today]: day.isSame(today, 'day')
+              })}
+            >
+              <div className={styles.round}>{day.format('D')}</div>
+              <div className={styles.events_wrapper}>
+                {getNotesForDay(day).map((note, index) => (
+                  <div key={index} className={styles.note} onClick={() => onNoteClick(note)}>
+                    {note.title}
+                  </div>
+                ))}
+                {birthdaysForDay.slice(0, 3).map((birthday, index) => (
+                  <div key={index} className={styles.birthday} onClick={() => onBirthdayClick(birthday)}>
+                    <Icon type='birthday' /> {birthday.name}
+                  </div>
+                ))}
+                {showMore && (
+                  <div className={styles.show_more} onClick={() => showAllBirthdays(birthdaysForDay)}>
+                    Показать все
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {nextMonthDays.map((day, i) => (
           <div key={`next-${i}`} className={cn(styles.day, styles.prev_next_month)}>
             <div>{day}</div>
@@ -118,7 +131,7 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
       </div>
       {currentNote && (
         <Modal isOpen={noteOpen} onClose={onCloseFormModal}>
-          <NoteForm deleteAction={deleteNote} editAction={editNote} formProps={currentNote} />
+          <NoteForm formProps={currentNote} onCloseModal={onCloseFormModal} />
         </Modal>
       )}
       {currentBirthday && <BirthDayModal isOpen={birthdayOpen} data={currentBirthday} onCancel={onCloseBirthdayModal} />}

@@ -1,7 +1,9 @@
+import { Options } from 'types/common';
 import {
   ICreatePayment,
   IGetCalc,
   IGetLeadAdditional,
+  IGetServises,
   ISetAdditionalPayment,
   ISetContract,
   ISetTourInfo,
@@ -95,6 +97,24 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
         url: `/files/${file_id}`
       }),
       invalidatesTags: ['Calculator']
+    }),
+    getServises: query<Options[], IGetServises.Params>({
+      query: () => `/leads-calculator-tour-data/product`,
+      transformResponse: (data: IGetServises.Response) => {
+        return data.map(({ id, name }) => ({
+          label: name,
+          value: id
+        }));
+      }
+    }),
+    getBrands: query<Options[], IGetServises.Params>({
+      query: () => `/leads-calculator-tour-data/brand`,
+      transformResponse: (data: IGetServises.Response) => {
+        return data.map(({ id, name }) => ({
+          label: name,
+          value: id
+        }));
+      }
     })
   })
 });
@@ -111,5 +131,7 @@ export const {
   useSetAdditionalPaymentMutation,
   useUploadBackPassportMutation,
   useUploadFrontPassportMutation,
-  useDeleteFileMutation
+  useDeleteFileMutation,
+  useGetServisesQuery,
+  useGetBrandsQuery
 } = calculatorApi;

@@ -1,5 +1,5 @@
-import { IColumn } from 'types/entities';
-import { setBoard, setBoardAll, setLoading } from './kanban.slice';
+import { IColumn, IEmployee } from 'types/entities';
+import { setBoard, setBoardAll, setLoading, setOnline } from './kanban.slice';
 
 import { AppDispatch } from 'api';
 import { sendMessage } from 'socket';
@@ -23,5 +23,10 @@ export const sendBoardAllUpdate = (board: IColumn[]) => (dispatch: AppDispatch) 
 
 export const setKanbanAllBoard = (message: IColumn[]) => (dispatch: AppDispatch) => {
   dispatch(setBoardAll(message));
+  dispatch(setLoading(false));
+};
+
+export const setOnlineList = (message: IEmployee[]) => (dispatch: AppDispatch) => {
+  dispatch(setOnline(message));
   dispatch(setLoading(false));
 };

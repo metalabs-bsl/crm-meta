@@ -1,53 +1,51 @@
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import dayjs from 'dayjs';
 import cn from 'classnames';
-import { Button, Icon, Input, Loading, PhoneInput, Select } from 'common/ui';
+import { Button, Icon, Input, Loading, Select } from 'common/ui';
 import { useAppSelector, useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import { useGetResponsibleEmployeesQuery } from 'api/admin/employees/employees.api';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
 import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import styles from './styles.module.scss';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
 import { BUTTON_TYPES } from 'types/enums';
 
 interface IProps {
   formProps?: ICreateLeadParams;
   colStatus?: number;
+  dateCreated?: string;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
+export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     setValue,
-    setError,
-    clearErrors
+    control
   } = useForm<ICreateLeadParams>();
 
   const { isNewDeal, column_id } = useAppSelector(sidebarSelectors.sidebar);
   const [isEdit, setIsEdit] = useState<boolean>(isNewDeal);
   const { data: responsibleOptions, isFetching: isResponsibleFetching } = useGetResponsibleEmployeesQuery();
+  const { userInfo } = useAppSelector(employeesSelectors.employees);
   const { data: sourceOptions, isFetching: isSourceFetching } = useGetSourseLeadQuery();
   const [createDeal, { isLoading: isCreateLoading }] = useCreateLeadMutation();
   const [updateLead, { isLoading: isUpdateLoading }] = useUpdateLeadMutation();
   const notify = useNotify();
   const { search } = useLocation();
-  const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
+  // const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
 
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
-        if (key === 'customer_DOB') {
-          setValue(key as keyof ICreateLeadParams, dayjs(formProps[key as keyof ICreateLeadParams]).format('YYYY-MM-DDTHH:mm'));
-        } else {
-          setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
-        }
+        setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
       });
     }
   }, [formProps, setValue]);
@@ -57,11 +55,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
   }, [isNewDeal]);
 
   const onsubmit: SubmitHandler<ICreateLeadParams> = (data) => {
-    if (!data.customer_phone || data.customer_phone.replace(/[^\d]/g, '').length < 12) {
-      setError('customer_phone', { type: 'manual', message: 'Phone number must have at least 9 digits' });
-      return;
-    }
-
     if (formProps) {
       updateLead({ body: data, id: search.substring(1) })
         .unwrap()
@@ -78,18 +71,6 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           setIsEdit(false);
           reset();
         });
-    }
-  };
-
-  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const cleanedValue = value.replace(/[^\d]/g, '');
-
-    if (cleanedValue.length >= 12) {
-      setValue('customer_phone', cleanedValue, { shouldValidate: true });
-      clearErrors('customer_phone');
-    } else {
-      setValue('customer_phone', cleanedValue);
     }
   };
 
@@ -131,12 +112,24 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
           <div className={styles.inpBlock}>
             <div className={styles.inpBlock}>
               <label>Номер телефона</label>
-              <PhoneInput
-                {...register('customer_phone', { required: 'Номер телефона обязателен' })}
-                className={styles.inp}
-                onChange={handlePhoneChange}
-                initialValue={formProps?.customer_phone}
+              <Controller
                 disabled={!isEdit}
+                name='customer_phone'
+                control={control}
+                rules={{ required: 'Phone number is required' }}
+                render={({ field: { onChange, value } }) => (
+                  <div>
+                    <PhoneInput
+                      disabled={!isEdit}
+                      country={'kg'}
+                      value={value}
+                      onChange={onChange}
+                      enableSearch
+                      containerClass={styles.phone_container}
+                      buttonClass={cn(styles.select_btn, { [styles.disabled_btn]: !isEdit })}
+                    />
+                  </div>
+                )}
               />
               {errors.customer_phone && <span className={styles.error}>{errors.customer_phone.message}</span>}
             </div>
@@ -169,12 +162,17 @@ export const DealsForm: FC<IProps> = ({ formProps, colStatus }) => {
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={!isEdit && !isResponseEmployeeEditable}
+                disabled={!isEdit}
                 className={styles.select}
+                defaultValue={userInfo?.id}
               />
               {errors.responsible_employee_id && <span className={styles.error}>{errors.responsible_employee_id.message}</span>}
             </div>
           )}
+          <div className={styles.inpBlock}>
+            <label>Дата создания</label>
+            <span className={cn(styles.inp, styles.dateCreated)}>{dateCreated?.split('T')[0].split('-').reverse().join('.') || '-'}</span>
+          </div>
         </div>
       </Loading>
     </form>

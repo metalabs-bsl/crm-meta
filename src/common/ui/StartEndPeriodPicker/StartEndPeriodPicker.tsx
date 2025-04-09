@@ -48,9 +48,9 @@ export const StartEndPeriodPicker: FC<StartEndPeriodPickerProps> = ({ startValue
     <div className={cn(styles.content, className)}>
       <span className={styles.title}>Отчетный период:</span>
       <span className={styles.preposition}>с</span>
-      <DatePicker className={styles.date} value={startDate} onChange={handleStartDateChange} />
+      <DatePicker className={styles.date} value={startDate} onChange={handleStartDateChange} datePicketType={'date'} />
       <span className={styles.preposition}>по</span>
-      <DatePicker className={styles.date} value={endDate} minDate={startDate} onChange={handleEndDateChange} />
+      <DatePicker className={styles.date} value={endDate} minDate={startDate} onChange={handleEndDateChange} datePicketType={'date'} />
     </div>
   );
 };

@@ -1,6 +1,9 @@
-export type { IResAppSettings, IUpdateAppSettings } from './appSettings';
+export type { IAccountData, IUnpaidInvoicesCountData } from './accounts';
+export type { IResAppSettings, ISettingsCalculatorBrandData, IUpdateAppSettings } from './appSettings';
+export type { Birthday, ICalendarDataRes, Note } from './calendar';
 export type { IResCurrenciesLast } from './currencies';
-export type { IResResponsible, IUserInfoRes } from './employees';
+export type { ICreateDocumentParams, IDocument, IGetDocumentParams } from './document';
+export type { IEmployee, IResResponsible, IRole } from './employees';
 export type { IResExchangeRates } from './exchangeRates';
 export * from './history';
 export type { IColumn, IColumnInfo, ICreateColumnParams, ICustomer, IGetColumnsRes, Task } from './kanban';
@@ -21,6 +24,7 @@ export type {
   IResPaymentCurrency,
   IResSearch,
   IResSource,
+  IServise,
   ISetAdditionalPaymentRes,
   ITourData,
   IUpdateContract,
@@ -29,4 +33,15 @@ export type {
   IUpdateLeadParams
 } from './leads';
 export type { ILoginParams, ILoginRes } from './login';
+export type {
+  IAttachment,
+  IForwardMessageParams,
+  IMail,
+  IMailCounts,
+  IMailParams,
+  ISendMail,
+  ISetPinMessageParams,
+  ISetReadMessageParams
+} from './mail';
+export type { IStartSummary } from './start';
 export type { IResWorkTimeInfo } from './workTime';

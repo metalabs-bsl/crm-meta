@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Note } from 'types/pages';
 import { Icon } from 'common/ui';
 import { dateFormatWithHour } from 'common/helpers';
+import { Note } from 'types/entities';
 import { Modal } from '../Modal';
 import styles from './styles.module.scss';
 

@@ -27,7 +27,7 @@ export const ClientWindow: FC<ClientProps> = ({ data }) => {
         </ul>
         <ul>
           <li className={styles.clientTitleNumber}>Номер телефона</li>
-          <li className={styles.clientPhone}>{phone}</li>
+          <li className={styles.clientPhone}>+{phone}</li>
         </ul>
         <ul>
           <li className={styles.clientTitleNumber}>Город проживания</li>

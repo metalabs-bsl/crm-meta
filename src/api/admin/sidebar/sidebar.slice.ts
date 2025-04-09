@@ -6,7 +6,10 @@ const initialState: ISidebarState = {
   isShowSidebar: true,
   isOpenEdgeModal: false,
   isNewDeal: false,
-  column_id: ''
+  column_id: '',
+  delete_id: '',
+  name: '',
+  idUser: ''
 };
 
 export const sidebarSlice = createSlice({
@@ -24,6 +27,15 @@ export const sidebarSlice = createSlice({
     },
     setColumnId: (state, action: PayloadAction<string>) => {
       state.column_id = action.payload;
+    },
+    setDeleteId: (state, action: PayloadAction<string>) => {
+      state.delete_id = action.payload;
+    },
+    setName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
+    },
+    setIdUser: (state, action: PayloadAction<string>) => {
+      state.idUser = action.payload;
     }
   },
   extraReducers(builder) {
@@ -34,4 +46,5 @@ export const sidebarSlice = createSlice({
   }
 });
 
-export const { setChangeSidebarVisible, setChangeOpenEdgeModal, setIsNewDeal, setColumnId } = sidebarSlice.actions;
+export const { setChangeSidebarVisible, setChangeOpenEdgeModal, setIsNewDeal, setColumnId, setDeleteId, setName, setIdUser } =
+  sidebarSlice.actions;

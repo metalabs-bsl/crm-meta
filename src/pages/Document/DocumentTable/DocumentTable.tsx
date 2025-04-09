@@ -1,68 +1,72 @@
 import { FC, useCallback, useState } from 'react';
-import { Checkbox } from 'common/ui';
-import { DeleteModal } from 'common/components';
+import { Checkbox, Empty, Loading } from 'common/ui';
+import { useNotify } from 'common/hooks';
+import { MESSAGE } from 'common/constants';
+import { useDeleteDocMutation, useLazyDownloadFileQuery } from 'api/admin/document/document.api';
+import { IDocument } from 'types/entities';
 import { DownloadDelete } from '../DownloadDelete';
 import { DocumentTableRow } from './DocumentTableRow';
 import styles from './Document.module.scss';
 
-interface DocumentData {
-  id: string;
-  name: string;
-  title: string;
-  file: string;
-}
-
 interface IProps {
-  data: DocumentData[];
+  data?: IDocument[];
 }
 
 export const DocumentTable: FC<IProps> = ({ data }) => {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const notify = useNotify();
+  const [selectedRow, setSelectedRow] = useState<IDocument | null>(null);
+  const [downloadDocumentFile, { isLoading: isDownloadLoading }] = useLazyDownloadFileQuery();
+  const [deleteDocument, { isLoading: isDeleteLoading }] = useDeleteDocMutation();
 
-  const handleSelectAll = useCallback(() => {
-    setSelectAll((prev) => !prev);
-    setSelectedRows(() => (!selectAll ? data.map((_, index) => index) : []));
-  }, [selectAll, data]);
-
-  const handleSelectRow = useCallback((index: number) => {
-    setSelectedRows((prev) => (prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]));
+  const handleSelectRow = useCallback((document: IDocument) => {
+    setSelectedRow((prev) => (prev?.id === document.id ? null : document));
   }, []);
 
-  const handleDownload = () => {
-    console.log('Скачать', selectedRows);
+  const handleDelete = () => {
+    if (selectedRow) {
+      deleteDocument(selectedRow?.id)
+        .unwrap()
+        .then(() => {
+          setSelectedRow(null);
+          notify(MESSAGE.DELETED, 'success');
+        });
+    }
   };
 
-  const handleDelete = useCallback(() => {
-    setOpenDeleteModal(true);
-  }, []);
+  const handleDownload = () => {
+    if (selectedRow) {
+      downloadDocumentFile({ id: selectedRow.files.id, original_name: selectedRow.files.original_name })
+        .unwrap()
+        .then(() => {
+          setSelectedRow(null);
+          notify(MESSAGE.DOWNLOAD, 'success');
+        });
+    }
+  };
 
   return (
     <div className={styles.tableContainer}>
-      <div className={styles.table}>
-        <div className={styles.thead}>
-          <div className={styles.theadCheckbox}>
-            <Checkbox checked={selectAll} onChange={handleSelectAll} />
+      <Loading isSpin={isDownloadLoading || isDeleteLoading}>
+        {!!data?.length ? (
+          <div className={styles.table}>
+            <div className={styles.thead}>
+              <div className={styles.theadCheckbox}>
+                <Checkbox disabled />
+              </div>
+              <div className={`${styles.headTd} ${styles.id}`}>номер договора</div>
+              <div className={`${styles.headTd} ${styles.name}`}>ФИО</div>
+            </div>
+            <div className={styles.tbody}>
+              {data?.map((el, index) => (
+                <DocumentTableRow key={index} data={el} isSelected={selectedRow?.id === el.id} onSelectRow={handleSelectRow} />
+              ))}
+            </div>
           </div>
-          <div className={`${styles.headTd} ${styles.id}`}>номер договора</div>
-          <div className={`${styles.headTd} ${styles.name}`}>ФИО</div>
-          <div className={`${styles.headTd} ${styles.naming}`}>название договора</div>
-          <div className={`${styles.headTd} ${styles.format}`}>формат</div>
-        </div>
-        <div className={styles.tbody}>
-          {data.map((el, index) => (
-            <DocumentTableRow key={index} index={index} data={el} isSelected={selectedRows.includes(index)} onSelectRow={handleSelectRow} />
-          ))}
-        </div>
-      </div>
-      {selectedRows.length > 0 && <DownloadDelete onDelete={handleDelete} onDownload={handleDownload} />}
-      <DeleteModal
-        isOpen={openDeleteModal}
-        onCancel={() => setOpenDeleteModal(false)}
-        text={`Вы уверены, что хотите удалить счёт "${selectedRows}"?`}
-        onDelete={handleDelete}
-      />
+        ) : (
+          <Empty />
+        )}
+        {selectedRow && <DownloadDelete onDelete={handleDelete} onDownload={handleDownload} />}
+      </Loading>
     </div>
   );
 };

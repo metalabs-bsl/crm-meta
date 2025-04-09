@@ -1,19 +1,22 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import { Options } from 'types/pages';
+import dayjs, { extend } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { DatePicker, Input, Select } from 'common/ui';
 import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
-import { MESSAGE, paymentOptions, servicesOptions } from 'common/constants';
+import { MESSAGE, paymentOptions } from 'common/constants';
 import { useSetAdditionalPaymentMutation } from 'api/admin/leads/endpoints/calculator';
 import { useGetPaymentCurrencyQuery } from 'api/admin/paymentCurrency/paymentCurrency.api';
+import { Options } from 'types/common';
 import { IAdditionalPayment } from 'types/entities/leads';
 import styles from './style.module.scss';
 
 import { useForm } from 'react-hook-form';
 
+extend(utc);
+
 interface IProps {
-  title: string;
+  title?: string;
   calcId?: string;
   formProps: IAdditionalPayment;
 }
@@ -21,11 +24,28 @@ interface IProps {
 export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
   const [isEditUpsell, setIsEditUpsell] = useState<boolean>(false);
   const isEditable = !isEditUpsell;
-  const serviceTitle = servicesOptions.find((i) => i.value === title);
-  const { register, getValues, setValue } = useForm<IAdditionalPayment>();
+  const { register, getValues, setValue, watch } = useForm<IAdditionalPayment>();
   const [postPayment] = useSetAdditionalPaymentMutation();
   const { data } = useGetPaymentCurrencyQuery();
   const notify = useNotify();
+
+  const brutto = watch('brutto');
+  const course_TO = watch('course_TO');
+  const netto = watch('netto');
+
+  useEffect(() => {
+    if (brutto && course_TO) {
+      const calculatedValue = Number(brutto) * Number(course_TO);
+      setValue('exchange_rate', Number(calculatedValue.toFixed(2)));
+    }
+  }, [brutto, course_TO, setValue]);
+
+  useEffect(() => {
+    if (brutto && netto) {
+      const calculatedValue = Number(brutto) - Number(netto);
+      setValue('commission', Number(calculatedValue.toFixed(2)));
+    }
+  }, [brutto, netto, setValue]);
 
   const paymentCurrencyOptions = useMemo<Options[]>(() => {
     return (
@@ -41,7 +61,7 @@ export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof IAdditionalPayment];
         if (key === 'client_due_date' && typeof value === 'string') {
-          setValue(key as keyof IAdditionalPayment, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof IAdditionalPayment, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof IAdditionalPayment, formProps[key as keyof IAdditionalPayment]);
         }
@@ -79,7 +99,7 @@ export const UpsellForm: FC<IProps> = ({ title, calcId, formProps }) => {
 
   return (
     <Accordion
-      title={`Доп продажа - ${serviceTitle?.label}`}
+      title={`Доп продажа - ${title}`}
       onEditAction={() => setIsEditUpsell(!isEditUpsell)}
       isEdit={isEditUpsell}
       onSaveAction={onSubmit}
