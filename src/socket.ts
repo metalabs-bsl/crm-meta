@@ -18,7 +18,8 @@ export const connectSocket = (accessToken: string | null) => {
     socket = io(SOCKET_URL, {
       autoConnect: false,
       extraHeaders: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true'
       }
     });
 

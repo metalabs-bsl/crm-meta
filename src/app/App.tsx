@@ -31,7 +31,8 @@ export const App = () => {
       const response = await fetch(process.env.REACT_APP_BASE_URL + '/auth/check', {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'ngrok-skip-browser-warning': 'true'
         }
       });
 
