@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Button, StartEndPeriodPicker } from 'common/ui';
+import api from 'api/admin/expenses/expenses.api';
 import { IListItem, ITableData } from './types/ITableData';
 import { addTotalToTableData, calculateTotalTableDataPrice } from './Expenses.helper';
 import { ExpensesTable } from './ExpensesTable';
@@ -8,40 +9,32 @@ import styles from './styles.module.scss';
 import { BUTTON_TYPES } from 'types/enums';
 
 export const Expenses: FC = () => {
-  const [startDate, setStartDate] = useState<string>('2024-06-01T00:00');
-  const [endDate, setEndDate] = useState<string>('2024-06-30T00:00');
+  const [startDate, setStartDate] = useState<string>('2024-06-01');
+  const [endDate, setEndDate] = useState<string>('2024-06-30');
+
   const [addNew, setAddNew] = useState<boolean>(false);
   const [tableData, setTableData] = useState<ITableData[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
-  // Get the current month and year in the Bishkek timezone
   const getCurrentMonthInBishkek = () => {
     const bishkekTime = new Intl.DateTimeFormat('ru-RU', {
       timeZone: 'Asia/Bishkek',
       month: 'long',
       year: 'numeric'
     }).format(new Date());
-    return bishkekTime.charAt(0).toUpperCase() + bishkekTime.slice(1); // Capitalize month
+    return bishkekTime.charAt(0).toUpperCase() + bishkekTime.slice(1);
   };
-
   const [currentMonthTitle] = useState<string>(getCurrentMonthInBishkek());
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + '/expenses');
-      if (!response.ok) {
-        throw new Error(`Failed to fetch: ${response.statusText}`);
-      }
-      const data = await response.json();
-
-      const transformedData = transformBackendResponse(data);
-      const initializedData = addTotalToTableData(transformedData);
-      setTableData(initializedData);
-
-      const initialTotal = calculateTotalTableDataPrice(initializedData);
-      setTotalPrice(initialTotal);
+      const { data } = await api.get<BackendExpense[]>('/expenses');
+      const transformed = transformBackendResponse(data);
+      const initialized = addTotalToTableData(transformed);
+      setTableData(initialized);
+      setTotalPrice(calculateTotalTableDataPrice(initialized));
     } catch (error) {
-      console.error('Failed to fetch expenses:', error);
+      console.error('Ошибка при загрузке расходов:', error);
     }
   };
 
@@ -50,8 +43,7 @@ export const Expenses: FC = () => {
   }, []);
 
   useEffect(() => {
-    const total = calculateTotalTableDataPrice(tableData);
-    setTotalPrice(total);
+    setTotalPrice(calculateTotalTableDataPrice(tableData));
   }, [tableData]);
 
   return (
@@ -91,25 +83,18 @@ export const Expenses: FC = () => {
 };
 
 const transformBackendResponse = (data: BackendExpense[]): ITableData[] => {
-  const groupedData: Record<string, IListItem[]> = {};
-
+  const grouped: Record<string, IListItem[]> = {};
   data.forEach((item) => {
-    const date = item.expense_date.split('T')[0]; // Extract date part
-    if (!groupedData[date]) {
-      groupedData[date] = [];
-    }
-    groupedData[date].push({
+    const date = item.expense_date.split('T')[0];
+    if (!grouped[date]) grouped[date] = [];
+    grouped[date].push({
       id: item.id,
       name: item.title,
       quantity: item.expense_quantity,
       price: item.expense_price
     });
   });
-
-  return Object.entries(groupedData).map(([creationDate, list]) => ({
-    creationDate,
-    list
-  }));
+  return Object.entries(grouped).map(([creationDate, list]) => ({ creationDate, list }));
 };
 
 type BackendExpense = {
