@@ -16,11 +16,15 @@ let whatsappMessageCallback: ((message: string) => void) | null = null;
 export const connectSocket = (accessToken: string | null) => {
   if (!socket && accessToken) {
     socket = io(SOCKET_URL, {
+      path: '/socket.io/',
       autoConnect: false,
+      withCredentials: true,
       extraHeaders: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'ngrok-skip-browser-warning': 'true'
       }
     });
+    socket.connect();
 
     socket.on('connect', () => {
       console.log('Connected to WebSocket server');
@@ -85,13 +89,19 @@ export const sendMessage = (event: string, data: IColumn[]) => {
 };
 
 export const initializeSocket = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  console.log('start');
   const accessToken = getState().login.accessToken;
 
   if (accessToken) {
     connectSocket(accessToken);
+    console.log(socket);
 
     // Example of dispatching actions to update Redux state
     dispatch(setConnected(socket?.connected || false));
+
+    socket?.on('noteCreated', () => {
+      new Audio('/notification.mp3').play(); // воспроизвести звук всем
+    });
 
     socket?.on('boardKanban', (message: IColumn[]) => {
       dispatch(setKanbanBoard(message));

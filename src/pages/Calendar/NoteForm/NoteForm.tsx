@@ -35,7 +35,8 @@ interface IProps {
 
 export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
   const notify = useNotify();
-  const [disabled, setDisabled] = useState<boolean>(!!formProps ?? false);
+  // const [disabled, setDisabled] = useState<boolean>(!!formProps ?? false);
+  const [disabled, setDisabled] = useState<boolean>(formProps ? true : false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [reminders, setReminders] = useState<Options[]>([]);
@@ -103,6 +104,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
       createNote(payload)
         .unwrap()
         .then(() => {
+          new Audio('/notification.mp3').play();
           notify(MESSAGE.CREATED, 'success');
           onCloseModal && onCloseModal();
         });

@@ -29,11 +29,11 @@ export const Expenses: FC = () => {
   const fetchExpenses = async () => {
     try {
       const response = await fetch(process.env.REACT_APP_BASE_URL + '/expenses');
+      console.log(response); // Временно логируем ответ сервера, чтобы понять, что сервер возвращает
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.statusText}`);
       }
-      const data = await response.json();
-
+      const data = await response.json(); // Если все в порядке, парсим ответ как JSON
       const transformedData = transformBackendResponse(data);
       const initializedData = addTotalToTableData(transformedData);
       setTableData(initializedData);
@@ -41,7 +41,7 @@ export const Expenses: FC = () => {
       const initialTotal = calculateTotalTableDataPrice(initializedData);
       setTotalPrice(initialTotal);
     } catch (error) {
-      console.error('Failed to fetch expenses:', error);
+      console.error('Failed to fetch expenses:', error); // Логируем ошибку
     }
   };
 

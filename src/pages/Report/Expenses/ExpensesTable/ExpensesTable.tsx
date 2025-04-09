@@ -81,6 +81,7 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
         throw new Error(`Failed to save expense: ${response.statusText}`);
       }
 
+      console.log('Expense saved successfully');
       // Update table data
       setTableData((prev) => [newExpenseData, ...prev]);
       setAddNew(false);
