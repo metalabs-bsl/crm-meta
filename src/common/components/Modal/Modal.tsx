@@ -37,7 +37,7 @@ export const Modal: FC<ModalProps> = ({
   return (
     <>
       {isOpen && (
-        <div className={styles.modal} onClick={onClose}>
+        <div className={styles.modal}>
           <div className={cn(styles.modalWrapper, className)} onClick={(e) => e.stopPropagation()}>
             <button className={styles.modalClose} onClick={onClose}>
               <Icon type='burger-close' />
