@@ -75,6 +75,7 @@ export const Progress: FC<IProps> = ({ currentStage, lead_id }) => {
   }, [currentStage, data]);
 
   const changeStage = (index: number, item: IGetColumnsRes) => {
+    console.log(index, item);
     setActiveStage(index);
     if (lead_id) {
       if (item.status === 10) {
