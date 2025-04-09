@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -66,13 +67,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
       const data = await response.json();
       console.log(await data);
       setSuggestions(data);
@@ -173,6 +168,27 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+  const fetchCitie = async () => {
+    const url = 'https://gateway.spark-dev.team/cabinet/api/v2/cities';
+    const options = {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+        'Content-Type': 'application/json'
+      }
+    };
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data); // Работа с полученными данными
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+    }
+  };
+  fetchCities();
   return (
     <Accordion
       title='Информация о туре'

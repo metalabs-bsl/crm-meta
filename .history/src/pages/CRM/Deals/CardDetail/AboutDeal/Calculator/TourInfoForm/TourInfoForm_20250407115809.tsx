@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -66,13 +68,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
       const data = await response.json();
       console.log(await data);
       setSuggestions(data);
@@ -173,6 +169,44 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+  const fetchCity = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
+    try {
+      const response = await fetch(`https://api.geodatasource.com/cities?key=ТВОЙ_API_КЛЮЧ&format=json&country_code=&q=${query}`);
+      const result = await response.json();
+      if (!Array.isArray(result)) {
+        console.error('Unexpected result:', result);
+        setSuggestions([]);
+        return;
+      }
+      const cities = result.map((item: any) => `${item.city}, ${item.country_name}`);
+      setSuggestions(cities);
+    } catch (error) {
+      console.error('Ошибка при получении городов:', error);
+      setSuggestions([]);
+    }
+  };
+  useEffect(() => {
+    if (departureCity !== '') {
+      fetchCities(departureCity, setDepartureSuggestions);
+    }
+  }, [departureCity]);
+
+  useEffect(() => {
+    if (arrivalCity !== '') {
+      fetchCities(arrivalCity, setArrivalSuggestions);
+    }
+  }, [arrivalCity]);
+
+  const handleSuggestionClick= (suggestion: string, type: 'departure' | 'arrival') => {
+    if (type === 'departure') {
+      setDepartureCity(suggestion);
+      setDepartureSuggestions([]);
+    } else {
+      setArrivalCity(suggestion);
+      setArrivalSuggestions([]);
+    }
+  };
+
   return (
     <Accordion
       title='Информация о туре'
@@ -239,7 +273,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               />
               {errors.departure_city && <p className={styles.error}>{errors.departure_city.message}</p>}
 
-              <div className={styles.suggestions}>
+              <div className={styles.suggestions} style={{ display: isHoveringDeparture && departureSuggestions.length > 0 ? 'block' : 'none' }}>
                 {departureSuggestions.map((city, index) => (
                   <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
                     {city}

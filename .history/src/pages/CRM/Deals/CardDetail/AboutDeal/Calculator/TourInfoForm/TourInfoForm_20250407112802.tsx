@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -23,6 +24,47 @@ interface IProps {
   servicesOptions: Options[];
   brandOptions: Options[];
 }
+
+interface Props {
+  value: string;
+  disabled?: boolean;
+  onChange: (value: string) => void;
+  onSelect: (value: string) => void;
+  error?: string;
+  placeholder?: string;
+}
+
+
+export const CityAutocompleteInput: FC<Props> = ({ value, disabled, onChange, onSelect, error, placeholder }) => {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const fetchCities = async (query: string) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/leadsCalculator/cities/${query}`);
+      const data = await response.json();
+      setSuggestions(data);
+    } catch (error) {
+      console.error('Ошибка при получении городов:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (!value) {
+      setSuggestions([]);
+      return;
+    }
+
+    const delay = setTimeout(() => {
+      fetchCities(value);
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [value]);
+
+  const handleSelect = (city: string) => {
+    onSelect(city);
+    setSuggestions([]);
+  };
 
 export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, brandOptions }) => {
   const notify = useNotify();
@@ -66,13 +108,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
       const data = await response.json();
       console.log(await data);
       setSuggestions(data);
@@ -173,6 +209,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+
   return (
     <Accordion
       title='Информация о туре'

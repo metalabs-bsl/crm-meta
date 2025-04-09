@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -66,13 +67,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
       const data = await response.json();
       console.log(await data);
       setSuggestions(data);
@@ -173,6 +168,26 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+  const fetchEuropeanCountries = async () => {
+    const url = 'https://gas-price.p.rapidapi.com/europeanCountries';
+    const options = {
+      method: 'GET',
+      headers: {`
+                `X-Rapidapi-Key': '37dd5627b6msh043bf027fda8958p102480jsn08fd44a67f3a`
+        `X-Rapidapi-Host': 'gas-price.p.rapidapi.com`
+        `
+
+      },
+    };
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching European countries:', error);
+    }
+  };
+  fetchEuropeanCountries();
   return (
     <Accordion
       title='Информация о туре'

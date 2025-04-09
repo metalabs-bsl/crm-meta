@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -23,6 +25,31 @@ interface IProps {
   servicesOptions: Options[];
   brandOptions: Options[];
 }
+const fetchCities = async (searchQuery: string) => {
+  try {
+    const response = await fetch(
+      `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${searchQuery}`,
+      {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': '37dd5627b6msh043bf027fda8958p102480jsn08fd44a67f3a',
+          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Ошибка сервера: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Города:', data.data);
+    return data.data;
+  } catch (error) {
+    console.error('Ошибка при поиске городов:', error);
+    return [];
+  }
+};
 
 export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, brandOptions }) => {
   const notify = useNotify();
@@ -66,13 +93,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
       const data = await response.json();
       console.log(await data);
       setSuggestions(data);

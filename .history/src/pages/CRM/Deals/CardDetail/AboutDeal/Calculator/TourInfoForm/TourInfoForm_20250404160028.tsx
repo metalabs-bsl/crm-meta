@@ -23,7 +23,29 @@ interface IProps {
   servicesOptions: Options[];
   brandOptions: Options[];
 }
+const apiKey = 'const apiKey = 'YOUR_API_KEY_HERE';
 
+const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
+  try {
+    const response = await fetch(`https://api.example.com/cities/${query}?apiKey=${apiKey}`);
+    const data = await response.json();
+    console.log(data);
+    setSuggestions(data);
+  } catch (error) {
+    console.error('Error fetching cities:', error);
+  }
+};';
+
+const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
+  try {
+    const response = await fetch(`https://api.example.com/cities/${query}?apiKey=${apiKey}`);
+    const data = await response.json();
+    console.log(data);
+    setSuggestions(data);
+  } catch (error) {
+    console.error('Error fetching cities:', error);
+  }
+};
 export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, brandOptions }) => {
   const notify = useNotify();
   const [postTourData, { isLoading }] = useSetTourDataMutation();
@@ -66,13 +88,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`);
       const data = await response.json();
       console.log(await data);
       setSuggestions(data);
@@ -173,6 +189,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+
   return (
     <Accordion
       title='Информация о туре'
