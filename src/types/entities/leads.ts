@@ -143,14 +143,14 @@ export interface IAdditionalPayment {
 
 export interface ICalcPayment {
   id?: string;
-  brutto: number;
-  netto: number;
-  currency: string;
-  exchange_rate: number;
-  course_TO: number;
-  payment_method: number;
-  commission: number;
+  brutto: number | '';
+  netto: number | '';
+  exchange_rate: number | '';
+  commission: number | '';
+  course_TO: number | '';
   client_due_date: string;
+  currency: string;
+  payment_method: number | '';
   calculator: {
     id: string;
   };

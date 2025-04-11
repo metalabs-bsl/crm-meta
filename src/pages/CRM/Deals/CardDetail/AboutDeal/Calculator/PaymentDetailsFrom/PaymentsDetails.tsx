@@ -27,17 +27,17 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
     if (paymentsList && paymentsList.length > 0) {
       const initialPaymentForms = paymentsList.map((payment) => ({
         id: payment.id,
-        brutto: payment.brutto,
-        netto: payment.netto,
-        exchange_rate: payment.exchange_rate,
-        payment_method: payment.payment_method,
-        course_TO: payment.course_TO,
-        commission: payment.commission,
+        brutto: Number(payment.brutto) || 0,
+        netto: Number(payment.netto) || 0,
+        exchange_rate: Number(payment.exchange_rate) || 0,
+        payment_method: Number(payment.payment_method) || 0,
+        course_TO: Number(payment.course_TO) || 0,
+        commission: Number(payment.commission) || 0,
         client_due_date: payment.client_due_date,
         calculator: {
           id: calculator_id || ''
         },
-        currency: payment?.currency
+        currency: payment?.currency || ''
       }));
       setPaymentForms(initialPaymentForms);
       const initialPaymentAccordions = initialPaymentForms.map((_, index) => ({
