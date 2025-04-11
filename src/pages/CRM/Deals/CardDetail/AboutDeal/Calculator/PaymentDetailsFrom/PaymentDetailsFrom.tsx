@@ -56,7 +56,18 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     );
   }, [data]);
 
-  const { register, getValues, setValue, watch } = useForm<ICalcPayment>();
+  const { register, getValues, setValue, watch } = useForm<ICalcPayment>({
+    defaultValues: {
+      brutto: '',
+      netto: '',
+      exchange_rate: '',
+      commission: '',
+      course_TO: '',
+      client_due_date: '',
+      currency: '',
+      payment_method: ''
+    }
+  });
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
   const updatedTitle = index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title;
 
@@ -66,51 +77,70 @@ export const PaymentDetailsFrom: FC<IProps> = ({
 
   useEffect(() => {
     if (brutto && course_TO) {
-      const calculatedValue = Number(brutto) * Number(course_TO);
-      setValue('exchange_rate', Number(calculatedValue.toFixed(2)));
+      const numBrutto = Number(brutto);
+      const numCourse = Number(course_TO);
+      if (!isNaN(numBrutto) && !isNaN(numCourse)) {
+        const calculatedValue = numBrutto * numCourse;
+        setValue('exchange_rate', calculatedValue ? Number(calculatedValue.toFixed(2)) : '');
+      }
+    } else {
+      setValue('exchange_rate', '');
     }
   }, [brutto, course_TO, setValue]);
 
   useEffect(() => {
     if (brutto && netto) {
-      const calculatedValue = Number(brutto) - Number(netto);
-      setValue('commission', Number(calculatedValue.toFixed(2)));
+      const numBrutto = Number(brutto);
+      const numNetto = Number(netto);
+      if (!isNaN(numBrutto) && !isNaN(numNetto)) {
+        const calculatedValue = numBrutto - numNetto;
+        setValue('commission', calculatedValue ? Number(calculatedValue.toFixed(2)) : '');
+      }
+    } else {
+      setValue('commission', '');
     }
   }, [brutto, netto, setValue]);
 
   useEffect(() => {
     if (formProps) {
-      if (formProps.brutto !== watch('brutto')) setValue('brutto', formProps.brutto);
-      if (formProps.netto !== watch('netto')) setValue('netto', formProps.netto);
-      if (formProps.payment_method !== watch('payment_method')) setValue('payment_method', formProps.payment_method);
-      if (formProps.exchange_rate !== watch('exchange_rate')) setValue('exchange_rate', formProps.exchange_rate);
-      if (formProps.commission !== watch('commission')) setValue('commission', formProps.commission);
-      if (formProps.course_TO !== watch('course_TO')) setValue('course_TO', formProps.course_TO);
+      if (formProps.brutto !== watch('brutto')) setValue('brutto', formProps.brutto || '');
+      if (formProps.netto !== watch('netto')) setValue('netto', formProps.netto || '');
+      if (formProps.payment_method !== watch('payment_method')) setValue('payment_method', formProps.payment_method || '');
+      if (formProps.exchange_rate !== watch('exchange_rate')) setValue('exchange_rate', formProps.exchange_rate || '');
+      if (formProps.commission !== watch('commission')) setValue('commission', formProps.commission || '');
+      if (formProps.course_TO !== watch('course_TO')) setValue('course_TO', formProps.course_TO || '');
       const formattedDate = dayjs.utc(formProps.client_due_date).isValid()
         ? dayjs.utc(formProps.client_due_date).format('YYYY-MM-DD')
         : dayjs().format('YYYY-MM-DD');
       if (formProps.client_due_date !== watch('client_due_date')) setValue('client_due_date', formattedDate);
-      if (formProps.currency !== watch('currency')) setValue('currency', formProps.currency);
+      if (formProps.currency !== watch('currency')) setValue('currency', formProps.currency || '');
     }
   }, [formProps, setValue, watch]);
 
   useEffect(() => {
-    if (!formProps?.currency) setValue('currency', paymentCurrencyOptions[0]?.value as string);
-    if (!formProps?.payment_method) setValue('payment_method', paymentOptions[0]?.value as number);
+    if (!formProps?.currency) setValue('currency', String(paymentCurrencyOptions[0]?.value || ''));
+    if (!formProps?.payment_method) setValue('payment_method', Number(paymentOptions[0]?.value || 0));
   }, [formProps?.currency, formProps?.payment_method, paymentCurrencyOptions, setValue]);
 
   const onSubmit = () => {
     const data = getValues();
     const createPaymentDto = {
       ...data,
+      brutto: data.brutto ? Number(data.brutto) : 0,
+      netto: data.netto ? Number(data.netto) : 0,
+      exchange_rate: data.exchange_rate ? Number(data.exchange_rate) : 0,
+      commission: data.commission ? Number(data.commission) : 0,
+      course_TO: data.course_TO ? Number(data.course_TO) : 0,
       currency: data.currency,
-      commission: data.commission,
       calculator: {
         id: formProps?.calculator.id || ''
       },
       name: updatedTitle,
+      payment_method: Number(data.payment_method) as number,
+      client_due_date: data.client_due_date,
       ...(formProps?.id && { id: formProps.id })
     };
+
     createPayment(createPaymentDto)
       .unwrap()
       .then(() => {
@@ -124,7 +154,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   };
 
   const isNotEmpty = (value: unknown) => {
-    return value !== null && value !== undefined && value !== '' && value !== 0;
+    return value !== null && value !== undefined && value !== '';
   };
 
   const checkingFormForNull = () => {
