@@ -11,13 +11,13 @@ interface IProps {
   className?: string;
   tabClassName?: string;
   activeTabClassName?: string;
-  onChange?: () => void;
+  onChange?: (type: string) => void;
 }
 
 export const Tabs: FC<IProps> = ({ tabItems, isActiveTab, setIsActiveTab, className, tabClassName, activeTabClassName, onChange }) => {
   const onChangeTab = (type: string, itemDisabled?: boolean) => {
     if (!itemDisabled) {
-      onChange && onChange();
+      onChange && onChange(type);
       setIsActiveTab(type);
     }
   };
