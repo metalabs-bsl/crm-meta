@@ -1,3 +1,4 @@
+// TableRow.tsx
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
@@ -9,7 +10,10 @@ import { ContractModal } from './ContractModal';
 import { PaymentRow } from './PaymentRow';
 import styles from './styles.module.scss';
 
-interface ITableRowProps extends IAccountData {}
+interface ITableRowProps extends IAccountData {
+  paymentStatus: string;
+  onPaymentStatusChange: (id: string, newStatus: string) => void;
+}
 
 export const TableRow: FC<ITableRowProps> = ({
   id,
@@ -26,31 +30,45 @@ export const TableRow: FC<ITableRowProps> = ({
   tourInvoiceEUR,
   whoCreated,
   paymentDetails,
-  paymentStatus,
-  customer
+  paymentStatus, // из родительского компонента
+  customer,
+  onPaymentStatusChange
 }) => {
   const navigate = useNavigate();
-  const contractNumberRef = useRef(null);
+  const contractNumberRef = useRef<HTMLSpanElement | null>(null);
   const [contractOpen, setContractOpen] = useState<boolean>(false);
-  const allChecked = useMemo(() => paymentDetails.every((payment) => payment.isPaid), [paymentDetails]);
 
-  const onContractCLick = () => {
+  // где предполагается, что каждый элемент имеет поле isPaid (boolean)
+  const computedPaymentStatus = useMemo(() => {
+    if (!paymentDetails.length) return 'Не оплачено';
+    const allPaid = paymentDetails.every((payment) => payment.isPaid);
+    const nonePaid = paymentDetails.every((payment) => !payment.isPaid);
+    if (allPaid) return 'Оплачено';
+    if (nonePaid) return 'Не оплачено';
+    return 'Частично';
+  }, [paymentDetails]);
+
+  // Если вычисленный статус изменился, уведомляем родительский компонент.
+  useEffect(() => {
+    if (computedPaymentStatus !== paymentStatus) {
+      onPaymentStatusChange(id, computedPaymentStatus);
+    }
+  }, [computedPaymentStatus, id, onPaymentStatusChange, paymentStatus]);
+
+  // Функция навигации при клике на номер контракта
+  const onContractClick = () => {
     navigate(`/crm/transactions?${id}`);
   };
 
-  useEffect(() => {
-    console.log('YOPTA');
-  }, []);
-
   return (
     <>
-      <tr className={cn(styles.mainRow, { [styles.checkedRow]: allChecked })}>
+      <tr className={cn(styles.mainRow, { [styles.checkedRow]: computedPaymentStatus === 'Оплачено' })}>
         <td className={styles.item}>
           <span
             className={styles.contractNumber}
             onMouseEnter={() => setContractOpen(true)}
             onMouseLeave={() => setContractOpen(false)}
-            onClick={onContractCLick}
+            onClick={onContractClick}
             ref={contractNumberRef}
           >
             {contractNumber || '-'}
@@ -58,14 +76,15 @@ export const TableRow: FC<ITableRowProps> = ({
         </td>
         <td className={styles.item}>{bookingNumber || '-'}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
+          {/* Отображаем вычисленный статус */}
           <span
             className={cn({
-              [styles.not_paid]: paymentStatus === 'Не оплачено',
-              [styles.paid]: paymentStatus === 'Оплачено',
-              [styles.partial]: paymentStatus === 'Частично'
+              [styles.not_paid]: computedPaymentStatus === 'Не оплачено',
+              [styles.paid]: computedPaymentStatus === 'Оплачено',
+              [styles.partial]: computedPaymentStatus === 'Частично'
             })}
           >
-            {paymentStatus || '-'}
+            {computedPaymentStatus || '-'}
           </span>
         </td>
         <td className={styles.item}>{gross || '-'}</td>
@@ -83,7 +102,12 @@ export const TableRow: FC<ITableRowProps> = ({
         <td colSpan={14} className={styles.accordionContainer}>
           <Accordion className={styles.accordion} title='Информация об оплате'>
             <div className={styles.expandedContent}>
-              {!!paymentDetails.length ? paymentDetails.map((details) => <PaymentRow {...details} key={details.id} />) : <Empty />}
+              {!!paymentDetails.length ? (
+                // PaymentRow должен содержать логику изменения isPaid для каждого платежа
+                paymentDetails.map((details) => <PaymentRow {...details} key={details.id} />)
+              ) : (
+                <Empty />
+              )}
             </div>
           </Accordion>
         </td>
