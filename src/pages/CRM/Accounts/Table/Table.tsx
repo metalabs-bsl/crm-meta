@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Empty } from 'common/ui';
 import { IAccountData } from 'types/entities/accounts';
@@ -11,6 +11,23 @@ interface ITableProps {
 }
 
 export const Table: FC<ITableProps> = ({ data }) => {
+  const [paymentStatuses, setPaymentStatuses] = useState<{ [key: string]: string }>(
+    data.reduce(
+      (acc, row) => {
+        acc[row.id] = row.paymentStatus || 'Не оплачено'; // Начальное значение
+        return acc;
+      },
+      {} as { [key: string]: string }
+    )
+  );
+
+  const handlePaymentStatusChange = (id: string, newStatus: string) => {
+    setPaymentStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [id]: newStatus
+    }));
+  };
+
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
@@ -25,7 +42,14 @@ export const Table: FC<ITableProps> = ({ data }) => {
         </thead>
         <tbody className={styles.tbody}>
           {data.length ? (
-            data.map((row, index) => <TableRow key={index} {...row} />)
+            data.map((row, index) => (
+              <TableRow
+                key={index}
+                {...row}
+                paymentStatus={paymentStatuses[row.id]} // Передаем текущий статус
+                onPaymentStatusChange={handlePaymentStatusChange} // Передаем функцию для обновления
+              />
+            ))
           ) : (
             <tr>
               <td colSpan={13}>
