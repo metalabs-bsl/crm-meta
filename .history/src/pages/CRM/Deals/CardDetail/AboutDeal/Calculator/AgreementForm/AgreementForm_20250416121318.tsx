@@ -25,7 +25,6 @@ interface IProps {
 }
 
 export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const notify = useNotify();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const [updateContract, { isLoading }] = useUpdateContractMutation();
@@ -46,6 +45,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     formState: { errors }
   } = useForm<IUpdateContract>();
   const isEditable = !isEditAgreement;
+
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
@@ -122,15 +122,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
         notify(MESSAGE.ERROR, 'error');
       });
   };
-  useEffect(() => {
-    if (isFocused) {
-      const todayDate = dayjs().format('DD/MM/');
-      const currentValue = getValues('contract_number');
-      if (!currentValue) {
-        setValue('contract_number' as keyof IUpdateContract, `${todayDate} `);
-      }
-    }
-  }, [isFocused, getValues, setValue]);
+
   return (
     <Accordion
       title='Договор'
@@ -144,19 +136,33 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
           <div className={styles.blocks}>
             <div className={styles.item_block}>
               <label>Номер договора</label>
-              <Input
+              {/* <Input
                 {...register('contract_number', { required: 'обязательное поле' })}
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
                 type='text'
-                onFocus={() => {
-                  setIsFocused(true);
-                }}
-                onBlur={() => {
-                  setIsFocused(false);
-                }}
-              />
+              /> */}
+              <Input
+  {...register('contract_number', { required: 'обязательное поле' })}
+  placeholder='Не заполнено'
+  className={styles.inp_wrapper}
+  disabled={isEditable}
+  type='text'
+  onFocus={(e) => {
+    const value = getValues('contract_number');
+    const todayDate = dayjs().format('DD/MM/YYYY');
+    if (!value) {
+      const fullValue = `${todayDate} `;
+      setValue('contract_number', fullValue);
+      // ставим курсор в конец вручную
+      requestAnimationFrame(() => {
+        e.target.selectionStart = e.target.selectionEnd = fullValue.length;
+      });
+    }
+  }}
+/>
+
             </div>
             <div className={styles.more_items_block}>
               <div className={styles.item_block}>

@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable simple-import-sort/imports */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -212,34 +209,14 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             {brandOptions && (
               <div className={styles.item_block}>
                 <label>Бренд</label>
-                <Input
+                <Select
                   {...register('brand', { required: 'обязательное поле' })}
+                  options={brandOptions}
+                  className={styles.select}
                   disabled={isEditable}
                   value={brandInput}
-                  placeholder='Начните вводить бренд'
-                  className={styles.inp_wrapper}
-                  onChange={(e) => {
-                    setBrandInput(e.target.value);
-                    setValue('brand', e.target.value); 
-                  }}
+                  onChange={(e) => setBrandInput(e.target.value)}
                 />
-                  {!isEditable && filteredBrands.length > 0 && (
-      <div className={styles.suggestions}>
-        {filteredBrands.map((option) => (
-          <div
-            key={option.value}
-            className={styles.suggestionItem}
-            onClick={() => {
-              setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
-            }}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    )}
                 {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}

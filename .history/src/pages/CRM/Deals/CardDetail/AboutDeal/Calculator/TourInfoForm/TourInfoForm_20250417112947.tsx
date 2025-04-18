@@ -223,23 +223,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                     setValue('brand', e.target.value); 
                   }}
                 />
-                  {!isEditable && filteredBrands.length > 0 && (
-      <div className={styles.suggestions}>
-        {filteredBrands.map((option) => (
-          <div
-            key={option.value}
-            className={styles.suggestionItem}
-            onClick={() => {
-              setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
-            }}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    )}
+                
                 {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}

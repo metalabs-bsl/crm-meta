@@ -25,7 +25,6 @@ interface IProps {
 }
 
 export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const notify = useNotify();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const [updateContract, { isLoading }] = useUpdateContractMutation();
@@ -46,6 +45,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     formState: { errors }
   } = useForm<IUpdateContract>();
   const isEditable = !isEditAgreement;
+
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
@@ -122,15 +122,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
         notify(MESSAGE.ERROR, 'error');
       });
   };
-  useEffect(() => {
-    if (isFocused) {
-      const todayDate = dayjs().format('DD/MM/');
-      const currentValue = getValues('contract_number');
-      if (!currentValue) {
-        setValue('contract_number' as keyof IUpdateContract, `${todayDate} `);
-      }
-    }
-  }, [isFocused, getValues, setValue]);
+
   return (
     <Accordion
       title='Договор'
@@ -150,12 +142,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.inp_wrapper}
                 disabled={isEditable}
                 type='text'
-                onFocus={() => {
-                  setIsFocused(true);
-                }}
-                onBlur={() => {
-                  setIsFocused(false);
-                }}
+                
               />
             </div>
             <div className={styles.more_items_block}>

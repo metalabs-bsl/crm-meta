@@ -25,7 +25,6 @@ interface IProps {
 }
 
 export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const notify = useNotify();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
   const [updateContract, { isLoading }] = useUpdateContractMutation();
@@ -46,6 +45,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     formState: { errors }
   } = useForm<IUpdateContract>();
   const isEditable = !isEditAgreement;
+
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
@@ -123,14 +123,14 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
       });
   };
   useEffect(() => {
-    if (isFocused) {
-      const todayDate = dayjs().format('DD/MM/');
-      const currentValue = getValues('contract_number');
-      if (!currentValue) {
-        setValue('contract_number' as keyof IUpdateContract, `${todayDate} `);
-      }
+    const todayDate = dayjs().format('DD/MM/YYYY'); // <-- форматируем дату как DD/MM/YYYY
+    if (formProps?.contract_number) {
+      setValue('contract_number', formProps.contract_number); // если есть готовое значение — используем его
+    } else {
+      setValue('contract_number', `${todayDate} `); // <-- если нет — подставляем дату + пробел
     }
-  }, [isFocused, getValues, setValue]);
+  }, [formProps, setValue])  
+
   return (
     <Accordion
       title='Договор'
@@ -150,12 +150,6 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
                 className={styles.inp_wrapper}
                 disabled={isEditable}
                 type='text'
-                onFocus={() => {
-                  setIsFocused(true);
-                }}
-                onBlur={() => {
-                  setIsFocused(false);
-                }}
               />
             </div>
             <div className={styles.more_items_block}>

@@ -124,13 +124,13 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
   };
   useEffect(() => {
     if (isFocused) {
-      const todayDate = dayjs().format('DD/MM/');
+      const todayDate = dayjs().format('DD/MM/YYYY');
       const currentValue = getValues('contract_number');
       if (!currentValue) {
         setValue('contract_number' as keyof IUpdateContract, `${todayDate} `);
       }
     }
-  }, [isFocused, getValues, setValue]);
+  }, [isFocused, getValues, setValue]);  
   return (
     <Accordion
       title='Договор'

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { Loading, Select } from 'common/ui';

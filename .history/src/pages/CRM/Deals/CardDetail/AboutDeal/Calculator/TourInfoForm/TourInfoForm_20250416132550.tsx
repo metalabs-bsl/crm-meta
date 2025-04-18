@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable simple-import-sort/imports */
-import { FC, useEffect, useRef, useState } from 'react';
+/* eslint-disable prettier/prettier */
+import { FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import cn from 'classnames';
@@ -15,6 +14,7 @@ import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
 import { categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
+
 import { useForm } from 'react-hook-form';
 
 extend(utc);
@@ -27,8 +27,6 @@ interface IProps {
 }
 
 export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, brandOptions }) => {
-  const [brandInput, setBrandInput] = useState('');
-  const [filteredBrands, setFilteredBrands] = useState<Options[]>([]);
   const notify = useNotify();
   const [postTourData, { isLoading }] = useSetTourDataMutation();
   const passengersRef = useRef(null);
@@ -84,18 +82,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       console.error('Error fetching cities:', error);
     }
   };
-  useEffect(() => {
-    if (brandInput.trim() === '') {
-      setFilteredBrands([]);
-      return;
-    }
-  
-    const filtered = brandOptions.filter((option) =>
-      option.label.toLowerCase().includes(brandInput.toLowerCase())
-    );
-    setFilteredBrands(filtered);
-  }, [brandInput, brandOptions]);
-  
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (departureCity) {
@@ -188,6 +175,19 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+const [filteredBrandOptions, setFilteredBrandOptions] = useState<Options[]>(brandOptions);
+const [brandSearchInput, setBrandSearchInput] = useState('');
+useEffect(() => {
+  if (brandSearchInput.trim() === '') {
+    setFilteredBrandOptions(brandOptions);
+  } else {
+    const filtered = brandOptions.filter((option) =>
+      option.label.toLowerCase().includes(brandSearchInput.toLowerCase())
+    );
+    setFilteredBrandOptions(filtered);
+  }
+}, [brandSearchInput, brandOptions]);
+
   return (
     <Accordion
       title='Информация о туре'
@@ -212,34 +212,18 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             {brandOptions && (
               <div className={styles.item_block}>
                 <label>Бренд</label>
-                <Input
+                <Select
                   {...register('brand', { required: 'обязательное поле' })}
+                  options={brandOptions}
+                  className={styles.select}
                   disabled={isEditable}
-                  value={brandInput}
-                  placeholder='Начните вводить бренд'
-                  className={styles.inp_wrapper}
-                  onChange={(e) => {
-                    setBrandInput(e.target.value);
-                    setValue('brand', e.target.value); 
+                  onInputChange={(newInputValue) => setBrandSearchInput(newInputValue)} // Обрабатываем ввод
+                  onChange={(selectedOption) => {
+                    const selectedValue = selectedOption?.value; // Извлекаем выбранное значение
+                    setValue('brand', selectedValue);
+                    setBrandSearchInput(''); // Очищаем строку поиска
                   }}
                 />
-                  {!isEditable && filteredBrands.length > 0 && (
-      <div className={styles.suggestions}>
-        {filteredBrands.map((option) => (
-          <div
-            key={option.value}
-            className={styles.suggestionItem}
-            onClick={() => {
-              setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
-            }}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    )}
                 {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}

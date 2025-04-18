@@ -231,8 +231,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             className={styles.suggestionItem}
             onClick={() => {
               setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
+              setValue('brand', option.value); // сохраняем value, не label
+              setFilteredBrands([]); // закрываем подсказки
             }}
           >
             {option.label}

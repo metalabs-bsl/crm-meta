@@ -216,30 +216,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                   {...register('brand', { required: 'обязательное поле' })}
                   disabled={isEditable}
                   value={brandInput}
-                  placeholder='Начните вводить бренд'
-                  className={styles.inp_wrapper}
-                  onChange={(e) => {
-                    setBrandInput(e.target.value);
-                    setValue('brand', e.target.value); 
-                  }}
+                  
                 />
-                  {!isEditable && filteredBrands.length > 0 && (
-      <div className={styles.suggestions}>
-        {filteredBrands.map((option) => (
-          <div
-            key={option.value}
-            className={styles.suggestionItem}
-            onClick={() => {
-              setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
-            }}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    )}
                 {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}

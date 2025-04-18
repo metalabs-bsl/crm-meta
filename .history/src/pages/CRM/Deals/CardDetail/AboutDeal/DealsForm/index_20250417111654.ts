@@ -1,0 +1,1 @@
+тзьexport { DealsForm } from './DealsForm';
