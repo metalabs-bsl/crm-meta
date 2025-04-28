@@ -12,6 +12,7 @@ import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
 import { categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
+
 import { useForm } from 'react-hook-form';
 
 extend(utc);

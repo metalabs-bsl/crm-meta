@@ -143,6 +143,14 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
       });
   };
 
+  // const sortLeadsByReminders = (leads) => {
+  //   return leads.slice().sort((a, b) => {
+  //     if (a.count_of_reminders > 0 && b.count_of_reminders === 0) return -1;
+  //     if (a.count_of_reminders === 0 && b.count_of_reminders > 0) return 1;
+  //     return 0; // Если оба имеют или не имеют дела, порядок не меняется
+  //   });
+  // };
+
   return (
     <div className={cn(styles.column, { [styles.isOver]: isOver })}>
       <div className={styles.titleBlock}>
@@ -185,9 +193,16 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
         </div>
       )}
       <div className={styles.cardsContainer} ref={drop}>
-        {leads.map((task, index) => (
-          <Card key={task.id} index={index} data={task} canDrag={canDrag} />
-        ))}
+        {leads
+          .slice()
+          .sort((a, b) => {
+            if (a.count_of_reminders > 0 && b.count_of_reminders === 0) return -1;
+            if (a.count_of_reminders === 0 && b.count_of_reminders > 0) return 1;
+            return 0;
+          })
+          .map((task, index) => (
+            <Card key={task.id} index={index} data={task} canDrag={canDrag} />
+          ))}
       </div>
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>
         <ColumnForm
