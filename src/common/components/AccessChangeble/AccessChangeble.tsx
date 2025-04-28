@@ -13,7 +13,7 @@ interface IProps {
 
 export const AccessChangeble: FC<IProps> = ({ isAccess = true, onUpdateAccess, isLoading = false, currentStage }) => {
   const isBookingStage = currentStage === 'бронирование';
-  // const  canEdit = userRole === ROLES.SENIOR_MANAGER || ROLES.DIRECTOR 
+  // const  canEdit = userRole === ROLES.SENIOR_MANAGER || ROLES.DIRECTOR
 
   const handleClick = () => {
     if (isBookingStage && onUpdateAccess) {
