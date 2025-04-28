@@ -117,7 +117,15 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
           <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
             {isCalculatorTab && (
               <div className={styles.btns_wrapper}>
-                {isManagement && <AccessChangeble isAccess={!calcData?.is_closed} isLoading={isLoading} onUpdateAccess={changeAccess} />}
+                {isManagement && (
+                  <AccessChangeble
+                    isAccess={!calcData?.is_closed}
+                    isLoading={isLoading}
+                    onUpdateAccess={changeAccess}
+                    currentStage={colStatus}
+                    // userRole={role}
+                  />
+                )}
                 <Button
                   text='Создать договор'
                   onClick={handleGenerateDocument}
