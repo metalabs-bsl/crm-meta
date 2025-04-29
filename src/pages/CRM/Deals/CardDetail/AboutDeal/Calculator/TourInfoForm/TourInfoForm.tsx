@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable simple-import-sort/imports */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -15,6 +12,7 @@ import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
 import { categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
+
 import { useForm } from 'react-hook-form';
 
 extend(utc);
@@ -73,15 +71,21 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
         method: 'GET',
         headers: {
-          'ngrok-skip-browser-warning': 'true',
+          // 'ngrok-skip-browser-warning': 'true',
           'Content-Type': 'application/json'
         }
       });
       const data = await response.json();
-      console.log(await data);
+      if (Array.isArray(data)) {
+        setSuggestions(data);
+      } else {
+        setSuggestions([]);
+      }
+      // console.log(await data);
       setSuggestions(data);
     } catch (error) {
       console.error('Error fetching cities:', error);
+      setSuggestions([]);
     }
   };
   useEffect(() => {
@@ -89,13 +93,11 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       setFilteredBrands([]);
       return;
     }
-  
-    const filtered = brandOptions.filter((option) =>
-      option.label.toLowerCase().includes(brandInput.toLowerCase())
-    );
+
+    const filtered = brandOptions.filter((option) => option.label.toLowerCase().includes(brandInput.toLowerCase()));
     setFilteredBrands(filtered);
   }, [brandInput, brandOptions]);
-  
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (departureCity) {
@@ -220,26 +222,26 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                   className={styles.inp_wrapper}
                   onChange={(e) => {
                     setBrandInput(e.target.value);
-                    setValue('brand', e.target.value); 
+                    setValue('brand', e.target.value);
                   }}
                 />
-                  {!isEditable && filteredBrands.length > 0 && (
-      <div className={styles.suggestions}>
-        {filteredBrands.map((option) => (
-          <div
-            key={option.value}
-            className={styles.suggestionItem}
-            onClick={() => {
-              setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
-            }}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    )}
+                {!isEditable && filteredBrands.length > 0 && (
+                  <div className={styles.suggestions}>
+                    {filteredBrands.map((option) => (
+                      <div
+                        key={option.value}
+                        className={styles.suggestionItem}
+                        onClick={() => {
+                          setBrandInput(option.label);
+                          setValue('brand', String(option.value));
+                          setFilteredBrands([]);
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}
@@ -277,11 +279,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               {errors.departure_city && <p className={styles.error}>{errors.departure_city.message}</p>}
 
               <div className={styles.suggestions}>
-                {departureSuggestions.map((city, index) => (
-                  <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
-                    {city}
-                  </div>
-                ))}
+                {Array.isArray(departureSuggestions) &&
+                  departureSuggestions.map((city, index) => (
+                    <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
+                      {city}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className={styles.item_block}>
@@ -296,11 +299,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               {errors.arrival_city && <p className={styles.error}>{errors.arrival_city.message}</p>}
 
               <div className={styles.suggestions}>
-                {arrivalSuggestions.map((city, index) => (
-                  <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
-                    {city}
-                  </div>
-                ))}
+                {Array.isArray(arrivalSuggestions) &&
+                  arrivalSuggestions.map((city, index) => (
+                    <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
+                      {city}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className={styles.item_block}>

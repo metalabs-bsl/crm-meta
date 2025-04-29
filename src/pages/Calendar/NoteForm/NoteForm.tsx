@@ -60,7 +60,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof Note];
         if (key === 'date' && typeof value === 'string') {
-          setValue(key as keyof Note, dayjs(value).format('YYYY-MM-DDTHH:mm'));
+          setValue(key as keyof Note, dayjs.utc(value).format('YYYY-MM-DDTHH:mm'));
         } else {
           setValue(key as keyof Note, formProps[key as keyof Note]);
         }
@@ -121,6 +121,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
 
   const onDelete = (id?: string) => {
     if (id) {
+      console.log('Удаляем заметку с ID:', id); // Логируем ID
       deleteNote(id)
         .unwrap()
         .then(() => {
@@ -184,7 +185,7 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
             <DatePicker
               {...register('date', { required: 'Поле обязательно' })}
               disabled={disabled}
-              defaultValue={formProps ? dayjs.utc(formProps.date).local().format('YYYY-MM-DDTHH:mm') : undefined}
+              defaultValue={formProps?.date ? dayjs.utc(formProps.date).format('YYYY-MM-DDTHH:mm') : undefined}
             />
             {errors.date && <span className={styles.error}>{errors.date.message}</span>}
           </div>
