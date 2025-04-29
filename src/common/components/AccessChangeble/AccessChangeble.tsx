@@ -1,22 +1,28 @@
 import { FC } from 'react';
 import { Icon, Loading } from 'common/ui';
 import styles from './styles.module.scss';
-// import { ROLES } from 'types/roles';
 
 interface IProps {
   isAccess?: boolean;
   onUpdateAccess?: () => void;
   isLoading?: boolean;
   currentStage?: number | string;
-  // userRole?: string
+  userRole?: string;
+  canAlwaysEdit?: boolean;
 }
 
-export const AccessChangeble: FC<IProps> = ({ isAccess = true, onUpdateAccess, isLoading = false, currentStage }) => {
+export const AccessChangeble: FC<IProps> = ({
+  isAccess = true,
+  onUpdateAccess,
+  isLoading = false,
+  currentStage,
+  canAlwaysEdit = false
+}) => {
   const isBookingStage = currentStage === 'бронирование';
-  // const  canEdit = userRole === ROLES.SENIOR_MANAGER || ROLES.DIRECTOR
+  const canEdit = canAlwaysEdit || isBookingStage;
 
   const handleClick = () => {
-    if (isBookingStage && onUpdateAccess) {
+    if (canEdit && onUpdateAccess) {
       onUpdateAccess();
     }
   };
@@ -24,7 +30,7 @@ export const AccessChangeble: FC<IProps> = ({ isAccess = true, onUpdateAccess, i
   return (
     <div>
       <Loading isSpin={isLoading}>
-        <div className={styles.access} onClick={handleClick} style={{ cursor: isBookingStage ? 'pointer' : 'not-allowed' }}>
+        <div className={styles.access} onClick={handleClick} style={{ cursor: canEdit ? 'pointer' : 'not-allowed' }}>
           <span>Доступ {isAccess ? 'открыт' : 'закрыт'}</span>
           <Icon type={`calc-${isAccess ? 'open' : 'close'}`} />
         </div>

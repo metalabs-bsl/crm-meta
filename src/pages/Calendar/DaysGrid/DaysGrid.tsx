@@ -66,7 +66,8 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
     setBirthdayOpen(false);
   };
 
-  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).isSame(day, 'day'));  const getBirthdaysForDay = (day: Dayjs) => {
+  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).isSame(day, 'day'));
+  const getBirthdaysForDay = (day: Dayjs) => {
     return birthdays.filter((birthday) => {
       const birthdayDate = dayjs(birthday.date).utc();
       return birthdayDate.month() === day.month() && birthdayDate.date() === day.date();
