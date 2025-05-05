@@ -41,7 +41,6 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus }) => 
   const notify = useNotify();
   const { search } = useLocation();
 
-  console.log('статус', colStatus);
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
