@@ -52,10 +52,13 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     }
   });
   const [servises, setServises] = useState<Options[]>([]);
+  const [isUserTyping, setIsUserTyping] = useState(false);
 
   const onClosePassengersModal = () => {
     setIsOpenPassengersModal(false);
   };
+
+  console.log('tour data', formProps);
 
   const onClickPassengersItem = () => {
     if (!isEditable) setIsOpenPassengersModal(!isOpenPassengersModal);
@@ -89,14 +92,14 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     }
   };
   useEffect(() => {
-    if (brandInput.trim() === '') {
-      setFilteredBrands([]);
+    if (!isUserTyping || brandInput.trim() === '') {
+      setFilteredBrands([]); // Очищаем список, если поле пустое или изменение не инициировано пользователем
       return;
     }
 
     const filtered = brandOptions.filter((option) => option.label.toLowerCase().includes(brandInput.toLowerCase()));
     setFilteredBrands(filtered);
-  }, [brandInput, brandOptions]);
+  }, [brandInput, brandOptions, isUserTyping]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -155,8 +158,18 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const servicesIds = formProps.services.map((service) => String(service.id)); // Convert to array of strings
       servicesOptions && setServises(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
     }
-    console.log(formProps);
   }, [formProps, servicesOptions, setValue]);
+
+  useEffect(() => {
+    if (formProps?.brand) {
+      const brandOption = brandOptions.find((option) => option.value === formProps.brand);
+      if (brandOption) {
+        setBrandInput(brandOption.label); // Устанавливаем отображаемое значение
+        setValue('brand', formProps.brand); // Устанавливаем значение в форму
+        setIsUserTyping(false); // Сбрасываем флаг, чтобы список не отображался
+      }
+    }
+  }, [formProps, brandOptions, setValue]);
 
   const onSubmit = handleSubmit(() => {
     if (calcId) {
@@ -180,13 +193,17 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       if (sendingData.departure_date === '') {
         delete sendingData.departure_date;
       }
-      console.log(data);
-      console.log(sendingData);
+      console.log('Данные перед отправкой:', sendingData);
       postTourData(sendingData)
         .unwrap()
-        .then(() => {
+        .then((response) => {
+          console.log('Ответ от сервера:', response);
           notify(MESSAGE.UPDATED, 'success');
           setIsEditTourInfo(!isEditTourInfo);
+        })
+        .catch((error) => {
+          // Логируем ошибку, если отправка не удалась
+          console.error('Ошибка при отправке данных:', error);
         });
     }
   });
@@ -204,7 +221,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             <div className={styles.item_block}>
               <label>Номер брони в СТ</label>
               <Input
-                // {...register('booking_number', { required: 'обязательное поле' })}
+                {...register('booking_number')}
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -215,13 +232,14 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               <div className={styles.item_block}>
                 <label>Бренд</label>
                 <Input
-                  {...register('brand', { required: 'обязательное поле' })}
+                  {...register('brand')}
                   disabled={isEditable}
                   value={brandInput}
                   placeholder='Начните вводить бренд'
                   className={styles.inp_wrapper}
                   onChange={(e) => {
-                    setBrandInput(e.target.value);
+                    setIsUserTyping(true); // Пользователь начал ввод
+                    setBrandInput(e.target.value); // Обновляем ввод пользователя
                     setValue('brand', e.target.value);
                   }}
                 />
@@ -235,6 +253,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                           setBrandInput(option.label);
                           setValue('brand', String(option.value));
                           setFilteredBrands([]);
+                          setIsUserTyping(false);
                         }}
                       >
                         {option.label}
@@ -247,22 +266,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             )}
             <div className={styles.item_block}>
               <label>Отель</label>
-              <Input
-                {...register('hotel', { required: 'обязательное поле' })}
-                placeholder='Не заполнено'
-                className={styles.inp_wrapper}
-                disabled={isEditable}
-              />
+              <Input {...register('hotel')} placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
               {errors.hotel && <p className={styles.error}>{errors.hotel.message}</p>}
             </div>
             <div className={styles.item_block}>
               <label>Категория срока тура</label>
-              <Select
-                {...register('tour_category', { required: 'обязательное поле' })}
-                options={categoryTourTimeOptions}
-                className={styles.select}
-                disabled={isEditable}
-              />
+              <Select {...register('tour_category')} options={categoryTourTimeOptions} className={styles.select} disabled={isEditable} />
               {errors.tour_category && <p className={styles.error}>{errors.tour_category.message}</p>}
             </div>
           </div>
@@ -270,7 +279,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             <div className={styles.item_block}>
               <label>Город вылета</label>
               <Input
-                {...register('departure_city', { required: 'обязательное поле' })}
+                {...register('departure_city')}
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -290,7 +299,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             <div className={styles.item_block}>
               <label>Город прилета</label>
               <Input
-                {...register('arrival_city', { required: 'обязательное поле' })}
+                {...register('arrival_city')}
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -324,20 +333,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           <div className={styles.blocks}>
             <div className={styles.item_block}>
               <label>Дата вылета</label>
-              <DatePicker
-                {...register('departure_date', { required: 'обязательное поле' })}
-                className={styles.datepicker}
-                disabled={isEditable}
-              />
+              <DatePicker {...register('departure_date')} className={styles.datepicker} disabled={isEditable} />
               {errors.departure_date && <p className={styles.error}>{errors.departure_date.message}</p>}
             </div>
             <div className={styles.item_block}>
               <label>Дата прилета</label>
-              <DatePicker
-                {...register('arrival_date', { required: 'обязательное поле' })}
-                className={styles.datepicker}
-                disabled={isEditable}
-              />
+              <DatePicker {...register('arrival_date')} className={styles.datepicker} disabled={isEditable} />
               {errors.arrival_date && <p className={styles.error}>{errors.arrival_date.message}</p>}
             </div>
             {servicesOptions && (
