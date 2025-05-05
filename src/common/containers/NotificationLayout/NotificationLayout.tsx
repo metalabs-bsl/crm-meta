@@ -75,9 +75,9 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
         const reminderTime = eventTime.subtract(reminderMinutes, 'minute'); // Рассчитываем время напоминания
         const now = dayjs(); // Текущее локальное время
 
-        console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
+        // console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
+        // console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
+        // console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
         if (reminderTime.isSame(now, 'minute')) {
           console.log('vot modalka');
           new Audio('/notification.mp3').play();
