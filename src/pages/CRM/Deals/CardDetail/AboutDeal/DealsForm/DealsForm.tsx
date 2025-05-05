@@ -21,7 +21,7 @@ interface IProps {
   dateCreated?: string;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
+export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus }) => {
   const {
     register,
     handleSubmit,
@@ -40,8 +40,8 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
   const [updateLead, { isLoading: isUpdateLoading }] = useUpdateLeadMutation();
   const notify = useNotify();
   const { search } = useLocation();
-  // const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
 
+  console.log('статус', colStatus);
   useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
@@ -162,7 +162,10 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={!isEdit}
+                disabled={
+                  !isEdit ||
+                  (colStatus === 5 && !userInfo?.roles.some((role) => role.role_name === 'Director' || role.role_name === 'Senior Manager'))
+                }
                 className={styles.select}
                 defaultValue={userInfo?.id}
               />
