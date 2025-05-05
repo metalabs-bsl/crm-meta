@@ -74,7 +74,6 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
         method: 'GET',
         headers: {
-          // 'ngrok-skip-browser-warning': 'true',
           'Content-Type': 'application/json'
         }
       });
@@ -84,7 +83,6 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       } else {
         setSuggestions([]);
       }
-      // console.log(await data);
       setSuggestions(data);
     } catch (error) {
       console.error('Error fetching cities:', error);
@@ -93,7 +91,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
   };
   useEffect(() => {
     if (!isUserTyping || brandInput.trim() === '') {
-      setFilteredBrands([]); // Очищаем список, если поле пустое или изменение не инициировано пользователем
+      setFilteredBrands([]);
       return;
     }
 
@@ -155,7 +153,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
       });
 
-      const servicesIds = formProps.services.map((service) => String(service.id)); // Convert to array of strings
+      const servicesIds = formProps.services.map((service) => String(service.id));
       servicesOptions && setServises(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
     }
   }, [formProps, servicesOptions, setValue]);
@@ -164,9 +162,9 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     if (formProps?.brand) {
       const brandOption = brandOptions.find((option) => option.value === formProps.brand);
       if (brandOption) {
-        setBrandInput(brandOption.label); // Устанавливаем отображаемое значение
-        setValue('brand', formProps.brand); // Устанавливаем значение в форму
-        setIsUserTyping(false); // Сбрасываем флаг, чтобы список не отображался
+        setBrandInput(brandOption.label);
+        setValue('brand', formProps.brand);
+        setIsUserTyping(false);
       }
     }
   }, [formProps, brandOptions, setValue]);
@@ -202,7 +200,6 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           setIsEditTourInfo(!isEditTourInfo);
         })
         .catch((error) => {
-          // Логируем ошибку, если отправка не удалась
           console.error('Ошибка при отправке данных:', error);
         });
     }
@@ -232,14 +229,14 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               <div className={styles.item_block}>
                 <label>Бренд</label>
                 <Input
-                  {...register('brand')}
+                  {...register('brand', { required: 'обязательное поле' })}
                   disabled={isEditable}
                   value={brandInput}
                   placeholder='Начните вводить бренд'
                   className={styles.inp_wrapper}
                   onChange={(e) => {
-                    setIsUserTyping(true); // Пользователь начал ввод
-                    setBrandInput(e.target.value); // Обновляем ввод пользователя
+                    setIsUserTyping(true);
+                    setBrandInput(e.target.value);
                     setValue('brand', e.target.value);
                   }}
                 />
