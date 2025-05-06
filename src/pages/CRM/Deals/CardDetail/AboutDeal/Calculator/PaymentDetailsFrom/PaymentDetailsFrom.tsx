@@ -56,7 +56,14 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     );
   }, [data]);
 
-  const { register, getValues, setValue, watch } = useForm<ICalcPayment>({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors }
+  } = useForm<ICalcPayment>({
     defaultValues: {
       brutto: '',
       netto: '',
@@ -122,8 +129,9 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     if (!formProps?.payment_method) setValue('payment_method', Number(paymentOptions[0]?.value || 0));
   }, [formProps?.currency, formProps?.payment_method, paymentCurrencyOptions, setValue]);
 
-  const onSubmit = () => {
-    const data = getValues();
+  const onSubmit = handleSubmit((data) => {
+    console.log('Данные для отправки:', data);
+  
     const createPaymentDto = {
       ...data,
       brutto: data.brutto ? Number(data.brutto) : 0,
@@ -137,10 +145,10 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       },
       name: updatedTitle,
       payment_method: Number(data.payment_method) as number,
-      client_due_date: data.client_due_date,
+      client_due_date: data.client_due_date, // Значение "СО клиента"
       ...(formProps?.id && { id: formProps.id })
     };
-
+  
     createPayment(createPaymentDto)
       .unwrap()
       .then(() => {
@@ -151,7 +159,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       .catch(() => {
         notify(MESSAGE.ERROR, 'error');
       });
-  };
+  });
 
   const isNotEmpty = (value: unknown) => {
     return value !== null && value !== undefined && value !== '';
@@ -189,7 +197,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <div className={styles.item_block}>
                   <label>Брутто</label>
                   <Input
-                    {...register('brutto', { required: 'обязательное поле' })}
+                    {...register('brutto')}
                     placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
@@ -199,7 +207,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <div className={styles.item_block}>
                   <label>Нетто</label>
                   <Input
-                    {...register('netto', { required: 'обязательное поле' })}
+                    {...register('netto')}
                     placeholder='0'
                     className={styles.inp_wrapper}
                     disabled={!isEdit}
@@ -210,7 +218,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
               <div className={styles.item_block}>
                 <label>Способ оплаты</label>
                 <Select
-                  {...register('payment_method', { required: 'обязательное поле' })}
+                  {...register('payment_method')}
                   options={paymentOptions}
                   className={styles.select}
                   disabled={!isEdit}
@@ -254,12 +262,13 @@ export const PaymentDetailsFrom: FC<IProps> = ({
                 <div className={styles.item_block}>
                   <label>СО клиента</label>
                   <DatePicker
-                    {...register('client_due_date', { required: 'обязательное поле' })}
+                    {...register('client_due_date', { required: 'Поле обязательно для заполнения' })}
                     className={styles.datepicker}
                     disabled={!isEdit}
                     defaultValue={dayjs().format('YYYY-MM-DD')}
                     datePicketType='date'
                   />
+                  {errors.client_due_date && <p className={styles.error}>{errors.client_due_date.message}</p>}
                 </div>
               </div>
               <div className={styles.item_block}>
