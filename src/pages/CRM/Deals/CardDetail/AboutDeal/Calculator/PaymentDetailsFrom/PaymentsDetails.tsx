@@ -24,6 +24,9 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
   const [paymentForms, setPaymentForms] = useState<ICreatePaymentParams[]>([]);
 
   useEffect(() => {
+    console.log('Полученные данные paymentsList:', paymentsList);
+    console.log('Полученный calculator_id:', calculator_id);
+
     if (paymentsList && paymentsList.length > 0) {
       const initialPaymentForms = paymentsList.map((payment) => ({
         id: payment.id,
@@ -39,12 +42,13 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
         },
         currency: payment?.currency || ''
       }));
+      console.log('Инициализированные формы платежей:', initialPaymentForms);
       setPaymentForms(initialPaymentForms);
       const initialPaymentAccordions = initialPaymentForms.map((_, index) => ({
-        title: ordinalTitles[index] || `Оплата ${index + 1}`,
-        isEdit: false
+        title: ordinalTitles[index] || `Оплата ${index + 1}`, // Названия на основе индекса
+        isEdit: false // Все аккордеоны изначально не в режиме редактирования
       }));
-
+      console.log('Инициализированные аккордеоны:', initialPaymentAccordions);
       setPaymentAccordions(initialPaymentAccordions);
     } else {
       const newPaymentForm: ICreatePaymentParams = {
@@ -61,10 +65,11 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
         },
         currency: ''
       };
+      // console.log('Создана новая форма платежа:', newPaymentForm);
       setPaymentForms([newPaymentForm]);
       setPaymentAccordions([
         {
-          title: ordinalTitles[0] || 'Данные об оплате',
+          title: ordinalTitles[0] || 'первая оплата',
           isEdit: false
         }
       ]);
@@ -72,7 +77,12 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
   }, [paymentsList, calculator_id]);
 
   const handleEditPaymentAccordion = (index: number) => {
-    setPaymentAccordions(paymentAccordions.map((accordion, i) => (i === index ? { ...accordion, isEdit: !accordion.isEdit } : accordion)));
+    setPaymentAccordions(
+      paymentAccordions.map((accordion, i) => ({
+        ...accordion,
+        isEdit: i === index ? !accordion.isEdit : false
+      }))
+    );
   };
 
   const handleAddPaymentAccordion = () => {
@@ -92,20 +102,26 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
       },
       currency: ''
     };
+    // console.log('Добавление нового платежа:', newPaymentForm);
+    // console.log('Добавление нового аккордеона с названием:', newAccordionTitle);
     setPaymentAccordions([
       ...paymentAccordions,
       {
         title: newAccordionTitle,
-        isEdit: false
+        isEdit: true
       }
     ]);
     setPaymentForms([...paymentForms, newPaymentForm]);
   };
 
   const handleDeletePaymentAccordion = (index: number) => {
+    console.log('Вызвана функция handleDeletePaymentAccordion с индексом:', index);
+    console.log('Текущие paymentAccordions до удаления:', paymentAccordions);
+    console.log('Текущие paymentForms до удаления:', paymentForms);
     const updatedAccordions = paymentAccordions.filter((_, i) => i !== index);
     const updatedForms = paymentForms.filter((_, i) => i !== index);
-
+    console.log('Обновленные paymentAccordions после удаления:', updatedAccordions);
+    console.log('Обновленные paymentForms после удаления:', updatedForms);
     setPaymentAccordions(updatedAccordions);
     setPaymentForms(updatedForms);
   };
@@ -118,20 +134,25 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
 
   return (
     <>
-      {paymentForms.map((payment, idx) => (
-        <PaymentDetailsFrom
-          isActiveTab={isActiveTab}
-          formProps={payment}
-          key={idx}
-          index={idx}
-          title={paymentAccordions[idx]?.title || ''}
-          isEdit={paymentAccordions[idx]?.isEdit}
-          handleAddPaymentAccordion={handleAddPaymentAccordion}
-          handleEditPaymentAccordion={handleEditPaymentAccordion}
-          paymentAccordions={paymentAccordions}
-          handleDeletePaymentAccordion={handleDeletePaymentAccordion}
-        />
-      ))}
+      {paymentForms.map((payment, idx) => {
+        console.log(`Рендеринг платежа с индексом ${idx}:`, payment);
+        console.log(`Рендеринг аккордеона с индексом ${idx}:`, paymentAccordions[idx]);
+
+        return (
+          <PaymentDetailsFrom
+            isActiveTab={isActiveTab}
+            formProps={payment}
+            key={idx}
+            index={idx}
+            title={paymentAccordions[idx]?.title || ''}
+            isEdit={paymentAccordions[idx]?.isEdit}
+            handleAddPaymentAccordion={handleAddPaymentAccordion}
+            handleEditPaymentAccordion={handleEditPaymentAccordion}
+            paymentAccordions={paymentAccordions}
+            handleDeletePaymentAccordion={handleDeletePaymentAccordion}
+          />
+        );
+      })}
     </>
   );
 };

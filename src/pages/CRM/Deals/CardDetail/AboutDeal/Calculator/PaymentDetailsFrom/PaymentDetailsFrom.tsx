@@ -5,7 +5,7 @@ import { DatePicker, Icon, Input, Loading, Select } from 'common/ui';
 import { Accordion, Modal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE, paymentOptions } from 'common/constants';
-import { useCreatePaymentMutation } from 'api/admin/leads/endpoints/calculator';
+import { useCreatePaymentMutation, useDeletePaymentMutation } from 'api/admin/leads/endpoints/calculator';
 import { useGetPaymentCurrencyQuery } from 'api/admin/paymentCurrency/paymentCurrency.api';
 import { Options } from 'types/common';
 import { ICalcPayment, ICreatePaymentParams } from 'types/entities/leads';
@@ -76,7 +76,13 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     }
   });
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
-  const updatedTitle = index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title;
+  const [deletePayment] = useDeletePaymentMutation(); // Новый хук
+  const updatedTitle =
+    isActiveTab === 'partial'
+      ? title || `Оплата ${index + 1}` // Используем индекс для генерации названия
+      : 'Данные об оплате';
+  console.log('updatedTitle:', updatedTitle);
+  console.log('deleteIconState:', updatedTitle === 'Данные об оплате' ? false : updatedTitle === 'Первая оплата' ? false : true);
 
   const brutto = watch('brutto');
   const course_TO = watch('course_TO');
@@ -176,7 +182,28 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   };
 
   const deletePaymentAccordion = () => {
-    handleDeletePaymentAccordion?.(index);
+    console.log('PaymentDetailsFrom: Вызвана функция deletePaymentAccordion', {
+      index,
+      paymentAccordions,
+      formProps,
+      hasId: !!formProps?.id
+    });
+
+    if (formProps?.id) {
+      deletePayment(formProps.id)
+        .unwrap()
+        .then(() => {
+          handleDeletePaymentAccordion?.(index);
+          notify('Оплата успешно удалена', 'success');
+        })
+        .catch((error) => {
+          console.error('PaymentDetailsFrom: Ошибка удаления оплаты', error);
+          notify(MESSAGE.ERROR, 'error');
+        });
+    } else {
+      handleDeletePaymentAccordion?.(index);
+      notify('Оплата успшено удалена', 'success');
+    }
   };
 
   return (
