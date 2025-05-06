@@ -10,6 +10,7 @@ import { useCreateLeadMutation, useGetSourseLeadQuery, useUpdateLeadMutation } f
 import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
 import { ICreateLeadParams } from 'types/entities';
 import styles from './styles.module.scss';
+import { emitLeadCreated } from 'socket'; 
 
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
@@ -21,7 +22,7 @@ interface IProps {
   dateCreated?: string;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
+export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus }) => {
   const {
     register,
     handleSubmit,
@@ -40,7 +41,6 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
   const [updateLead, { isLoading: isUpdateLoading }] = useUpdateLeadMutation();
   const notify = useNotify();
   const { search } = useLocation();
-  // const isResponseEmployeeEditable = colStatus === 5 || colStatus === 6 || colStatus === 7;
 
   useEffect(() => {
     if (formProps) {
@@ -66,6 +66,7 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
       createDeal({ ...data, column_id: column_id })
         .unwrap()
         .then(() => {
+          emitLeadCreated();
           new Audio('/notification.mp3').play();
           notify(MESSAGE.SUCCESS, 'success');
           setIsEdit(false);
@@ -162,7 +163,10 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated }) => {
               <Select
                 {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
                 options={responsibleOptions}
-                disabled={!isEdit}
+                disabled={
+                  !isEdit ||
+                  (colStatus === 5 && !userInfo?.roles.some((role) => role.role_name === 'Director' || role.role_name === 'Senior Manager'))
+                }
                 className={styles.select}
                 defaultValue={userInfo?.id}
               />

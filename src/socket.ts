@@ -88,6 +88,12 @@ export const sendMessage = (event: string, data: IColumn[]) => {
   }
 };
 
+export const emitLeadCreated = () => {
+  if (socket?.connected) {
+    socket.emit('noteCreated');
+  }
+};
+
 export const initializeSocket = () => (dispatch: AppDispatch, getState: () => RootState) => {
   console.log('start');
   const accessToken = getState().login.accessToken;

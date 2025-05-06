@@ -68,7 +68,6 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
 
   const [isActiveTab, setIsActiveTab] = useState<string>(tabItems[0].type);
   const isCalculatorTab = isActiveTab === TAB_COMPONENTS.CALCULATOR;
-  const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
 
   const getActiveComponent = () => {
     const component = {
@@ -117,7 +116,14 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
           <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
             {isCalculatorTab && (
               <div className={styles.btns_wrapper}>
-                {isManagement && <AccessChangeble isAccess={!calcData?.is_closed} isLoading={isLoading} onUpdateAccess={changeAccess} />}
+                <AccessChangeble
+                  isAccess={!calcData?.is_closed}
+                  isLoading={isLoading}
+                  onUpdateAccess={changeAccess}
+                  currentStage={colStatus}
+                  userRole={role}
+                  canAlwaysEdit={role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER}
+                />
                 <Button
                   text='Создать договор'
                   onClick={handleGenerateDocument}

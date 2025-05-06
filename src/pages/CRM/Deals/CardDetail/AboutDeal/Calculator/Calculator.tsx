@@ -167,7 +167,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
         {data?.additionalPayments?.map((item, index) => <UpsellForm calcId={data?.id} title={item.name} formProps={item} key={index} />)}
 
         <DeleteModal
-          text='Вы уверены, что хотите изменить тип оплаты? Все текущие данные будут сброшены.'
+          text='Вы уверены, что хотите изменить тип оплаты?'
           isOpen={showConfirmModal}
           onDelete={confirmTabChange}
           onCancel={() => setShowConfirmModal(false)}

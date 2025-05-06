@@ -145,7 +145,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
             <div className={styles.item_block}>
               <label>Номер договора</label>
               <Input
-                {...register('contract_number', { required: 'обязательное поле' })}
+                {...register('contract_number')}
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -161,33 +161,18 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
             <div className={styles.more_items_block}>
               <div className={styles.item_block}>
                 <label>ID паспорта</label>
-                <Input
-                  {...register('customer_passport', { required: 'обязательное поле' })}
-                  placeholder='Не заполнено'
-                  className={styles.inp_wrapper}
-                  disabled={isEditable}
-                />
+                <Input {...register('customer_passport')} placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
                 {errors.customer_passport && <span className={styles.error}>{errors.customer_passport.message}</span>}
               </div>
               <div className={styles.item_block}>
                 <label>ИНН</label>
-                <Input
-                  {...register('customer_inn', { required: 'обязательное поле' })}
-                  placeholder='Не заполнено'
-                  className={styles.inp_wrapper}
-                  disabled={isEditable}
-                />
+                <Input {...register('customer_inn')} placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
                 {errors.customer_inn && <span className={styles.error}>{errors.customer_inn.message}</span>}
               </div>
             </div>
             <div className={styles.item_block}>
               <label>Адрес</label>
-              <Input
-                {...register('customer_address', { required: 'обязательное поле' })}
-                placeholder='Не заполнено'
-                className={styles.inp_wrapper}
-                disabled={isEditable}
-              />
+              <Input {...register('customer_address')} placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
               {errors.customer_address && <span className={styles.error}>{errors.customer_address.message}</span>}
             </div>
             <div className={styles.item_block} style={{ height: '70px', display: 'inline-block' }}></div>
@@ -204,18 +189,13 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
           <div className={styles.blocks}>
             <div className={styles.item_block}>
               <label>ФИО</label>
-              <Input
-                {...register('customer_fullname', { required: 'обязательное поле' })}
-                placeholder='Не заполнено'
-                className={styles.inp_wrapper}
-                disabled={isEditable}
-              />
+              <Input {...register('customer_fullname')} placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
               {errors.customer_fullname && <span className={styles.error}>{errors.customer_fullname.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Орган выдавший документ</label>
               <Input
-                {...register('customer_issuingAuthority', { required: 'обязательное поле' })}
+                {...register('customer_issuingAuthority')}
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -225,7 +205,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
             <div className={styles.item_block}>
               <label>Дата выдачи паспорта</label>
               <DatePicker
-                {...register('customer_passportDateGiven', { required: 'обязательное поле' })}
+                {...register('customer_passportDateGiven')}
                 className={styles.datepicker}
                 disabled={isEditable}
                 datePicketType='date'
@@ -235,7 +215,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
             <div className={styles.item_block}>
               <label>Дата окончания паспорта</label>
               <DatePicker
-                {...register('customer_passportDateEnds', { required: 'обязательное поле' })}
+                {...register('customer_passportDateEnds')}
                 className={styles.datepicker}
                 disabled={isEditable}
                 datePicketType='date'
@@ -256,32 +236,18 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
             <div className={styles.item_block}>
               <label>Ответственный</label>
               {responsibleOptions && (
-                <Select
-                  {...register('responsible_id', { required: 'обязательное поле' })}
-                  options={responsibleOptions}
-                  disabled={isEditable}
-                  className={styles.inp_wrapper}
-                />
+                <Select {...register('responsible_id')} options={responsibleOptions} disabled={isEditable} className={styles.inp_wrapper} />
               )}
               {errors.responsible_id && <span className={styles.error}>{errors.responsible_id.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Дата бронирования</label>
-              <DatePicker
-                {...register('booking_date', { required: 'обязательное поле' })}
-                className={styles.datepicker}
-                disabled={isEditable}
-              />
+              <DatePicker {...register('booking_date')} className={styles.datepicker} disabled={isEditable} />
               {errors.booking_date && <span className={styles.error}>{errors.booking_date.message}</span>}
             </div>
             <div className={styles.item_block}>
               <label>Дата рождения клиента</label>
-              <DatePicker
-                {...register('customer_DOB', { required: 'Дата рождения клиента обязательна' })}
-                disabled={isEditable}
-                className={styles.datepicker}
-                datePicketType='date'
-              />
+              <DatePicker {...register('customer_DOB')} disabled={isEditable} className={styles.datepicker} datePicketType='date' />
               {errors.customer_DOB && <span className={styles.error}>{errors.customer_DOB.message}</span>}
             </div>
           </div>

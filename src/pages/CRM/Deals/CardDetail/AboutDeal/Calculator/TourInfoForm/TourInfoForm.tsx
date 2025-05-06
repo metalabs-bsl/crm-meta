@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable simple-import-sort/imports */
 import { FC, useEffect, useRef, useState } from 'react';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -15,6 +12,7 @@ import { ITourData } from 'types/entities/leads';
 import { PassengersCount } from './PassengersCount';
 import { categoryTourTimeOptions, PassengerCounts } from './TourInfoForm.helper';
 import styles from './styles.module.scss';
+
 import { useForm } from 'react-hook-form';
 
 extend(utc);
@@ -54,10 +52,13 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     }
   });
   const [servises, setServises] = useState<Options[]>([]);
+  const [isUserTyping, setIsUserTyping] = useState(false);
 
   const onClosePassengersModal = () => {
     setIsOpenPassengersModal(false);
   };
+
+  console.log('tour data', formProps);
 
   const onClickPassengersItem = () => {
     if (!isEditable) setIsOpenPassengersModal(!isOpenPassengersModal);
@@ -73,29 +74,31 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
         method: 'GET',
         headers: {
-          'ngrok-skip-browser-warning': 'true',
           'Content-Type': 'application/json'
         }
       });
       const data = await response.json();
-      console.log(await data);
+      if (Array.isArray(data)) {
+        setSuggestions(data);
+      } else {
+        setSuggestions([]);
+      }
       setSuggestions(data);
     } catch (error) {
       console.error('Error fetching cities:', error);
+      setSuggestions([]);
     }
   };
   useEffect(() => {
-    if (brandInput.trim() === '') {
+    if (!isUserTyping || brandInput.trim() === '') {
       setFilteredBrands([]);
       return;
     }
-  
-    const filtered = brandOptions.filter((option) =>
-      option.label.toLowerCase().includes(brandInput.toLowerCase())
-    );
+
+    const filtered = brandOptions.filter((option) => option.label.toLowerCase().includes(brandInput.toLowerCase()));
     setFilteredBrands(filtered);
-  }, [brandInput, brandOptions]);
-  
+  }, [brandInput, brandOptions, isUserTyping]);
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (departureCity) {
@@ -150,11 +153,21 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
       });
 
-      const servicesIds = formProps.services.map((service) => String(service.id)); // Convert to array of strings
+      const servicesIds = formProps.services.map((service) => String(service.id));
       servicesOptions && setServises(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
     }
-    console.log(formProps);
   }, [formProps, servicesOptions, setValue]);
+
+  useEffect(() => {
+    if (formProps?.brand) {
+      const brandOption = brandOptions.find((option) => option.value === formProps.brand);
+      if (brandOption) {
+        setBrandInput(brandOption.label);
+        setValue('brand', formProps.brand);
+        setIsUserTyping(false);
+      }
+    }
+  }, [formProps, brandOptions, setValue]);
 
   const onSubmit = handleSubmit(() => {
     if (calcId) {
@@ -162,6 +175,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const updatedServises = servises.map((i) => ({ id: String(i.value) }));
       const sendingData: ITourData = {
         ...data,
+        departure_date: data.departure_date || null,
+        arrival_date: data.arrival_date || null,
         services: updatedServises,
         adult_passengers: passengerCounts.adults,
         child_passengers: passengerCounts.children,
@@ -171,20 +186,22 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           id: calcId
         }
       };
-      if (sendingData.arrival_date === '') {
-        delete sendingData.arrival_date;
-      }
+      // if (sendingData.arrival_date === '') {
+      //   delete sendingData.arrival_date;
+      // }
 
-      if (sendingData.departure_date === '') {
-        delete sendingData.departure_date;
-      }
-      console.log(data);
-      console.log(sendingData);
+      // if (sendingData.departure_date === '') {
+      //   delete sendingData.departure_date;
+      // }
       postTourData(sendingData)
         .unwrap()
-        .then(() => {
+        .then((response) => {
+          console.log('Ответ от сервера:', response);
           notify(MESSAGE.UPDATED, 'success');
           setIsEditTourInfo(!isEditTourInfo);
+        })
+        .catch((error) => {
+          console.error('Ошибка при отправке данных:', error);
         });
     }
   });
@@ -202,7 +219,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             <div className={styles.item_block}>
               <label>Номер брони в СТ</label>
               <Input
-                // {...register('booking_number', { required: 'обязательное поле' })}
+                {...register('booking_number')}
                 placeholder='Не заполнено'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -219,48 +236,40 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                   placeholder='Начните вводить бренд'
                   className={styles.inp_wrapper}
                   onChange={(e) => {
+                    setIsUserTyping(true);
                     setBrandInput(e.target.value);
-                    setValue('brand', e.target.value); 
+                    setValue('brand', e.target.value);
                   }}
                 />
-                  {!isEditable && filteredBrands.length > 0 && (
-      <div className={styles.suggestions}>
-        {filteredBrands.map((option) => (
-          <div
-            key={option.value}
-            className={styles.suggestionItem}
-            onClick={() => {
-              setBrandInput(option.label);
-              setValue('brand', String(option.value));
-              setFilteredBrands([]); 
-            }}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    )}
+                {!isEditable && filteredBrands.length > 0 && (
+                  <div className={styles.suggestions}>
+                    {filteredBrands.map((option) => (
+                      <div
+                        key={option.value}
+                        className={styles.suggestionItem}
+                        onClick={() => {
+                          setBrandInput(option.label);
+                          setValue('brand', String(option.value));
+                          setFilteredBrands([]);
+                          setIsUserTyping(false);
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {errors.brand && <p className={styles.error}>{errors.brand.message}</p>}
               </div>
             )}
             <div className={styles.item_block}>
               <label>Отель</label>
-              <Input
-                {...register('hotel', { required: 'обязательное поле' })}
-                placeholder='Не заполнено'
-                className={styles.inp_wrapper}
-                disabled={isEditable}
-              />
+              <Input {...register('hotel')} placeholder='Не заполнено' className={styles.inp_wrapper} disabled={isEditable} />
               {errors.hotel && <p className={styles.error}>{errors.hotel.message}</p>}
             </div>
             <div className={styles.item_block}>
               <label>Категория срока тура</label>
-              <Select
-                {...register('tour_category', { required: 'обязательное поле' })}
-                options={categoryTourTimeOptions}
-                className={styles.select}
-                disabled={isEditable}
-              />
+              <Select {...register('tour_category')} options={categoryTourTimeOptions} className={styles.select} disabled={isEditable} />
               {errors.tour_category && <p className={styles.error}>{errors.tour_category.message}</p>}
             </div>
           </div>
@@ -268,7 +277,7 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
             <div className={styles.item_block}>
               <label>Город вылета</label>
               <Input
-                {...register('departure_city', { required: 'обязательное поле' })}
+                {...register('departure_city')}
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -277,17 +286,18 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               {errors.departure_city && <p className={styles.error}>{errors.departure_city.message}</p>}
 
               <div className={styles.suggestions}>
-                {departureSuggestions.map((city, index) => (
-                  <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
-                    {city}
-                  </div>
-                ))}
+                {Array.isArray(departureSuggestions) &&
+                  departureSuggestions.map((city, index) => (
+                    <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
+                      {city}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className={styles.item_block}>
               <label>Город прилета</label>
               <Input
-                {...register('arrival_city', { required: 'обязательное поле' })}
+                {...register('arrival_city')}
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
@@ -296,11 +306,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
               {errors.arrival_city && <p className={styles.error}>{errors.arrival_city.message}</p>}
 
               <div className={styles.suggestions}>
-                {arrivalSuggestions.map((city, index) => (
-                  <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
-                    {city}
-                  </div>
-                ))}
+                {Array.isArray(arrivalSuggestions) &&
+                  arrivalSuggestions.map((city, index) => (
+                    <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
+                      {city}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className={styles.item_block}>
@@ -320,20 +331,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           <div className={styles.blocks}>
             <div className={styles.item_block}>
               <label>Дата вылета</label>
-              <DatePicker
-                {...register('departure_date', { required: 'обязательное поле' })}
-                className={styles.datepicker}
-                disabled={isEditable}
-              />
+              <DatePicker {...register('departure_date')} className={styles.datepicker} disabled={isEditable} />
               {errors.departure_date && <p className={styles.error}>{errors.departure_date.message}</p>}
             </div>
             <div className={styles.item_block}>
               <label>Дата прилета</label>
-              <DatePicker
-                {...register('arrival_date', { required: 'обязательное поле' })}
-                className={styles.datepicker}
-                disabled={isEditable}
-              />
+              <DatePicker {...register('arrival_date')} className={styles.datepicker} disabled={isEditable} />
               {errors.arrival_date && <p className={styles.error}>{errors.arrival_date.message}</p>}
             </div>
             {servicesOptions && (
