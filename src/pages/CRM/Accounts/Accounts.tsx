@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading, SearchInput, Select } from 'common/ui';
 import { useAppSelector } from 'common/hooks';
 import { useGetAllAccountsQuery } from 'api/admin/accounts/accounts.api';
@@ -14,19 +15,28 @@ const options: Options[] = [
 ];
 
 export const Accounts = () => {
+  const navigate = useNavigate();
   const { role } = useAppSelector(employeesSelectors.employees);
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
-  const [isFull, setIsFull] = useState<string>('false');
+
+  const params = new URLSearchParams(useLocation().search);
+  const isFullParam = params.get('isFull') ?? 'false';
+  const [isFull, setIsFull] = useState<string>(isFullParam);
+
   const { data, isFetching } = useGetAllAccountsQuery(isFull);
+
+  const onFilterChange = (value: string) => {
+    setIsFull(value);
+    navigate({ search: `?isFull=${value}` }, { replace: true });
+  };
+
   return (
     <div className={styles.accounts}>
       <div className={styles.headBlock}>
-        <div className={styles.titleBlock}>
-          <h1>Счета</h1>
-        </div>
+        <h1>Счета</h1>
         <div className={styles.filterBlock}>
           {isManagement && (
-            <Select value={isFull} options={options} className={styles.filterSelect} onChange={(e) => setIsFull(e.target.value)} />
+            <Select value={isFull} options={options} className={styles.filterSelect} onChange={(e) => onFilterChange(e.target.value)} />
           )}
           <SearchInput placeholder='Поиск' />
         </div>
