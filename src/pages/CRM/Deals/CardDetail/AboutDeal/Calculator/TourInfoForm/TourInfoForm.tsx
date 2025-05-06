@@ -175,6 +175,8 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       const updatedServises = servises.map((i) => ({ id: String(i.value) }));
       const sendingData: ITourData = {
         ...data,
+        departure_date: data.departure_date || null,
+        arrival_date: data.arrival_date || null,
         services: updatedServises,
         adult_passengers: passengerCounts.adults,
         child_passengers: passengerCounts.children,
@@ -184,14 +186,13 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           id: calcId
         }
       };
-      if (sendingData.arrival_date === '') {
-        delete sendingData.arrival_date;
-      }
+      // if (sendingData.arrival_date === '') {
+      //   delete sendingData.arrival_date;
+      // }
 
-      if (sendingData.departure_date === '') {
-        delete sendingData.departure_date;
-      }
-      console.log('Данные перед отправкой:', sendingData);
+      // if (sendingData.departure_date === '') {
+      //   delete sendingData.departure_date;
+      // }
       postTourData(sendingData)
         .unwrap()
         .then((response) => {
