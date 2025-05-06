@@ -31,11 +31,12 @@ interface IProps {
   }[];
 }
 
+const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
+
 export const PaymentDetailsFrom: FC<IProps> = ({
   isActiveTab,
   formProps,
   index,
-  title,
   handleAddPaymentAccordion,
   handleEditPaymentAccordion,
   isEdit,
@@ -77,12 +78,8 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   });
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
   const [deletePayment] = useDeletePaymentMutation(); // Новый хук
-  const updatedTitle =
-    isActiveTab === 'partial'
-      ? title || `Оплата ${index + 1}` // Используем индекс для генерации названия
-      : 'Данные об оплате';
-  console.log('updatedTitle:', updatedTitle);
-  console.log('deleteIconState:', updatedTitle === 'Данные об оплате' ? false : updatedTitle === 'Первая оплата' ? false : true);
+
+  const updatedTitle = isActiveTab === 'partial' ? ordinalTitles[index] : 'Данные об оплате';
 
   const brutto = watch('brutto');
   const course_TO = watch('course_TO');
@@ -151,7 +148,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       },
       name: updatedTitle,
       payment_method: Number(data.payment_method) as number,
-      client_due_date: data.client_due_date, // Значение "СО клиента"
+      client_due_date: data.client_due_date,
       ...(formProps?.id && { id: formProps.id })
     };
 
@@ -214,7 +211,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         isEdit={isEdit}
         onSaveAction={() => onSubmit()}
         isOpenDefault={true}
-        deleteIconState={updatedTitle === 'Данные об оплате' ? false : updatedTitle === 'Первая оплата' ? false : true}
+        deleteIconState={isActiveTab === 'partial' && index > 0}
         handleDeletePaymentAccordion={deletePaymentAccordion}
       >
         <Loading isSpin={isLoading}>
