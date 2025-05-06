@@ -131,7 +131,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
 
   const onSubmit = handleSubmit((data) => {
     console.log('Данные для отправки:', data);
-  
+
     const createPaymentDto = {
       ...data,
       brutto: data.brutto ? Number(data.brutto) : 0,
@@ -148,7 +148,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       client_due_date: data.client_due_date, // Значение "СО клиента"
       ...(formProps?.id && { id: formProps.id })
     };
-  
+
     createPayment(createPaymentDto)
       .unwrap()
       .then(() => {
@@ -196,68 +196,33 @@ export const PaymentDetailsFrom: FC<IProps> = ({
               <div className={styles.more_items_block}>
                 <div className={styles.item_block}>
                   <label>Брутто</label>
-                  <Input
-                    {...register('brutto')}
-                    placeholder='0'
-                    className={styles.inp_wrapper}
-                    disabled={!isEdit}
-                    type='number'
-                  />
+                  <Input {...register('brutto')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
                 </div>
                 <div className={styles.item_block}>
                   <label>Нетто</label>
-                  <Input
-                    {...register('netto')}
-                    placeholder='0'
-                    className={styles.inp_wrapper}
-                    disabled={!isEdit}
-                    type='number'
-                  />
+                  <Input {...register('netto')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
                 </div>
               </div>
               <div className={styles.item_block}>
                 <label>Способ оплаты</label>
-                <Select
-                  {...register('payment_method')}
-                  options={paymentOptions}
-                  className={styles.select}
-                  disabled={!isEdit}
-                />
+                <Select {...register('payment_method')} options={paymentOptions} className={styles.select} disabled={!isEdit} />
               </div>
             </div>
             <div className={styles.blocks}>
               <div className={styles.item_block}>
                 <label>Валюта (сом)</label>
-                <Input
-                  {...register('exchange_rate', { required: 'обязательное поле' })}
-                  placeholder='0'
-                  className={styles.inp_wrapper}
-                  disabled={!isEdit}
-                  type='number'
-                />
+                <Input {...register('exchange_rate')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
               </div>
               <div className={styles.item_block}>
                 <label>Комиссия</label>
-                <Input
-                  {...register('commission', { required: 'обязательное поле' })}
-                  placeholder='0'
-                  className={styles.inp_wrapper}
-                  disabled={!isEdit}
-                  type='number'
-                />
+                <Input {...register('commission')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
               </div>
             </div>
             <div className={styles.blocks}>
               <div className={styles.more_items_block}>
                 <div className={styles.item_block}>
                   <label>Курс ТО</label>
-                  <Input
-                    {...register('course_TO', { required: 'обязательное поле' })}
-                    placeholder='0'
-                    className={styles.inp_wrapper}
-                    disabled={!isEdit}
-                    type='number'
-                  />
+                  <Input {...register('course_TO')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
                 </div>
                 <div className={styles.item_block}>
                   <label>СО клиента</label>
@@ -274,12 +239,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
               <div className={styles.item_block}>
                 <label>Валюта (Брутто/Нетто/Комиссия)</label>
                 {paymentCurrencyOptions && (
-                  <Select
-                    {...register('currency', { required: 'обязательное поле' })}
-                    options={paymentCurrencyOptions}
-                    className={styles.select}
-                    disabled={!isEdit}
-                  />
+                  <Select {...register('currency')} options={paymentCurrencyOptions} className={styles.select} disabled={!isEdit} />
                 )}
               </div>
             </div>
