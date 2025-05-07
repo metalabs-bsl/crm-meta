@@ -5,7 +5,7 @@ import { DatePicker, Icon, Input, Loading, Select } from 'common/ui';
 import { Accordion, Modal } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE, paymentOptions } from 'common/constants';
-import { useCreatePaymentMutation } from 'api/admin/leads/endpoints/calculator';
+import { useCreatePaymentMutation, useDeletePaymentMutation } from 'api/admin/leads/endpoints/calculator';
 import { useGetPaymentCurrencyQuery } from 'api/admin/paymentCurrency/paymentCurrency.api';
 import { Options } from 'types/common';
 import { ICalcPayment, ICreatePaymentParams } from 'types/entities/leads';
@@ -31,11 +31,12 @@ interface IProps {
   }[];
 }
 
+const ordinalTitles = ['Первая оплата', 'Вторая оплата', 'Третья оплата', 'Четвертая оплата', 'Пятая оплата'];
+
 export const PaymentDetailsFrom: FC<IProps> = ({
   isActiveTab,
   formProps,
   index,
-  title,
   handleAddPaymentAccordion,
   handleEditPaymentAccordion,
   isEdit,
@@ -56,7 +57,14 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     );
   }, [data]);
 
-  const { register, getValues, setValue, watch } = useForm<ICalcPayment>({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors }
+  } = useForm<ICalcPayment>({
     defaultValues: {
       brutto: '',
       netto: '',
@@ -69,7 +77,9 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     }
   });
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
-  const updatedTitle = index === 0 ? (isActiveTab === 'partial' ? title || '' : 'Данные об оплате') : title;
+  const [deletePayment] = useDeletePaymentMutation(); // Новый хук
+
+  const updatedTitle = isActiveTab === 'partial' ? ordinalTitles[index] : 'Данные об оплате';
 
   const brutto = watch('brutto');
   const course_TO = watch('course_TO');
@@ -122,8 +132,15 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     if (!formProps?.payment_method) setValue('payment_method', Number(paymentOptions[0]?.value || 0));
   }, [formProps?.currency, formProps?.payment_method, paymentCurrencyOptions, setValue]);
 
-  const onSubmit = () => {
-    const data = getValues();
+  useEffect(() => {
+    if (formProps?.id) {
+      setSaveStatusTrueorFalse(true);
+    }
+  }, [formProps?.id]);
+
+  const onSubmit = handleSubmit((data) => {
+    console.log('Данные для отправки:', data);
+
     const createPaymentDto = {
       ...data,
       brutto: data.brutto ? Number(data.brutto) : 0,
@@ -151,7 +168,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
       .catch(() => {
         notify(MESSAGE.ERROR, 'error');
       });
-  };
+  });
 
   const isNotEmpty = (value: unknown) => {
     return value !== null && value !== undefined && value !== '';
@@ -168,7 +185,28 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   };
 
   const deletePaymentAccordion = () => {
-    handleDeletePaymentAccordion?.(index);
+    console.log('PaymentDetailsFrom: Вызвана функция deletePaymentAccordion', {
+      index,
+      paymentAccordions,
+      formProps,
+      hasId: !!formProps?.id
+    });
+
+    if (formProps?.id) {
+      deletePayment(formProps.id)
+        .unwrap()
+        .then(() => {
+          handleDeletePaymentAccordion?.(index);
+          notify('Оплата успешно удалена', 'success');
+        })
+        .catch((error) => {
+          console.error('PaymentDetailsFrom: Ошибка удаления оплаты', error);
+          notify(MESSAGE.ERROR, 'error');
+        });
+    } else {
+      handleDeletePaymentAccordion?.(index);
+      notify('Оплата успшено удалена', 'success');
+    }
   };
 
   return (
@@ -179,7 +217,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
         isEdit={isEdit}
         onSaveAction={() => onSubmit()}
         isOpenDefault={true}
-        deleteIconState={updatedTitle === 'Данные об оплате' ? false : updatedTitle === 'Первая оплата' ? false : true}
+        deleteIconState={isActiveTab === 'partial' && index > 0}
         handleDeletePaymentAccordion={deletePaymentAccordion}
       >
         <Loading isSpin={isLoading}>
@@ -188,89 +226,50 @@ export const PaymentDetailsFrom: FC<IProps> = ({
               <div className={styles.more_items_block}>
                 <div className={styles.item_block}>
                   <label>Брутто</label>
-                  <Input
-                    {...register('brutto', { required: 'обязательное поле' })}
-                    placeholder='0'
-                    className={styles.inp_wrapper}
-                    disabled={!isEdit}
-                    type='number'
-                  />
+                  <Input {...register('brutto')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
                 </div>
                 <div className={styles.item_block}>
                   <label>Нетто</label>
-                  <Input
-                    {...register('netto', { required: 'обязательное поле' })}
-                    placeholder='0'
-                    className={styles.inp_wrapper}
-                    disabled={!isEdit}
-                    type='number'
-                  />
+                  <Input {...register('netto')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
                 </div>
               </div>
               <div className={styles.item_block}>
                 <label>Способ оплаты</label>
-                <Select
-                  {...register('payment_method', { required: 'обязательное поле' })}
-                  options={paymentOptions}
-                  className={styles.select}
-                  disabled={!isEdit}
-                />
+                <Select {...register('payment_method')} options={paymentOptions} className={styles.select} disabled={!isEdit} />
               </div>
             </div>
             <div className={styles.blocks}>
               <div className={styles.item_block}>
                 <label>Валюта (сом)</label>
-                <Input
-                  {...register('exchange_rate', { required: 'обязательное поле' })}
-                  placeholder='0'
-                  className={styles.inp_wrapper}
-                  disabled={!isEdit}
-                  type='number'
-                />
+                <Input {...register('exchange_rate')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
               </div>
               <div className={styles.item_block}>
                 <label>Комиссия</label>
-                <Input
-                  {...register('commission', { required: 'обязательное поле' })}
-                  placeholder='0'
-                  className={styles.inp_wrapper}
-                  disabled={!isEdit}
-                  type='number'
-                />
+                <Input {...register('commission')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
               </div>
             </div>
             <div className={styles.blocks}>
               <div className={styles.more_items_block}>
                 <div className={styles.item_block}>
                   <label>Курс ТО</label>
-                  <Input
-                    {...register('course_TO', { required: 'обязательное поле' })}
-                    placeholder='0'
-                    className={styles.inp_wrapper}
-                    disabled={!isEdit}
-                    type='number'
-                  />
+                  <Input {...register('course_TO')} placeholder='0' className={styles.inp_wrapper} disabled={!isEdit} type='number' />
                 </div>
                 <div className={styles.item_block}>
                   <label>СО клиента</label>
                   <DatePicker
-                    {...register('client_due_date', { required: 'обязательное поле' })}
+                    {...register('client_due_date', { required: 'Поле обязательно для заполнения' })}
                     className={styles.datepicker}
                     disabled={!isEdit}
                     defaultValue={dayjs().format('YYYY-MM-DD')}
                     datePicketType='date'
                   />
+                  {errors.client_due_date && <p className={styles.error}>{errors.client_due_date.message}</p>}
                 </div>
               </div>
               <div className={styles.item_block}>
                 <label>Валюта (Брутто/Нетто/Комиссия)</label>
                 {paymentCurrencyOptions && (
-                  <Select
-                    {...register('currency', { required: 'обязательное поле' })}
-                    options={paymentCurrencyOptions}
-                    className={styles.select}
-                    disabled={!isEdit}
-                  />
+                  <Select {...register('currency')} options={paymentCurrencyOptions} className={styles.select} disabled={!isEdit} />
                 )}
               </div>
             </div>
