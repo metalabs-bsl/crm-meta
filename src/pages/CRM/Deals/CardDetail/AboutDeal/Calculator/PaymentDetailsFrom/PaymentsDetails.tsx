@@ -2,6 +2,7 @@ import { type FC, useEffect, useState } from 'react';
 import { ICreatePaymentParams } from 'types/entities';
 import { ICalcPayment } from 'types/entities/leads';
 import { PaymentDetailsFrom } from './PaymentDetailsFrom';
+import { useDeletePaymentMutation } from 'api/admin/leads/endpoints/calculator';
 
 interface IProps {
   paymentsList: ICalcPayment[] | undefined;
@@ -22,6 +23,7 @@ const defaultPayment = [
 export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calculator_id }) => {
   const [paymentAccordions, setPaymentAccordions] = useState(defaultPayment);
   const [paymentForms, setPaymentForms] = useState<ICreatePaymentParams[]>([]);
+  const [deletePayment] = useDeletePaymentMutation();
 
   useEffect(() => {
     console.log('Полученные данные paymentsList:', paymentsList);
@@ -129,9 +131,6 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
   return (
     <>
       {paymentForms.map((payment, idx) => {
-        console.log(`Рендеринг платежа с индексом ${idx}:`, payment);
-        console.log(`Рендеринг аккордеона с индексом ${idx}:`, paymentAccordions[idx]);
-
         return (
           <PaymentDetailsFrom
             isActiveTab={isActiveTab}

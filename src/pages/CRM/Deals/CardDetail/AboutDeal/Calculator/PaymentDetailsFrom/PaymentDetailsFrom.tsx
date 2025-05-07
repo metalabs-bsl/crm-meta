@@ -132,6 +132,12 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     if (!formProps?.payment_method) setValue('payment_method', Number(paymentOptions[0]?.value || 0));
   }, [formProps?.currency, formProps?.payment_method, paymentCurrencyOptions, setValue]);
 
+  useEffect(() => {
+    if (formProps?.id) {
+      setSaveStatusTrueorFalse(true);
+    }
+  }, [formProps?.id]);
+
   const onSubmit = handleSubmit((data) => {
     console.log('Данные для отправки:', data);
 
