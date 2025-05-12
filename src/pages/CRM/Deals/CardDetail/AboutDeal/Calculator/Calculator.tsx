@@ -58,7 +58,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
       setIsActiveTab(currentType);
       setIsFullPayment(data.is_full_payment);
     }
-  }, [data?.id]); 
+  }, [data?.id]);
 
   const handleTabChange = (newTab: string) => {
     if (newTab !== isActiveTab) {
@@ -148,7 +148,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
         <div className={styles.tab_block}>
           <Tabs
             isActiveTab={isActiveTab}
-            setIsActiveTab={() => {}} 
+            setIsActiveTab={() => {}}
             tabItems={tabItems}
             className={styles.tabs}
             tabClassName={styles.tab}
