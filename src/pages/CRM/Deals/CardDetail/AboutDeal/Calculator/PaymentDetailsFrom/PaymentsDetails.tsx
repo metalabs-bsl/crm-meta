@@ -39,12 +39,11 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
         },
         currency: payment?.currency || ''
       }));
-      setPaymentForms(initialPaymentForms);
       const initialPaymentAccordions = initialPaymentForms.map((_, index) => ({
-        title: ordinalTitles[index] || `Оплата ${index + 1}`,
+        title: ordinalTitles[index],
         isEdit: false
       }));
-
+      setPaymentForms(initialPaymentForms);
       setPaymentAccordions(initialPaymentAccordions);
     } else {
       const newPaymentForm: ICreatePaymentParams = {
@@ -61,23 +60,27 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
         },
         currency: ''
       };
+      const newAccordion = {
+        title: isActiveTab === 'full' ? 'Данные об оплате' : 'Первая оплата',
+        isEdit: true
+      };
       setPaymentForms([newPaymentForm]);
-      setPaymentAccordions([
-        {
-          title: ordinalTitles[0] || 'Данные об оплате',
-          isEdit: false
-        }
-      ]);
+      setPaymentAccordions([newAccordion]);
     }
-  }, [paymentsList, calculator_id]);
+  }, [paymentsList, calculator_id, isActiveTab]);
 
   const handleEditPaymentAccordion = (index: number) => {
-    setPaymentAccordions(paymentAccordions.map((accordion, i) => (i === index ? { ...accordion, isEdit: !accordion.isEdit } : accordion)));
+    setPaymentAccordions(
+      paymentAccordions.map((accordion, i) => ({
+        ...accordion,
+        isEdit: i === index ? !accordion.isEdit : false
+      }))
+    );
   };
 
   const handleAddPaymentAccordion = () => {
     const newAccordionIndex = paymentAccordions.length;
-    const newAccordionTitle = ordinalTitles[newAccordionIndex] || `Оплата ${newAccordionIndex + 1}`;
+    const newAccordionTitle = ordinalTitles[newAccordionIndex];
     const newPaymentForm: ICreatePaymentParams = {
       id: '',
       brutto: 0,
@@ -96,7 +99,7 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
       ...paymentAccordions,
       {
         title: newAccordionTitle,
-        isEdit: false
+        isEdit: true
       }
     ]);
     setPaymentForms([...paymentForms, newPaymentForm]);
@@ -105,7 +108,6 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
   const handleDeletePaymentAccordion = (index: number) => {
     const updatedAccordions = paymentAccordions.filter((_, i) => i !== index);
     const updatedForms = paymentForms.filter((_, i) => i !== index);
-
     setPaymentAccordions(updatedAccordions);
     setPaymentForms(updatedForms);
   };
@@ -118,20 +120,22 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
 
   return (
     <>
-      {paymentForms.map((payment, idx) => (
-        <PaymentDetailsFrom
-          isActiveTab={isActiveTab}
-          formProps={payment}
-          key={idx}
-          index={idx}
-          title={paymentAccordions[idx]?.title || ''}
-          isEdit={paymentAccordions[idx]?.isEdit}
-          handleAddPaymentAccordion={handleAddPaymentAccordion}
-          handleEditPaymentAccordion={handleEditPaymentAccordion}
-          paymentAccordions={paymentAccordions}
-          handleDeletePaymentAccordion={handleDeletePaymentAccordion}
-        />
-      ))}
+      {paymentForms.map((payment, idx) => {
+        return (
+          <PaymentDetailsFrom
+            isActiveTab={isActiveTab}
+            formProps={payment}
+            key={idx}
+            index={idx}
+            title={paymentAccordions[idx]?.title || 'Первая оплата'}
+            isEdit={paymentAccordions[idx]?.isEdit}
+            handleAddPaymentAccordion={handleAddPaymentAccordion}
+            handleEditPaymentAccordion={handleEditPaymentAccordion}
+            paymentAccordions={paymentAccordions}
+            handleDeletePaymentAccordion={handleDeletePaymentAccordion}
+          />
+        );
+      })}
     </>
   );
 };

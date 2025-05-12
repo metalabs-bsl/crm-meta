@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Navbar } from 'common/components';
 import { crmChapters } from 'common/constants';
-import { useGetUnpaidInvoicesCountQuery } from 'api/admin/accounts/accounts.api';
 import { Accounts } from './Accounts';
 import { Deals } from './Deals';
 import { Employees } from './Employees';
@@ -13,7 +12,6 @@ import { NAVBAR_PAGES } from 'types/enums';
 
 export const CRM: FC = () => {
   const { chapter } = useParams<{ chapter: string }>();
-  const { data: accountsBadge } = useGetUnpaidInvoicesCountQuery();
   if (!chapter) return null;
 
   const getComponent = (chapter: string) => {
@@ -28,7 +26,7 @@ export const CRM: FC = () => {
 
   return (
     <div className={styles.crm}>
-      <Navbar navbarItems={crmChapters} page={NAVBAR_PAGES.CRM} accountsBadge={accountsBadge?.count} />
+      <Navbar navbarItems={crmChapters} page={NAVBAR_PAGES.CRM} />
       <div className={styles.pageContainer}>{getComponent(chapter)}</div>
     </div>
   );

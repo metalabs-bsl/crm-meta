@@ -9,6 +9,7 @@ import { useNotify } from 'common/hooks';
 import { MESSAGE } from 'common/constants';
 import {
   useChoicePaymentToggleMutation,
+  useDeletePaymentMutation,
   useGetBrandsQuery,
   useGetServisesQuery,
   useUpdateLeadCalcPaidStatusMutation
@@ -36,6 +37,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
   const notify = useNotify();
   const [updatePaidStatus, { isLoading }] = useUpdateLeadCalcPaidStatusMutation();
   const [choicePaymentToggle] = useChoicePaymentToggleMutation();
+  const [deletePayment] = useDeletePaymentMutation();
   const { data: servicesOptions } = useGetServisesQuery();
   const { data: brandOptions } = useGetBrandsQuery();
 
@@ -50,14 +52,13 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [nextTab, setNextTab] = useState<string>('');
 
-  // устанавливаем начальное состояние только один раз при монтировании
   useEffect(() => {
     if (data) {
       const currentType = data.is_full_payment ? 'full' : 'partial';
       setIsActiveTab(currentType);
       setIsFullPayment(data.is_full_payment);
     }
-  }, [data?.id]); // зависит только от id
+  }, [data?.id]);
 
   const handleTabChange = (newTab: string) => {
     if (newTab !== isActiveTab) {
@@ -69,22 +70,38 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
   const confirmTabChange = async () => {
     if (data?.id) {
       try {
+        if (data.paymentData && data.paymentData.length > 0) {
+          notify('Все предыдущие оплаты будут удалены при смене типа оплаты', 'warning');
+          await Promise.all(
+            data.paymentData.map((payment) => {
+              if (payment.id) {
+                return deletePayment(payment.id).unwrap();
+              }
+              return Promise.resolve();
+            })
+          );
+        }
+
         await choicePaymentToggle(data.id).unwrap();
+
         setIsActiveTab(nextTab);
         setIsFullPayment(nextTab === 'full');
         setShowConfirmModal(false);
 
-        // Обновление status оплаты при смене вкладки
         if (nextTab === 'partial') {
           changePaidStatus('Частично');
         } else if (nextTab === 'full') {
           changePaidStatus('Оплачено');
         }
+
+        notify('Тип оплаты успешно изменен', 'success');
       } catch (err) {
         console.error('Ошибка при смене типа оплаты:', err);
+        notify(MESSAGE.ERROR, 'error');
       }
     } else {
       console.error('ID is undefined');
+      notify('Ошибка: ID калькулятора не определен', 'error');
     }
   };
 
@@ -131,7 +148,7 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
         <div className={styles.tab_block}>
           <Tabs
             isActiveTab={isActiveTab}
-            setIsActiveTab={() => {}} // управляем через onChange
+            setIsActiveTab={() => {}}
             tabItems={tabItems}
             className={styles.tabs}
             tabClassName={styles.tab}
