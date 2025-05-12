@@ -77,7 +77,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
     }
   });
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
-  const [deletePayment] = useDeletePaymentMutation(); // Новый хук
+  const [deletePayment] = useDeletePaymentMutation();
 
   const updatedTitle = isActiveTab === 'partial' ? ordinalTitles[index] : 'Данные об оплате';
 
@@ -139,8 +139,6 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   }, [formProps?.id]);
 
   const onSubmit = handleSubmit((data) => {
-    console.log('Данные для отправки:', data);
-
     const createPaymentDto = {
       ...data,
       brutto: data.brutto ? Number(data.brutto) : 0,

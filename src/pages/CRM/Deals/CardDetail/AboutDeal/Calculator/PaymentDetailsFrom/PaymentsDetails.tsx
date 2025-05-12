@@ -24,9 +24,6 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
   const [paymentForms, setPaymentForms] = useState<ICreatePaymentParams[]>([]);
 
   useEffect(() => {
-    console.log('Полученные данные paymentsList:', paymentsList);
-    console.log('Полученный calculator_id:', calculator_id);
-
     if (paymentsList && paymentsList.length > 0) {
       const initialPaymentForms = paymentsList.map((payment) => ({
         id: payment.id,
@@ -109,13 +106,8 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
   };
 
   const handleDeletePaymentAccordion = (index: number) => {
-    console.log('Вызвана функция handleDeletePaymentAccordion с индексом:', index);
-    console.log('Текущие paymentAccordions до удаления:', paymentAccordions);
-    console.log('Текущие paymentForms до удаления:', paymentForms);
     const updatedAccordions = paymentAccordions.filter((_, i) => i !== index);
     const updatedForms = paymentForms.filter((_, i) => i !== index);
-    console.log('Обновленные paymentAccordions после удаления:', updatedAccordions);
-    console.log('Обновленные paymentForms после удаления:', updatedForms);
     setPaymentAccordions(updatedAccordions);
     setPaymentForms(updatedForms);
   };
