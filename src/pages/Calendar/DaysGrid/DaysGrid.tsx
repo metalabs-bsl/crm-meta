@@ -51,7 +51,7 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
   };
 
   const onNoteClick = (note: Note) => {
-    console.log('Передаём заметку в NoteForm:', note); // Логируем заметку
+    console.log('Передаём заметку в NoteForm:', note);
     setCurrentNote(note);
     setNoteOpen(true);
   };
@@ -66,7 +66,7 @@ export const DaysGrid: React.FC<DaysGridProps> = ({ currentMonth, notes, birthda
     setBirthdayOpen(false);
   };
 
-  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).isSame(day, 'day'));
+  const getNotesForDay = (day: Dayjs) => notes.filter((note) => dayjs(note.date).utc().startOf('day').isSame(day.utc().startOf('day')));
   const getBirthdaysForDay = (day: Dayjs) => {
     return birthdays.filter((birthday) => {
       const birthdayDate = dayjs(birthday.date).utc();

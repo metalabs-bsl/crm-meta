@@ -104,7 +104,6 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
       createNote(payload)
         .unwrap()
         .then(() => {
-          new Audio('/notification.mp3').play();
           notify(MESSAGE.CREATED, 'success');
           onCloseModal && onCloseModal();
         });
@@ -121,7 +120,6 @@ export const NoteForm: FC<IProps> = ({ formProps, onCloseModal }) => {
 
   const onDelete = (id?: string) => {
     if (id) {
-      console.log('Удаляем заметку с ID:', id); // Логируем ID
       deleteNote(id)
         .unwrap()
         .then(() => {

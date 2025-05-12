@@ -2,7 +2,7 @@ import { TableRow } from 'pages/CRM/Deals/List/types/types';
 import { setConnected } from 'api/admin/kanban/kanban.slice';
 import { setKanbanAllBoard, setKanbanBoard, setOnlineList } from 'api/admin/kanban/kanban.ws';
 import { setListBoard, setListBoardAll } from 'api/admin/list/list.slice';
-import { IColumn } from 'types/entities';
+import { IColumn, Note } from 'types/entities';
 
 import { AppDispatch, RootState } from 'api';
 import { io, Socket } from 'socket.io-client';
@@ -38,6 +38,10 @@ export const connectSocket = (accessToken: string | null) => {
 
     socket.connect();
   }
+};
+
+export const getSocket = () => {
+  return socket;
 };
 
 export const connectWhatsAppSocket = () => {
@@ -115,6 +119,14 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
 
     socket?.on('boardKanbanAll', (message: IColumn[]) => {
       dispatch(setKanbanAllBoard(message));
+    });
+
+    socket?.on('note', (message: { body?: Note; message: string }) => {
+      if (message.body) {
+      } else {
+        console.log(message);
+        new Audio('/notification.mp3').play();
+      }
     });
 
     socket?.on('boardList', (message: TableRow) => {
