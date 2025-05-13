@@ -60,6 +60,9 @@
     border-radius: 5px;
     background-color: $seaSalt;
     cursor: pointer;
+    &.highlight {
+      background-color: yellow; /* Задний фон жёлтого цвета */
+    }
     .mainBlock {
       align-items: center;
       font-size: 14px;
