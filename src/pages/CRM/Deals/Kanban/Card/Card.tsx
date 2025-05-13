@@ -103,7 +103,11 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
           <div className={styles.date}>{updatedDate}</div>
         </div>
         {comment_or_reminder && (
-          <div className={styles.commentContainer}>
+          <div
+            className={cn(styles.commentContainer, {
+              [styles.highlight]: comment_or_reminder.text === 'Повторный лид' // Условие для жёлтого фона
+            })}
+          >
             <div className={styles.mainBlock}>
               <Icon type={comment_or_reminder.type === 'reminder' ? 'history-todo' : 'comment'} alt='comment' />
               <span className={styles.comment}>{comment_or_reminder.text}</span>
