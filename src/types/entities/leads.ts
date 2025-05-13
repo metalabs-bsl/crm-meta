@@ -143,6 +143,7 @@ export interface IAdditionalPayment {
 
 export interface ICalcPayment {
   id?: string;
+  name: string;
   brutto: number | '';
   netto: number | '';
   exchange_rate: number | '';

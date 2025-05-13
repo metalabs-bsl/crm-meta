@@ -86,6 +86,15 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   const netto = watch('netto');
 
   useEffect(() => {
+    if (data) {
+      console.log('Данные валют с бэкенда:', data);
+    }
+  }, [data]);
+  useEffect(() => {
+    console.log('Входные данные formProps:', formProps);
+  }, [formProps]);
+
+  useEffect(() => {
     if (brutto && course_TO) {
       const numBrutto = Number(brutto);
       const numCourse = Number(course_TO);
@@ -183,13 +192,6 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   };
 
   const deletePaymentAccordion = () => {
-    console.log('PaymentDetailsFrom: Вызвана функция deletePaymentAccordion', {
-      index,
-      paymentAccordions,
-      formProps,
-      hasId: !!formProps?.id
-    });
-
     if (formProps?.id) {
       deletePayment(formProps.id)
         .unwrap()
