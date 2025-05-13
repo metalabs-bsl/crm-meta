@@ -84,16 +84,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   const brutto = watch('brutto');
   const course_TO = watch('course_TO');
   const netto = watch('netto');
-
-  useEffect(() => {
-    if (data) {
-      console.log('Данные валют с бэкенда:', data);
-    }
-  }, [data]);
-  useEffect(() => {
-    console.log('Входные данные formProps:', formProps);
-  }, [formProps]);
-
+  
   useEffect(() => {
     if (brutto && course_TO) {
       const numBrutto = Number(brutto);
