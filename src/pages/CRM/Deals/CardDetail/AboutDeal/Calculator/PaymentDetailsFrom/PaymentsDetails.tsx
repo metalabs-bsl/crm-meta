@@ -25,7 +25,11 @@ export const PaymentsDetails: FC<IProps> = ({ isActiveTab, paymentsList, calcula
 
   useEffect(() => {
     if (paymentsList && paymentsList.length > 0) {
-      const initialPaymentForms = paymentsList.map((payment) => ({
+      const sortedPaymentsList = [...paymentsList].sort((a, b) => {
+        const order = ordinalTitles.indexOf(a.name) - ordinalTitles.indexOf(b.name);
+        return order;
+      });
+      const initialPaymentForms = sortedPaymentsList.map((payment) => ({
         id: payment.id,
         brutto: Number(payment.brutto) || 0,
         netto: Number(payment.netto) || 0,
