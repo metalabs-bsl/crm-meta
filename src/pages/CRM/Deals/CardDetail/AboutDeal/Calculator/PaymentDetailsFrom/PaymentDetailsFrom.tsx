@@ -84,7 +84,7 @@ export const PaymentDetailsFrom: FC<IProps> = ({
   const brutto = watch('brutto');
   const course_TO = watch('course_TO');
   const netto = watch('netto');
-  
+
   useEffect(() => {
     if (brutto && course_TO) {
       const numBrutto = Number(brutto);
