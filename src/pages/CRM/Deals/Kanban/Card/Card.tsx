@@ -105,7 +105,7 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
         {comment_or_reminder && (
           <div
             className={cn(styles.commentContainer, {
-              [styles.highlight]: comment_or_reminder.text === 'Повторный лид' // Условие для жёлтого фона
+              [styles.highlight]: comment_or_reminder.text === 'Повторный лид'
             })}
           >
             <div className={styles.mainBlock}>
@@ -127,6 +127,12 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
                 src={`${process.env.REACT_APP_BASE_URL}/files/download/${responsible_employee?.avatar_id}`}
                 alt='user'
               />
+            ) : responsible_employee?.first_name || responsible_employee?.second_name ? (
+              <div className={styles.user_initial}>
+                {`${responsible_employee?.first_name?.charAt(0).toUpperCase() || ''}${
+                  responsible_employee?.second_name?.charAt(0).toUpperCase() || ''
+                }`}
+              </div>
             ) : (
               <Icon type='userIcon' alt='user' className={styles.user_img} />
             )}
