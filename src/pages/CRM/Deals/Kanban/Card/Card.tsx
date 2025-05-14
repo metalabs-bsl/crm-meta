@@ -103,7 +103,11 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
           <div className={styles.date}>{updatedDate}</div>
         </div>
         {comment_or_reminder && (
-          <div className={styles.commentContainer}>
+          <div
+            className={cn(styles.commentContainer, {
+              [styles.highlight]: comment_or_reminder.text === 'Повторный лид'
+            })}
+          >
             <div className={styles.mainBlock}>
               <Icon type={comment_or_reminder.type === 'reminder' ? 'history-todo' : 'comment'} alt='comment' />
               <span className={styles.comment}>{comment_or_reminder.text}</span>
@@ -123,6 +127,12 @@ export const Card: FC<CardProps> = ({ data, index, canDrag }) => {
                 src={`${process.env.REACT_APP_BASE_URL}/files/download/${responsible_employee?.avatar_id}`}
                 alt='user'
               />
+            ) : responsible_employee?.first_name || responsible_employee?.second_name ? (
+              <div className={styles.user_initial}>
+                {`${responsible_employee?.first_name?.charAt(0).toUpperCase() || ''}${
+                  responsible_employee?.second_name?.charAt(0).toUpperCase() || ''
+                }`}
+              </div>
             ) : (
               <Icon type='userIcon' alt='user' className={styles.user_img} />
             )}

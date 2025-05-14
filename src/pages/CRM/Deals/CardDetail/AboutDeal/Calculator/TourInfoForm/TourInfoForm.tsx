@@ -58,8 +58,6 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
     setIsOpenPassengersModal(false);
   };
 
-  console.log('tour data', formProps);
-
   const onClickPassengersItem = () => {
     if (!isEditable) setIsOpenPassengersModal(!isOpenPassengersModal);
   };
@@ -186,17 +184,9 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
           id: calcId
         }
       };
-      // if (sendingData.arrival_date === '') {
-      //   delete sendingData.arrival_date;
-      // }
-
-      // if (sendingData.departure_date === '') {
-      //   delete sendingData.departure_date;
-      // }
       postTourData(sendingData)
         .unwrap()
-        .then((response) => {
-          console.log('Ответ от сервера:', response);
+        .then(() => {
           notify(MESSAGE.UPDATED, 'success');
           setIsEditTourInfo(!isEditTourInfo);
         })

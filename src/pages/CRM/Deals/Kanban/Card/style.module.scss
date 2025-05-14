@@ -60,6 +60,9 @@
     border-radius: 5px;
     background-color: $seaSalt;
     cursor: pointer;
+    &.highlight {
+      background-color: yellow;
+    }
     .mainBlock {
       align-items: center;
       font-size: 14px;
@@ -75,6 +78,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .user_initial {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background-color: #ccc; 
+      color: #000; 
+      font-size: 14px; 
+      font-weight: 600;
+      border-radius: 50%; 
+      text-transform: uppercase;
+    }
     .todoCreate,
     .user_img {
       width: 24px;

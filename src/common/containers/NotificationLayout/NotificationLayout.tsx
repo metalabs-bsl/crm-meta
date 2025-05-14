@@ -11,6 +11,7 @@ import { setBirthdayModalShown, setIsModalOpen, setIsPreved, setNoteModalShown, 
 import { useGetWorkTimeInfoQuery } from 'api/admin/workTime/workTime.api';
 import { Birthday, Note } from 'types/entities';
 
+import { getSocket } from 'socket';
 // import { leadFlyData } from './NotificationLayout.helper';
 import { NOTIFICATION_COMPONENTS } from 'types/enums';
 
@@ -67,23 +68,67 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     }
   }, [userInfo, dispatch]);
 
+  const socket = getSocket();
+
+  useEffect(() => {
+    const handleNoteMessage = (message: { body?: Note; message: string }) => {
+      console.log(message);
+      if (message.body) {
+        const note = message.body;
+        const eventTime = dayjs(note.date).utc();
+        const reminderMinutes = getReminderOffset(note.reminderTypes[0]);
+        const reminderTime = eventTime.subtract(reminderMinutes, 'minute').local();
+        // reminderTime = reminderTime.add(+6, 'hour');
+        const now = dayjs();
+        const timeUntilReminder = reminderTime.diff(now);
+
+        if (note.title === 'lol') {
+          console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
+          console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
+          console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
+        }
+
+        if (timeUntilReminder > 0) {
+          console.log('timeout set');
+          setTimeout(() => {
+            new Audio('/notification.mp3').play();
+            setNoteData(note);
+            dispatch(setNoteModalShown(true));
+            openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
+          }, timeUntilReminder);
+        }
+      } else {
+        console.log(message);
+        new Audio('/notification.mp3').play();
+      }
+    };
+
+    // Подписываемся на событие 'note'
+    socket?.on('note', handleNoteMessage);
+
+    // Отписываемся при размонтировании компонента
+    return () => {
+      socket?.off('note', handleNoteMessage);
+    };
+  }, [dispatch, getReminderOffset, openNotificationModal]);
+
   useEffect(() => {
     if (calendarData) {
       calendarData.notes.forEach((note) => {
-        const eventTime = dayjs(note.date).utc().local(); // Преобразуем событие в локальное время
+        const eventTime = dayjs(note.date).utc();
         const reminderMinutes = getReminderOffset(note.reminderTypes[0]);
-        const reminderTime = eventTime.subtract(reminderMinutes, 'minute'); // Рассчитываем время напоминания
-        const now = dayjs(); // Текущее локальное время
+        let reminderTime = eventTime.subtract(reminderMinutes, 'minute').local();
+        reminderTime = reminderTime.add(-6, 'hour');
+        const now = dayjs();
+        const timeUntilReminder = reminderTime.diff(now);
 
-        // console.log('Event Time (Local):', eventTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        // console.log('Reminder Time (Local):', reminderTime.format('YYYY-MM-DD HH:mm:ss Z'));
-        // console.log('Now:', now.format('YYYY-MM-DD HH:mm:ss Z'));
-        if (reminderTime.isSame(now, 'minute')) {
-          console.log('vot modalka');
-          new Audio('/notification.mp3').play();
-          setNoteData(note);
-          dispatch(setNoteModalShown(true));
-          openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
+        if (timeUntilReminder > 0) {
+          setTimeout(() => {
+            new Audio('/notification.mp3').play();
+            setNoteData(note);
+            dispatch(setNoteModalShown(true));
+            openNotificationModal(NOTIFICATION_COMPONENTS.NOTE);
+          }, timeUntilReminder);
         }
       });
       console.log(calendarData);

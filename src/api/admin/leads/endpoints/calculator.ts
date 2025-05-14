@@ -75,6 +75,13 @@ export const calculatorApi = leadsMainApi.injectEndpoints({
       }),
       invalidatesTags: ['Calculator']
     }),
+    deletePayment: mutation<void, string>({
+      query: (paymentId) => ({
+        method: 'DELETE',
+        url: `/leads-calculator-payment-data/${paymentId}`
+      }),
+      invalidatesTags: ['Calculator']
+    }),
     uploadBackPassport: mutation<IUploadPassport.Response, IUploadPassport.Params>({
       query: ({ body, customerId }) => ({
         method: 'POST',
@@ -128,6 +135,7 @@ export const {
   useChoicePaymentToggleMutation,
   useSetTourDataMutation,
   useCreatePaymentMutation,
+  useDeletePaymentMutation,
   useSetAdditionalPaymentMutation,
   useUploadBackPassportMutation,
   useUploadFrontPassportMutation,
