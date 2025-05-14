@@ -23,7 +23,7 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
   const { role } = useAppSelector(employeesSelectors.employees);
 
   const params = new URLSearchParams(search);
-  const isFull = params.get('isFull') ?? 'true';
+  const isFull = params.get('isFull') ?? 'false';
 
   const { data: accounts } = useGetAllAccountsQuery(isFull) as { data?: IAccountData[] };
 

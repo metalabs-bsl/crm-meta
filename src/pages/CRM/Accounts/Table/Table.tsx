@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Empty } from 'common/ui';
 import { IAccountData } from 'types/entities/accounts';
@@ -11,16 +11,21 @@ interface ITableProps {
 }
 
 export const Table: FC<ITableProps> = ({ data }) => {
-  const [paymentStatuses, setPaymentStatuses] = useState<{ [key: string]: string }>(
-    data.reduce(
-      (acc, row) => {
-        acc[row.id] = row.paymentStatus || 'Не оплачено'; // Начальное значение
-        return acc;
-      },
-      {} as { [key: string]: string }
-    )
-  );
+  console.log('payment', data);
+  const [paymentStatuses, setPaymentStatuses] = useState<{ [key: string]: string }>({});
 
+  useEffect(() => {
+    setPaymentStatuses((prevStatuses) => {
+      const newStatuses = data.reduce(
+        (acc, row) => {
+          acc[row.id] = prevStatuses[row.id] || row.paymentStatus || 'Не оплачено';
+          return acc;
+        },
+        {} as { [key: string]: string }
+      );
+      return newStatuses;
+    });
+  }, [data]);
   const handlePaymentStatusChange = (id: string, newStatus: string) => {
     setPaymentStatuses((prevStatuses) => ({
       ...prevStatuses,
