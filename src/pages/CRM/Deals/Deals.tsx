@@ -34,12 +34,15 @@ export const Deals = () => {
   const [updateAppSettings, { isLoading }] = useUpdateAppSettingsMutation();
   const { role } = useAppSelector(employeesSelectors.employees);
   const [isActiveTab, setIsActiveTab] = useState<DEALS_TABS>(DEALS_TABS.kanban);
-  const [wsDataType, setWsDataType] = useState<string>(options[0].value as string);
+  const [wsDataType, setWsDataType] = useState<string>(
+    (role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER ? options[1].value : options[0].value) as string
+  );
   const [reminderCount, setReminderCount] = useState<number>(0);
   const isManagement = role === ROLES.DIRECTOR || role === ROLES.SENIOR_MANAGER;
   const [getTodos, { data: TodoData, isFetching }] = useLazyGetLeadsForTodoQuery();
   const [getSearchedLeads, { data: searchData, isFetching: isSearchFetching }] = useLazySearchLeadsQuery();
   const redirect = useRedirect();
+  // console.log('wsDataType', wsDataType);
 
   useEffect(() => {
     if (wsDataType) {
@@ -102,7 +105,7 @@ export const Deals = () => {
         <div className={styles.filterBlock}>
           {isManagement && (
             <Select
-              defaultValue={options[0].value}
+              defaultValue={wsDataType}
               options={options}
               className={styles.filterSelect}
               onChange={(e) => setWsDataType(e.target.value)}

@@ -10,12 +10,11 @@ interface ExpensesTableRowProps {
 
 export const ExpensesTableRow: FC<ExpensesTableRowProps> = ({ expense, deleteExpense }) => {
   const { creationDate, list, total } = expense;
+  console.log('Expense:', expense);
 
   return (
     <div className={styles.card}>
-      <div className={`${styles.cardColumn} ${styles.cardData}`}>
-        <p className={styles.cardText}>{creationDate.split('T')[0]}</p>
-      </div>
+      <div className={`${styles.cardColumn} ${styles.cardData}`}>{creationDate.split('T')[0].split('-').reverse().join('-')}</div>
       <div className={`${styles.cardColumn} ${styles.cardNaming}`}>
         {list.map((item) => (
           <p key={item.id} className={styles.cardText}>

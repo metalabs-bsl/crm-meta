@@ -13,7 +13,6 @@ import styles from './styles.module.scss';
 
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
-import { emitLeadCreated } from 'socket';
 import { BUTTON_TYPES } from 'types/enums';
 
 interface IProps {

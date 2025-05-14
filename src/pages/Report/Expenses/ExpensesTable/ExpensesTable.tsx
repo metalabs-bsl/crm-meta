@@ -68,7 +68,6 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
         expense_price: item.price
       }));
 
-      // Post to the backend
       const response = await fetch(process.env.REACT_APP_BASE_URL + '/expenses', {
         method: 'POST',
         headers: {
@@ -82,7 +81,6 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
       }
 
       console.log('Expense saved successfully');
-      // Update table data
       setTableData((prev) => [newExpenseData, ...prev]);
       setAddNew(false);
 
@@ -100,7 +98,7 @@ export const ExpensesTable: FC<ExpensesTableProps> = ({ addNew, setAddNew, table
       if (!response.ok) {
         throw new Error(`Failed to delete expense: ${response.statusText}`);
       }
-      await fetchExpenses(); // Refetch expenses after deletion
+      await fetchExpenses();
     } catch (error) {
       console.error('Error deleting expense:', error);
     }
