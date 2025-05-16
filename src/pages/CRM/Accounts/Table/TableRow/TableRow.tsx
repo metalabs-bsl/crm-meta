@@ -1,9 +1,9 @@
-// TableRow.tsx
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import { Empty } from 'common/ui';
 import { Accordion, DropdownModal } from 'common/components';
+import { useLazyGetLeadCalcQuery } from 'api/admin/leads/endpoints/calculator';
 import { IAccountData } from 'types/entities/accounts';
 import { formatDate } from '../../Account.helper';
 import { ContractModal } from './ContractModal';
@@ -30,39 +30,37 @@ export const TableRow: FC<ITableRowProps> = ({
   tourInvoiceEUR,
   whoCreated,
   paymentDetails,
-  paymentStatus, // из родительского компонента
+  paymentStatus,
   customer,
   onPaymentStatusChange
 }) => {
   const navigate = useNavigate();
   const contractNumberRef = useRef<HTMLSpanElement | null>(null);
   const [contractOpen, setContractOpen] = useState<boolean>(false);
+  const [getCalc, { data }] = useLazyGetLeadCalcQuery();
 
-  // где предполагается, что каждый элемент имеет поле isPaid (boolean)
-  const computedPaymentStatus = useMemo(() => {
-    if (!paymentDetails.length) return 'Не оплачено';
-    const allPaid = paymentDetails.every((payment) => payment.isPaid);
-    const nonePaid = paymentDetails.every((payment) => !payment.isPaid);
-    if (allPaid) return 'Оплачено';
-    if (nonePaid) return 'Не оплачено';
-    return 'Частично';
-  }, [paymentDetails]);
+  // const computedPaymentStatus = useMemo(() => {
+  //   if (!paymentDetails.length) return 'Не оплачено';
+  //   const allPaid = paymentDetails.every((detail) => detail.isPaid);
+  //   const nonePaid = paymentDetails.every((detail) => !detail.isPaid);
+  //   if (allPaid) return 'Оплачено';
+  //   if (nonePaid) return 'Не оплачено';
+  //   return 'Частично';
+  // }, [paymentDetails]);
 
-  // Если вычисленный статус изменился, уведомляем родительский компонент.
   useEffect(() => {
-    if (computedPaymentStatus !== paymentStatus) {
-      onPaymentStatusChange(id, computedPaymentStatus);
-    }
-  }, [computedPaymentStatus, id, onPaymentStatusChange, paymentStatus]);
+    getCalc(id).catch((err) => {
+      console.error('Ошибка при загрузке calc:', err);
+    });
+  }, [id, getCalc]);
 
-  // Функция навигации при клике на номер контракта
   const onContractClick = () => {
     navigate(`/crm/transactions?${id}`);
   };
 
   return (
     <>
-      <tr className={cn(styles.mainRow, { [styles.checkedRow]: computedPaymentStatus === 'Оплачено' })}>
+      <tr className={cn(styles.mainRow, { [styles.checkedRow]: paymentStatus === 'Оплачено' })}>
         <td className={styles.item}>
           <span
             className={styles.contractNumber}
@@ -76,15 +74,14 @@ export const TableRow: FC<ITableRowProps> = ({
         </td>
         <td className={styles.item}>{bookingNumber || '-'}</td>
         <td className={cn(styles.item, styles.paymentStatus)}>
-          {/* Отображаем вычисленный статус */}
           <span
             className={cn({
-              [styles.not_paid]: computedPaymentStatus === 'Не оплачено',
-              [styles.paid]: computedPaymentStatus === 'Оплачено',
-              [styles.partial]: computedPaymentStatus === 'Частично'
+              [styles.not_paid]: paymentStatus === 'Не оплачено',
+              [styles.paid]: paymentStatus === 'Оплачено',
+              [styles.partial]: paymentStatus === 'Частично'
             })}
           >
-            {computedPaymentStatus || '-'}
+            {paymentStatus || '-'}
           </span>
         </td>
         <td className={styles.item}>{gross || '-'}</td>
@@ -103,8 +100,16 @@ export const TableRow: FC<ITableRowProps> = ({
           <Accordion className={styles.accordion} title='Информация об оплате'>
             <div className={styles.expandedContent}>
               {!!paymentDetails.length ? (
-                // PaymentRow должен содержать логику изменения isPaid для каждого платежа
-                paymentDetails.map((details) => <PaymentRow {...details} key={details.id} />)
+                paymentDetails.map((details) => (
+                  <PaymentRow
+                    {...details}
+                    key={details.id}
+                    globalPaymentStatus={paymentStatus}
+                    calcId={data?.id ? String(data.id) : undefined}
+                    onPaymentStatusChange={onPaymentStatusChange}
+                    accountId={id}
+                  />
+                ))
               ) : (
                 <Empty />
               )}

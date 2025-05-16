@@ -23,12 +23,13 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
   const { role } = useAppSelector(employeesSelectors.employees);
 
   const params = new URLSearchParams(search);
-  const isFull = params.get('isFull') ?? 'true';
+  const isFull = params.get('isFull') ?? 'false';
 
   const { data: accounts } = useGetAllAccountsQuery(isFull) as { data?: IAccountData[] };
 
   const unpaidCount = accounts
     ? accounts.filter((acc) => {
+        if (acc.paymentStatus === 'Оплачено') return false;
         const det = acc.paymentDetails || [];
         if (det.length === 0) return true;
         const allPaid = det.every((d) => d.isPaid);

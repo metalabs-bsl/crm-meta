@@ -5,27 +5,24 @@ import { Accordion } from 'common/components';
 import { useNotify } from 'common/hooks';
 import { MESSAGE, paymentOptions } from 'common/constants';
 import { useUpdateInvoiceMutation } from 'api/admin/accounts/accounts.api';
+import { useUpdateLeadCalcPaidStatusMutation } from 'api/admin/leads/endpoints/calculator';
 import { Options } from 'types/common';
 import { IPaymentDetailsData } from 'types/entities/accounts';
 import { paymentRowHeaders } from '../../../Account.helper';
 import styles from './styles.module.scss';
 
 const currencyOptions: Options[] = [
-  {
-    value: 1,
-    label: 'сом'
-  },
-  {
-    value: 2,
-    label: 'доллар'
-  },
-  {
-    value: 3,
-    label: 'евро'
-  }
+  { value: 1, label: 'сом' },
+  { value: 2, label: 'доллар' },
+  { value: 3, label: 'евро' }
 ];
 
-export interface IPaymentRowProps extends IPaymentDetailsData {}
+export interface IPaymentRowProps extends IPaymentDetailsData {
+  globalPaymentStatus: string;
+  calcId?: string;
+  onPaymentStatusChange?: (id: string, newStatus: string) => void; // Новый пропс
+  accountId?: string; // Новый пропс
+}
 
 export const PaymentRow: FC<IPaymentRowProps> = ({
   id,
@@ -37,20 +34,28 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
   tourAmount,
   method,
   rate,
-  isPaid,
+  globalPaymentStatus,
   invoice,
   receipt,
-  paymentTOType
+  paymentTOType,
+  calcId,
+  onPaymentStatusChange,
+  accountId
 }) => {
   const notify = useNotify();
   const [updateInvoice] = useUpdateInvoiceMutation();
-  const [isEdit, setIsEdit] = useState<boolean>(true);
-  const [localIsPaid, setLocalIsPaid] = useState<boolean>(isPaid);
+  const [updateLeadCalcPaidStatus] = useUpdateLeadCalcPaidStatusMutation();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [localIsPaid, setLocalIsPaid] = useState<boolean>(globalPaymentStatus === 'Оплачено');
   const [localPaymentTOType, setLocalPaymentTOType] = useState<number>(paymentTOType || 1);
-  const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor?.split('T')[0]);
+  const [localPaymentDateSupervisor, setLocalPaymentDateSupervisor] = useState<string>(paymentDateSupervisor?.split('T')[0] || '');
   const [localTourAmount, setLocalTourAmount] = useState<string>(tourAmount || '');
   const [receiptLocal, setReceiptLocal] = useState<{ id: string; original_name: string } | null>(receipt);
   const [receiptLocalFile, setReceiptLocalFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setLocalIsPaid(globalPaymentStatus === 'Оплачено');
+  }, [globalPaymentStatus]);
 
   useEffect(() => {
     setReceiptLocal(receipt);
@@ -66,9 +71,8 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
 
   const handleSave = async () => {
     const formData = new FormData();
-
     const updatedData = {
-      id: id,
+      id,
       paymentDateSupervisor: localPaymentDateSupervisor,
       tourAmount: localTourAmount,
       isPaid: localIsPaid,
@@ -78,16 +82,22 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
     formData.append('invoiceInfo', JSON.stringify(updatedData));
 
     if (receiptLocalFile) {
-      formData.append(`receipt`, receiptLocalFile);
+      formData.append('receipt', receiptLocalFile);
     }
 
     try {
       await updateInvoice(formData).unwrap();
+
+      if (calcId && accountId) {
+        const newStatus = localIsPaid ? 'Оплачено' : 'Не оплачено';
+        await updateLeadCalcPaidStatus({ calc_id: calcId, paid_status: newStatus }).unwrap();
+        onPaymentStatusChange?.(accountId, newStatus);
+      }
+
       notify(MESSAGE.SUCCESS, 'success');
+      setIsEdit(false);
     } catch (error) {
       notify(MESSAGE.ERROR, 'error');
-    } finally {
-      setIsEdit(false);
     }
   };
 
@@ -104,7 +114,7 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
         <thead className={styles.thead}>
           <tr>
             {paymentRowHeaders.map((header, idx) => (
-              <th key={idx} className={header.classNames.map((el) => `${styles[el]}`).join(' ')}>
+              <th key={idx} className={header.classNames.map((el) => styles[el]).join(' ')}>
                 {header.title}
               </th>
             ))}
