@@ -11,7 +11,6 @@ interface ITableProps {
 }
 
 export const Table: FC<ITableProps> = ({ data }) => {
-  console.log('payment', data);
   const [paymentStatuses, setPaymentStatuses] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {

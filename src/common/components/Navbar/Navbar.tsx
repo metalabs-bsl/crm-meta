@@ -29,6 +29,7 @@ export const Navbar: FC<IProps> = ({ navbarItems, page }) => {
 
   const unpaidCount = accounts
     ? accounts.filter((acc) => {
+        if (acc.paymentStatus === 'Оплачено') return false;
         const det = acc.paymentDetails || [];
         if (det.length === 0) return true;
         const allPaid = det.every((d) => d.isPaid);
