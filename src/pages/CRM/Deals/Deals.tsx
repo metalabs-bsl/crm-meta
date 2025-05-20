@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import { Button, SearchInput, Select } from 'common/ui';
@@ -74,6 +74,15 @@ export const Deals = () => {
     dispatch(setChangeOpenEdgeModal(true));
   };
 
+  const onSearchChange = useCallback(
+    (text: string) => {
+      if (text.length >= 1 && !isSearchFetching) {
+        getSearchedLeads(text);
+      }
+    },
+    [getSearchedLeads, isSearchFetching]
+  );
+
   const getDealsComponent = () => {
     const components: Record<DEALS_TABS, JSX.Element> = {
       [DEALS_TABS.kanban]: <KanbanChapter dataType={wsDataType} />,
@@ -115,9 +124,9 @@ export const Deals = () => {
             placeholder='Поиск'
             showCoincidences
             onCoincidencesClick={onClickSearchValue}
-            onValueChange={(text) => getSearchedLeads(text)}
+            onValueChange={onSearchChange}
             coincidenceOptions={searchData}
-            coincidenceLoading={isSearchFetching}
+            coincidenceLoading={false}
           />
         </div>
       </div>
