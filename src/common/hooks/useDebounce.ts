@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useDebounce = (value: string, delay: number): [string, string] => {
+export const useDebounce = (value: string, delay: number): [string] => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   const prevValue = useRef<string>(value);
 
@@ -13,7 +13,7 @@ export const useDebounce = (value: string, delay: number): [string, string] => {
     return () => {
       clearTimeout(handler);
     };
-  }, [value, delay, debouncedValue]);
+  }, [value, delay]);
 
-  return [debouncedValue, prevValue.current];
+  return [debouncedValue];
 };
