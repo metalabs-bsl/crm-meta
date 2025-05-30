@@ -2,7 +2,8 @@ import { IListItem, ITableData } from './types/ITableData';
 
 // Функция для подсчета суммы одного элемента
 const calculateItemTotal = (item: IListItem): number => {
-  return item.quantity * item.price;
+  // Если quantity равно 0, возвращаем только price, иначе quantity * price
+  return item.quantity === 0 ? Number(item.price) || 0 : (Number(item.quantity) || 0) * (Number(item.price) || 0);
 };
 
 // Функция для добавления свойства total в каждый объект ITableData
@@ -19,8 +20,13 @@ export const calculateTotalTableDataPrice = (tableData: ITableData[]): number =>
 };
 
 export const calculateTotalForNewItem = (list: IListItem[]): number => {
-  return list.reduce((total, item) => total + item.quantity * item.price, 0);
+  return list.reduce((total, item) => {
+    // Если quantity равно 0, добавляем только price, иначе quantity * price
+    const itemTotal = item.quantity === 0 ? Number(item.price) || 0 : (Number(item.quantity) || 0) * (Number(item.price) || 0);
+    return total + itemTotal;
+  }, 0);
 };
+
 export const getCurrentDate = (): string => {
   const now = new Date();
   const year = now.getFullYear();
