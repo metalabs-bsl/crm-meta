@@ -1,0 +1,190 @@
+@import '../../../common/styles/variables.scss';
+
+.wrapper {
+  background: $white;
+  width: 100%;
+  height: auto;
+  overflow-x: auto;
+
+  border-radius: 10px;
+
+  .table {
+    width: 100%;
+    border-radius: 10px;
+    border-collapse: collapse !important;
+    overflow: hidden;
+
+    thead {
+      &.table_wrapper {
+        background: $seaSalt;
+
+        width: 100%;
+        th {
+          padding: 10px;
+          color: $table-title-color;
+          font-weight: 400;
+          text-align: left;
+          border-bottom: 1px solid $seaSalt;
+        }
+      }
+
+      .table_titles {
+        th {
+          padding: 10px;
+          color: $table-title-color;
+          font-weight: 400;
+          font-size: 15px;
+          text-align: left;
+        }
+      }
+    }
+
+    td {
+      padding: 8px;
+      text-align: left;
+      color: $table-column-color;
+      font-weight: 400;
+    }
+
+    .buttons {
+      display: flex;
+    }
+  }
+
+  .table_wrap_column {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .main_checkbox {
+    display: flex;
+    gap: 10px;
+    padding-top: 12px;
+    margin-left: 10px;
+    position: relative;
+    margin-bottom: 22px;
+  }
+
+  .checkbox {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    margin-left: 12px;
+  }
+
+  .column {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .editInput {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    background: $input-edit-bg;
+    outline: none;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    gap: 30px;
+    padding-bottom: 15px;
+
+    .btnSave,
+    .btnEdit {
+      padding: 5px 20px;
+      background: $table-dtn-save;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .btnDelete,
+    .btnCancel {
+      padding: 5px 20px;
+      border-radius: 10px;
+      border: none;
+      color: $table-btn-delete;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+
+  .table_text {
+    text-align: center;
+    color: $not-paid;
+    font-weight: 400;
+    font-size: 26px;
+  }
+}
+
+// modal
+.modalBtnWrapper {
+  gap: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    font-weight: 400;
+    font-size: 16px;
+  }
+}
+
+.modalWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 32px;
+  &Text {
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+  }
+}
+// mini progress bar
+
+.miniProgressBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .progressContainer {
+    display: flex;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .progressStage {
+    flex: 1;
+    height: 25px;
+    border-radius: 4px;
+    margin-right: 2px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .stageTitle {
+    font-size: 14px;
+    color: $gray;
+  }
+
+  .active {
+    background-color: inherit;
+  }
+}
+
+.date {
+  font-size: 14px;
+  color: $gray;
+  margin-top: 4px;
+}

@@ -1,0 +1,118 @@
+@import '../../../common/styles/variables.scss';
+
+.employeesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  column-gap: 10px;
+
+  .btn_title {
+    display: flex;
+    gap: 50px;
+  }
+
+  .title {
+    color: $white;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .addEmployeeButton {
+    background-color: $btn_employess;
+    border: none;
+    padding: 5px 20px;
+    color: $table-column-color;
+    font-weight: 400;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+}
+
+.wrapper {
+  height: auto;
+  border-radius: 10px;
+  overflow: auto;
+  height: calc(100vh - 280px);
+  position: relative;
+  .modal {
+    max-width: 788px;
+  }
+}
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.table {
+  display: grid;
+  grid-template-columns: 50px 90px repeat(17, minmax(190px, 1fr));
+  border-collapse: collapse;
+  min-width: 2900px;
+}
+
+.tableHeaderWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 11;
+}
+
+.tableHeader {
+  background-color: #f1f1f1;
+  font-weight: bold;
+  display: contents;
+}
+
+.headerItem {
+  padding-right: 9px;
+  height: 54px;
+  border-bottom: 1px solid $silver;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: $seaSalt;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray;
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  &:first-child {
+    left: 0;
+    z-index: 10;
+    position: sticky;
+    padding: 3px;
+  }
+  &:nth-child(2) {
+    left: 50px;
+    z-index: 10;
+    position: sticky;
+    padding: 9px;
+  }
+  &.scrolled {
+    box-shadow: 5px 0 10px -5px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.btnEdit {
+  padding: 5px 20px;
+  background: $yellow-btn-bg;
+  font-size: 16px;
+  color: $gray-btn-bg-hover;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}

@@ -1,0 +1,86 @@
+@import '../../../common/styles/variables.scss';
+
+.calendar_grid {
+  .week_days,
+  .days_grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .days_grid {
+    border-top: 1px solid $silver;
+    overflow-y: scroll;
+    height: calc(100vh - 240px);
+  }
+
+  .week_day,
+  .day {
+    padding: 10px;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
+  .day {
+    border: 1px solid $silver;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    &:nth-child(7n + 1) {
+      border-left: none;
+    }
+
+    &:nth-child(7n) {
+      border-right: none;
+    }
+
+    .round {
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .events_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .birthday,
+      .note {
+        border-radius: 10px;
+        font-weight: 400;
+        font-size: 14px;
+        width: min-content;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .note {
+        padding: 3px 10px;
+        background-color: $count-active-bg;
+      }
+      .birthday {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        background-color: $partial;
+      }
+      .show_more {
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .prev_next_month {
+    color: $gray;
+  }
+
+  .today {
+    .round {
+      background-color: $yellow-btn-bg;
+    }
+  }
+}

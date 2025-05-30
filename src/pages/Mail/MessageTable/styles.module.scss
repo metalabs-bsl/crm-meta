@@ -1,0 +1,141 @@
+@import '../../../common/styles/variables.scss';
+
+.table_wrapper {
+  border-radius: 10px;
+  overflow: auto;
+  height: 100%;
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .subject {
+      font-weight: 600;
+    }
+
+    th,
+    td {
+      height: 54px;
+      padding-right: 30px;
+    }
+
+    td {
+      font-weight: 500;
+      font-size: 16px;
+      color: $gray-btn-bg-hover;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+      cursor: pointer;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray;
+    }
+
+    th:first-child,
+    td:first-child {
+      width: 55px;
+      padding-left: 15px;
+      padding-bottom: 30px;
+      padding-right: 15px;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 10%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 70%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray;
+      padding-right: 15px;
+    }
+
+    th:last-child,
+    td:last-child {
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray;
+      padding-right: 0px;
+    }
+
+    thead {
+      background-color: $seaSalt;
+      border-bottom: 1px solid $silver;
+      position: sticky;
+      top: 0;
+      z-index: 52;
+      tr {
+        border-left: 5px solid $seaSalt;
+      }
+    }
+
+    tbody {
+      tr {
+        border-left: 5px solid $white;
+        border-bottom: 1px solid $silver;
+        position: relative;
+        height: 54px;
+        .marker {
+          display: block;
+          width: 20px;
+          height: 20px;
+          background-color: $yellow-round;
+          clip-path: polygon(100% 0, 0 0, 100% 100%);
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+      }
+
+      .unread {
+        border-left: 5px solid $not-paid;
+      }
+    }
+  }
+
+  .btns_wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 52px;
+    padding: 10px;
+    background-color: $white;
+    border-top: 2px solid $silver;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    z-index: 100;
+    button {
+      font-weight: 400;
+      font-size: 16px;
+      text-transform: lowercase;
+    }
+  }
+
+  .modalInner {
+    gap: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modalBtnWrapper {
+    display: flex;
+    gap: 20px;
+  }
+}

@@ -1,0 +1,81 @@
+@import '../../../common/styles/variables.scss';
+
+.loginForm {
+  width: 434px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  padding: 32px;
+  background-color: $white;
+  border-radius: 0 10px 10px 0;
+
+  h1 {
+    color: $black;
+    margin-bottom: 15px;
+    font-weight: 500;
+    font-size: 30px;
+  }
+
+  .loginInp {
+    background-color: $seaSalt;
+    height: 40px;
+    border-radius: 5px;
+    width: 100%;
+
+    input,
+    input::placeholder {
+      color: $gray;
+    }
+
+    input {
+      padding-left: 15px;
+    }
+  }
+
+  .passwordContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .loginInp {
+      width: 100%;
+    }
+
+    .eyeIcon {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      cursor: pointer;
+      color: $gray;
+      font-size: 20px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $black;
+      }
+    }
+  }
+
+  .checkboxContainer {
+    display: flex;
+    gap: 10px;
+
+    .label {
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+
+  .btn {
+    margin-top: 45px;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .error {
+    color: $red;
+    font-size: 14px;
+  }
+}

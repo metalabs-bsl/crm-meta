@@ -1,0 +1,51 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .tab_block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .tabs {
+      background-color: transparent;
+      padding: 0;
+      .tab {
+        font-weight: 400;
+        font-size: 14px;
+        color: $gray;
+        border-radius: 10px;
+      }
+      .activeTab {
+        background-color: $white;
+        color: $gray-btn-bg-hover;
+      }
+    }
+    .select {
+      background-color: $silver;
+      width: 160px;
+      height: 32px;
+      border-radius: 10px;
+    }
+    .paid {
+      background-color: $salat-round;
+    }
+    .partial {
+      background-color: $partial;
+    }
+    .not_paid {
+      background-color: $not-paid;
+    }
+  }
+}
+
+.isDisabled > div {
+  pointer-events: none;
+}

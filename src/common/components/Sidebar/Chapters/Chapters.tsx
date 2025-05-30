@@ -1,41 +1,81 @@
-import { useAppSelector } from 'common/hooks';
-import { sidebarSelectors } from 'api/admin/sidebar/sidebar.selectors';
-import calendarIcon from '../../../assets/icons/sidebar/001-calendar.png';
-import mailIcon from '../../../assets/icons/sidebar/002-empty-email.png';
-import docsIcon from '../../../assets/icons/sidebar/003-documents.png';
-import crmIcon from '../../../assets/icons/sidebar/004-crm.png';
+import { FC, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import cn from 'classnames';
+import { Icon } from 'common/ui';
+import { checkActivePath } from 'common/helpers';
+import { useAppSelector, useRedirect } from 'common/hooks';
+import { crmChapters, reportChapters } from 'common/constants';
+import { employeesSelectors } from 'api/admin/employees/employees.selectors';
+import { IIconType } from 'types/common';
+import { adminPath } from 'types/routes';
 import styles from '../styles.module.scss';
 
-const Chapters = () => {
-  const { isShowSidebar } = useAppSelector(sidebarSelectors.sidebar);
+const Chapters: FC = () => {
+  const { pathname } = useLocation();
+  const redirect = useRedirect();
+  const { role } = useAppSelector(employeesSelectors.employees);
+
+  useEffect(() => {
+    console.log(role);
+  }, []);
 
   const chapters = [
     {
-      title: 'Почта',
-      icon: mailIcon
-    },
-    {
-      title: 'Документы',
-      icon: docsIcon
-    },
-    {
       title: 'CRM',
-      icon: crmIcon
+      icon: 'crm',
+      path: adminPath.crm,
+      action: () => redirect.crm({ chapter: crmChapters.transactions.chapter })
     },
     {
       title: 'Календарь',
-      icon: calendarIcon
+      icon: 'calendar',
+      path: adminPath.calendar,
+      action: () => redirect.calendar({})
+    },
+    {
+      title: 'Документы',
+      icon: 'document',
+      path: adminPath.document,
+      action: () => redirect.document({})
+    },
+    {
+      title: 'Почта',
+      icon: 'mail',
+      path: adminPath.mail,
+      action: () => redirect.mail({})
+    },
+    {
+      title: 'Отчеты',
+      icon: 'report',
+      path: adminPath.report,
+      action: () => redirect.report({ chapter: reportChapters.profit.chapter })
+    },
+    {
+      title: 'Настройки',
+      icon: 'settings',
+      path: adminPath.settings,
+      action: () => redirect.settings({})
     }
   ];
 
   return (
     <ul className={styles.chapter}>
-      {chapters.map((i, index) => {
-        if (isShowSidebar) {
-          return <img key={index} src={i.icon} alt={i.title} />;
-        }
-        return <li key={index}>{i.title}</li>;
-      })}
+      {chapters
+        .filter((chapter) => {
+          return !(
+            (chapter.title === 'Настройки' && (role === 'Manager' || role === 'Intern')) ||
+            (chapter.title === 'Отчеты' && (role === 'Manager' || role === 'Intern'))
+          );
+        })
+        .map((i, index) => {
+          const isActive = checkActivePath(pathname, i.path);
+          return (
+            <li key={index} onClick={i.action} className={cn({ [styles.active]: isActive })}>
+              <Icon type={(isActive ? i.icon + '-dark' : i.icon) as IIconType} alt={i.icon} />
+              <p>{i.title}</p>
+            </li>
+          );
+        })}
     </ul>
   );
 };

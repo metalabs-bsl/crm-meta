@@ -1,0 +1,15 @@
+@import '../../styles/variables.scss';
+
+.select {
+  background-color: $seaSalt;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+    background-color: lighten($seaSalt, 20%) !important;
+    opacity: 0.3;
+  }
+}

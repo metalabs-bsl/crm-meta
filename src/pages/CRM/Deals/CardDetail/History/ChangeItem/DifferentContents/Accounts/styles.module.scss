@@ -1,0 +1,58 @@
+@import '../../../../../../../../common/styles/variables.scss';
+
+.accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 5px;
+
+  .headline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .employee {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray;
+    }
+  }
+  .title {
+    font-weight: 400;
+    font-size: 14px;
+    color: $gray;
+    .descTitle {
+      color: $gray-btn-bg-hover;
+    }
+    .isRemoving {
+      color: $not-paid;
+    }
+  }
+  .middle {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: $gray-btn-bg-hover;
+    font-weight: 400;
+    .payment {
+      font-size: 14px;
+    }
+    .comment {
+      background-color: $seaSalt;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .linkWrapper {
+      border-radius: 5px;
+      background-color: $seaSalt;
+      padding: 5px 10px;
+      font-size: 14px;
+      width: min-content;
+      white-space: nowrap;
+      .link {
+        color: $gray;
+        text-decoration: none;
+      }
+    }
+  }
+}

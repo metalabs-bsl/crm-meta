@@ -1,0 +1,50 @@
+@import '../../../../common/styles/variables.scss';
+
+.tabFilterBlock {
+  display: flex;
+  gap: 30px;
+  .tabsBlock {
+    background: $baby-powder;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 15px;
+    color: $white;
+    .tab {
+      padding: 5px 20px;
+      border-radius: 12px;
+      font-weight: 400;
+      font-size: 16px;
+      user-select: none;
+      cursor: pointer;
+      display: flex;
+      .count {
+        border-radius: 50%;
+        background-color: $count-active-bg;
+        color: $gray-btn-bg-hover;
+        margin-left: 10px;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notZeroCount {
+        background-color: $not-paid;
+        color: $white;
+      }
+    }
+
+    .activeTab {
+      background-color: $white;
+      color: $gray-btn-bg-hover;
+    }
+  }
+
+  .countBlock {
+    span {
+      margin-left: 20px;
+    }
+  }
+}

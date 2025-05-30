@@ -1,0 +1,48 @@
+@import '../../../../../../../../common/styles/variables.scss';
+
+.deal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  .timeText {
+    font-weight: 500;
+    color: $gray;
+  }
+  .headline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .title,
+  .employee {
+    font-weight: 400;
+    font-size: 14px;
+    color: $gray;
+    .descTitle {
+      color: $gray-btn-bg-hover;
+    }
+  }
+  .bottom,
+  .bottom_other {
+    display: flex;
+    gap: 10px;
+    .blocks {
+      padding: 5px 20px;
+      border-radius: 10px;
+      background-color: $seaSalt;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .paid {
+      background-color: $salat-round;
+    }
+    .partial {
+      background-color: $partial;
+    }
+    .not-paid {
+      background-color: $not-paid;
+    }
+  }
+}

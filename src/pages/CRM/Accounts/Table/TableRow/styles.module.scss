@@ -1,0 +1,76 @@
+@import '../../../../../common/styles/variables.scss';
+
+.mainRow {
+  background-color: $not-paid-row;
+  height: 58px;
+  &:not(:first-child) {
+    border-top: 1px solid $silver;
+  }
+}
+.checkedRow {
+  background-color: $white;
+}
+
+.item {
+  padding: 10px 20px 10px 10px;
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover;
+  text-align: start;
+  white-space: nowrap;
+  &_date {
+    white-space: wrap;
+  }
+}
+
+.contractNumber {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.paymentStatus {
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray-btn-bg-hover;
+  & span {
+    padding: 5px 10px;
+    border-radius: 10px;
+  }
+  .paid {
+    background-color: $salat-round;
+  }
+  .partial {
+    background-color: $partial;
+  }
+  .not_paid {
+    background-color: $not-paid;
+  }
+}
+
+.item.paymentStatus {
+  min-width: 130px;
+}
+
+.accordion {
+  width: 100%;
+  flex-grow: 1;
+  padding: 5px 0;
+  background-color: $seaSalt;
+  display: inline-block;
+  border-radius: 0;
+  & > div {
+    justify-content: start;
+    align-items: normal;
+    margin-bottom: 0;
+    height: 100%;
+    padding: 10px 0 0 15px;
+    & > img:last-child {
+      display: none;
+    }
+  }
+}
+
+.marginRow:not(:last-child) {
+  height: 20px;
+  background-color: transparent;
+}

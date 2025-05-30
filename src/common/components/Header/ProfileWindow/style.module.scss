@@ -1,0 +1,68 @@
+@import '../../../styles/variables.scss';
+
+.profile {
+  min-width: 280px;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .role {
+    font-size: 16px;
+    color: $gray;
+    padding-left: 10px;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: $seaSalt;
+    border-radius: 10px;
+    padding: 10px;
+    .avatarBlock {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      .textWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+    li {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .label {
+      color: $gray;
+      font-size: 14px;
+    }
+
+    .name,
+    .email,
+    .number {
+      color: $gray-btn-bg-hover;
+    }
+
+    .name {
+      font-size: 18px;
+    }
+    .email {
+      font-size: 16px;
+    }
+
+    .number {
+      font-size: 14px;
+    }
+  }
+
+  .btnBlock {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      background-color: transparent;
+    }
+  }
+}

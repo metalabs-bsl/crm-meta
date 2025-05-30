@@ -1,1 +1,3 @@
-export * from "./route";
+export * from './iconTypes';
+export * from './options';
+export * from './route';

@@ -1,0 +1,96 @@
+@import '../../../../common/styles/variables.scss';
+
+.table {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  .tableHead {
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    background: $seaSalt;
+    border-bottom: 1px solid $silver;
+    box-shadow: 0 1px 5px $dark-box-shadow;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .tableTitle {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3em;
+    color: $gray;
+    font-family: var(--font-family);
+    padding: 15px 0;
+  }
+
+  .name {
+    width: 50%;
+  }
+
+  .status {
+    width: 50%;
+  }
+
+  .tableBody {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .tableRow {
+    padding: 0 30px;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $silver;
+  }
+
+  .bodyBlock {
+    padding: 15px 0;
+  }
+
+  .blockText {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3em;
+    font-family: var(--font-family);
+    color: var(--background-eerie-black);
+  }
+
+  .bodyName {
+    width: 50%;
+  }
+
+  .bodyStatus {
+    width: 30%;
+  }
+
+  .bodyExcel {
+    width: 20%;
+    text-align: right;
+  }
+
+  .btnDownload {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 5px 20px;
+    line-height: 1.3em;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    text-transform: lowercase;
+    font-family: var(--font-family);
+    background-color: $count-active-bg;
+    color: var(--background-eerie-black);
+  }
+}

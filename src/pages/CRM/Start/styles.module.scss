@@ -1,0 +1,51 @@
+@import '../../../common/styles/variables.scss';
+
+.start {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .headBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 26px;
+    .titleBlock {
+      display: flex;
+      gap: 50px;
+      h1 {
+        color: $white;
+        font-weight: 500;
+        font-size: 30px;
+      }
+    }
+  }
+  .bodyBlock {
+    width: calc(100vw - 254px);
+    height: calc(100vh - 274px);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+}
+
+.inputsWrapper {
+  display: flex;
+  gap: 15px;
+}
+
+.select {
+  height: 44px;
+  border-radius: 15px;
+  border: 1px solid $white;
+  background-color: $inp-bg;
+  padding: 11px 20px;
+  padding-top: 9px;
+  font-weight: 500;
+  font-size: 16px;
+  color: $white;
+  option {
+    text-align: right;
+    color: $gray-btn-bg-hover;
+  }
+}

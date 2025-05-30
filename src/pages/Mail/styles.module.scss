@@ -1,0 +1,61 @@
+@import '../../common/styles/variables.scss';
+
+.mail {
+  width: 100%;
+  overflow-y: hidden;
+  height: 100%;
+  border-radius: 10px;
+  padding: 20px 50px 10px 50px;
+  background: $baby-powder;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .refresh {
+    display: flex;
+    justify-content: space-between;
+    button {
+      font-size: 18px;
+      height: min-content;
+    }
+  }
+  .headBlock {
+    gap: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .titleBlock {
+      gap: 50px;
+      display: flex;
+      align-items: center;
+
+      & h1 {
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1.3em;
+        color: $white;
+        font-family: var(--font-family);
+      }
+    }
+  }
+  .tabs {
+    width: min-content;
+    background-color: $baby-powder;
+    .tab {
+      color: $white;
+    }
+    .activeTab {
+      background-color: $white;
+      color: $gray-btn-bg-hover;
+    }
+  }
+
+  .tableWrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 270px);
+    background: $white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px $black-box-shadow;
+    overflow: hidden;
+  }
+}

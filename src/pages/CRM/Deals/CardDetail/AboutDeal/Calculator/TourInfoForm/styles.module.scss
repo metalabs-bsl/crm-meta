@@ -1,0 +1,97 @@
+@import '../../../../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 42%;
+    &:first-child {
+      width: 38%;
+    }
+
+    &:last-child {
+      width: 20%;
+      min-width: min-content;
+    }
+    .error {
+      font-weight: 400px;
+      font-size: 14px;
+      color: red
+    }
+    .item_block {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      label {
+        font-weight: 400;
+        font-size: 14px;
+        color: $gray;
+      }
+      .inp_wrapper {
+        background-color: $seaSalt;
+        border: none;
+        border-radius: 5px;
+        input {
+          font-weight: 400;
+          font-size: 16px;
+          color: $gray;
+          &::placeholder {
+            color: $gray;
+          }
+        }
+      }
+      .suggestions {
+        width: 100%;
+        color: $gray;
+        div {
+          cursor: pointer;
+          padding: 5px 3px;
+          transition: color 0.3s ease;
+          &:hover {
+            color: black;
+          }
+        }
+      }
+
+      .select {
+        height: 46px;
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray;
+        padding-left: 20px;
+      }
+      .datepicker {
+        height: 46px;
+        width: 100%;
+      }
+
+      .passengers {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray;
+        width: 100%;
+        height: 46px;
+        border-radius: 5px;
+        background: $seaSalt;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .isDisabled {
+        cursor: not-allowed;
+      }
+    }
+
+    .more_items_block {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

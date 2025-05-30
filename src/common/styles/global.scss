@@ -1,5 +1,26 @@
+@import './variables.scss';
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Manrope', sans-serif;
+  &::-webkit-scrollbar {
+    width: 10px; /* Ширина полосы прокрутки */
+    height: 10px; /* Высота полосы прокрутки (для горизонтальной прокрутки) */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* Цвет фона полосы прокрутки */
+    border-radius: 10px; /* Закругление углов трека */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $border-color; /* Цвет ползунка */
+    border-radius: 10px; /* Закругление углов ползунка */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+  }
 }

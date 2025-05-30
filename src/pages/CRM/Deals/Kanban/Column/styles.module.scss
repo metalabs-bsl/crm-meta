@@ -1,0 +1,129 @@
+@import '../../../../../common/styles/variables.scss';
+
+.column {
+  height: 100%;
+  background: $baby-powder;
+  border-radius: 15px;
+  padding: 10px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .totalSum {
+    align-self: center;
+    font-weight: 500;
+    font-size: 24px;
+    color: $white;
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .cardsContainer {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: scroll;
+    height: calc(100vh - 485px);
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .titleBlock {
+    background-color: $white;
+    padding: 11px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-btn-bg-hover;
+    position: relative;
+    .roundIcon {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+
+    .without {
+      background-color: transparent;
+      border: 1px solid $gray;
+    }
+    .salat {
+      background-color: $yellow-round;
+    }
+
+    .blue {
+      background-color: $blue-round;
+    }
+
+    .dark-green {
+      background-color: $green-round;
+    }
+
+    .violet {
+      background-color: $violet-round;
+    }
+
+    .red {
+      background-color: $red-round;
+    }
+
+    .light-green {
+      background-color: $salat-round;
+    }
+    .pink {
+      background-color: $pink-round;
+    }
+
+    .black {
+      background-color: $gray-btn-bg-hover;
+    }
+
+    .actionBlock {
+      position: absolute;
+      right: -13px;
+      display: none;
+      gap: 10px;
+      * {
+        cursor: pointer;
+      }
+      .plus {
+        background-color: $count-active-bg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+      .filter {
+        display: flex;
+        height: min-content;
+      }
+    }
+
+    &:hover {
+      transition: 1s ease-in-out;
+      .actionBlock {
+        display: flex;
+      }
+    }
+  }
+
+  .createBtn {
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+    display: flex;
+    justify-content: center;
+    &:hover {
+      background: $count-active-bg;
+    }
+  }
+}
+
+.isOver {
+  filter: opacity(0.6);
+}

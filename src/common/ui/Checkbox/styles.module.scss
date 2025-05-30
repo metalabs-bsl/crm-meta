@@ -1,0 +1,54 @@
+@import '../../styles/variables.scss';
+
+.custom_checkbox {
+  display: inline-block;
+  position: relative;
+  padding-left: 20px;
+  cursor: pointer;
+  margin-top: 2px;
+  font-size: 18px;
+  user-select: none;
+  z-index: 50;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ .custom_checkbox__checkmark {
+      background-color: $black;
+      border: transparent;
+    }
+
+    &:checked ~ .custom_checkbox__checkmark:after {
+      display: block;
+    }
+  }
+
+  .custom_checkbox__checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: transparent;
+    border: 1px solid $count-active-bg;
+    border-radius: 4px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 3px;
+      width: 4px;
+      height: 8px;
+      border: 1px solid $white;
+      border-width: 0 2px 2px 0;
+      border-radius: 1px;
+      transform: rotate(45deg);
+    }
+  }
+}

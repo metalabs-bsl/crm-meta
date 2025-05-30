@@ -1,0 +1,32 @@
+.avatar {
+  display: flex;
+  width: min-content;
+  height: min-content;
+  position: relative;
+  .userAvatar,
+  .icon {
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+  }
+
+  .userAvatar {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .delete {
+    position: absolute;
+    right: -20px;
+    top: -10px;
+    cursor: pointer;
+    display: none;
+  }
+}
+.hasPhoto {
+  &:hover {
+    .delete {
+      display: block;
+    }
+  }
+}

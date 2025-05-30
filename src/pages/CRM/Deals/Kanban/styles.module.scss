@@ -1,0 +1,38 @@
+@import '../../../../common/styles/variables.scss';
+
+.kanbanBoardWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.kanbanBoard {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  background-color: rgba(255, 255, 255, 0.63);
+  border-radius: 50%;
+  font-size: 32px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  border: none;
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+.navButtonLeft {
+  left: -45px;
+}
+
+.navButtonRight {
+  right: -45px;
+}

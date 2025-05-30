@@ -1,0 +1,74 @@
+@import '../../../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .select {
+      padding: 9px 15px;
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray-btn-bg-hover;
+      &::placeholder {
+        color: $gray;
+      }
+    }
+    .errorMessage {
+      color: $red;
+      font-size: 14px;
+    }
+    label {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray;
+    }
+    .inp {
+      background-color: $seaSalt;
+      border-radius: 5px;
+      input {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray-btn-bg-hover;
+        &::placeholder {
+          color: $gray;
+        }
+      }
+    }
+  }
+  .colors {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .active {
+      height: 28px !important;
+      width: 28px !important;
+      border: 2px solid $gray;
+    }
+    .without {
+      background-image: url(../../../../../../common/assets/icons/without-color.svg) !important;
+      background-repeat: no-repeat !important;
+      background-size: contain !important;
+    }
+    .roundIcon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  .modalBtnWrapper {
+    gap: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+}

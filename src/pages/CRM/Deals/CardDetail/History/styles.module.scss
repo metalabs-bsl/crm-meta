@@ -1,0 +1,54 @@
+@import '../../../../../common/styles/variables.scss';
+
+.change_history {
+  position: relative;
+  padding: 0 49px 0 80px;
+  max-height: 100%;
+  overflow-y: scroll;
+  .vertical_line {
+    position: absolute;
+    left: 80px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: $gray;
+  }
+
+  .change_group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .change_item {
+      display: flex;
+      align-items: center;
+      position: relative;
+      margin-bottom: 20px;
+      width: 100%;
+      .horizontal_line {
+        width: 40%;
+        height: 1px;
+        background: $gray;
+        position: relative;
+        .icon {
+          position: relative;
+          left: -28px;
+          top: -28px;
+          .hidenLine {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            left: 5px;
+            background-color: $seaSalt;
+          }
+        }
+      }
+
+      .change_content {
+        background: $white;
+        border-radius: 10px;
+        padding: 10px;
+        width: 60%;
+      }
+    }
+  }
+}

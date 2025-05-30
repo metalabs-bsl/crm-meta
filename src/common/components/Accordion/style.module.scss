@@ -1,0 +1,48 @@
+@import '../../styles/variables.scss';
+
+.accordion {
+  border-radius: 10px;
+  background-color: $white;
+  padding: 15px;
+  position: relative;
+  &_header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    img {
+      cursor: pointer;
+    }
+    .edit {
+      margin-left: 5px;
+    }
+  }
+  &_title {
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-btn-bg-hover;
+  }
+  &_icon {
+    transition: transform 0.3s;
+  }
+  &_icon_open {
+    transform: rotate(180deg);
+  }
+  &_content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+  }
+  &_content_open {
+    overflow: visible;
+    max-height: 600px;
+  }
+  .btns_wrapper {
+    display: flex;
+    gap: 15px;
+  }
+  .deleteIcon {
+    position: absolute;
+    right: 15px;
+  }
+}

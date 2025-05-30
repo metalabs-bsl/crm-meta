@@ -1,0 +1,40 @@
+@import '../../../../../common/styles/variables.scss';
+
+.aboutDeal {
+  display: flex;
+  gap: 30px;
+  max-height: 100%;
+  width: 100%;
+  .rightBlock {
+    display: flex;
+    flex-direction: column;
+    width: 53.16%;
+    gap: 10px;
+
+    .box {
+      width: 100%;
+      height: calc(100% - 50px);
+    }
+    .isDisabled {
+      opacity: 0.5;
+    }
+    .wrapper {
+      padding-right: 13.5%;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .btns_wrapper {
+        display: flex;
+        gap: 30px;
+      }
+    }
+    .isOnlyTab {
+      justify-content: center;
+      padding-right: 0;
+    }
+  }
+  .isCalculatorChild {
+    width: 100%;
+  }
+}

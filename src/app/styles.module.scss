@@ -1,4 +1,57 @@
+@import '../common/styles/variables.scss';
+
 .main {
-  display: flex;
-  gap: 50px;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  .content {
+    display: flex;
+    gap: 13px;
+    padding: 20px 78px 0 13px;
+    height: calc(100% - 78px);
+    width: 100%;
+  }
+}
+
+.unAuth {
+  background-image: url(../common/assets/images/secondBg.png) !important;
+  .content {
+    padding: 0;
+    display: block;
+  }
+}
+
+.pink {
+  background-color: $main-pink-bg;
+}
+.violet {
+  background-color: $main-violet-bg;
+}
+
+.green {
+  background-color: $main-green-bg;
+}
+.gray {
+  background-color: $gray;
+}
+.black {
+  background-color: $main-black-bg;
+}
+.first-texture {
+  background-image: url(../common/assets/images/firstBg.png);
+}
+.second-texture {
+  background-image: url(../common/assets/images/secondBg.png);
+}
+.third-texture {
+  background-image: url(../common/assets/images/thirdBg.png);
+}
+.fourth-texture {
+  background-image: url(../common/assets/images/fourthBg.png);
+}
+.fifth-texture {
+  background-image: url(../common/assets/images/fifthBg.png);
+}
+.sixth-texture {
+  background-image: url(../common/assets/images/sixthBg.png);
 }

@@ -5,6 +5,7 @@ import { App } from 'app/App';
 import './common/styles/styles.scss';
 
 import { setupStore } from 'api';
+import { ToastContainer } from 'react-toastify';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
@@ -13,5 +14,6 @@ root.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    <ToastContainer stacked />
   </Provider>
 );

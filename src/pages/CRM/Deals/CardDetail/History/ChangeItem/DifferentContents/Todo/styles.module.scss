@@ -1,0 +1,92 @@
+@import '../../../../../../../../common/styles/variables.scss';
+
+.todo {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .headline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .employee {
+      font-weight: 400;
+      font-size: 14px;
+      color: $gray;
+    }
+  }
+  .title {
+    font-weight: 400;
+    font-size: 14px;
+    color: $gray;
+    .titleDesc {
+      color: $gray-btn-bg-hover;
+    }
+  }
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    background-color: $seaSalt;
+    .description {
+      font-weight: 400;
+      font-size: 16px;
+      color: $gray-btn-bg-hover;
+    }
+  }
+  .statusBottom {
+    display: flex;
+    gap: 10px;
+    .blocks {
+      padding: 5px 20px;
+      border-radius: 10px;
+      background-color: $seaSalt;
+    }
+
+    .salat {
+      background-color: $yellow-round;
+    }
+
+    .blue {
+      background-color: $blue-round;
+    }
+
+    .dark-green {
+      background-color: $green-round;
+    }
+
+    .violet {
+      background-color: $violet-round;
+    }
+
+    .red {
+      background-color: $red-round;
+    }
+
+    .light-green {
+      background-color: $salat-round;
+    }
+    .pink {
+      background-color: $pink-round;
+    }
+
+    .black {
+      background-color: $gray-btn-bg-hover;
+    }
+  }
+  .dedline {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    .date {
+      padding: 5px 20px;
+      border-radius: 10px;
+      background-color: $seaSalt;
+    }
+  }
+}

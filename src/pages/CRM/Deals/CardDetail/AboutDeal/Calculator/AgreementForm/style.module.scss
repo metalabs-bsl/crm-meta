@@ -1,0 +1,78 @@
+@import '../../../../../../../common/styles/variables.scss';
+
+.form {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 42%;
+    &:first-child {
+      width: 38%;
+    }
+
+    &:last-child {
+      width: 20%;
+      min-width: min-content;
+    }
+    .error {
+      font-weight: 400;
+      font-size: 14px;
+      color: red;
+    }
+
+    .item_block {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      .password_wrapper {
+        padding: 10px 15px;
+        background-color: $seaSalt;
+        border-radius: 5px;
+        min-height: 40px;
+      }
+      label {
+        font-weight: 400;
+        font-size: 14px;
+        color: $gray;
+      }
+      .inp_wrapper {
+        background-color: $seaSalt;
+        border: none;
+        border-radius: 5px;
+        input {
+          font-weight: 400;
+          font-size: 16px;
+          color: $gray;
+          &::placeholder {
+            color: $gray;
+          }
+        }
+      }
+      select {
+        font-weight: 400;
+        font-size: 16px;
+        color: $gray;
+        padding: 9px 15px;
+        height: 46px;
+      }
+      .withIcon {
+        input {
+          padding-left: 0;
+        }
+      }
+      .datepicker {
+        width: 100%;
+        height: 46px;
+      }
+    }
+
+    .more_items_block {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

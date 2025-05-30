@@ -1,0 +1,1 @@
+export { OriginalTable } from './OriginalTable';

@@ -1,0 +1,16 @@
+@import '../../styles/variables.scss';
+
+.access {
+  height: 34px;
+  background-color: $white;
+  border-radius: 10px;
+  width: 184px;
+  font-weight: 400;
+  font-size: 16px;
+  padding: 6px 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+  cursor: pointer;
+}

@@ -1,0 +1,73 @@
+@import '../../styles/variables.scss';
+
+.select {
+  position: relative;
+  .showArea {
+    min-height: 40px;
+    border-radius: 5px;
+    background-color: $seaSalt;
+    padding: 9px 15px;
+    padding-right: 70px;
+    position: relative;
+    font-weight: 400;
+    font-size: 16px;
+    .arrow {
+      position: absolute;
+      right: 10px;
+      transition: all 0.3s;
+      top: 25%;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      img {
+        cursor: pointer;
+      }
+    }
+    .arrow_closed {
+      transform: rotate(180deg);
+    }
+  }
+  .disabled {
+    cursor: not-allowed;
+    background-color: lighten($seaSalt, 20%) !important;
+    opacity: 0.3;
+  }
+  .options_area {
+    width: 215px;
+    top: 100%;
+    right: 0;
+    position: absolute;
+    background-color: $white;
+    max-height: 120px;
+    overflow-y: scroll;
+    z-index: 100;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .option {
+      border: 1px solid $silver;
+      padding: 5px 10px;
+      padding-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 400;
+      font-size: 14px;
+      &:first-child {
+        border-top: none;
+      }
+      label > span {
+        width: 20px;
+        height: 20px;
+        &::after {
+          width: 12px;
+          height: 12px;
+        }
+      }
+    }
+  }
+  .radioWrapper {
+    pointer-events: none;
+  }
+}

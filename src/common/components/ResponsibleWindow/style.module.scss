@@ -1,0 +1,17 @@
+@import '../../styles/variables.scss';
+
+.wrapper {
+  font-weight: 400;
+  font-size: 14px;
+  color: $gray;
+  border-radius: 10px;
+  background: $seaSalt;
+  padding: 10px;
+  width: 200px;
+  .name {
+    margin-top: 5px;
+    color: $gray-btn-bg-hover;
+    display: flex;
+    gap: 5px;
+  }
+}

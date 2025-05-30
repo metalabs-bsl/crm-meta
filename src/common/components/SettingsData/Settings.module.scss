@@ -1,0 +1,97 @@
+@import '../../../common/styles/variables.scss';
+
+.bonusesInner {
+  display: flex;
+  align-items: center;
+}
+.bonusesPercent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  position: relative;
+
+  & input {
+    border-radius: 5px;
+    width: 100px;
+    height: 40px;
+    background-color: $seaSalt;
+    border: none;
+    outline: none;
+    padding-left: 33px;
+    padding-right: 20px;
+  }
+
+  & span {
+    position: absolute;
+    right: 30px;
+  }
+}
+.bonusesEditWrapper {
+  gap: 5px;
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+}
+
+.bonusesEdit {
+  margin-right: 40px;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 40px;
+  height: 40px;
+  background-color: $white;
+  cursor: pointer;
+}
+.saveBtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  background-color: $btn_employess;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.saveSvg {
+  width: 15px;
+  height: 15px;
+}
+.switchWrapper {
+  position: relative;
+  width: 52px;
+  height: 25px;
+  border-radius: 20px;
+  border: 1px solid $gray-btn;
+  background-color: $gray;
+  transition: all 0.4s;
+
+  &.switchTrue {
+    background-color: $btn_employess;
+  }
+
+  &.switchFalse {
+    background-color: $silver;
+  }
+}
+.switch {
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+  width: 21px;
+  height: 21px;
+  background-color: $seaSalt;
+  top: 1px;
+  transition: right 0.3s ease;
+
+  &.switchTrue {
+    right: 1px;
+  }
+
+  &.switchFalse {
+    right: 28px;
+  }
+}
