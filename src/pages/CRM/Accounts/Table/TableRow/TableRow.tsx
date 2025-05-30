@@ -38,7 +38,7 @@ export const TableRow: FC<ITableRowProps> = ({
   const contractNumberRef = useRef<HTMLSpanElement | null>(null);
   const [contractOpen, setContractOpen] = useState<boolean>(false);
   const [getCalc, { data }] = useLazyGetLeadCalcQuery();
-
+  console.log('data', data);
   // const computedPaymentStatus = useMemo(() => {
   //   if (!paymentDetails.length) return 'Не оплачено';
   //   const allPaid = paymentDetails.every((detail) => detail.isPaid);
