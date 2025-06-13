@@ -73,7 +73,7 @@ export const employeesApi = createApi({
     }),
     getQRCode: query<{ qr_url: string }, { phone: string }>({
       query: ({ phone }) => ({
-        url: `${process.env.REACT_APP_WHATSAPP_BASE_URL}/whatsapp-account/qr`,
+        url: `${process.env.REACT_APP_WS_BASE_URL}/whatsapp-account/qr`,
         params: { phone }
       })
     })
