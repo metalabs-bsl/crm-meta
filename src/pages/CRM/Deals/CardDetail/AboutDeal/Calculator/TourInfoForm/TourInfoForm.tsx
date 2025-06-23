@@ -51,25 +51,18 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       tour_category: categoryTourTimeOptions[0].value as string
     }
   });
-  const [servises, setServises] = useState<Options[]>([]);
+  const [services, setServices] = useState<Options[]>([]);
   const [isUserTyping, setIsUserTyping] = useState(false);
-
-  const onClosePassengersModal = () => {
-    setIsOpenPassengersModal(false);
-  };
-
-  const onClickPassengersItem = () => {
-    if (!isEditable) setIsOpenPassengersModal(!isOpenPassengersModal);
-  };
-
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [departureSuggestions, setDepartureSuggestions] = useState<string[]>([]);
   const [arrivalSuggestions, setArrivalSuggestions] = useState<string[]>([]);
 
   const fetchCities = async (query: string, setSuggestions: React.Dispatch<React.SetStateAction<string[]>>) => {
+    const suggestions = query.toLowerCase().startsWith('б') || query.toLowerCase().startsWith('b') ? ['Бишкек, Кыргызстан'] : [];
+
     try {
-      const response = await fetch(process.env.REACT_APP_BASE_URL + `/leadsCalculator/cities/${query}`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/leadsCalculator/cities/${encodeURIComponent(query)}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -77,16 +70,52 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
       });
       const data = await response.json();
       if (Array.isArray(data)) {
-        setSuggestions(data);
+        setSuggestions([...new Set([...suggestions, ...data])]);
       } else {
-        setSuggestions([]);
+        setSuggestions(suggestions);
       }
-      setSuggestions(data);
     } catch (error) {
       console.error('Error fetching cities:', error);
-      setSuggestions([]);
+      setSuggestions(suggestions);
     }
   };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (departureCity) {
+        fetchCities(departureCity, setDepartureSuggestions);
+      } else {
+        setDepartureSuggestions([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [departureCity]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (arrivalCity) {
+        fetchCities(arrivalCity, setArrivalSuggestions);
+      } else {
+        setArrivalSuggestions([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [arrivalCity]);
+
+  const handleSuggestionClick = (suggestion: string, type: 'departure' | 'arrival') => {
+    if (type === 'arrival') {
+      setValue('arrival_city', suggestion);
+      setArrivalCity(suggestion);
+      setArrivalSuggestions([]);
+    } else {
+      setValue('departure_city', suggestion);
+      setDepartureCity(suggestion);
+      setDepartureSuggestions([]);
+    }
+  };
+
   useEffect(() => {
     if (!isUserTyping || brandInput.trim() === '') {
       setFilteredBrands([]);
@@ -98,44 +127,6 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
   }, [brandInput, brandOptions, isUserTyping]);
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (departureCity) {
-        fetchCities(departureCity, setDepartureSuggestions);
-      }
-    }, 300);
-
-    if (departureCity === '') {
-      setDepartureSuggestions([]);
-    }
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [departureCity]);
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (arrivalCity) {
-        fetchCities(arrivalCity, setArrivalSuggestions);
-      }
-    }, 300);
-
-    if (arrivalCity === '') {
-      setArrivalSuggestions([]);
-    }
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [arrivalCity]);
-
-  const handleSuggestionClick = (suggestion: string, type: 'departure' | 'arrival') => {
-    if (type === 'arrival') {
-      setValue('arrival_city', suggestion);
-      setArrivalSuggestions([]);
-    } else {
-      setValue('departure_city', suggestion);
-      setDepartureSuggestions([]);
-    }
-  };
-
-  useEffect(() => {
     if (formProps) {
       Object.keys(formProps).forEach((key) => {
         const value = formProps[key as keyof ITourData];
@@ -144,15 +135,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         } else {
           setValue(key as keyof ITourData, formProps[key as keyof ITourData]);
         }
-        setPassengerCounts({
-          adults: formProps.adult_passengers,
-          children: formProps.child_passengers,
-          children_old: formProps.child_passengers_older
-        });
+        if (key === 'departure_city') setDepartureCity(value as string);
+        if (key === 'arrival_city') setArrivalCity(value as string);
       });
 
       const servicesIds = formProps.services.map((service) => String(service.id));
-      servicesOptions && setServises(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
+      servicesOptions && setServices(servicesOptions.filter((option) => servicesIds.includes(String(option.value))));
     }
   }, [formProps, servicesOptions, setValue]);
 
@@ -170,12 +158,12 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
   const onSubmit = handleSubmit(() => {
     if (calcId) {
       const data = getValues();
-      const updatedServises = servises.map((i) => ({ id: String(i.value) }));
+      const updatedServices = services.map((i) => ({ id: String(i.value) }));
       const sendingData: ITourData = {
         ...data,
         departure_date: data.departure_date || null,
         arrival_date: data.arrival_date || null,
-        services: updatedServises,
+        services: updatedServices,
         adult_passengers: passengerCounts.adults,
         child_passengers: passengerCounts.children,
         child_passengers_older: passengerCounts.children_old,
@@ -195,6 +183,15 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
         });
     }
   });
+
+  const onClosePassengersModal = () => {
+    setIsOpenPassengersModal(false);
+  };
+
+  const onClickPassengersItem = () => {
+    if (!isEditable) setIsOpenPassengersModal(!isOpenPassengersModal);
+  };
+
   return (
     <Accordion
       title='Информация о туре'
@@ -271,18 +268,25 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
+                value={departureCity}
                 onChange={(e) => setDepartureCity(e.target.value)}
               />
               {errors.departure_city && <p className={styles.error}>{errors.departure_city.message}</p>}
-
-              <div className={styles.suggestions}>
-                {Array.isArray(departureSuggestions) &&
-                  departureSuggestions.map((city, index) => (
-                    <div key={index} onClick={() => handleSuggestionClick(city, 'departure')}>
+              {!isEditable && departureSuggestions.length > 0 && (
+                <div className={styles.suggestions}>
+                  {departureSuggestions.map((city, index) => (
+                    <div
+                      key={index}
+                      className={cn(styles.suggestionItem, {
+                        [styles.highlight]: city === 'Бишкек, Кыргызстан'
+                      })}
+                      onClick={() => handleSuggestionClick(city, 'departure')}
+                    >
                       {city}
                     </div>
                   ))}
-              </div>
+                </div>
+              )}
             </div>
             <div className={styles.item_block}>
               <label>Город прилета</label>
@@ -291,18 +295,25 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                 placeholder='Не выбрано'
                 className={styles.inp_wrapper}
                 disabled={isEditable}
+                value={arrivalCity}
                 onChange={(e) => setArrivalCity(e.target.value)}
               />
               {errors.arrival_city && <p className={styles.error}>{errors.arrival_city.message}</p>}
-
-              <div className={styles.suggestions}>
-                {Array.isArray(arrivalSuggestions) &&
-                  arrivalSuggestions.map((city, index) => (
-                    <div key={index} onClick={() => handleSuggestionClick(city, 'arrival')}>
+              {!isEditable && arrivalSuggestions.length > 0 && (
+                <div className={styles.suggestions}>
+                  {arrivalSuggestions.map((city, index) => (
+                    <div
+                      key={index}
+                      className={cn(styles.suggestionItem, {
+                        [styles.highlight]: city === 'Бишкек, Кыргызстан'
+                      })}
+                      onClick={() => handleSuggestionClick(city, 'arrival')}
+                    >
                       {city}
                     </div>
                   ))}
-              </div>
+                </div>
+              )}
             </div>
             <div className={styles.item_block}>
               <label>Количество пассажиров</label>
@@ -336,11 +347,11 @@ export const TourInfoForm: FC<IProps> = ({ calcId, formProps, servicesOptions, b
                   openSelect={openSelect}
                   setOpenSelect={setOpenSelect}
                   selectId='services'
-                  onChange={setServises}
+                  onChange={setServices}
                   options={servicesOptions}
                   disabled={isEditable}
                   placeholder='Не выбрано'
-                  defaultValue={servises}
+                  defaultValue={services}
                 />
               </div>
             )}
