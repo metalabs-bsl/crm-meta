@@ -93,7 +93,6 @@ export const PaymentRow: FC<IPaymentRowProps> = ({
         await updateLeadCalcPaidStatus({ calc_id: calcId, paid_status: newStatus }).unwrap();
         onPaymentStatusChange?.(accountId, newStatus);
       }
-      console.log("Updated invoice", updatedData)
       notify(MESSAGE.SUCCESS, 'success');
       setIsEdit(false);
     } catch (error) {
