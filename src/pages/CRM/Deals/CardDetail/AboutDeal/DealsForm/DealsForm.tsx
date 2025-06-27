@@ -19,9 +19,11 @@ interface IProps {
   formProps?: ICreateLeadParams;
   colStatus?: number;
   dateCreated?: string;
+  responsibleId?: string;
+  onResponsibleChange?: (id: string) => void;
 }
 
-export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus }) => {
+export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus, responsibleId, onResponsibleChange }) => {
   const {
     register,
     handleSubmit,
@@ -47,7 +49,10 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus }) => 
         setValue(key as keyof ICreateLeadParams, formProps[key as keyof ICreateLeadParams]);
       });
     }
-  }, [formProps, setValue]);
+    if (responsibleId) {
+      setValue('responsible_employee_id', responsibleId);
+    }
+  }, [formProps, responsibleId, setValue]);
 
   useEffect(() => {
     setIsEdit(isNewDeal);
@@ -158,14 +163,17 @@ export const DealsForm: FC<IProps> = ({ formProps, dateCreated, colStatus }) => 
             <div className={styles.inpBlock}>
               <label>Ответственный</label>
               <Select
-                {...register('responsible_employee_id', { required: 'Ответственный обязателен' })}
+                {...register('responsible_employee_id', {
+                  required: 'Ответственный обязателен',
+                  onChange: (e) => onResponsibleChange?.(e.target.value)
+                })}
                 options={responsibleOptions}
                 disabled={
                   !isEdit ||
                   (colStatus === 5 && !userInfo?.roles.some((role) => role.role_name === 'Director' || role.role_name === 'Senior Manager'))
                 }
                 className={styles.select}
-                defaultValue={userInfo?.id}
+                value={responsibleId}
               />
               {errors.responsible_employee_id && <span className={styles.error}>{errors.responsible_employee_id.message}</span>}
             </div>
