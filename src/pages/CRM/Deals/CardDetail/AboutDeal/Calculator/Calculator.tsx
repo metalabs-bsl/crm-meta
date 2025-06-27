@@ -31,9 +31,11 @@ const payOptions: Options[] = [
 interface IProps {
   data?: IResCalc;
   calcData?: ICalculator;
+  responsibleId?: string;
+  onResponsibleChange?: (id: string) => void;
 }
 
-export const Calculator: FC<IProps> = ({ calcData, data }) => {
+export const Calculator: FC<IProps> = ({ calcData, data, responsibleId, onResponsibleChange }) => {
   const notify = useNotify();
   const [updatePaidStatus, { isLoading }] = useUpdateLeadCalcPaidStatusMutation();
   const [choicePaymentToggle] = useChoicePaymentToggleMutation();
@@ -143,7 +145,14 @@ export const Calculator: FC<IProps> = ({ calcData, data }) => {
   return (
     <Loading isSpin={isLoading}>
       <div className={cn(styles.calculator, { [styles.isDisabled]: calcData?.is_closed })}>
-        {data && <AgreementForm formProps={contractFormProps} customerId={data.contracts[0].customer.id} />}
+        {data && (
+          <AgreementForm
+            formProps={contractFormProps}
+            customerId={data.contracts[0].customer.id}
+            responsibleId={responsibleId}
+            onResponsibleChange={onResponsibleChange}
+          />
+        )}
 
         <div className={styles.tab_block}>
           <Tabs

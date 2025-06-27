@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import dayjs, { extend } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { DatePicker, FilePicker, Input, Loading, Select } from 'common/ui';
@@ -12,6 +13,7 @@ import {
   useUploadBackPassportMutation,
   useUploadFrontPassportMutation
 } from 'api/admin/leads/endpoints/calculator';
+import { useUpdateLeadMutation } from 'api/admin/leads/endpoints/lead';
 import { IUpdateContract } from 'types/entities';
 import styles from './style.module.scss';
 
@@ -22,12 +24,15 @@ extend(utc);
 interface IProps {
   customerId: string;
   formProps: IUpdateContract | null;
+  responsibleId?: string;
+  onResponsibleChange?: (id: string) => void;
 }
 
-export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
+export const AgreementForm: FC<IProps> = ({ formProps, customerId, responsibleId, onResponsibleChange }) => {
   const [isFocused, setIsFocused] = useState(false);
   const notify = useNotify();
   const { data: responsibleOptions } = useGetResponsibleEmployeesQuery();
+  const [updateLead] = useUpdateLeadMutation();
   const [updateContract, { isLoading }] = useUpdateContractMutation();
   const [uploadBack, { isLoading: isBackLoading }] = useUploadBackPassportMutation();
   const [uploadFront, { isLoading: isFrontLoading }] = useUploadFrontPassportMutation();
@@ -37,6 +42,7 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
   const [backOfPassport, setBackOfPassport] = useState<File | null>(null);
   const [deletedFront, setDeletedFront] = useState<boolean>(false);
   const [deletedBack, setDeletedBack] = useState<boolean>(false);
+  const { search } = useLocation();
   const {
     register,
     getValues,
@@ -70,7 +76,10 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
       // Set initial value if formProps is null
       setValue('booking_date', dayjs.utc().format('YYYY-MM-DDTHH:mm'));
     }
-  }, [formProps, setValue]);
+    if (responsibleId) {
+      setValue('responsible_id', responsibleId);
+    }
+  }, [formProps, responsibleId, setValue]);
 
   useEffect(() => {
     if (!isDeleteLoading && isSuccess) {
@@ -79,6 +88,21 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
+
+  const handleResponsibleChange = (id: string) => {
+    onResponsibleChange?.(id);
+    const leadId = search.substring(1);
+    if (leadId) {
+      updateLead({ body: { responsible_employee_id: id }, id: leadId })
+        .unwrap()
+        .then(() => {
+          notify(MESSAGE.UPDATED, 'success');
+        })
+        .catch(() => {
+          notify(MESSAGE.ERROR, 'error');
+        });
+    }
+  };
 
   const onSubmit = (data: IUpdateContract) => {
     const hasEmptyFields = Object.entries(data).some(([value]) => !value);
@@ -236,7 +260,16 @@ export const AgreementForm: FC<IProps> = ({ formProps, customerId }) => {
             <div className={styles.item_block}>
               <label>Ответственный</label>
               {responsibleOptions && (
-                <Select {...register('responsible_id')} options={responsibleOptions} disabled={isEditable} className={styles.inp_wrapper} />
+                <Select
+                  {...register('responsible_id', {
+                    required: 'Ответственный обязателен',
+                    onChange: (e) => handleResponsibleChange(e.target.value)
+                  })}
+                  options={responsibleOptions}
+                  disabled={isEditable}
+                  className={styles.inp_wrapper}
+                  value={responsibleId}
+                />
               )}
               {errors.responsible_id && <span className={styles.error}>{errors.responsible_id.message}</span>}
             </div>

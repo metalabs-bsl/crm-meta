@@ -39,6 +39,7 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
   const [generateDocument, { isLoading: isDocumentLoading }] = useGenerateDocumentMutation();
 
   const [leadId, setLeadId] = useState<string | null>(null);
+  const [responsibleId, setResponsibleId] = useState<string | undefined>(formData?.responsible_employee_id);
 
   useEffect(() => {
     if (search) {
@@ -73,10 +74,13 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
     const component = {
       [TAB_COMPONENTS.TODO]: <Todo reminders={reminders} comments={comments} customerPhone={customerPhone} />,
       [TAB_COMPONENTS.ACCOUNT]: <Accounts />,
-      [TAB_COMPONENTS.CALCULATOR]: <Calculator calcData={calcData} data={data} />
+      [TAB_COMPONENTS.CALCULATOR]: (
+        <Calculator calcData={calcData} data={data} responsibleId={responsibleId} onResponsibleChange={setResponsibleId} />
+      )
     };
     return component[isActiveTab as TAB_COMPONENTS];
   };
+
   const changeAccess = () => {
     if (calcData) {
       updateCalcAccess(calcData.id)
@@ -111,7 +115,15 @@ export const AboutDeal: FC<IProps> = ({ formData, reminders, comments, calcData,
   return (
     <Loading isSpin={isFetching}>
       <div className={styles.aboutDeal}>
-        {!isCalculatorTab && <DealsForm formProps={formData} colStatus={colStatus} dateCreated={data?.created_at} />}
+        {!isCalculatorTab && (
+          <DealsForm
+            formProps={formData}
+            colStatus={colStatus}
+            dateCreated={data?.created_at}
+            responsibleId={responsibleId}
+            onResponsibleChange={setResponsibleId}
+          />
+        )}
         <div className={cn(styles.rightBlock, { [styles.isCalculatorChild]: isCalculatorTab })}>
           <div className={cn(styles.wrapper, { [styles.isOnlyTab]: !isCalculatorTab })}>
             {isCalculatorTab && (
