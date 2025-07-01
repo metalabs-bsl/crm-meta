@@ -1,6 +1,9 @@
 export interface IMessageResponse {
-  id: string;
+  id: number;
   isSender: boolean;
-  message: string;
+  message?: string;
+  hasMedia: boolean;
+  fileId: number | null;
+  fileType?: string | null;
   timestamp: string;
 }
