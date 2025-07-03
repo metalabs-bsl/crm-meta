@@ -124,7 +124,6 @@ export const initializeSocket = () => (dispatch: AppDispatch, getState: () => Ro
     socket?.on('note', (message: { body?: Note; message: string }) => {
       if (message.body) {
       } else {
-        console.log(message);
         new Audio('/notification.mp3').play();
       }
     });
