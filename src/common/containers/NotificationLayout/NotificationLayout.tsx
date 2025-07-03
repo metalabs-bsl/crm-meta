@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { BirthDayModal, BreakModal, GreetingsModal, Modal } from 'common/components';
-// import { LeadFlyModal } from 'common/components/LeadFlyModal';
+import { LeadFlyModal } from 'common/components/LeadFlyModal';
 import { NoteModal } from 'common/components/NoteModal';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
 import { useGetCalendarDataQuery } from 'api/admin/calendar/calendar.api';
@@ -10,6 +10,7 @@ import { modalSelectors } from 'api/admin/modal/modal.selectors';
 import { setBirthdayModalShown, setIsModalOpen, setIsPreved, setNoteModalShown, setPrevModalShown } from 'api/admin/modal/modals.slice';
 import { useGetWorkTimeInfoQuery } from 'api/admin/workTime/workTime.api';
 import { Birthday, Note } from 'types/entities';
+import { LeadFly } from 'types/entities/calendar';
 
 import { getSocket } from 'socket';
 // import { leadFlyData } from './NotificationLayout.helper';
@@ -26,6 +27,7 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
   const [isBreakNotified, setIsBreakNotified] = useState<boolean>(false);
   const [birthdayData, setBirthdayData] = useState<Birthday | undefined>(undefined);
   const [noteData, setNoteData] = useState<Note | undefined>(undefined);
+  const [leadFlyData, setLeadFlyData] = useState<LeadFly | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(employeesSelectors.employees);
   const { prevModalShown, isPreved, noteModalShown, birthdayModalShown, isModalOpen } = useAppSelector(modalSelectors.modal);
@@ -38,6 +40,9 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     dispatch(setNoteModalShown(true));
     if (activeNotification === NOTIFICATION_COMPONENTS.BREAK) {
       setIsBreakNotified(true);
+    }
+    if (activeNotification === NOTIFICATION_COMPONENTS.LEADFLY) {
+      setLeadFlyData(undefined); // Сбрасываем данные после закрытия
     }
   };
 
@@ -103,14 +108,23 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
       }
     };
 
+    const handleDepartureReminder = (data: { message: string; body: LeadFly }) => {
+      console.log('Received departureReminder:', data);
+      new Audio('/notification.mp3').play();
+      setLeadFlyData(data.body);
+      openNotificationModal(NOTIFICATION_COMPONENTS.LEADFLY);
+    };
+
     // Подписываемся на событие 'note'
     socket?.on('note', handleNoteMessage);
+    socket?.on('departureReminder', handleDepartureReminder);
 
     // Отписываемся при размонтировании компонента
     return () => {
       socket?.off('note', handleNoteMessage);
+      socket?.off('departureReminder', handleDepartureReminder);
     };
-  }, [dispatch, getReminderOffset, openNotificationModal]);
+  }, [dispatch, getReminderOffset, openNotificationModal, socket]);
 
   useEffect(() => {
     if (calendarData) {
@@ -183,8 +197,8 @@ export const NotificationLayout: FC<IProps> = ({ children }) => {
     const modals: Record<NOTIFICATION_COMPONENTS, ReactNode> = {
       [NOTIFICATION_COMPONENTS.BIRTHDAY]: <BirthDayModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={birthdayData} />,
       [NOTIFICATION_COMPONENTS.NOTE]: <NoteModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={noteData!} />,
-      [NOTIFICATION_COMPONENTS.BREAK]: <BreakModal isOpen={isBreakNotified} onCancel={closeNotificationModal} />
-      // [NOTIFICATION_COMPONENTS.LEADFLY]: <LeadFlyModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={leadFlyData} />
+      [NOTIFICATION_COMPONENTS.BREAK]: <BreakModal isOpen={isBreakNotified} onCancel={closeNotificationModal} />,
+      [NOTIFICATION_COMPONENTS.LEADFLY]: <LeadFlyModal isOpen={isModalOpen} onCancel={closeNotificationModal} data={leadFlyData} />
     };
     return activeNotification ? modals[activeNotification] : null;
   };
