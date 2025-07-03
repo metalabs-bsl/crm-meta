@@ -37,6 +37,8 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
   const [openPeriodModal, setOpenPeriodModal] = useState<boolean>(false);
   const [startDateTotalBrutto, setStartDateTotalBrutto] = useState<string>(dayjs().startOf('month').format('YYYY-MM-DD'));
   const [endDateTotalBrutto, setEndDateTotalBrutto] = useState<string>(dayjs().endOf('month').format('YYYY-MM-DD'));
+  const [startDateFilter, setStartDateFilter] = useState<string | null>(null);
+  const [endDateFilter, setEndDateFilter] = useState<string | null>(null);
   const filterRef = useRef(null);
   const { role } = useAppSelector(employeesSelectors.employees);
   const isManagement = role === ROLES.SENIOR_MANAGER || role === ROLES.DIRECTOR;
@@ -51,6 +53,18 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
 
   const dispatch = useAppDispatch();
   const notify = useNotify();
+
+  const filteredLeads = leads
+    .filter((lead) => {
+      if (!startDateFilter || !endDateFilter) return true;
+      const leadDate = dayjs(lead.created_at);
+      return leadDate.isAfter(dayjs(startDateFilter).subtract(1, 'day')) && leadDate.isBefore(dayjs(endDateFilter).add(1, 'day'));
+    })
+    .sort((a, b) => {
+      if (a.count_of_reminders > 0 && b.count_of_reminders === 0) return -1;
+      if (a.count_of_reminders === 0 && b.count_of_reminders > 0) return 1;
+      return dayjs(b.created_at).valueOf() - dayjs(a.created_at).valueOf();
+    });
 
   const [{ isOver }, drop] = useDrop({
     accept: 'CARD',
@@ -104,7 +118,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
   };
 
   const onFilterChange = (start: string, end: string) => {
-    console.log({ start, end });
+    setStartDateFilter(start);
+    setEndDateFilter(end);
+    setOpenFilterModal(false);
   };
 
   const onOpen = () => {
@@ -193,16 +209,9 @@ export const Column: React.FC<ColumnProps> = ({ col, onDrop, index, canDrag }) =
         </div>
       )}
       <div className={styles.cardsContainer} ref={drop}>
-        {leads
-          .slice()
-          .sort((a, b) => {
-            if (a.count_of_reminders > 0 && b.count_of_reminders === 0) return -1;
-            if (a.count_of_reminders === 0 && b.count_of_reminders > 0) return 1;
-            return 0;
-          })
-          .map((task, index) => (
-            <Card key={task.id} index={index} data={task} canDrag={canDrag} />
-          ))}
+        {filteredLeads.map((task, index) => (
+          <Card key={task.id} index={index} data={task} canDrag={canDrag} />
+        ))}
       </div>
       <Modal isOpen={openColumnModal} onClose={onCloseColumnModal}>
         <ColumnForm
